@@ -3,64 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NewGen Finance — כלים פיננסיים חכמים</title>
-  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <title>NewGen Finance — בנה את העתיד הפיננסי שלך</title>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     /* ─── TOKENS ─────────────────────────────────────── */
     :root {
-      --font: 'Rubik', sans-serif;
-
-      --bg:           #0B0E1A;
-      --bg-surface:   #111527;
-      --bg-card:      #161B31;
-      --bg-card-h:    #1C2240;
-      --border:       rgba(255,255,255,0.07);
-      --border-h:     rgba(139,92,246,0.45);
-
-      --purple:       #8B5CF6;
-      --purple-light: #A78BFA;
-      --purple-dim:   rgba(139,92,246,0.15);
-      --purple-glow:  rgba(139,92,246,0.35);
-
-      --navy:         #1E254A;
-      --navy-light:   #2A3260;
-
-      --text:         #F0F2FF;
-      --text-sub:     #9BA3C9;
-      --text-muted:   #5C6490;
-
-      --radius:       16px;
-      --radius-sm:    10px;
-      --transition:   0.22s ease;
+      --font: 'Heebo', sans-serif;
+      --bg: #1e3a4a;
+      --card-bg: #ffffff;
+      --teal: #2a9d8f;
+      --teal-dark: #21867a;
+      --teal-dim: rgba(42, 157, 143, 0.15);
+      --gold: #e9c46a;
+      --gold-dark: #d4a843;
+      --text-dark: #1a2e38;
+      --text-mid: #4a6472;
+      --text-light: #f0f8fa;
+      --text-sub: rgba(240, 248, 250, 0.75);
+      --shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
+      --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.28);
+      --radius: 16px;
+      --transition: 0.22s ease;
     }
 
     /* ─── RESET ──────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     html { scroll-behavior: smooth; }
-
     body {
       font-family: var(--font);
       background: var(--bg);
-      color: var(--text);
+      color: var(--text-light);
+      direction: rtl;
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
     }
-
     a { text-decoration: none; color: inherit; }
-
-    /* ─── BACKGROUND GLOW ────────────────────────────── */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 60% 40% at 20% 10%, rgba(139,92,246,0.12) 0%, transparent 70%),
-        radial-gradient(ellipse 50% 35% at 80% 80%, rgba(99,102,241,0.09) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: 0;
-    }
+    ul { list-style: none; }
 
     /* ─── NAVBAR ─────────────────────────────────────── */
     .navbar {
@@ -70,348 +49,463 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 clamp(24px, 5vw, 80px);
+      padding: 0 clamp(20px, 5vw, 80px);
       height: 68px;
-      background: rgba(11,14,26,0.82);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border-bottom: 1px solid var(--border);
+      background: rgba(30, 58, 74, 0.95);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      font-size: 1.25rem;
       font-weight: 800;
-      font-size: 1.2rem;
       letter-spacing: -0.3px;
-      color: var(--text);
+      color: var(--text-light);
+      /* Logo stays LTR */
+      direction: ltr;
+      unicode-bidi: embed;
     }
 
-    .logo-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
-      background: linear-gradient(135deg, var(--purple) 0%, #6366F1 100%);
+    .logo span { color: var(--teal); }
+
+    .nav-links {
       display: flex;
       align-items: center;
-      justify-content: center;
-      box-shadow: 0 0 16px var(--purple-glow);
-      flex-shrink: 0;
+      gap: clamp(16px, 3vw, 36px);
     }
 
-    .logo-icon svg { width: 20px; height: 20px; fill: #fff; }
-
-    .logo-text span { color: var(--purple-light); }
-
-    .nav-badge {
-      font-size: 0.72rem;
-      font-weight: 600;
-      padding: 3px 10px;
-      border-radius: 20px;
-      background: var(--purple-dim);
-      border: 1px solid rgba(139,92,246,0.3);
-      color: var(--purple-light);
-      letter-spacing: 0.3px;
+    .nav-links a {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--text-sub);
+      transition: color var(--transition);
     }
+
+    .nav-links a:hover { color: var(--text-light); }
 
     /* ─── HERO ───────────────────────────────────────── */
     .hero {
       position: relative;
-      z-index: 1;
-      text-align: center;
-      padding: clamp(72px, 12vw, 130px) clamp(24px, 5vw, 80px) clamp(60px, 9vw, 100px);
-      max-width: 900px;
+      padding: clamp(72px, 11vw, 130px) clamp(20px, 5vw, 80px) clamp(64px, 10vw, 120px);
+      overflow: hidden;
+    }
+
+    .hero-inner {
+      max-width: 1200px;
       margin: 0 auto;
-    }
-
-    .hero-eyebrow {
-      display: inline-flex;
+      display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      color: var(--purple-light);
-      background: var(--purple-dim);
-      border: 1px solid rgba(139,92,246,0.25);
-      border-radius: 30px;
-      padding: 6px 16px;
-      margin-bottom: 30px;
+      gap: 60px;
     }
 
-    .hero-eyebrow::before {
-      content: '';
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      background: var(--purple);
-      box-shadow: 0 0 6px var(--purple);
-      animation: pulse 2s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
-    }
+    .hero-content { flex: 1; min-width: 0; }
 
     .hero h1 {
-      font-size: clamp(2.4rem, 6vw, 4rem);
-      font-weight: 800;
+      font-size: clamp(2.2rem, 5.5vw, 3.8rem);
+      font-weight: 900;
       line-height: 1.15;
       letter-spacing: -1px;
-      margin-bottom: 22px;
-    }
-
-    .hero h1 .highlight {
-      background: linear-gradient(135deg, var(--purple-light) 0%, #C4B5FD 50%, #818CF8 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      margin-bottom: 20px;
     }
 
     .hero-sub {
-      font-size: clamp(1rem, 2.2vw, 1.2rem);
+      font-size: clamp(1rem, 2vw, 1.2rem);
       font-weight: 400;
       color: var(--text-sub);
-      max-width: 560px;
-      margin: 0 auto 44px;
-      line-height: 1.75;
+      line-height: 1.8;
+      max-width: 520px;
+      margin-bottom: 40px;
     }
 
-    .hero-stats {
+    .hero-ctas {
       display: flex;
-      justify-content: center;
-      gap: clamp(24px, 5vw, 60px);
+      gap: 16px;
       flex-wrap: wrap;
     }
 
-    .stat {
-      text-align: center;
+    /* ─── BUTTONS ─────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 30px;
+      border-radius: 10px;
+      font-family: var(--font);
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: transform var(--transition), box-shadow var(--transition), background var(--transition), color var(--transition), border-color var(--transition);
+      white-space: nowrap;
     }
 
-    .stat-val {
-      font-size: 1.6rem;
-      font-weight: 800;
-      color: var(--purple-light);
-      display: block;
+    .btn:hover { transform: translateY(-2px); }
+
+    .btn-gold {
+      background: var(--gold);
+      color: #1a2e38;
+      border-color: var(--gold);
     }
 
-    .stat-label {
+    .btn-gold:hover {
+      background: var(--gold-dark);
+      border-color: var(--gold-dark);
+      box-shadow: 0 8px 24px rgba(233, 196, 106, 0.4);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text-light);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .btn-outline:hover {
+      border-color: rgba(255, 255, 255, 0.8);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .btn-teal {
+      background: var(--teal);
+      color: #ffffff;
+      border-color: var(--teal);
+    }
+
+    .btn-teal:hover {
+      background: var(--teal-dark);
+      border-color: var(--teal-dark);
+      box-shadow: 0 8px 24px rgba(42, 157, 143, 0.4);
+    }
+
+    .btn-outline-dark {
+      background: transparent;
+      color: var(--text-dark);
+      border-color: rgba(42, 157, 143, 0.5);
+    }
+
+    .btn-outline-dark:hover {
+      border-color: var(--teal);
+      background: var(--teal-dim);
+    }
+
+    /* ─── HERO GRAPHIC ────────────────────────────────── */
+    .hero-graphic {
+      flex-shrink: 0;
+      width: clamp(180px, 28vw, 340px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .graphic-ring {
+      position: relative;
+      width: 280px;
+      height: 280px;
+    }
+
+    .graphic-ring svg {
+      width: 100%;
+      height: 100%;
+      animation: spin-slow 22s linear infinite;
+    }
+
+    @keyframes spin-slow {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    .graphic-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .graphic-icon {
+      font-size: 2.6rem;
+      line-height: 1;
+    }
+
+    .graphic-label {
       font-size: 0.78rem;
-      color: var(--text-muted);
-      margin-top: 2px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: var(--teal);
+      text-transform: uppercase;
     }
 
     /* ─── SECTION ────────────────────────────────────── */
     .section {
-      position: relative;
-      z-index: 1;
-      padding: 0 clamp(24px, 5vw, 80px) clamp(80px, 10vw, 120px);
-      max-width: 1280px;
+      padding: clamp(60px, 8vw, 100px) clamp(20px, 5vw, 80px);
+      max-width: 1200px;
       margin: 0 auto;
     }
 
-    .section-header {
-      margin-bottom: 40px;
-    }
-
-    .section-label {
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 1.2px;
-      text-transform: uppercase;
-      color: var(--purple);
-      margin-bottom: 10px;
-    }
-
     .section-title {
-      font-size: clamp(1.5rem, 3vw, 2.1rem);
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
       font-weight: 800;
       letter-spacing: -0.5px;
+      margin-bottom: 40px;
+      color: var(--text-light);
     }
-
-    .section-title .dim { color: var(--text-sub); font-weight: 400; }
 
     /* ─── TOOLS GRID ─────────────────────────────────── */
     .tools-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      grid-template-columns: repeat(2, 1fr);
       gap: 24px;
     }
 
     /* ─── TOOL CARD ──────────────────────────────────── */
     .tool-card {
-      position: relative;
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      box-shadow: var(--shadow);
       display: flex;
       flex-direction: column;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 32px 28px 28px;
-      transition: border-color var(--transition), transform var(--transition), box-shadow var(--transition), background var(--transition);
+      gap: 12px;
+      transition: transform var(--transition), box-shadow var(--transition);
+      color: var(--text-dark);
       overflow: hidden;
-      cursor: pointer;
-    }
-
-    .tool-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(139,92,246,0.06) 0%, transparent 60%);
-      opacity: 0;
-      transition: opacity var(--transition);
-      pointer-events: none;
     }
 
     .tool-card:hover {
-      border-color: var(--border-h);
-      background: var(--bg-card-h);
-      transform: translateY(-4px);
-      box-shadow: 0 20px 50px rgba(0,0,0,0.35), 0 0 0 1px rgba(139,92,246,0.2);
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-hover);
     }
 
-    .tool-card:hover::before { opacity: 1; }
-
-    /* Glow accent line at top */
-    .tool-card::after {
-      content: '';
-      position: absolute;
-      top: 0; left: 20%; right: 20%;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--purple), transparent);
-      opacity: 0;
-      transition: opacity var(--transition);
-    }
-
-    .tool-card:hover::after { opacity: 1; }
-
-    .card-icon-wrap {
-      width: 52px;
-      height: 52px;
-      border-radius: 14px;
-      background: var(--purple-dim);
-      border: 1px solid rgba(139,92,246,0.25);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 22px;
-      transition: box-shadow var(--transition);
-    }
-
-    .tool-card:hover .card-icon-wrap {
-      box-shadow: 0 0 20px var(--purple-glow);
-    }
-
-    .card-icon-wrap svg {
-      width: 26px; height: 26px;
-      stroke: var(--purple-light);
-      stroke-width: 1.8;
-      fill: none;
-    }
-
-    .card-tag {
-      font-size: 0.68rem;
-      font-weight: 700;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      color: var(--purple);
-      margin-bottom: 8px;
+    .card-icon {
+      font-size: 2rem;
+      line-height: 1;
+      margin-bottom: 4px;
     }
 
     .card-title {
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       font-weight: 700;
-      letter-spacing: -0.2px;
-      margin-bottom: 12px;
+      color: var(--text-dark);
       line-height: 1.3;
     }
 
     .card-desc {
-      font-size: 0.88rem;
-      line-height: 1.7;
-      color: var(--text-sub);
+      font-size: 0.9rem;
+      color: var(--text-mid);
+      line-height: 1.65;
       flex: 1;
-      margin-bottom: 28px;
     }
 
-    .card-footer {
+    .card-btn {
+      align-self: flex-start;
+      margin-top: 8px;
+    }
+
+    /* ─── COURSE SECTION ─────────────────────────────── */
+    .course-section {
+      padding: 0 clamp(20px, 5vw, 80px) clamp(60px, 8vw, 100px);
+    }
+
+    .course-section .section-title {
+      max-width: 1200px;
+      margin: 0 auto 40px;
+    }
+
+    .course-card {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: #163344;
+      border-radius: var(--radius);
+      padding: clamp(36px, 5vw, 64px) clamp(28px, 5vw, 64px);
+      border: 1px solid rgba(42, 157, 143, 0.25);
+      box-shadow: var(--shadow);
       display: flex;
-      align-items: center;
-      justify-content: space-between;
+      gap: 48px;
+      align-items: flex-start;
+      position: relative;
+      overflow: hidden;
     }
 
-    .card-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--purple-light);
-      transition: gap var(--transition);
-    }
-
-    .tool-card:hover .card-link { gap: 12px; }
-
-    .card-link svg {
-      width: 16px; height: 16px;
-      stroke: currentColor;
-      stroke-width: 2;
-      fill: none;
-      /* flip arrow for RTL — point left */
-      transform: scaleX(-1);
-    }
-
-    .card-pill {
-      font-size: 0.68rem;
-      font-weight: 600;
-      padding: 4px 10px;
-      border-radius: 20px;
-      background: rgba(34,197,94,0.1);
-      border: 1px solid rgba(34,197,94,0.25);
-      color: #4ade80;
-    }
-
-    /* ─── COMING SOON CARD ───────────────────────────── */
-    .tool-card.coming-soon {
-      opacity: 0.45;
-      cursor: default;
+    /* Subtle teal glow top-right */
+    .course-card::before {
+      content: '';
+      position: absolute;
+      top: -60px;
+      left: -60px;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(42, 157, 143, 0.18) 0%, transparent 70%);
       pointer-events: none;
     }
 
-    .tool-card.coming-soon .card-pill {
-      background: rgba(255,255,255,0.05);
-      border-color: rgba(255,255,255,0.1);
-      color: var(--text-muted);
+    .course-content { flex: 1; min-width: 0; }
+
+    .course-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--teal);
+      background: rgba(42, 157, 143, 0.15);
+      border: 1px solid rgba(42, 157, 143, 0.3);
+      border-radius: 20px;
+      padding: 5px 14px;
+      margin-bottom: 18px;
     }
 
-    /* ─── DIVIDER ─────────────────────────────────────── */
-    .divider {
-      position: relative;
-      z-index: 1;
-      height: 1px;
-      margin: 0 clamp(24px, 5vw, 80px);
-      background: linear-gradient(90deg, transparent, var(--border), transparent);
-      margin-bottom: clamp(60px, 8vw, 100px);
+    .course-name {
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      margin-bottom: 14px;
+      line-height: 1.2;
+    }
+
+    .course-desc {
+      font-size: 1rem;
+      color: var(--text-sub);
+      line-height: 1.75;
+      margin-bottom: 28px;
+      max-width: 480px;
+    }
+
+    .course-bullets {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 36px;
+    }
+
+    .course-bullets li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.95rem;
+      color: var(--text-light);
+      font-weight: 500;
+    }
+
+    .bullet-check {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(42, 157, 143, 0.2);
+      color: var(--teal);
+      font-size: 0.8rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .course-ctas {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .course-visual {
+      flex-shrink: 0;
+      width: clamp(140px, 22vw, 220px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .course-emblem {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      border: 3px solid rgba(42, 157, 143, 0.35);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: rgba(42, 157, 143, 0.08);
+    }
+
+    .emblem-icon { font-size: 3rem; line-height: 1; }
+
+    .emblem-text {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--teal);
+      text-align: center;
     }
 
     /* ─── FOOTER ─────────────────────────────────────── */
     footer {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-      padding: 40px clamp(24px, 5vw, 80px);
-      border-top: 1px solid var(--border);
-      color: var(--text-muted);
-      font-size: 0.8rem;
+      background: rgba(0, 0, 0, 0.25);
+      border-top: 1px solid rgba(255, 255, 255, 0.07);
+      padding: 28px clamp(20px, 5vw, 80px);
     }
 
-    footer span { color: var(--purple); }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-logo {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--text-light);
+      direction: ltr;
+      unicode-bidi: embed;
+    }
+
+    .footer-logo span { color: var(--teal); }
+
+    .footer-right {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .footer-copy {
+      font-size: 0.82rem;
+      color: var(--text-sub);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 16px;
+    }
+
+    .footer-links a {
+      font-size: 0.82rem;
+      color: var(--text-sub);
+      transition: color var(--transition);
+    }
+
+    .footer-links a:hover { color: var(--text-light); }
 
     /* ─── RESPONSIVE ─────────────────────────────────── */
-    @media (max-width: 600px) {
+    @media (max-width: 900px) {
+      .hero-graphic { display: none; }
+      .course-visual { display: none; }
+      .course-card { flex-direction: column; }
+    }
+
+    @media (max-width: 640px) {
       .tools-grid { grid-template-columns: 1fr; }
-      .hero-stats { gap: 32px; }
+      .nav-links { gap: 14px; }
+      .nav-links a { font-size: 0.85rem; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
     }
   </style>
 </head>
@@ -419,128 +513,133 @@
 
   <!-- ─── NAVBAR ──────────────────────────────────────── -->
   <nav class="navbar">
-    <div class="logo">
-      <div class="logo-icon">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-        </svg>
-      </div>
-      <span class="logo-text">NewGen <span>Finance</span></span>
-    </div>
-    <div class="nav-badge">בטא</div>
+    <div class="logo">NewGen <span>Finance</span></div>
+    <ul class="nav-links">
+      <li><a href="#">ראשי</a></li>
+      <li><a href="#tools">כלים</a></li>
+      <li><a href="#course">קורסים</a></li>
+      <li><a href="#">אודות</a></li>
+    </ul>
   </nav>
 
   <!-- ─── HERO ─────────────────────────────────────────── -->
   <section class="hero">
-    <div class="hero-eyebrow">כלים פיננסיים לדור הבא</div>
-    <h1>
-      קבל שליטה על<br>
-      <span class="highlight">הבריאות הפיננסית שלך</span>
-    </h1>
-    <p class="hero-sub">
-      כלים חכמים, ויזואליים וחינמיים שעוזרים לך להבין את מצבך הכלכלי,
-      לתכנן טוב יותר ולהגיע לחופש פיננסי מהר יותר.
-    </p>
-    <div class="hero-stats">
-      <div class="stat">
-        <span class="stat-val">100%</span>
-        <span class="stat-label">חינמי לחלוטין</span>
+    <div class="hero-inner">
+      <div class="hero-content">
+        <h1>בנה את העתיד הפיננסי שלך</h1>
+        <p class="hero-sub">כלים חינמיים, קורסים מעשיים, וידע שמשנה תוצאות.</p>
+        <div class="hero-ctas">
+          <a href="#tools" class="btn btn-gold">לכלים החינמיים</a>
+          <a href="#course" class="btn btn-outline">לקורס ההשקעות</a>
+        </div>
       </div>
-      <div class="stat">
-        <span class="stat-val">פרטי</span>
-        <span class="stat-label">ללא שמירת נתונים</span>
-      </div>
-      <div class="stat">
-        <span class="stat-val">עברית</span>
-        <span class="stat-label">תכנון מקומי</span>
+
+      <div class="hero-graphic" aria-hidden="true">
+        <div class="graphic-ring">
+          <!-- Rotating dashed ring with dots -->
+          <svg viewBox="0 0 280 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Outer dashed circle -->
+            <circle cx="140" cy="140" r="128" stroke="rgba(42,157,143,0.35)" stroke-width="1.5" stroke-dasharray="8 10"/>
+            <!-- Inner solid ring -->
+            <circle cx="140" cy="140" r="100" stroke="rgba(42,157,143,0.2)" stroke-width="1"/>
+            <!-- Orbit dots -->
+            <circle cx="140" cy="12" r="6" fill="#2a9d8f"/>
+            <circle cx="258" cy="195" r="4" fill="#e9c46a"/>
+            <circle cx="44"  cy="222" r="5" fill="#2a9d8f" opacity="0.6"/>
+            <!-- Arc highlight -->
+            <path d="M 140 12 A 128 128 0 0 1 250 195" stroke="#2a9d8f" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+          </svg>
+          <div class="graphic-center">
+            <div class="graphic-icon">📈</div>
+            <div class="graphic-label">Finance</div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ─── TOOLS SECTION ─────────────────────────────────── -->
-  <div class="section">
-    <div class="section-header">
-      <div class="section-label">הכלים שלנו</div>
-      <h2 class="section-title">
-        מה תרצה <span class="dim">לחשב היום?</span>
-      </h2>
-    </div>
-
+  <!-- ─── FREE TOOLS SECTION ───────────────────────────── -->
+  <section class="section" id="tools">
+    <h2 class="section-title">כלים חינמיים</h2>
     <div class="tools-grid">
 
-      <!-- Card 1 — Financial Health Calculator -->
-      <a href="/calculator" class="tool-card">
-        <div class="card-icon-wrap">
-          <svg viewBox="0 0 24 24">
-            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-          </svg>
-        </div>
-        <div class="card-tag">בריאות פיננסית</div>
+      <!-- Card 1 -->
+      <a href="/calculator/" class="tool-card">
+        <div class="card-icon">🩺</div>
         <div class="card-title">מחשבון בריאות פיננסית</div>
-        <p class="card-desc">
-          ענה על כמה שאלות על ההכנסות, ההוצאות, החסכונות והחובות שלך —
-          וקבל ציון בריאות פיננסית מפורט עם תובנות אישיות.
-        </p>
-        <div class="card-footer">
-          <span class="card-link">
-            פתח כלי
-            <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </span>
-          <span class="card-pill">זמין עכשיו</span>
-        </div>
+        <p class="card-desc">גלה את הציון הפיננסי שלך ב-5 דקות</p>
+        <span class="btn btn-teal card-btn">התחל עכשיו</span>
       </a>
 
-      <!-- Card 2 — Coming Soon -->
-      <div class="tool-card coming-soon">
-        <div class="card-icon-wrap">
-          <svg viewBox="0 0 24 24">
-            <rect x="2" y="3" width="20" height="14" rx="2"/>
-            <path d="M8 21h8M12 17v4"/>
-          </svg>
-        </div>
-        <div class="card-tag">תכנון פרישה</div>
-        <div class="card-title">מחשבון פרישה</div>
-        <p class="card-desc">
-          תכנן את הדרך לפרישה מוקדמת — כמה צריך לחסוך, מתי תגיע ליעד
-          ואיך לבנות פורטפוליו חוסן.
+      <!-- Card 2 -->
+      <a href="#" class="tool-card">
+        <div class="card-icon">🎮</div>
+        <div class="card-title">משחק השקעות</div>
+        <p class="card-desc">תרגל השקעות בסביבה בטוחה</p>
+        <span class="btn btn-teal card-btn">שחק עכשיו</span>
+      </a>
+
+      <!-- Card 3 -->
+      <a href="#" class="tool-card">
+        <div class="card-icon">🧮</div>
+        <div class="card-title">מחשבון השקעות</div>
+        <p class="card-desc">חשב תשואות, ריבית דריבית ועוד</p>
+        <span class="btn btn-teal card-btn">פתח מחשבון</span>
+      </a>
+
+      <!-- Card 4 -->
+      <a href="#" class="tool-card">
+        <div class="card-icon">📊</div>
+        <div class="card-title">מעקב תיק השקעות</div>
+        <p class="card-desc">עקוב אחרי הביצועים של התיק שלך</p>
+        <span class="btn btn-teal card-btn">פתח מעקב</span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ─── COURSE SECTION ────────────────────────────────── -->
+  <div class="course-section" id="course">
+    <h2 class="section-title">קורס ההשקעות</h2>
+    <div class="course-card">
+      <div class="course-content">
+        <div class="course-badge">קורס מקיף</div>
+        <div class="course-name">Investor Academy</div>
+        <p class="course-desc">
+          הקורס המקיף ביותר להשקעות בשוק ההון בעברית — מהבסיס ועד ניתוח מתקדם
         </p>
-        <div class="card-footer">
-          <span class="card-link">
-            בקרוב
-            <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </span>
-          <span class="card-pill">בקרוב</span>
+        <ul class="course-bullets">
+          <li><span class="bullet-check">✓</span> 5 פרקים עם עשרות שיעורים</li>
+          <li><span class="bullet-check">✓</span> כלים ומחשבונים ייחודיים</li>
+          <li><span class="bullet-check">✓</span> קהילה תומכת</li>
+          <li><span class="bullet-check">✓</span> עדכונים שוטפים</li>
+        </ul>
+        <div class="course-ctas">
+          <a href="#" class="btn btn-gold">לדף הקורס</a>
+          <a href="#" class="btn btn-outline">כניסה לתלמידים</a>
         </div>
       </div>
-
-      <!-- Card 3 — Coming Soon -->
-      <div class="tool-card coming-soon">
-        <div class="card-icon-wrap">
-          <svg viewBox="0 0 24 24">
-            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
-          </svg>
-        </div>
-        <div class="card-tag">ניהול חוב</div>
-        <div class="card-title">מחשבון פירעון הלוואות</div>
-        <p class="card-desc">
-          השווה בין שיטת המפולת לשיטת כדור השלג — וגלה מהי הדרך החכמה
-          לחסל חובות ולשלם פחות ריבית.
-        </p>
-        <div class="card-footer">
-          <span class="card-link">
-            בקרוב
-            <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </span>
-          <span class="card-pill">בקרוב</span>
+      <div class="course-visual" aria-hidden="true">
+        <div class="course-emblem">
+          <div class="emblem-icon">🎓</div>
+          <div class="emblem-text">Investor<br>Academy</div>
         </div>
       </div>
-
     </div>
   </div>
 
   <!-- ─── FOOTER ─────────────────────────────────────────── -->
   <footer>
-    <p>בנוי עם <span>♥</span> עבור הקהילה הפיננסית הישראלית &nbsp;·&nbsp; NewGen Finance &copy; 2025</p>
+    <div class="footer-inner">
+      <div class="footer-logo">NewGen <span>Finance</span></div>
+      <div class="footer-right">
+        <div class="footer-links">
+          <a href="#">פרטיות</a>
+          <a href="#">תנאי שימוש</a>
+        </div>
+        <span class="footer-copy">© 2025 NewGen Finance — כל הזכויות שמורות</span>
+      </div>
+    </div>
   </footer>
 
 </body>
