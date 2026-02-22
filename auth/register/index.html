@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>יצירת חשבון — NewGen Finance</title>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Heebo', sans-serif;
+      background: #1e3a4a;
+      color: #1a2e38;
+      direction: rtl;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* ── Card ── */
+    .card {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: clamp(36px, 6vw, 56px) clamp(28px, 6vw, 52px);
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    /* ── Logo ── */
+    .logo {
+      display: block;
+      text-align: center;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #1a2e38;
+      margin-bottom: 6px;
+      direction: ltr;
+    }
+
+    .logo span { color: #2a9d8f; }
+
+    .page-title {
+      text-align: center;
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: #1a2e38;
+      margin-bottom: 32px;
+    }
+
+    /* ── Form ── */
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #2e4a58;
+      margin-bottom: 6px;
+    }
+
+    input[type="email"],
+    input[type="password"],
+    input[type="text"] {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid #d0dde3;
+      border-radius: 10px;
+      font-family: 'Heebo', sans-serif;
+      font-size: 1rem;
+      color: #1a2e38;
+      background: #f7fafb;
+      direction: rtl;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #2a9d8f;
+      box-shadow: 0 0 0 3px rgba(42, 157, 143, 0.15);
+      background: #fff;
+    }
+
+    /* ── Messages ── */
+    .error-msg,
+    .success-msg {
+      display: none;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      padding: 10px 14px;
+      margin-bottom: 18px;
+      line-height: 1.55;
+    }
+
+    .error-msg {
+      background: #fff0f0;
+      border: 1px solid #f5c6c6;
+      color: #c0392b;
+    }
+
+    .success-msg {
+      background: #f0faf8;
+      border: 1px solid #a8ddd6;
+      color: #1a6b5e;
+      font-weight: 500;
+    }
+
+    .error-msg.visible,
+    .success-msg.visible { display: block; }
+
+    /* ── Button ── */
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      background: #e9c46a;
+      color: #1a2e38;
+      border: none;
+      border-radius: 10px;
+      font-family: 'Heebo', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s ease, transform 0.15s ease, box-shadow 0.18s ease;
+      margin-top: 8px;
+    }
+
+    .btn-submit:hover {
+      background: #d4a843;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(233, 196, 106, 0.45);
+    }
+
+    .btn-submit:active { transform: translateY(0); }
+
+    .btn-submit:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* ── Footer link ── */
+    .card-footer-link {
+      text-align: center;
+      margin-top: 22px;
+      font-size: 0.88rem;
+      color: #5a7585;
+    }
+
+    .card-footer-link a {
+      color: #2a9d8f;
+      font-weight: 600;
+    }
+
+    .card-footer-link a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <a href="/" class="logo">NewGen <span>Finance</span></a>
+    <h1 class="page-title">יצירת חשבון</h1>
+
+    <div class="error-msg"   id="error-msg"></div>
+    <div class="success-msg" id="success-msg"></div>
+
+    <form id="register-form" novalidate>
+      <div class="form-group">
+        <label for="full-name">שם מלא</label>
+        <input type="text" id="full-name" name="full-name" placeholder="ישראל ישראלי" required autocomplete="name">
+      </div>
+      <div class="form-group">
+        <label for="email">אימייל</label>
+        <input type="email" id="email" name="email" placeholder="you@example.com" required autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label for="password">סיסמה</label>
+        <input type="password" id="password" name="password" placeholder="לפחות 6 תווים" minlength="6" required autocomplete="new-password">
+      </div>
+      <div class="form-group">
+        <label for="confirm-password">אימות סיסמה</label>
+        <input type="password" id="confirm-password" name="confirm-password" placeholder="חזור על הסיסמה" required autocomplete="new-password">
+      </div>
+      <button type="submit" class="btn-submit" id="submit-btn">צור חשבון</button>
+    </form>
+
+    <p class="card-footer-link">
+      כבר יש לך חשבון?
+      <a href="/auth/login/">התחבר כאן</a>
+    </p>
+  </div>
+
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <!-- Config -->
+  <script src="/assets/js/supabase-config.js"></script>
+  <script>
+    const _client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const form       = document.getElementById('register-form');
+    const errorMsg   = document.getElementById('error-msg');
+    const successMsg = document.getElementById('success-msg');
+    const submitBtn  = document.getElementById('submit-btn');
+
+    function showError(msg) {
+      successMsg.classList.remove('visible');
+      errorMsg.textContent = msg;
+      errorMsg.classList.add('visible');
+    }
+
+    function clearMessages() {
+      errorMsg.classList.remove('visible');
+      successMsg.classList.remove('visible');
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearMessages();
+
+      const fullName  = document.getElementById('full-name').value.trim();
+      const email     = document.getElementById('email').value.trim();
+      const password  = document.getElementById('password').value;
+      const confirm   = document.getElementById('confirm-password').value;
+
+      if (!fullName || !email || !password || !confirm) {
+        showError('נא למלא את כל השדות.');
+        return;
+      }
+
+      if (password.length < 6) {
+        showError('הסיסמה חייבת להכיל לפחות 6 תווים.');
+        return;
+      }
+
+      if (password !== confirm) {
+        showError('הסיסמאות אינן תואמות. נסה שוב.');
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'יוצר חשבון...';
+
+      const { error } = await _client.auth.signUp({
+        email,
+        password,
+        options: {
+          data: { full_name: fullName }
+        }
+      });
+
+      if (error) {
+        showError('אירעה שגיאה בעת יצירת החשבון. ייתכן שהאימייל כבר רשום.');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'צור חשבון';
+        return;
+      }
+
+      // Success — hide form, show confirmation
+      form.style.display = 'none';
+      successMsg.textContent = 'נשלח אליך אימייל לאימות — בדוק את תיבת הדואר שלך';
+      successMsg.classList.add('visible');
+    });
+  </script>
+
+</body>
+</html>
