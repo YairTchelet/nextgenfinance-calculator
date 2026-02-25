@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>הפרופיל שלי — NewGen Finance</title>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Heebo', sans-serif;
+      background: #1e3a4a;
+      color: #1a2e38;
+      direction: rtl;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* ── Card ── */
+    .card {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: clamp(36px, 6vw, 56px) clamp(28px, 6vw, 52px);
+      width: 100%;
+      max-width: 480px;
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    /* ── Logo ── */
+    .logo {
+      display: block;
+      text-align: center;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #1a2e38;
+      margin-bottom: 6px;
+      direction: ltr;
+    }
+
+    .logo span { color: #2a9d8f; }
+
+    .page-title {
+      text-align: center;
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: #1a2e38;
+      margin-bottom: 32px;
+    }
+
+    /* ── Profile fields ── */
+    .profile-row {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 18px;
+    }
+
+    .profile-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #4a6472;
+    }
+
+    .profile-value {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #1a2e38;
+      background: #f7fafb;
+      border: 1.5px solid #d0dde3;
+      border-radius: 10px;
+      padding: 10px 14px;
+    }
+
+    /* ── Access status ── */
+    .access-status {
+      margin: 24px 0;
+      padding: 16px 18px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .access-granted {
+      background: #f0faf5;
+      border: 1.5px solid #a3d9c5;
+      color: #1b7a55;
+    }
+
+    .access-denied {
+      background: #fdf8ee;
+      border: 1.5px solid #e9c46a;
+      color: #7a5a1b;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    /* ── Buttons ── */
+    .btn-gold {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 11px 28px;
+      background: #e9c46a;
+      color: #1a2e38;
+      border: none;
+      border-radius: 10px;
+      font-family: 'Heebo', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s ease, transform 0.15s ease;
+      text-decoration: none;
+    }
+
+    .btn-gold:hover {
+      background: #d4a843;
+      transform: translateY(-1px);
+    }
+
+    .btn-logout {
+      width: 100%;
+      padding: 12px;
+      background: transparent;
+      color: #4a6472;
+      border: 1.5px solid #d0dde3;
+      border-radius: 10px;
+      font-family: 'Heebo', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+      margin-top: 8px;
+    }
+
+    .btn-logout:hover {
+      background: #f7fafb;
+      border-color: #4a6472;
+      color: #1a2e38;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #e8eff3;
+      margin: 24px 0;
+    }
+
+    /* Hidden until session confirmed */
+    #profile-content { display: none; }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <a href="/" class="logo">NewGen <span>Finance</span></a>
+    <h1 class="page-title">הפרופיל שלי</h1>
+
+    <div id="profile-content">
+      <div class="profile-row">
+        <span class="profile-label">שם מלא</span>
+        <div class="profile-value" id="user-name"></div>
+      </div>
+      <div class="profile-row">
+        <span class="profile-label">אימייל</span>
+        <div class="profile-value" id="user-email"></div>
+      </div>
+
+      <hr class="divider">
+
+      <div id="access-status"></div>
+
+      <hr class="divider">
+
+      <button class="btn-logout" id="logout-btn">התנתק</button>
+    </div>
+  </div>
+
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <!-- Config (must come before auth-guard) -->
+  <script src="/assets/js/supabase-config.js"></script>
+  <!-- Auth guard: redirects to /auth/login/ if not logged in -->
+  <script src="/assets/js/auth-guard.js"></script>
+  <script>
+    (async () => {
+      const _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      const { data: { session } } = await _sb.auth.getSession();
+
+      if (!session) return; // auth-guard.js handles the redirect
+
+      const user = session.user;
+
+      // Fetch profile row
+      const { data: profile } = await _sb
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single();
+
+      // Populate fields
+      document.getElementById('user-email').textContent = user.email;
+      document.getElementById('user-name').textContent = profile?.full_name || '—';
+
+      // Access status
+      const accessEl = document.getElementById('access-status');
+      if (profile?.has_access) {
+        accessEl.innerHTML = '<div class="access-status access-granted">✓ יש לך גישה לקורס</div>';
+      } else {
+        accessEl.innerHTML =
+          '<div class="access-status access-denied">' +
+            '<span>אין לך גישה לקורס עדיין</span>' +
+            '<a href="/investor-academy/" class="btn-gold">לרכישת הקורס</a>' +
+          '</div>';
+      }
+
+      // Show content
+      document.getElementById('profile-content').style.display = 'block';
+
+      // Logout
+      document.getElementById('logout-btn').addEventListener('click', async () => {
+        await _sb.auth.signOut();
+        window.location.replace('/');
+      });
+    })();
+  </script>
+
+</body>
+</html>

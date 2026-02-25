@@ -494,6 +494,92 @@
 
     .footer-links a:hover { color: var(--text-light); }
 
+    /* ─── NAVBAR BRAND & AUTH ────────────────────────── */
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .nav-auth {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-nav {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 16px;
+      border-radius: 8px;
+      font-family: var(--font);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1.5px solid transparent;
+      transition: background var(--transition), color var(--transition), border-color var(--transition), transform var(--transition);
+      white-space: nowrap;
+      text-decoration: none;
+      line-height: 1.5;
+    }
+
+    .btn-nav:hover { transform: translateY(-1px); }
+
+    .btn-nav-outline {
+      background: transparent;
+      color: var(--text-light);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .btn-nav-outline:hover {
+      border-color: rgba(255, 255, 255, 0.75);
+      background: rgba(255, 255, 255, 0.07);
+    }
+
+    .btn-nav-gold {
+      background: var(--gold);
+      color: #1a2e38;
+      border-color: var(--gold);
+    }
+
+    .btn-nav-gold:hover {
+      background: var(--gold-dark);
+      border-color: var(--gold-dark);
+    }
+
+    .nav-greeting {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-sub);
+      white-space: nowrap;
+    }
+
+    .nav-user-link {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--teal);
+      transition: color var(--transition);
+      white-space: nowrap;
+    }
+
+    .nav-user-link:hover { color: var(--text-light); }
+
+    .nav-signout {
+      background: none;
+      border: none;
+      font-family: var(--font);
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-sub);
+      cursor: pointer;
+      padding: 0;
+      transition: color var(--transition);
+      white-space: nowrap;
+    }
+
+    .nav-signout:hover { color: var(--text-light); }
+
     /* ─── RESPONSIVE ─────────────────────────────────── */
     @media (max-width: 900px) {
       .hero-graphic { display: none; }
@@ -513,7 +599,10 @@
 
   <!-- ─── NAVBAR ──────────────────────────────────────── -->
   <nav class="navbar">
-    <div class="logo">NewGen <span>Finance</span></div>
+    <div class="navbar-brand">
+      <div class="logo">NewGen <span>Finance</span></div>
+      <div id="nav-auth" class="nav-auth"></div>
+    </div>
     <ul class="nav-links">
       <li><a href="#">ראשי</a></li>
       <li><a href="#tools">כלים</a></li>
@@ -641,6 +730,47 @@
       </div>
     </div>
   </footer>
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="/assets/js/supabase-config.js"></script>
+  <script>
+    (async () => {
+      const _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      const { data: { session } } = await _sb.auth.getSession();
+      const navAuth = document.getElementById('nav-auth');
+
+      if (!session) {
+        navAuth.innerHTML =
+          '<a href="/auth/login/" class="btn-nav btn-nav-outline">כניסה</a>' +
+          '<a href="/auth/register/" class="btn-nav btn-nav-gold">הרשמה</a>';
+      } else {
+        const user = session.user;
+        const { data: profile } = await _sb
+          .from('profiles')
+          .select('full_name')
+          .eq('id', user.id)
+          .single();
+
+        const rawName = profile?.full_name || user.email;
+        const safeName = rawName
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+
+        navAuth.innerHTML =
+          '<span class="nav-greeting">שלום, ' + safeName + '</span>' +
+          '<a href="/profile/" class="nav-user-link">הפרופיל שלי</a>' +
+          '<button class="nav-signout" id="nav-signout-btn">התנתק</button>';
+
+        document.getElementById('nav-signout-btn').addEventListener('click', async () => {
+          await _sb.auth.signOut();
+          window.location.reload();
+        });
+      }
+    })();
+  </script>
 
 </body>
 </html>
