@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(cd:*)"
+      "Bash(cd:*)",
+      "Bash(cd /c/Users/yairt/newgenfinance && git add index.html profile/index.html && git commit -m \"$\\(cat <<'EOF'\nadd dynamic navbar auth and user profile page\n\n- Update navbar to show login/register buttons when logged out, and\n  greeting + profile link + logout when logged in \\(Supabase session\\)\n- Create profile/index.html: protected page showing email, full name,\n  and course access status pulled from the profiles table\n\nCo-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>\nEOF\n\\)\")"
     ]
   }
 }
