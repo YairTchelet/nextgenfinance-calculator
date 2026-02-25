@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>אזור החברים — NewGen Finance</title>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    /* ─── TOKENS ─────────────────────────────────────── */
+    :root {
+      --font: 'Heebo', sans-serif;
+      --bg: #1e3a4a;
+      --card-bg: #ffffff;
+      --teal: #2a9d8f;
+      --teal-dark: #21867a;
+      --teal-dim: rgba(42, 157, 143, 0.15);
+      --gold: #e9c46a;
+      --gold-dark: #d4a843;
+      --text-dark: #1a2e38;
+      --text-mid: #4a6472;
+      --text-light: #f0f8fa;
+      --text-sub: rgba(240, 248, 250, 0.75);
+      --shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
+      --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.28);
+      --radius: 16px;
+      --transition: 0.22s ease;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text-light);
+      direction: rtl;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+
+    /* ─── NAVBAR ─────────────────────────────────────── */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(20px, 5vw, 80px);
+      height: 68px;
+      background: rgba(30, 58, 74, 0.95);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .logo {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      color: var(--text-light);
+      direction: ltr;
+      unicode-bidi: embed;
+    }
+
+    .logo span { color: var(--teal); }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: clamp(16px, 3vw, 36px);
+    }
+
+    .nav-links a {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--text-sub);
+      transition: color var(--transition);
+    }
+
+    .nav-links a:hover { color: var(--text-light); }
+
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .nav-auth {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-nav {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 16px;
+      border-radius: 8px;
+      font-family: var(--font);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1.5px solid transparent;
+      transition: background var(--transition), color var(--transition), border-color var(--transition), transform var(--transition);
+      white-space: nowrap;
+      line-height: 1.5;
+    }
+
+    .btn-nav:hover { transform: translateY(-1px); }
+
+    .btn-nav-outline {
+      background: transparent;
+      color: var(--text-light);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .btn-nav-outline:hover {
+      border-color: rgba(255, 255, 255, 0.75);
+      background: rgba(255, 255, 255, 0.07);
+    }
+
+    .btn-nav-gold {
+      background: var(--gold);
+      color: #1a2e38;
+      border-color: var(--gold);
+    }
+
+    .btn-nav-gold:hover {
+      background: var(--gold-dark);
+      border-color: var(--gold-dark);
+    }
+
+    .nav-greeting {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-sub);
+      white-space: nowrap;
+    }
+
+    .nav-user-link {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--teal);
+      transition: color var(--transition);
+      white-space: nowrap;
+    }
+
+    .nav-user-link:hover { color: var(--text-light); }
+
+    .nav-signout {
+      background: none;
+      border: none;
+      font-family: var(--font);
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-sub);
+      cursor: pointer;
+      padding: 0;
+      transition: color var(--transition);
+      white-space: nowrap;
+    }
+
+    .nav-signout:hover { color: var(--text-light); }
+
+    /* ─── PAGE HEADER ────────────────────────────────── */
+    .page-header {
+      padding: clamp(48px, 7vw, 80px) clamp(20px, 5vw, 80px) 0;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .page-header h1 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      color: var(--text-light);
+      margin-bottom: 8px;
+    }
+
+    .welcome-msg {
+      font-size: 1.05rem;
+      color: var(--text-sub);
+      font-weight: 400;
+    }
+
+    .welcome-msg strong {
+      color: var(--teal);
+      font-weight: 700;
+    }
+
+    /* ─── MEMBERS GRID ───────────────────────────────── */
+    .members-section {
+      padding: clamp(36px, 5vw, 56px) clamp(20px, 5vw, 80px) clamp(60px, 8vw, 100px);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .members-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    /* ─── MEMBER CARD ────────────────────────────────── */
+    .member-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 36px 28px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: transform var(--transition), box-shadow var(--transition);
+      color: var(--text-dark);
+    }
+
+    .member-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .card-icon {
+      font-size: 2.2rem;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--text-dark);
+    }
+
+    .card-desc {
+      font-size: 0.9rem;
+      color: var(--text-mid);
+      line-height: 1.65;
+      flex: 1;
+    }
+
+    .card-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    /* ─── BUTTONS ─────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-family: var(--font);
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: transform var(--transition), box-shadow var(--transition), background var(--transition), color var(--transition), border-color var(--transition);
+      white-space: nowrap;
+      text-align: center;
+    }
+
+    .btn:hover { transform: translateY(-2px); }
+
+    .btn-gold {
+      background: var(--gold);
+      color: #1a2e38;
+      border-color: var(--gold);
+    }
+
+    .btn-gold:hover {
+      background: var(--gold-dark);
+      border-color: var(--gold-dark);
+      box-shadow: 0 8px 24px rgba(233, 196, 106, 0.4);
+    }
+
+    .btn-teal {
+      background: var(--teal);
+      color: #ffffff;
+      border-color: var(--teal);
+    }
+
+    .btn-teal:hover {
+      background: var(--teal-dark);
+      border-color: var(--teal-dark);
+      box-shadow: 0 8px 24px rgba(42, 157, 143, 0.4);
+    }
+
+    .btn-outline-dark {
+      background: transparent;
+      color: var(--text-dark);
+      border-color: rgba(42, 157, 143, 0.5);
+      padding: 10px 20px;
+      font-size: 0.9rem;
+    }
+
+    .btn-outline-dark:hover {
+      border-color: var(--teal);
+      background: var(--teal-dim);
+    }
+
+    /* Tools link list */
+    .tool-links {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .tool-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1.5px solid rgba(42, 157, 143, 0.35);
+      color: var(--text-dark);
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: background var(--transition), border-color var(--transition), transform var(--transition);
+    }
+
+    .tool-link:hover {
+      background: var(--teal-dim);
+      border-color: var(--teal);
+      transform: translateX(-3px);
+    }
+
+    .tool-link-icon { font-size: 1.1rem; }
+
+    /* ─── FOOTER ─────────────────────────────────────── */
+    footer {
+      background: rgba(0, 0, 0, 0.25);
+      border-top: 1px solid rgba(255, 255, 255, 0.07);
+      padding: 28px clamp(20px, 5vw, 80px);
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-logo {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--text-light);
+      direction: ltr;
+      unicode-bidi: embed;
+    }
+
+    .footer-logo span { color: var(--teal); }
+
+    .footer-right {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .footer-copy {
+      font-size: 0.82rem;
+      color: var(--text-sub);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 16px;
+    }
+
+    .footer-links a {
+      font-size: 0.82rem;
+      color: var(--text-sub);
+      transition: color var(--transition);
+    }
+
+    .footer-links a:hover { color: var(--text-light); }
+
+    /* ─── RESPONSIVE ─────────────────────────────────── */
+    @media (max-width: 860px) {
+      .members-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 560px) {
+      .members-grid { grid-template-columns: 1fr; }
+      .nav-links { gap: 14px; }
+      .nav-links a { font-size: 0.85rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── NAVBAR ──────────────────────────────────────── -->
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a href="/" class="logo">NewGen <span>Finance</span></a>
+      <div id="nav-auth" class="nav-auth"></div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="/">ראשי</a></li>
+      <li><a href="/#tools">כלים</a></li>
+      <li><a href="/#course">קורסים</a></li>
+    </ul>
+  </nav>
+
+  <!-- ─── PAGE HEADER ──────────────────────────────────── -->
+  <div class="page-header">
+    <h1>אזור החברים</h1>
+    <p class="welcome-msg">שלום <strong id="user-display-name">...</strong>, ברוך הבא לאזור החברים</p>
+  </div>
+
+  <!-- ─── MEMBERS GRID ──────────────────────────────────── -->
+  <div class="members-section">
+    <div class="members-grid">
+
+      <!-- Card 1: My Course -->
+      <div class="member-card">
+        <div class="card-icon">🎓</div>
+        <div class="card-title">הקורס שלי</div>
+        <p class="card-desc">המשך ללמוד ולצמוח — גישה לכל השיעורים והחומרים של Investor Academy.</p>
+        <div class="card-actions">
+          <a href="/investor-academy/lessons/" class="btn btn-gold">כניסה לשיעורים</a>
+        </div>
+      </div>
+
+      <!-- Card 2: My Tools -->
+      <div class="member-card">
+        <div class="card-icon">🛠️</div>
+        <div class="card-title">הכלים שלי</div>
+        <p class="card-desc">כלים פיננסיים חכמים שיעזרו לך לנהל ולעקוב אחר ההשקעות שלך.</p>
+        <div class="card-actions">
+          <div class="tool-links">
+            <a href="/calculator/" class="tool-link">
+              <span class="tool-link-icon">🩺</span>
+              מחשבון בריאות פיננסית
+            </a>
+            <a href="/portfolio-tracker/" class="tool-link">
+              <span class="tool-link-icon">📊</span>
+              מעקב תיק השקעות
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: My Profile -->
+      <div class="member-card">
+        <div class="card-icon">👤</div>
+        <div class="card-title">הפרופיל שלי</div>
+        <p class="card-desc">ערוך את פרטיך האישיים, שנה סיסמה, וצפה בסטטוס הגישה לקורס.</p>
+        <div class="card-actions">
+          <a href="/profile/" class="btn btn-teal">עריכת פרופיל</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ─── FOOTER ─────────────────────────────────────────── -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">NewGen <span>Finance</span></div>
+      <div class="footer-right">
+        <div class="footer-links">
+          <a href="#">פרטיות</a>
+          <a href="#">תנאי שימוש</a>
+        </div>
+        <span class="footer-copy">© 2025 NewGen Finance — כל הזכויות שמורות</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <!-- Config (must come before auth-guard) -->
+  <script src="/assets/js/supabase-config.js"></script>
+  <!-- Auth guard: redirects to /auth/login/ if not logged in -->
+  <script src="/assets/js/auth-guard.js"></script>
+  <script>
+    (async () => {
+      const _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      const { data: { session } } = await _sb.auth.getSession();
+
+      if (!session) return; // auth-guard.js handles the redirect
+
+      const user = session.user;
+
+      // Fetch profile
+      const { data: profile } = await _sb
+        .from('profiles')
+        .select('full_name')
+        .eq('id', user.id)
+        .single();
+
+      // Set welcome name
+      const displayName = profile?.full_name || user.email;
+      document.getElementById('user-display-name').textContent = displayName;
+
+      // Navbar auth
+      const navAuth = document.getElementById('nav-auth');
+      const safeName = displayName
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+
+      navAuth.innerHTML =
+        '<span class="nav-greeting">שלום, ' + safeName + '</span>' +
+        '<a href="/members/" class="nav-user-link">אזור החברים</a>' +
+        '<button class="nav-signout" id="nav-signout-btn">התנתק</button>';
+
+      document.getElementById('nav-signout-btn').addEventListener('click', async () => {
+        await _sb.auth.signOut();
+        window.location.replace('/');
+      });
+    })();
+  </script>
+
+</body>
+</html>
