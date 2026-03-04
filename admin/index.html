@@ -295,14 +295,9 @@
     </div>
   </div>
 
-  <!-- Supabase CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-  <script src="/assets/js/supabase-config.js"></script>
   <script>
   (function () {
     var ADMIN_PASSWORD = 'Jessie123!';
-
-    var _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     function getStoredToken() { return sessionStorage.getItem('admin_authenticated'); }
 
@@ -344,14 +339,16 @@
 
     async function loadData() {
       try {
-        // Parallel queries
-        var [profilesRes, requestsRes] = await Promise.all([
-          _sb.from('profiles').select('*').order('created_at', { ascending: false }),
-          _sb.from('access_requests').select('*').order('created_at', { ascending: false }),
-        ]);
-
-        var profiles = profilesRes.data || [];
-        var requests = requestsRes.data || [];
+        var res = await fetch('/api/admin-data', {
+          headers: { 'x-admin-token': ADMIN_PASSWORD },
+        });
+        if (!res.ok) {
+          var err = await res.json();
+          throw new Error(err.error || 'Failed to load data');
+        }
+        var data = await res.json();
+        var profiles = data.profiles || [];
+        var requests = data.requests || [];
 
         // ── Stats ──
         var pendingCount  = requests.filter(function (r) { return r.status === 'pending'; }).length;
