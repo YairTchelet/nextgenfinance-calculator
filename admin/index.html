@@ -292,24 +292,11 @@
   <script src="/assets/js/supabase-config.js"></script>
   <script>
   (function () {
-    // SHA-256 of "NewGen@2025" — change by replacing this hash
-    // To generate a new hash: echo -n "yourpassword" | sha256sum
-    var ADMIN_HASH = 'ace033624a0ca318f9633cfa1164dde071a534533b4c346a6c8d9c8e5dd5e129';
-    var ADMIN_TOKEN_KEY = 'ng_admin_token';
+    var ADMIN_PASSWORD = 'Jessie123!';
 
     var _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // ── Auth helpers ──
-    async function hashPassword(pw) {
-      var enc = new TextEncoder().encode(pw);
-      var buf = await crypto.subtle.digest('SHA-256', enc);
-      return Array.from(new Uint8Array(buf))
-        .map(function (b) { return b.toString(16).padStart(2, '0'); })
-        .join('');
-    }
-
-    function getStoredToken() { return localStorage.getItem(ADMIN_TOKEN_KEY); }
-    function storeToken(t)    { localStorage.setItem(ADMIN_TOKEN_KEY, t); }
+    function getStoredToken() { return sessionStorage.getItem('admin_authenticated'); }
 
     // ── Login flow ──
     document.getElementById('admin-login-btn').addEventListener('click', attemptLogin);
@@ -317,11 +304,10 @@
       if (e.key === 'Enter') attemptLogin();
     });
 
-    async function attemptLogin() {
+    function attemptLogin() {
       var pw = document.getElementById('admin-password').value;
-      var hash = await hashPassword(pw);
-      if (hash === ADMIN_HASH) {
-        storeToken(pw);  // Store plain password as the admin API token
+      if (pw === ADMIN_PASSWORD) {
+        sessionStorage.setItem('admin_authenticated', 'true');
         showDashboard();
       } else {
         document.getElementById('lock-error').style.display = 'block';
@@ -329,13 +315,7 @@
     }
 
     // ── Bootstrap ──
-    var stored = getStoredToken();
-    if (stored) {
-      hashPassword(stored).then(function (h) {
-        if (h === ADMIN_HASH) { showDashboard(); }
-        else { localStorage.removeItem(ADMIN_TOKEN_KEY); }
-      });
-    }
+    if (getStoredToken() === 'true') { showDashboard(); }
 
     // ── Dashboard ──
     function showDashboard() {
@@ -440,12 +420,11 @@
 
     // ── API calls ──
     async function callManageAccess(payload) {
-      var adminToken = getStoredToken();
       var res = await fetch('/api/manage-access', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-admin-token': adminToken,
+          'x-admin-token': ADMIN_PASSWORD,
         },
         body: JSON.stringify(payload),
       });
