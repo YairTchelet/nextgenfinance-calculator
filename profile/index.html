@@ -631,6 +631,13 @@
 
     <h1 class="page-title">הפרופיל שלי</h1>
 
+    <!-- ── Access Denied Notice (shown when redirected from course-guard) ── -->
+    <div id="access-denied-notice" style="display:none; background:#ece8e5; border-radius:14px; padding:16px 22px; box-shadow:0 4px 16px rgba(0,0,0,0.12);">
+      <p style="color:#5e817d; font-size:0.95rem; font-weight:600; margin:0;">
+        אין לך גישה לקורס עדיין — מלא את הטופס למטה כדי לבקש גישה
+      </p>
+    </div>
+
     <!-- ── Profile Card ── -->
     <div class="card">
       <div class="card-header">
@@ -946,6 +953,11 @@
       });
 
     })();
+
+    // Access denied notice
+    if (new URLSearchParams(window.location.search).get('access') === 'denied') {
+      document.getElementById('access-denied-notice').style.display = 'block';
+    }
 
     // Mobile nav toggle
     (function () {
