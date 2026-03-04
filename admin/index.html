@@ -246,7 +246,10 @@
       </div>
 
       <!-- Access requests -->
-      <div class="section-title">📋 בקשות גישה</div>
+      <div class="section-title">
+        📋 בקשות גישה ממתינות
+        <span id="pending-badge" style="background:#e74c3c;color:#fff;font-size:0.72rem;font-weight:700;padding:2px 9px;border-radius:20px;display:none;"></span>
+      </div>
       <div class="table-card">
         <table>
           <thead>
@@ -256,7 +259,6 @@
               <th>אימייל</th>
               <th class="hide-mobile">טלפון</th>
               <th class="hide-mobile">הודעה</th>
-              <th>סטטוס</th>
               <th>פעולות</th>
             </tr>
           </thead>
@@ -267,7 +269,13 @@
       </div>
 
       <!-- All users -->
-      <div class="section-title">👥 כל המשתמשים</div>
+      <div class="section-title" style="justify-content:space-between;">
+        <span>👥 כל המשתמשים</span>
+        <label style="font-size:0.8rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;">
+          <input type="checkbox" id="show-all-users" style="cursor:pointer;">
+          הצג הכל
+        </label>
+      </div>
       <div class="table-card">
         <table>
           <thead>
@@ -346,54 +354,64 @@
         var requests = requestsRes.data || [];
 
         // ── Stats ──
+        var pendingCount  = requests.filter(function (r) { return r.status === 'pending'; }).length;
+        var approvedCount = requests.filter(function (r) { return r.status === 'approved'; }).length;
         document.getElementById('stat-total').textContent    = profiles.length;
         document.getElementById('stat-active').textContent   = profiles.filter(function (p) { return p.has_access; }).length;
-        document.getElementById('stat-pending').textContent  = requests.filter(function (r) { return r.status === 'pending'; }).length;
-        document.getElementById('stat-approved').textContent = requests.filter(function (r) { return r.status === 'approved'; }).length;
+        document.getElementById('stat-pending').textContent  = pendingCount;
+        document.getElementById('stat-approved').textContent = approvedCount;
 
-        // ── Requests table ──
-        renderRequests(requests);
+        // ── Pending badge ──
+        var badge = document.getElementById('pending-badge');
+        if (pendingCount > 0) {
+          badge.textContent = pendingCount;
+          badge.style.display = 'inline-block';
+        }
 
-        // ── Users table ──
-        renderUsers(profiles);
+        // ── Requests table — show pending only ──
+        var pendingRequests = requests.filter(function (r) { return r.status === 'pending'; });
+        renderRequests(pendingRequests);
+
+        // ── Users table — hide those with access by default ──
+        window._allProfiles = profiles;
+        renderUsers(profiles.filter(function (p) { return !p.has_access; }));
+
+        document.getElementById('show-all-users').addEventListener('change', function () {
+          renderUsers(this.checked ? profiles : profiles.filter(function (p) { return !p.has_access; }));
+        });
 
       } catch (err) {
         console.error('loadData error:', err);
       }
     }
 
-    // ── Requests table ──
+    // ── Requests table (pending only) ──
     function renderRequests(requests) {
       var tbody = document.getElementById('requests-tbody');
       if (!requests.length) {
-        tbody.innerHTML = '<tr class="empty-row"><td colspan="7">אין בקשות עדיין</td></tr>';
+        tbody.innerHTML = '<tr class="empty-row"><td colspan="6">אין בקשות ממתינות</td></tr>';
         return;
       }
       tbody.innerHTML = requests.map(function (r, i) {
-        var badgeClass = r.status === 'approved' ? 'badge-approved'
-                       : r.status === 'denied'   ? 'badge-denied'
-                       : 'badge-pending';
-        var badgeText  = r.status === 'approved' ? 'אושר'
-                       : r.status === 'denied'   ? 'נדחה'
-                       : 'ממתין';
-        var actions = r.status === 'pending'
-          ? '<button class="btn-approve" onclick="approveRequest(\'' + esc(r.user_id) + '\',this)">אשר גישה</button>' +
-            '<button class="btn-deny"    onclick="denyRequest(\''    + esc(r.user_id) + '\',this)">דחה</button>'
-          : '—';
         return '<tr id="req-row-' + i + '">' +
           '<td>' + fmtDate(r.created_at) + '</td>' +
           '<td class="td-wrap">' + esc(r.name) + '</td>' +
           '<td class="td-wrap">' + esc(r.email) + '</td>' +
           '<td class="hide-mobile td-wrap">' + esc(r.phone) + '</td>' +
           '<td class="hide-mobile td-wrap" title="' + esc(r.message) + '">' + esc(r.message) + '</td>' +
-          '<td><span class="badge ' + badgeClass + '" id="req-badge-' + i + '">' + badgeText + '</span></td>' +
-          '<td id="req-actions-' + i + '">' + actions + '</td>' +
+          '<td id="req-actions-' + i + '">' +
+            '<button class="btn-approve" onclick="approveRequest(\'' + esc(r.user_id) + '\',' + i + ',this)">אשר גישה</button>' +
+            '<button class="btn-deny"    onclick="denyRequest(\''    + esc(r.user_id) + '\',' + i + ',this)">דחה</button>' +
+          '</td>' +
           '</tr>';
       }).join('');
+    }
 
-      // Store index for later status updates
-      requests.forEach(function (r, i) { r._idx = i; });
-      window._requests = requests;
+    function decrementPendingBadge() {
+      var badge = document.getElementById('pending-badge');
+      var n = Math.max(0, parseInt(badge.textContent || '0') - 1);
+      badge.textContent = n;
+      if (n === 0) badge.style.display = 'none';
     }
 
     // ── Users table ──
@@ -432,43 +450,38 @@
       return res.json();
     }
 
-    window.approveRequest = async function (userId, btn) {
+    window.approveRequest = async function (userId, idx, btn) {
       btn.disabled = true;
-      var row = btn.closest('tr');
-      var idx = row.id.replace('req-row-', '');
       try {
         await callManageAccess({ userId: userId, action: 'approve' });
-        document.getElementById('req-badge-' + idx).outerHTML = '<span class="badge badge-approved">אושר</span>';
-        document.getElementById('req-actions-' + idx).textContent = '—';
+        // Remove row
+        var row = document.getElementById('req-row-' + idx);
+        if (row) row.remove();
         // Update stats
-        var pending = document.getElementById('stat-pending');
-        var approved = document.getElementById('stat-approved');
-        pending.textContent  = Math.max(0, parseInt(pending.textContent) - 1);
-        approved.textContent = parseInt(approved.textContent) + 1;
-        // Update active users stat
-        var active = document.getElementById('stat-active');
-        active.textContent = parseInt(active.textContent) + 1;
+        document.getElementById('stat-pending').textContent  = Math.max(0, parseInt(document.getElementById('stat-pending').textContent) - 1);
+        document.getElementById('stat-approved').textContent = parseInt(document.getElementById('stat-approved').textContent) + 1;
+        document.getElementById('stat-active').textContent   = parseInt(document.getElementById('stat-active').textContent) + 1;
+        decrementPendingBadge();
       } catch (err) {
         console.error('approve failed:', err);
         btn.disabled = false;
-        alert('שגיאה באישור הגישה');
+        alert('שגיאה באישור הגישה: ' + err.message);
       }
     };
 
-    window.denyRequest = async function (userId, btn) {
+    window.denyRequest = async function (userId, idx, btn) {
       btn.disabled = true;
-      var row = btn.closest('tr');
-      var idx = row.id.replace('req-row-', '');
       try {
         await callManageAccess({ userId: userId, action: 'deny' });
-        document.getElementById('req-badge-' + idx).outerHTML = '<span class="badge badge-denied">נדחה</span>';
-        document.getElementById('req-actions-' + idx).textContent = '—';
-        var pending = document.getElementById('stat-pending');
-        pending.textContent = Math.max(0, parseInt(pending.textContent) - 1);
+        // Remove row
+        var row = document.getElementById('req-row-' + idx);
+        if (row) row.remove();
+        document.getElementById('stat-pending').textContent = Math.max(0, parseInt(document.getElementById('stat-pending').textContent) - 1);
+        decrementPendingBadge();
       } catch (err) {
         console.error('deny failed:', err);
         btn.disabled = false;
-        alert('שגיאה בדחיית הבקשה');
+        alert('שגיאה בדחיית הבקשה: ' + err.message);
       }
     };
 
