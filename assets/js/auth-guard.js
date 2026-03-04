@@ -8,6 +8,7 @@
   const _client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   const { data: { session } } = await _client.auth.getSession();
   if (!session) {
+    sessionStorage.setItem('redirectAfterLogin', window.location.href);
     window.location.replace('/auth/login/');
   }
 })();
