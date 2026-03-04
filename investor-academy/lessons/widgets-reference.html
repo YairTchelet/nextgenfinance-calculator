@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Widgets Reference — מאגר רכיבים</title>
+    <style>
+        body { font-family: monospace; background: #111; color: #eee; padding: 2rem; }
+        .widget-label {
+            background: #2a9d8f;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            margin: 3rem 0 0 0;
+            border-radius: 8px 8px 0 0;
+            display: inline-block;
+        }
+        .widget-section {
+            border: 2px solid #2a9d8f;
+            border-radius: 0 8px 8px 8px;
+            padding: 2rem;
+            margin-bottom: 1rem;
+            background: #1a2e38;
+        }
+    </style>
+</head>
+<body>
+
+<h1 style="color:#e9c46a; text-align:center;">📦 מאגר רכיבים — Widgets Reference</h1>
+<p style="text-align:center; color:#aaa;">כל רכיב מסומן בשם הקובץ המקורי שלו. העתק את הקוד הרצוי לעמוד הפרק.</p>
+
+
+<!-- ============================================================ -->
+<!-- WIDGET SOURCE FILE: "table of contents.txt"                  -->
+<!-- ============================================================ -->
+<div class="widget-label">📄 table of contents.txt — תוכן עניינים</div>
+<div class="widget-section">
+
+<!-- PASTE INTO PAGE — copy from here -->
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+    .toc-widget {
+        --text-primary: #1a202c;
+        --text-secondary: #4a5568;
+        --border-color: #cbd5e1;
+        --accent-gradient: linear-gradient(90deg, #38b2ac, #3182ce);
+
+        font-family: 'Rubik', sans-serif;
+        width: 100%;
+        max-width: 800px;
+        margin: 40px auto;
+        background: transparent;
+        padding: 1rem;
+        box-sizing: border-box;
+    }
+
+    .toc-widget .main-title {
+        text-align: center;
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin: 0 0 2.5rem 0;
+        background: var(--accent-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
+    }
+
+    .toc-widget .sections-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .toc-widget .section {
+        text-align: right;
+        border-radius: 12px;
+        padding: 1rem;
+    }
+
+    .toc-widget .section-title {
+        display: inline-block;
+        position: relative;
+        text-decoration: none;
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        cursor: pointer;
+        background: var(--accent-gradient);
+        background-size: 200% auto;
+        color: var(--text-primary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-position: 100%;
+        transition: background-position 0.4s ease;
+    }
+
+    .toc-widget .section:hover .section-title {
+        background-position: 0%;
+    }
+
+    .toc-widget .subchapter-list {
+        list-style: none !important;
+        margin: 0;
+        padding-right: 20px;
+        position: relative;
+    }
+
+    .toc-widget .subchapter-list::before {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 0.5em;
+        bottom: 0.5em;
+        width: 2px;
+        background: var(--accent-gradient);
+        transform: scaleY(0);
+        transform-origin: top;
+        transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+
+    .toc-widget .section:hover .subchapter-list::before {
+        transform: scaleY(1);
+    }
+
+    .toc-widget .subchapter-list li {
+        margin-bottom: 0.75rem;
+        list-style-type: none !important;
+    }
+    .toc-widget .subchapter-list li:last-child {
+        margin-bottom: 0;
+    }
+
+    .toc-widget .item {
+        font-size: 1.1rem;
+        font-weight: 500;
+        text-decoration: none;
+        display: inline-block;
+        color: var(--text-primary);
+        background: var(--accent-gradient);
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        background-position: 100%;
+        -webkit-text-fill-color: var(--text-primary);
+        transition: color 0.3s ease, background-position 0.4s ease;
+    }
+
+    .toc-widget .item:hover {
+        background-position: 0%;
+        -webkit-text-fill-color: transparent;
+    }
+
+    @media (max-width: 600px) {
+        .toc-widget .main-title { font-size: 2rem; }
+        .toc-widget .section-title { font-size: 1.25rem; }
+        .toc-widget .item { font-size: 1rem; }
+    }
+</style>
+
+<div class="toc-widget">
+    <h1 class="main-title">תוכן העניינים לפרק 1</h1>
+
+    <div class="sections-container">
+        <!-- פרק 1 שיעור 1 -->
+        <div class="section">
+            <a href="#a" class="section-title">פרק 1 שיעור 1: איך התפתח עולם ההשקעות</a>
+            <ul class="subchapter-list">
+                <li><a href="#1" class="item">1. אי הקוקוסים</a></li>
+                <li><a href="#2" class="item">2. מהפכת הבורסות</a></li>
+                <li><a href="#3" class="item">3. יתרונות הבורסה</a></li>
+                <li><a href="#4" class="item">4. שנות ה-80: המעבר הטכנולוגי</a></li>
+                <li><a href="#5" class="item">5. חווית המסחר כיום</a></li>
+            </ul>
+        </div>
+
+        <!-- פרק 1 שיעור 2 -->
+       <div class="section">
+            <a href="#b" class="section-title">פרק 1 שיעור 2: אז מהי מנייה?</a>
+            <ul class="subchapter-list">
+                <li><a href="#6" class="item">1. מה המשמעות של אחזקה בנייר ערך</a></li>
+                <li><a href="#7" class="item">2. איך חברות מוצאות את דרכן לבורסה</a></li>
+                <li><a href="#8" class="item">3. שלבי ההנפקה של חברה</a></li>
+                <li><a href="#9" class="item">4. לי-מונדה בע"מ - דוגמא</a></li>
+            </ul>
+        </div>
+
+        <!-- אירועי מניות נוספים -->
+        <div class="section">
+            <a href="#c" class="section-title">אירועי מניות נוספים</a>
+            <ul class="subchapter-list">
+                <li><a href="#10" class="item">1. הנפקות משניות</a></li>
+                <li><a href="#11" class="item">2. אירועי Split</a></li>
+                <li><a href="#12" class="item">3. אירועי Buyback</a></li>
+                <li><a href="#13" class="item">4. נקודת המבט של המשקיע</a></li>
+            </ul>
+        </div>
+
+        <!-- מניות הבורסה לאורך ולרוחב -->
+        <div class="section">
+            <a href="#8024229_10000063" class="section-title">מניות הבורסה לאורך ולרוחב</a>
+            <ul class="subchapter-list">
+                <li><a href="#14" class="item">1. מדדים וקרנות</a></li>
+                <li><a href="#15" class="item">2. מדד ג'אגור/בורסה</a></li>
+                <li><a href="#16" class="item">3. מדד שווי שוק</a></li>
+                <li><a href="#17" class="item">4. S&amp;P500</a></li>
+                <li><a href="#18" class="item">5. NASDAQ100</a></li>
+                <li><a href="#19" class="item">6. TA125</a></li>
+                <li><a href="#20" class="item">7. מדד סקטוריאלי</a></li>
+                <li><a href="#21" class="item">8. קרן סל Vs קרן נאמנות</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- END: table of contents.txt -->
+
+</div>
+
+
+<!-- ============================================================ -->
+<!-- WIDGET SOURCE FILE: "quote.txt"                              -->
+<!-- ============================================================ -->
+<div class="widget-label">📄 quote.txt — ציטוט (וורן באפט)</div>
+<div class="widget-section">
+
+<!-- PASTE INTO PAGE — copy from here -->
+<style>
+    :root {
+        --primary-color: #6ee1f5;
+        --text-color: white;
+        --font-primary: 'Assistant', sans-serif;
+        --transition-speed: 0.8s;
+    }
+
+    @font-face {
+        font-family: 'Assistant';
+        font-display: swap;
+        src: url('https://fonts.gstatic.com/s/assistant/v8/2sDZZMBAhRGHjfq2Fc9kcw.woff2') format('woff2');
+        font-weight: 300;
+        font-style: normal;
+    }
+
+    .warren-buffett-quote-widget {
+        font-family: var(--font-primary);
+        width: 100%;
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: transparent;
+        padding: 20px;
+    }
+
+    .warren-buffett-quote-widget__container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        padding: 2rem;
+        direction: rtl;
+        min-height: 200px;
+        background-color: transparent;
+        opacity: 0;
+        transform: translateY(30px);
+        transition:
+            opacity var(--transition-speed) ease-out,
+            transform var(--transition-speed) ease-out;
+    }
+
+    .warren-buffett-quote-widget__container.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .warren-buffett-quote-widget__reveal {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: var(--text-color);
+        font-size: clamp(1.5rem, 4vw, 2rem);
+        font-weight: 700;
+        text-align: center;
+        white-space: pre-wrap;
+        max-width: 80%;
+        line-height: 1.5;
+        padding: 0 2rem;
+    }
+
+    .warren-buffett-quote-widget__author {
+        font-size: clamp(1rem, 3vw, 1.2rem);
+        font-weight: 400;
+        color: var(--text-color);
+        margin-top: 0.5rem;
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out 1s;
+    }
+
+    .warren-buffett-quote-widget__container.visible .warren-buffett-quote-widget__author {
+        opacity: 1;
+    }
+
+    .warren-buffett-quote-widget__reveal::before,
+    .warren-buffett-quote-widget__reveal::after {
+        position: absolute;
+        content: "";
+        top: 8%;
+        height: 84%;
+        width: 2px;
+        background: var(--primary-color);
+        opacity: 0;
+        transition: all 1.5s ease-out;
+    }
+
+    .warren-buffett-quote-widget__reveal::before {
+        right: calc(50% + 1.5rem);
+    }
+
+    .warren-buffett-quote-widget__reveal::after {
+        left: calc(50% + 1.5rem);
+    }
+
+    .warren-buffett-quote-widget__container.visible .warren-buffett-quote-widget__reveal {
+        animation: warren-buffett-quote-text-expand 0.7s cubic-bezier(0.215, 0.610, 0.355, 1.000) both;
+    }
+
+    .warren-buffett-quote-widget__container.visible .warren-buffett-quote-widget__reveal::before {
+        right: -3.5%;
+        opacity: 1;
+    }
+
+    .warren-buffett-quote-widget__container.visible .warren-buffett-quote-widget__reveal::after {
+        left: -3.5%;
+        opacity: 1;
+    }
+
+    @keyframes warren-buffett-quote-text-expand {
+        0% { letter-spacing: -0.5em; opacity: 0; }
+        40% { opacity: 0.6; }
+        100% { opacity: 1; }
+    }
+
+    @media screen and (max-width: 768px) {
+        .warren-buffett-quote-widget__container { padding: 1rem; }
+        .warren-buffett-quote-widget__reveal::before { right: calc(50% + 1rem); }
+        .warren-buffett-quote-widget__reveal::after { left: calc(50% + 1rem); }
+        .warren-buffett-quote-widget__container.visible .warren-buffett-quote-widget__reveal::before { right: -3%; }
+        .warren-buffett-quote-widget__container.visible .warren-buffett-quote-widget__reveal::after { left: -3%; }
+    }
+</style>
+
+<div class="warren-buffett-quote-widget">
+    <div class="warren-buffett-quote-widget__container">
+        <div class="warren-buffett-quote-widget__reveal">"עדיף בהרבה לקנות חברה נפלאה במחיר הוגן מאשר חברה הוגנת במחיר נפלא."</div>
+        <div class="warren-buffett-quote-widget__author">– וורן באפט</div>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("visible");
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        const container = document.querySelector(".warren-buffett-quote-widget__container");
+        if (container) observer.observe(container);
+
+        if ('fonts' in document) {
+            document.fonts.load('1em Assistant');
+        }
+    });
+</script>
+<!-- END: quote.txt -->
+
+</div>
+
+
+<!-- ============================================================ -->
+<!-- WIDGET SOURCE FILE: "הידעת.txt"                              -->
+<!-- ============================================================ -->
+<div class="widget-label">📄 הידעת.txt — הידעת? (כרטיס מידע מתרחב)</div>
+<div class="widget-section">
+
+<!-- PASTE INTO PAGE — copy from here -->
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+    .did-you-know-widget {
+        --card-bg-color: rgba(255, 255, 255, 0.8);
+        --border-color: rgba(0, 0, 0, 0.08);
+        --text-primary: #1a202c;
+        --text-secondary: #4a5568;
+        --accent-gradient: linear-gradient(135deg, #38b2ac, #3182ce);
+        --highlight-bg: rgba(56, 178, 172, 0.1);
+
+        font-family: 'Rubik', sans-serif;
+        width: 100%;
+        max-width: 800px;
+        margin: 40px auto;
+        background: var(--card-bg-color);
+        border: 1px solid var(--border-color);
+        border-radius: 24px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        padding: 2.5rem;
+        box-sizing: border-box;
+        cursor: pointer;
+        transition: min-height 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .did-you-know-widget .card-teaser {
+        text-align: center;
+        transition: opacity 0.4s ease;
+    }
+    .did-you-know-widget .teaser-title {
+        font-size: 2.25rem;
+        font-weight: 700;
+        margin: 0;
+        background: var(--accent-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .did-you-know-widget .teaser-subtitle {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin: 0.5rem 0;
+    }
+    .did-you-know-widget .teaser-prompt {
+        font-size: 1rem;
+        font-weight: 500;
+        color: var(--text-secondary);
+        margin: 0;
+    }
+
+    .did-you-know-widget .card-content {
+        position: absolute;
+        top: 2.5rem;
+        left: 2.5rem;
+        right: 2.5rem;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.5s 0.2s ease, transform 0.5s 0.2s ease;
+        text-align: center;
+    }
+
+    .did-you-know-widget .content-title {
+        font-size: 2rem;
+        font-weight: 700;
+        margin: 0 0 1.5rem 0;
+        background: var(--accent-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .did-you-know-widget .content-text {
+        font-size: 1.25rem;
+        line-height: 1.8;
+        color: var(--text-primary);
+        margin: 0 0 1.5rem 0;
+    }
+    .did-you-know-widget .content-image {
+        width: 100%;
+        max-width: 600px;
+        height: auto;
+        border-radius: 12px;
+        margin: 0 auto;
+        box-shadow: 0 10px 20px -5px rgba(0,0,0,0.1);
+    }
+
+    .did-you-know-widget.is-expanded { cursor: default; }
+    .did-you-know-widget.is-expanded .card-teaser { opacity: 0; pointer-events: none; }
+    .did-you-know-widget.is-expanded .card-content {
+        position: relative;
+        top: auto; left: auto; right: auto;
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    @media (max-width: 600px) {
+        .did-you-know-widget { padding: 2rem; }
+        .did-you-know-widget .teaser-title { font-size: 2rem; }
+        .did-you-know-widget .teaser-subtitle { font-size: 1.25rem; }
+        .did-you-know-widget .content-title { font-size: 1.75rem; }
+        .did-you-know-widget .content-text { font-size: 1.1rem; }
+    }
+</style>
+
+<div class="did-you-know-widget" id="split-info-widget">
+    <div class="card-inner-wrapper">
+        <!-- Teaser State -->
+        <div class="card-teaser">
+            <h2 class="teaser-title">💡 ?הידעת</h2>
+            <p class="teaser-subtitle">אירועי ספליט</p>
+            <p class="teaser-prompt">לחץ למידע נוסף</p>
+        </div>
+
+        <!-- Expanded State (hidden by default) -->
+        <div class="card-content">
+            <h3 class="content-title">אירועי ספליט</h3>
+            <p class="content-text">
+                מחקר של Bank of America מצא שמניות שעוברות ספליט נוטות להציג תשואת יתר על השוק. הסיבה היא לא הספליט עצמו, אלא העובדה שספליט הוא בדרך כלל סימן לחברה איכותית וצומחת, שהגיעה למחיר מניה גבוה בזכות הצלחה עסקית.
+            </p>
+            <img class="content-image" src="https://images.ravpages.co.il/xsite_resources/user_content/cp_new_production/d4/83/50/cb/d48350cb1a786c4790a92b5444c0e526/images/3309dbd807151809e7ac72367e36eff1.jpeg" alt="Stocks That Split Outperform the Market Chart">
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        const widget = document.getElementById('split-info-widget');
+        if (!widget) return;
+
+        const teaser = widget.querySelector('.card-teaser');
+        const content = widget.querySelector('.card-content');
+
+        content.style.display = 'none';
+
+        widget.addEventListener('click', function() {
+            if (widget.classList.contains('is-expanded')) return;
+
+            const startHeight = widget.offsetHeight;
+            content.style.display = 'block';
+            teaser.style.display = 'none';
+            const endHeight = widget.scrollHeight;
+            widget.style.minHeight = `${startHeight}px`;
+
+            requestAnimationFrame(() => {
+                widget.style.minHeight = `${endHeight}px`;
+                widget.classList.add('is-expanded');
+            });
+
+            widget.addEventListener('transitionend', () => {
+                widget.style.minHeight = 'auto';
+            }, { once: true });
+        });
+    })();
+</script>
+<!-- END: הידעת.txt -->
+
+</div>
+
+
+<!-- ============================================================ -->
+<!-- WIDGET SOURCE FILE: "educational video.txt"                  -->
+<!-- ============================================================ -->
+<div class="widget-label">📄 educational video.txt — סרטון הרחבה (וידאו עם Overlay)</div>
+<div class="widget-section">
+
+<!-- PASTE INTO PAGE — copy from here -->
+<style>
+    .my-widget {
+        box-sizing: border-box;
+        width: 100%;
+        max-width: 1400px;
+        margin: 20px auto;
+        padding: 1rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .my-widget .video-container {
+        position: relative;
+        width: 100%;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .my-widget .video-container iframe {
+        width: 100%;
+        aspect-ratio: 16/9;
+        border: none;
+    }
+
+    .my-widget .video-overlay {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 10;
+        cursor: pointer;
+        color: #fff;
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+
+    .my-widget .floating-button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        padding: 10px 15px;
+        background-color: #66fcf1;
+        color: #000;
+        font-size: 1rem;
+        font-weight: bold;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        z-index: 10;
+    }
+
+    .my-widget .floating-button:hover {
+        background-color: #45a29e;
+    }
+
+    @media (max-width: 768px) {
+        .my-widget { padding: 0.5rem; }
+        .my-widget .floating-button { font-size: 0.8rem; padding: 8px 10px; }
+    }
+</style>
+
+<div class="my-widget">
+    <div class="video-container">
+        <div class="floating-button">סרטון הרחבה</div>
+        <div class="video-overlay" onclick="removeOverlay(this)">לחץ להרחבה על מבנה שוק ההון בעידן המודרני</div>
+        <iframe
+            src="https://www.youtube.com/embed/F3QpgXBtDeo?autoplay=0"
+            title="YouTube video player"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen>
+        </iframe>
+    </div>
+</div>
+
+<script>
+    function removeOverlay(overlayElement) {
+        overlayElement.style.display = 'none';
+    }
+</script>
+<!-- END: educational video.txt -->
+
+</div>
+
+
+<!-- ============================================================ -->
+<!-- WIDGET SOURCE FILE: "tradingview graph.txt"                  -->
+<!-- ============================================================ -->
+<div class="widget-label">📄 tradingview graph.txt — גרף TradingView (Symbol Overview)</div>
+<div class="widget-section">
+
+<!-- PASTE INTO PAGE — copy from here -->
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;700&display=swap" rel="stylesheet">
+<style>
+    .investment-course-widget {
+        font-family: 'Assistant', sans-serif;
+        padding: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .investment-course-widget .title-section {
+        text-align: center;
+        font-size: 36px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: white;
+    }
+
+    .investment-course-widget .widget-container {
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        margin-bottom: 20px;
+        width: 100%;
+    }
+
+    .investment-course-widget .text-section {
+        text-align: center;
+        font-size: 16px;
+        margin-top: 10px;
+        line-height: 1.6;
+        color: white;
+    }
+
+    @media (max-width: 768px) {
+        .investment-course-widget .title-section { font-size: 28px; }
+        .investment-course-widget .text-section { font-size: 14px; }
+    }
+</style>
+
+<div class="investment-course-widget">
+    <div class="title-section">
+        גרף מחירים של מדדי ה-S&amp;P500, NASDAQ100 ו-TA125
+    </div>
+
+    <!-- TradingView Widget BEGIN -->
+    <div class="tradingview-widget-container widget-container">
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js" async>
+        {
+            "symbols": [
+                ["TASE:TA125"],
+                ["SP:SPX"],
+                ["NASDAQ:NDX"]
+            ],
+            "chartOnly": false,
+            "width": "100%",
+            "height": "750",
+            "locale": "en",
+            "colorTheme": "dark",
+            "autosize": true,
+            "showVolume": true,
+            "showMA": true,
+            "hideDateRanges": false,
+            "hideMarketStatus": false,
+            "hideSymbolLogo": false,
+            "scalePosition": "right",
+            "scaleMode": "Normal",
+            "fontFamily": "Assistant, sans-serif",
+            "fontSize": "12",
+            "noTimeScale": false,
+            "valuesTracking": "1",
+            "changeMode": "price-and-percent",
+            "chartType": "line",
+            "maLineColor": "#2962FF",
+            "maLineWidth": 1,
+            "maLength": 9,
+            "headerFontSize": "medium",
+            "lineWidth": 2,
+            "lineType": 0
+        }
+        </script>
+    </div>
+    <!-- TradingView Widget END -->
+
+    <div class="text-section">
+        נסו לזהות ימי משבר בשוק (כמו משבר הקורונה, מלחמת חרבות ברזל וכו') ולראות את ההשפעה שלהם על השוק
+    </div>
+</div>
+<!-- END: tradingview graph.txt -->
+
+</div>
+
+
+<!-- ============================================================ -->
+<!-- WIDGET SOURCE FILE: "tradingview heatmap.txt"                -->
+<!-- NOTE: This file contains the Book Dossier widget code.       -->
+<!-- ============================================================ -->
+<div class="widget-label">📄 tradingview heatmap.txt — ספרי השקעות מומלצים (Book Dossier)</div>
+<div class="widget-section">
+
+<!-- PASTE INTO PAGE — copy from here -->
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+    .book-dossier-widget {
+        --card-bg-color: rgba(255, 255, 255, 0.8);
+        --border-color: rgba(0, 0, 0, 0.08);
+        --text-primary: #1a202c;
+        --text-secondary: #4a5568;
+        --accent-gradient: linear-gradient(135deg, #38b2ac, #3182ce);
+
+        font-family: 'Rubik', sans-serif;
+        width: 100%;
+        max-width: 900px;
+        margin: 40px auto;
+        background: var(--card-bg-color);
+        border: 1px solid var(--border-color);
+        border-radius: 24px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .dossier-header {
+        padding: 2.5rem 2.5rem 1.5rem 2.5rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .dossier-header .main-title {
+        text-align: center;
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin: 0;
+        background: var(--accent-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .dossier-main-content {
+        padding: 2.5rem;
+        position: relative;
+        overflow: hidden;
+        transition: height 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+    .book-display-card {
+        position: absolute;
+        top: 2.5rem; left: 2.5rem; right: 2.5rem;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        align-items: center;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .book-display-card.is-active { opacity: 1; transform: translateY(0); }
+    .book-display-card.is-exiting { opacity: 0; transform: translateY(-20px); }
+
+    @media (min-width: 768px) {
+        .book-display-card { grid-template-columns: 1fr 2fr; gap: 3rem; }
+    }
+
+    .book-cover-container { perspective: 1000px; }
+    .book-cover {
+        width: 100%;
+        max-width: 250px;
+        margin: 0 auto;
+        height: auto;
+        border-radius: 8px;
+        box-shadow: -10px 10px 30px -5px rgba(0,0,0,0.2);
+        transform: rotateY(-20deg) rotateX(5deg);
+    }
+
+    .book-details { text-align: right; }
+    .book-title { font-size: 2.25rem; font-weight: 700; color: var(--text-primary); margin: 0; }
+    .book-author { font-size: 1.25rem; font-weight: 500; color: var(--text-secondary); margin: 0.25rem 0 1.5rem 0; }
+    .book-description { font-size: 1.1rem; line-height: 1.8; color: var(--text-secondary); margin-bottom: 2rem; }
+    .takeaways-title { font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin-bottom: 1rem; }
+
+    .takeaways-list {
+        list-style-type: none !important;
+        padding-right: 0 !important;
+        margin: 0;
+    }
+    .takeaways-list li { font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 0.75rem; position: relative; padding-right: 25px; }
+    .takeaways-list li::before {
+        content: ''; position: absolute; right: 0; top: 50%; width: 10px; height: 10px; border-radius: 50%; background: var(--accent-gradient); transform: translateY(-50%);
+    }
+
+    .dossier-nav-bookshelf {
+        padding: 1.5rem;
+        border-top: 1px solid var(--border-color);
+        background: rgba(0,0,0,0.02);
+    }
+    .bookshelf-scroller {
+        display: flex;
+        gap: 1.5rem;
+        overflow-x: auto;
+        padding-bottom: 1rem;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(0,0,0,0.2) rgba(0,0,0,0.05);
+    }
+    .bookshelf-scroller::-webkit-scrollbar { height: 8px; }
+    .bookshelf-scroller::-webkit-scrollbar-track { background-color: rgba(0,0,0,0.05); border-radius: 8px; }
+    .bookshelf-scroller::-webkit-scrollbar-thumb { background-color: rgba(0,0,0,0.2); border-radius: 8px; }
+    .bookshelf-scroller::-webkit-scrollbar-thumb:hover { background-color: rgba(0,0,0,0.3); }
+
+    .bookshelf-item {
+        padding: 0;
+        border: 2px solid transparent;
+        border-radius: 8px;
+        cursor: pointer;
+        background: none;
+        flex-shrink: 0;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+    }
+    .bookshelf-item:hover { transform: translateY(-5px); }
+    .bookshelf-item.active {
+        border-image: var(--accent-gradient) 1;
+        box-shadow: 0 5px 15px -3px rgba(49, 130, 206, 0.2);
+    }
+    .bookshelf-item img {
+        display: block;
+        width: 80px;
+        height: auto;
+        border-radius: 6px;
+    }
+</style>
+
+<div class="book-dossier-widget" id="book-dossier">
+    <div class="dossier-header">
+        <h1 class="main-title">ספרי השקעות מומלצים</h1>
+    </div>
+    <div class="dossier-main-content" id="dossier-main-content"></div>
+    <nav class="dossier-nav-bookshelf">
+        <div class="bookshelf-scroller" id="bookshelf-scroller"></div>
+    </nav>
+</div>
+
+<script>
+(function() {
+    const bookData = {
+        'intelligent-investor': { title: 'המשקיע הנבון', author: 'בנג\'מין גראהם', imgSrc: 'https://images.ravpages.co.il/xsite_resources/user_content/cp_new_production/d4/83/50/cb/d48350cb1a786c4790a92b5444c0e526/images/c3e21993d78bfa2270cf095b07c3e956.jpg', description: 'נחשב לתנ"ך של "השקעות ערך". הוא נכתב על ידי המנטור של וורן באפט, ומציג תפיסת עולם שלמה להשקעות שקולות, הגנתיות ונטולות אמוציות, אשר עמדה במבחן הזמן.', takeaways: ['הכר את "מר שוק" ולמד להתעלם מהמצבים הרגשיים שלו.', 'השקע תמיד עם "מרווח ביטחון" משמעותי.', 'התמקד בלהיות בעלים של עסק, לא בספקולציות על מחיר מניה.'] },
+        'random-walk': { title: 'הליכה אקראית בוול סטריט', author: 'ברטון מלכיאל', imgSrc: 'https://images.ravpages.co.il/xsite_resources/user_content/cp_new_production/d4/83/50/cb/d48350cb1a786c4790a92b5444c0e526/images/a7ed898d3045e8987c8def4d071cc37a.jpg', description: 'ספר קלאסי שמסביר בשפה פשוטה את עולם ההשקעות, מתאוריית השוק היעיל ועד בועות ספקולטיביות. מומלץ מאוד למשקיעים מתחילים שמחפשים הבנה רחבה.', takeaways: ['בטווח הארוך, קשה מאוד "לנצח" את השוק באופן עקבי.', 'השקעה במדדים רחבים ובעלות נמוכה היא האסטרטגיה הטובה ביותר עבור רוב האנשים.', 'היזהר מבועות פיננסיות ופסיכולוגיית העדר.'] },
+        'one-up': { title: 'One Up On Wall Street', author: 'פיטר לינץ\'', imgSrc: 'https://images.ravpages.co.il/xsite_resources/user_content/cp_new_production/d4/83/50/cb/d48350cb1a786c4790a92b5444c0e526/images/4871df3969af1c15a9956722a684fd2b.jpg', description: 'פיטר לינץ\', מנהל קרן מגלן האגדי, טוען שמשקיעים פרטיים יכולים להצליח יותר מהמומחים על ידי שימוש בידע היומיומי שלהם כדי לזהות חברות מצוינות לפני וול סטריט.', takeaways: ['השקע במה שאתה מכיר ומבין מהחיים האישיים שלך.', 'חפש חברות "tenbagger" - אלו שיכולות להכפיל את ערכן פי 10.', 'עשה את שיעורי הבית שלך והבן את הסיפור מאחורי המניה.'] },
+        'charlie-munger': { title: 'צ\'רלי מאנגר: המשקיע השלם', author: 'טרן גריפין', imgSrc: 'https://images.ravpages.co.il/xsite_resources/user_content/cp_new_production/d4/83/50/cb/d48350cb1a786c4790a92b5444c0e526/images/e59aa799b4cdde75f25abd8996fed314.jpg', description: 'הספר חושף את שיטות החשיבה והעקרונות המנחים של צ\'רלי מאנגר, שותפו הגאון של וורן באפט. הוא מלמד לחשוב בעזרת "מודלים מנטליים" מתחומים שונים (פיזיקה, ביולוגיה, פסיכולוגיה) כדי לקבל החלטות השקעה טובות יותר.', takeaways: ['אסוף "ארגז כלים" של מודלים מנטליים כדי לנתח בעיות.', 'הימנעות מטיפשות חשובה יותר מניסיון להיות מבריק.', 'הכר בפסיכולוגיה האנושית ובהטיות הקוגניטיביות שלך.'] },
+        'most-important-thing': { title: 'הדבר החשוב ביותר', author: 'הווארד מארקס', imgSrc: 'https://images.ravpages.co.il/xsite_resources/user_content/cp_new_production/d4/83/50/cb/d48350cb1a786c4790a92b5444c0e526/images/2204ac1d7a30268819db07d9c4288d2c.jpg', description: 'הווארד מארקס, יו"ר Oaktree Capital, מסכם את פילוסופיית ההשקעות שלו. הספר מדגיש את חשיבותה של "חשיבה מסדר שני" - היכולת לחשוב מעבר למה שכולם רואים - ואת התפקיד המרכזי של הבנת סיכונים.', takeaways: ['התמקד בשליטה על הסיכון, התשואות יגיעו בעקבותיה.', 'הבן איפה אנחנו נמצאים במחזור השוק הנוכחי.', 'חפש את מה שהשוק מפספס (חשיבה מסדר שני).'] },
+        'value-investing': { title: 'השקעות ערך: מגראהם עד באפט', author: 'ברוס גרינוואלד', imgSrc: 'https://images.ravpages.co.il/xsite_resources/user_content/cp_new_production/d4/83/50/cb/d48350cb1a786c4790a92b5444c0e526/images/8fb411872eecc3a61f4de8c72ee130d6.jpg', description: 'גרינוואלד מציג גישה מודרנית להשקעות ערך. הספר משלב ניתוח אקדמי עם דוגמאות מעשיות, ומדגיש כיצד ליישם את העקרונות האלמותיים של גראהם בעולם העסקי המורכב של היום.', takeaways: ['הערך האמיתי של חברה נובע מהיתרונות התחרותיים שלה.', 'התמקד בהערכת שווי נכסים, כוח רווח, ופוטנציאל צמיחה.', 'השקעות ערך הן תהליך שיטתי, לא הימור ספקולטיבי.'] }
+    };
+
+    const dossierWidget = document.getElementById('book-dossier');
+    const mainContent = dossierWidget.querySelector('#dossier-main-content');
+    const bookshelf = dossierWidget.querySelector('#bookshelf-scroller');
+    let isAnimating = false;
+
+    function displayBook(bookId) {
+        if (isAnimating) return;
+        isAnimating = true;
+
+        const book = bookData[bookId];
+        bookshelf.querySelectorAll('.bookshelf-item').forEach(item => {
+            item.classList.toggle('active', item.dataset.bookId === bookId);
+        });
+
+        const currentCard = mainContent.querySelector('.book-display-card');
+        const exitAnimation = new Promise(resolve => {
+            if (currentCard) {
+                currentCard.classList.add('is-exiting');
+                currentCard.addEventListener('transitionend', resolve, { once: true });
+            } else { resolve(); }
+        });
+
+        exitAnimation.then(() => {
+            if (currentCard) currentCard.remove();
+            const newCard = document.createElement('div');
+            newCard.className = 'book-display-card';
+            newCard.innerHTML = `
+                <div class="book-cover-container">
+                    <img src="${book.imgSrc}" alt="${book.title} Book Cover" class="book-cover">
+                </div>
+                <div class="book-details">
+                    <h2 class="book-title">${book.title}</h2>
+                    <p class="book-author">מאת ${book.author}</p>
+                    <p class="book-description">${book.description}</p>
+                    <h3 class="takeaways-title">עקרונות מפתח מהספר:</h3>
+                    <ul class="takeaways-list">
+                        ${book.takeaways.map(item => `<li>${item}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+            newCard.style.visibility = 'hidden';
+            mainContent.appendChild(newCard);
+            const endHeight = newCard.offsetHeight + 40;
+            mainContent.style.height = `${endHeight}px`;
+            newCard.style.visibility = 'visible';
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => { newCard.classList.add('is-active'); });
+            });
+            setTimeout(() => { isAnimating = false; }, 500);
+        });
+    }
+
+    for (const bookId in bookData) {
+        const book = bookData[bookId];
+        const item = document.createElement('button');
+        item.className = 'bookshelf-item';
+        item.dataset.bookId = bookId;
+        item.innerHTML = `<img src="${book.imgSrc}" alt="${book.title}">`;
+        item.addEventListener('click', () => displayBook(bookId));
+        bookshelf.appendChild(item);
+    }
+
+    const firstBookId = Object.keys(bookData)[0];
+    const firstBook = bookData[firstBookId];
+    bookshelf.querySelector(`[data-book-id="${firstBookId}"]`).classList.add('active');
+
+    const initialCard = document.createElement('div');
+    initialCard.className = 'book-display-card is-active';
+    initialCard.innerHTML = `
+        <div class="book-cover-container">
+            <img src="${firstBook.imgSrc}" alt="${firstBook.title} Book Cover" class="book-cover">
+        </div>
+        <div class="book-details">
+            <h2 class="book-title">${firstBook.title}</h2>
+            <p class="book-author">מאת ${firstBook.author}</p>
+            <p class="book-description">${firstBook.description}</p>
+            <h3 class="takeaways-title">עקרונות מפתח מהספר:</h3>
+            <ul class="takeaways-list">
+                ${firstBook.takeaways.map(item => `<li>${item}</li>`).join('')}
+            </ul>
+        </div>
+    `;
+    mainContent.appendChild(initialCard);
+
+    const initialImage = initialCard.querySelector('.book-cover');
+    function setInitialHeight() {
+        mainContent.style.height = `${initialCard.offsetHeight + 40}px`;
+    }
+    if (initialImage.complete) { setInitialHeight(); }
+    else { initialImage.addEventListener('load', setInitialHeight, { once: true }); }
+})();
+</script>
+<!-- END: tradingview heatmap.txt -->
+
+</div>
+
+
+<!-- ============================================================ -->
+<!-- WIDGET SOURCE FILE: "tradingview heatmap - Copy.txt"         -->
+<!-- NOTE: Identical content to tradingview heatmap.txt           -->
+<!--       (Book Dossier widget — same code, kept as reference)   -->
+<!-- ============================================================ -->
+<div class="widget-label">📄 tradingview heatmap - Copy.txt — עותק של Book Dossier (זהה לעיל)</div>
+<div class="widget-section">
+    <p style="color:#e9c46a; text-align:center;">⚠️ קובץ זה זהה לחלוטין ל-"tradingview heatmap.txt". שניהם מכילים את רכיב ה-Book Dossier. אין כאן קוד heatmap נפרד.</p>
+</div>
+
+
+<!-- ============================================================ -->
+<!-- WIDGET SOURCE FILE: "header section.txt"                     -->
+<!-- ============================================================ -->
+<div class="widget-label">📄 header section.txt — תפריט ניווט (Hamburger + פרקים)</div>
+<div class="widget-section">
+
+<!-- PASTE INTO PAGE — copy from here -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+    .menu-widget-container {
+        direction: rtl;
+        text-align: center;
+        font-family: 'Assistant', sans-serif;
+    }
+
+    .hamburger-button {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1001;
+        width: 44px;
+        height: 44px;
+        background: #45a29e;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        padding: 0;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .hamburger-button .icon {
+        position: absolute;
+        width: 28px;
+        height: 28px;
+        transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    }
+
+    .hamburger-button .icon-menu { opacity: 1; transform: rotate(0deg) scale(1); }
+    .hamburger-button .icon-close { opacity: 0; transform: rotate(-90deg) scale(0); }
+    .hamburger-button.is-active .icon-menu { opacity: 0; transform: rotate(90deg) scale(0); }
+    .hamburger-button.is-active .icon-close { opacity: 1; transform: rotate(0deg) scale(1); }
+
+    .hamburger-button svg {
+        width: 100%;
+        height: 100%;
+        stroke: #ffffff;
+        stroke-width: 2.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        fill: none;
+    }
+
+    .menu-container {
+        position: fixed;
+        top: 0;
+        right: 0;
+        height: 100vh;
+        width: 280px;
+        background-color: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 15px;
+        padding: 20px;
+        box-sizing: border-box;
+        transform: translateX(100%);
+        transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        z-index: 1000;
+    }
+
+    .menu-container.is-open { transform: translateX(0); }
+
+    .glowing-text {
+        width: 100%;
+        display: flex;
+    }
+
+    .glowing-text a {
+        color: #1a202c;
+        text-decoration: none;
+        padding: 12px 16px;
+        border-radius: 8px;
+        width: 100%;
+        transition: background 0.5s ease-in-out, color 0.3s ease-in-out, transform 0.3s ease-in-out;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .glowing-text .chapter-icon {
+        font-size: 24px;
+        width: 30px;
+        text-align: center;
+        color: #45a29e;
+        transition: color 0.3s ease-in-out;
+    }
+
+    .chapter-text { text-align: right; }
+    .chapter-number { font-size: 18px; font-weight: bold; }
+    .chapter-title { font-size: 13px; line-height: 1.2; }
+
+    .glowing-text a:hover,
+    .glowing-text a:focus-visible {
+        background: linear-gradient(45deg, #45a29e, #66fcf1);
+        color: #ffffff;
+        transform: scale(1.05);
+    }
+
+    .glowing-text a:hover .chapter-icon { color: #ffffff; }
+
+    @media (min-width: 768px) {
+        .menu-container {
+            height: auto;
+            width: 100%;
+            left: 0;
+            flex-direction: row;
+            justify-content: center;
+            align-items: stretch;
+            padding: 20px 0;
+            transform: translateY(-120%);
+        }
+        .menu-container.is-open { transform: translateY(0); }
+        .glowing-text { flex: 1 1 auto; min-width: 120px; max-width: 200px; width: auto; }
+        .glowing-text a { flex-direction: column; justify-content: center; gap: 8px; padding: 12px 16px; }
+        .chapter-text { text-align: center; }
+        .glowing-text a:hover,
+        .glowing-text a:focus-visible { transform: scale(1.1); }
+    }
+</style>
+
+<div class="menu-widget-container">
+    <button class="hamburger-button" aria-label="פתח/סגור תפריט" aria-expanded="false">
+        <div class="icon icon-menu">
+            <svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </div>
+        <div class="icon icon-close">
+            <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </div>
+    </button>
+    <nav>
+        <div class="menu-container">
+            <div class="glowing-text">
+                <a href="#">
+                    <i class="fas fa-rocket chapter-icon"></i>
+                    <div class="chapter-text">
+                        <span class="chapter-number">הקדמה</span>
+                        <span class="chapter-title">למסע שלך</span>
+                    </div>
+                </a>
+            </div>
+            <div class="glowing-text">
+                <a href="#">
+                    <i class="fas fa-key chapter-icon"></i>
+                    <div class="chapter-text">
+                        <span class="chapter-number">פרק 1</span>
+                        <span class="chapter-title">שלב הכניסה</span>
+                    </div>
+                </a>
+            </div>
+            <div class="glowing-text">
+                <a href="#">
+                    <i class="fas fa-compass chapter-icon"></i>
+                    <div class="chapter-text">
+                        <span class="chapter-number">פרק 2</span>
+                        <span class="chapter-title">שלב האסטרטגיה</span>
+                    </div>
+                </a>
+            </div>
+            <div class="glowing-text">
+                <a href="#">
+                    <i class="fas fa-tools chapter-icon"></i>
+                    <div class="chapter-text">
+                        <span class="chapter-number">פרק 3</span>
+                        <span class="chapter-title">שלב הכלים</span>
+                    </div>
+                </a>
+            </div>
+            <div class="glowing-text">
+                <a href="#">
+                    <i class="fas fa-chart-pie chapter-icon"></i>
+                    <div class="chapter-text">
+                        <span class="chapter-number">פרק 4</span>
+                        <span class="chapter-title">שלב הניהול</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<script>
+    (function() {
+        const widgetContainer = document.querySelector('.menu-widget-container');
+        if (!widgetContainer) return;
+
+        const hamburgerButton = widgetContainer.querySelector('.hamburger-button');
+        const menuContainer = widgetContainer.querySelector('.menu-container');
+
+        hamburgerButton.addEventListener('click', () => {
+            const isOpened = hamburgerButton.getAttribute('aria-expanded') === 'true';
+            hamburgerButton.setAttribute('aria-expanded', !isOpened);
+            hamburgerButton.classList.toggle('is-active');
+            menuContainer.classList.toggle('is-open');
+        });
+    })();
+</script>
+<!-- END: header section.txt -->
+
+</div>
+
+
+
+<!-- ============================================================ -->
+<!-- WIDGET SOURCE FILE: "tradingview heatmap (real).txt"         -->
+<!-- ============================================================ -->
+<div class="widget-label">📄 tradingview heatmap (real) — מפת חום בורסה ישראלית (TA125)</div>
+<div class="widget-section">
+
+<!-- PASTE INTO PAGE — copy from here -->
+<style>
+    .heatmap-card {
+        background-color: #033242;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        padding: 20px;
+        max-width: 800px;
+        margin: 20px auto;
+    }
+
+    .heatmap-card h2 {
+        text-align: center;
+        color: #ffffff;
+        font-family: 'Assistant', sans-serif;
+        font-size: 32px;
+        margin-bottom: 15px;
+        display: inline-block;
+        position: relative;
+        cursor: default;
+        transition: transform 0.3s ease;
+    }
+    .heatmap-card h2::after {
+        content: "";
+        position: absolute;
+        right: 0;
+        bottom: -5px;
+        height: 2px;
+        width: 0;
+        background-color: #00aaff;
+        transform-origin: right;
+        transition: width 0.3s ease;
+    }
+    .heatmap-card h2:hover::after { width: 100%; }
+    .heatmap-card h2:hover { transform: scale(1.05); }
+
+    .tradingview-widget-container__widget { background: transparent !important; }
+    .tradingview-widget-copyright .blue-text { color: #033242 !important; }
+</style>
+
+<div class="heatmap-card">
+    <h2>מפת חום של תשואות המניות בבורסה הישראלית בשנה האחרונה</h2>
+    <!-- TradingView Widget BEGIN -->
+    <div class="tradingview-widget-container">
+        <div class="tradingview-widget-container__widget"></div>
+        <div class="tradingview-widget-copyright">
+            <a href="https://il.tradingview.com/" rel="noopener nofollow" target="_blank">
+                <span class="blue-text">עקוב אחר כל השווקים ב-TradingView</span>
+            </a>
+        </div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-stock-heatmap.js" async>
+        {
+            "exchanges": ["TASE"],
+            "dataSource": "TA125",
+            "grouping": "sector",
+            "blockSize": "market_cap_basic",
+            "blockColor": "Perf.Y",
+            "locale": "he_IL",
+            "symbolUrl": "",
+            "colorTheme": "dark",
+            "hasTopBar": false,
+            "isDataSetEnabled": false,
+            "isZoomEnabled": false,
+            "hasSymbolTooltip": true,
+            "isMonoSize": false,
+            "width": "100%",
+            "height": 400
+        }
+        </script>
+    </div>
+    <!-- TradingView Widget END -->
+</div>
+<!-- END: tradingview heatmap (real) -->
+
+</div>
+
+
+</body>
+</html>

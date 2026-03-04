@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>פרק 1 - שלב הכלים | NewGen Finance</title>
+
+    <!-- Auth protection -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <script src="/assets/js/supabase-config.js"></script>
+    <script src="/assets/js/auth-guard.js"></script>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ===== RESET & BASE ===== */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            background: #4a9eb5;
+            font-family: 'Assistant', 'Rubik', sans-serif;
+            direction: rtl;
+            color: #1a2e38;
+            min-height: 100vh;
+        }
+        img { max-width: 100%; height: auto; }
+
+        /* ===== NAVBAR ===== */
+        .ch1-nav {
+            background: #1e3a4a;
+            padding: 0 1.5rem;
+            height: 62px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.35);
+        }
+        .ch1-nav-logo {
+            color: #e9c46a;
+            font-family: 'Rubik', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            text-decoration: none;
+        }
+        .ch1-nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .ch1-nav-link {
+            color: #f0f8fa;
+            text-decoration: none;
+            font-family: 'Assistant', sans-serif;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+        .ch1-nav-link:hover { color: #e9c46a; }
+        .ch1-nav-signout {
+            background: transparent;
+            border: 1px solid rgba(240,248,250,0.35);
+            color: #f0f8fa;
+            font-family: 'Assistant', sans-serif;
+            font-size: 0.9rem;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .ch1-nav-signout:hover {
+            border-color: #e9c46a;
+            color: #e9c46a;
+        }
+
+        /* ===== HERO ===== */
+        .ch1-hero {
+            background: #1e3a4a;
+            padding: 3rem 1rem 2.5rem;
+            text-align: center;
+        }
+        .ch1-hero-title {
+            font-family: 'Rubik', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #f0f8fa;
+            margin-bottom: 1.5rem;
+        }
+        .ch1-hero-yt-wrap {
+            width: 100%;
+            max-width: 700px;
+            margin: 0 auto;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+            aspect-ratio: 16/9;
+        }
+        .ch1-hero-yt-wrap iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+        .ch1-hero-badge {
+            display: inline-block;
+            margin-top: 1.5rem;
+            background: #e9c46a;
+            color: #1a2e38;
+            font-family: 'Rubik', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            padding: 0.5rem 2rem;
+            border-radius: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        /* ===== CONTAINER ===== */
+        .ch1-container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 2rem 1rem 4rem;
+        }
+
+        /* ===== CARDS ===== */
+        .ch1-card {
+            background: rgba(255, 255, 255, 0.93);
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        .ch1-card-dark {
+            background: #033242;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        .ch1-card-title {
+            font-family: 'Rubik', sans-serif;
+            font-size: 1.55rem;
+            font-weight: 700;
+            color: #1a2e38;
+            text-align: center;
+            margin-bottom: 1.25rem;
+        }
+        .ch1-card-title-white {
+            font-family: 'Rubik', sans-serif;
+            font-size: 1.55rem;
+            font-weight: 700;
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 1.25rem;
+        }
+        .ch1-card-text {
+            font-family: 'Assistant', sans-serif;
+            font-size: 1.05rem;
+            line-height: 1.75;
+            color: #4a6472;
+            margin-bottom: 1.25rem;
+            text-align: center;
+        }
+        .ch1-caption-white {
+            font-family: 'Assistant', sans-serif;
+            font-size: 0.95rem;
+            color: rgba(240,248,250,0.85);
+            text-align: center;
+            margin-top: 1rem;
+            line-height: 1.65;
+        }
+
+        /* ===== MAIN YOUTUBE EMBEDS ===== */
+        .ch1-yt-main-wrap {
+            width: 100%;
+            aspect-ratio: 16/9;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+            margin-bottom: 1.25rem;
+        }
+        .ch1-yt-main-wrap iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        /* ===== SIDE BY SIDE ===== */
+        .ch1-sidebyside {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.25rem;
+        }
+        .ch1-sidebyside > * { flex: 1; min-width: 0; }
+        @media (max-width: 560px) {
+            .ch1-sidebyside { flex-direction: column; }
+        }
+
+        /* ===== EXPANSION VIDEO WIDGET ===== */
+        .ch1-expvid {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.28);
+        }
+        .ch1-expvid iframe {
+            width: 100%;
+            aspect-ratio: 16/9;
+            border: none;
+            display: block;
+        }
+        .ch1-expvid-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.76);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 1rem;
+            color: #fff;
+            font-family: 'Assistant', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            line-height: 1.5;
+            z-index: 10;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .ch1-expvid-overlay:hover { background: rgba(0,0,0,0.88); }
+        .ch1-expvid-tag {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: #66fcf1;
+            color: #000;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 3px 9px;
+            border-radius: 20px;
+            z-index: 20;
+            pointer-events: none;
+        }
+
+        /* ===== הידעת WIDGET ===== */
+        .ch1-dyk {
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 16px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+            padding: 1.5rem;
+            cursor: pointer;
+            text-align: center;
+            transition: box-shadow 0.2s;
+        }
+        .ch1-dyk:hover { box-shadow: 0 8px 28px rgba(0,0,0,0.13); }
+        .ch1-dyk.is-expanded { cursor: default; }
+        .ch1-dyk-teaser-title {
+            font-family: 'Rubik', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #38b2ac, #3182ce);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.3rem;
+        }
+        .ch1-dyk-teaser-sub {
+            font-family: 'Rubik', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1a202c;
+            margin-bottom: 0.25rem;
+        }
+        .ch1-dyk-teaser-prompt {
+            font-size: 0.85rem;
+            color: #4a5568;
+        }
+        .ch1-dyk-content { display: none; }
+        .ch1-dyk.is-expanded .ch1-dyk-teaser { display: none; }
+        .ch1-dyk.is-expanded .ch1-dyk-content {
+            display: block;
+            animation: ch1DykFadeIn 0.4s ease both;
+        }
+        @keyframes ch1DykFadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .ch1-dyk-content-title {
+            font-family: 'Rubik', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #38b2ac, #3182ce);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.75rem;
+        }
+        .ch1-dyk-content-text {
+            font-family: 'Assistant', sans-serif;
+            font-size: 0.97rem;
+            line-height: 1.7;
+            color: #2d3748;
+            margin-bottom: 0.75rem;
+        }
+        .ch1-dyk-content-img {
+            width: 100%;
+            border-radius: 10px;
+            margin-top: 0.5rem;
+        }
+
+        /* ===== QUOTE SECTION ===== */
+        .ch1-quote-section {
+            margin-bottom: 2rem;
+        }
+
+        /* ===== BOOKS SECTION ===== */
+        .ch1-books-section { margin-bottom: 2rem; }
+
+        /* ===== BOTTOM NAV ===== */
+        .ch1-bottom-nav {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+        .ch1-btn-gold {
+            display: inline-block;
+            background: #e9c46a;
+            color: #1a2e38;
+            font-family: 'Rubik', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            padding: 0.8rem 2.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            box-shadow: 0 4px 14px rgba(233,196,106,0.45);
+            transition: all 0.2s;
+        }
+        .ch1-btn-gold:hover {
+            background: #d4a843;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(233,196,106,0.55);
+        }
+        .ch1-btn-outline {
+            display: inline-block;
+            background: transparent;
+            border: 2px solid rgba(240,248,250,0.45);
+            color: #f0f8fa;
+            font-family: 'Assistant', sans-serif;
+            font-size: 1rem;
+            padding: 0.65rem 2rem;
+            border-radius: 30px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .ch1-btn-outline:hover {
+            border-color: #e9c46a;
+            color: #e9c46a;
+        }
+
+        /* ===== TOC WIDGET ===== */
+        .toc-widget {
+            --text-primary: #1a202c;
+            --text-secondary: #4a5568;
+            --border-color: #cbd5e1;
+            --accent-gradient: linear-gradient(90deg, #38b2ac, #3182ce);
+            font-family: 'Rubik', sans-serif;
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            background: transparent;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .toc-widget .main-title {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0 0 2rem 0;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+        }
+        .toc-widget .sections-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+        .toc-widget .section {
+            text-align: right;
+            border-radius: 12px;
+            padding: 0.75rem;
+        }
+        .toc-widget .section-title {
+            display: inline-block;
+            position: relative;
+            text-decoration: none;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            background: var(--accent-gradient);
+            background-size: 200% auto;
+            color: var(--text-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-position: 100%;
+            transition: background-position 0.4s ease;
+        }
+        .toc-widget .section:hover .section-title { background-position: 0%; }
+        .toc-widget .subchapter-list {
+            list-style: none !important;
+            margin: 0;
+            padding-right: 20px;
+            position: relative;
+        }
+        .toc-widget .subchapter-list::before {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0.5em;
+            bottom: 0.5em;
+            width: 2px;
+            background: var(--accent-gradient);
+            transform: scaleY(0);
+            transform-origin: top;
+            transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        .toc-widget .section:hover .subchapter-list::before { transform: scaleY(1); }
+        .toc-widget .subchapter-list li {
+            margin-bottom: 0.6rem;
+            list-style-type: none !important;
+        }
+        .toc-widget .subchapter-list li:last-child { margin-bottom: 0; }
+        .toc-widget .item {
+            font-size: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+            color: var(--text-primary);
+            background: var(--accent-gradient);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-position: 100%;
+            -webkit-text-fill-color: var(--text-primary);
+            transition: color 0.3s ease, background-position 0.4s ease;
+        }
+        .toc-widget .item:hover {
+            background-position: 0%;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* ===== QUOTE WIDGET ===== */
+        .ch1-quote-wrap {
+            font-family: 'Assistant', sans-serif;
+            width: 100%;
+            padding: 1rem 0;
+        }
+        .ch1-quote-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            direction: rtl;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .ch1-quote-container.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .ch1-quote-text {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-size: clamp(1.35rem, 4vw, 1.85rem);
+            font-weight: 700;
+            text-align: center;
+            max-width: 90%;
+            line-height: 1.55;
+            padding: 0 2rem;
+        }
+        .ch1-quote-text::before,
+        .ch1-quote-text::after {
+            position: absolute;
+            content: "";
+            top: 8%;
+            height: 84%;
+            width: 2px;
+            background: #6ee1f5;
+            opacity: 0;
+            transition: all 1.5s ease-out;
+        }
+        .ch1-quote-text::before { right: calc(50% + 1.5rem); }
+        .ch1-quote-text::after  { left:  calc(50% + 1.5rem); }
+        .ch1-quote-container.visible .ch1-quote-text {
+            animation: ch1QuoteExpand 0.7s cubic-bezier(0.215, 0.610, 0.355, 1.000) both;
+        }
+        .ch1-quote-container.visible .ch1-quote-text::before { right: -3.5%; opacity: 1; }
+        .ch1-quote-container.visible .ch1-quote-text::after  { left:  -3.5%; opacity: 1; }
+        .ch1-quote-author {
+            font-size: 1.1rem;
+            font-weight: 400;
+            color: #fff;
+            margin-top: 0.75rem;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out 1s;
+        }
+        .ch1-quote-container.visible .ch1-quote-author { opacity: 1; }
+        @keyframes ch1QuoteExpand {
+            0%   { letter-spacing: -0.5em; opacity: 0; }
+            40%  { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+
+        /* ===== TRADINGVIEW ===== */
+        .ch1-tv-wrap {
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        /* ===== BOOK DOSSIER ===== */
+        .book-dossier-widget {
+            --card-bg-color: rgba(255, 255, 255, 0.9);
+            --border-color: rgba(0, 0, 0, 0.08);
+            --text-primary: #1a202c;
+            --text-secondary: #4a5568;
+            --accent-gradient: linear-gradient(135deg, #38b2ac, #3182ce);
+            font-family: 'Rubik', sans-serif;
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            background: var(--card-bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .dossier-header {
+            padding: 2rem 2rem 1.25rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .dossier-header .main-title {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .dossier-main-content {
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: height 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        .book-display-card {
+            position: absolute;
+            top: 2rem; left: 2rem; right: 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            align-items: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        @media (min-width: 540px) {
+            .book-display-card { grid-template-columns: 1fr 2fr; gap: 2rem; }
+        }
+        .book-display-card.is-active  { opacity: 1; transform: translateY(0); }
+        .book-display-card.is-exiting { opacity: 0; transform: translateY(-20px); }
+        .book-cover-container { perspective: 1000px; text-align: center; }
+        .book-cover {
+            width: 100%;
+            max-width: 180px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: -8px 8px 24px -4px rgba(0,0,0,0.25);
+            transform: rotateY(-20deg) rotateX(5deg);
+            display: block;
+            margin: 0 auto;
+        }
+        .book-details { text-align: right; }
+        .book-title  { font-size: 1.6rem; font-weight: 700; color: var(--text-primary); margin: 0; }
+        .book-author { font-size: 1.05rem; font-weight: 500; color: var(--text-secondary); margin: 0.2rem 0 1.25rem; }
+        .book-description { font-size: 0.97rem; line-height: 1.75; color: var(--text-secondary); margin-bottom: 1.25rem; }
+        .takeaways-title { font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.75rem; }
+        .takeaways-list  { list-style: none !important; padding-right: 0 !important; margin: 0; }
+        .takeaways-list li {
+            font-size: 0.97rem; color: var(--text-secondary); margin-bottom: 0.6rem;
+            position: relative; padding-right: 22px;
+            list-style: none !important;
+        }
+        .takeaways-list li::before {
+            content: ''; position: absolute; right: 0; top: 50%;
+            width: 9px; height: 9px; border-radius: 50%;
+            background: var(--accent-gradient); transform: translateY(-50%);
+        }
+        .dossier-nav-bookshelf {
+            padding: 1.25rem;
+            border-top: 1px solid var(--border-color);
+            background: rgba(0,0,0,0.02);
+        }
+        .bookshelf-scroller {
+            display: flex; gap: 1.25rem; overflow-x: auto; padding-bottom: 0.75rem;
+            scrollbar-width: thin; scrollbar-color: rgba(0,0,0,0.2) rgba(0,0,0,0.05);
+        }
+        .bookshelf-scroller::-webkit-scrollbar { height: 6px; }
+        .bookshelf-scroller::-webkit-scrollbar-track { background: rgba(0,0,0,0.05); border-radius: 8px; }
+        .bookshelf-scroller::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 8px; }
+        .bookshelf-item {
+            padding: 0; border: 2px solid transparent; border-radius: 8px;
+            cursor: pointer; background: none; flex-shrink: 0;
+            transition: border-color 0.3s ease, transform 0.3s ease;
+        }
+        .bookshelf-item:hover { transform: translateY(-4px); }
+        .bookshelf-item.active {
+            border-color: #38b2ac;
+            box-shadow: 0 4px 12px rgba(49,130,206,0.2);
+        }
+        .bookshelf-item img { display: block; width: 70px; height: auto; border-radius: 6px; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 480px) {
+            .ch1-hero-title  { font-size: 1.75rem; }
+            .ch1-card        { padding: 1.25rem; }
+            .ch1-card-dark   { padding: 1.25rem; }
+            .ch1-card-title  { font-size: 1.3rem; }
+            .ch1-card-title-white { font-size: 1.3rem; }
+            .ch1-nav         { padding: 0 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="ch1-nav">
+    <a href="/" class="ch1-nav-logo">NewGen Finance</a>
+    <div class="ch1-nav-links">
+        <a href="/members/" class="ch1-nav-link">אזור החברים</a>
+        <button class="ch1-nav-signout" id="ch1-signout-btn">התנתקות</button>
+    </div>
+</nav>
+
+<!-- ===== SECTION 1: HERO ===== -->
+<section class="ch1-hero">
+    <h1 class="ch1-hero-title">פרק 1 - שלב הכלים</h1>
+    <div class="ch1-hero-yt-wrap">
+        <iframe
+            src="https://www.youtube-nocookie.com/embed/FwMUFh7x1mw?autoplay=0"
+            title="פרק 1 - שלב הכלים"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+        </iframe>
+    </div>
+    <div class="ch1-hero-badge">!בהצלחה</div>
+</section>
+
+<!-- ===== MAIN CONTAINER ===== -->
+<div class="ch1-container">
+
+    <!-- ===== SECTION 2: TABLE OF CONTENTS ===== -->
+    <div class="ch1-card" id="s2-toc">
+        <div class="toc-widget">
+            <h1 class="main-title">תוכן העניינים לפרק 1</h1>
+            <div class="sections-container">
+
+                <div class="section">
+                    <span class="section-title">פרק 1 שיעור 1: איך התפתח עולם ההשקעות</span>
+                    <ul class="subchapter-list">
+                        <li><span class="item">אי הקוקוסים</span></li>
+                        <li><span class="item">מהפכת הבורסות</span></li>
+                        <li><span class="item">יתרונות הבורסה</span></li>
+                        <li><span class="item">שנות ה-80: המעבר הטכנולוגי</span></li>
+                        <li><span class="item">חוויית המסחר כיום</span></li>
+                    </ul>
+                </div>
+
+                <div class="section">
+                    <span class="section-title">פרק 1 שיעור 2: אז מהי מנייה?</span>
+                    <ul class="subchapter-list">
+                        <li><span class="item">מה המשמעות של אחזקה בנייר ערך</span></li>
+                        <li><span class="item">איך חברות מוצאות את דרכן לבורסה</span></li>
+                        <li><span class="item">שלבי ההנפקה של חברה</span></li>
+                        <li><span class="item">לי-מונדה בע"מ - דוגמא</span></li>
+                    </ul>
+                </div>
+
+                <div class="section">
+                    <span class="section-title">אירועי מניות נוספים</span>
+                    <ul class="subchapter-list">
+                        <li><span class="item">הנפקות משניות</span></li>
+                        <li><span class="item">אירועי Split</span></li>
+                        <li><span class="item">אירועי Buyback</span></li>
+                        <li><span class="item">נקודת המבט של המשקיע</span></li>
+                    </ul>
+                </div>
+
+                <div class="section">
+                    <span class="section-title">מניות הבורסה לאורך ולרוחב</span>
+                    <ul class="subchapter-list">
+                        <li><span class="item">מדדים וקרנות</span></li>
+                        <li><span class="item">מדד ג'אגור/בורסה</span></li>
+                        <li><span class="item">מדד שווי שוק</span></li>
+                        <li><span class="item">S&amp;P500</span></li>
+                        <li><span class="item">NASDAQ100</span></li>
+                        <li><span class="item">TA125</span></li>
+                        <li><span class="item">מדד סקטוריאלי</span></li>
+                        <li><span class="item">קרן סל Vs קרן נאמנות</span></li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== SECTION 3: QUOTE ===== -->
+    <div class="ch1-quote-section" id="s3-quote">
+        <div class="ch1-quote-wrap">
+            <div class="ch1-quote-container" id="ch1-quote-container">
+                <div class="ch1-quote-text">"עדיף בהרבה לקנות חברה נפלאה במחיר הוגן מאשר חברה הוגנת במחיר נפלא."</div>
+                <div class="ch1-quote-author">– וורן באפט</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== SECTION 4: שיעור 1 ===== -->
+    <div class="ch1-card" id="s4-lesson1">
+        <h2 class="ch1-card-title">פרק 1 שיעור 1</h2>
+        <div class="ch1-yt-main-wrap">
+            <iframe
+                src="https://www.youtube-nocookie.com/embed/3sfE6uvzh9Q?autoplay=0"
+                title="פרק 1 שיעור 1"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+        </div>
+        <p class="ch1-card-text">
+            איך אי הקוקוסים מבטיח לנו שהשוק תמיד מסוגל לעלות יותר? אי הקוקוסים הוא בעצם משל נפלא לאיך כסף נוצר בעולם — הרחבה בפודקאסט כאן
+        </p>
+        <div class="ch1-sidebyside">
+            <!-- Expansion Video 1 -->
+            <div class="ch1-expvid" id="s4-expvid-1">
+                <span class="ch1-expvid-tag">סרטון הרחבה</span>
+                <div class="ch1-expvid-overlay" onclick="ch1PlayVideo('s4-expvid-1')">לחץ להרחבה על מבנה שוק ההון בעידן המודרני</div>
+                <iframe
+                    id="s4-expvid-1-iframe"
+                    src="https://www.youtube-nocookie.com/embed/PLACEHOLDER_1?autoplay=0"
+                    title="הרחבה על מבנה שוק ההון"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+                </iframe>
+            </div>
+            <!-- Expansion Video 2 -->
+            <div class="ch1-expvid" id="s4-expvid-2">
+                <span class="ch1-expvid-tag">סרטון הרחבה</span>
+                <div class="ch1-expvid-overlay" onclick="ch1PlayVideo('s4-expvid-2')">לחץ להרחבה על התפתחות שוק ההון</div>
+                <iframe
+                    id="s4-expvid-2-iframe"
+                    src="https://www.youtube-nocookie.com/embed/PLACEHOLDER_2?autoplay=0"
+                    title="הרחבה על התפתחות שוק ההון"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== SECTION 5: שיעור 2 ===== -->
+    <div class="ch1-card" id="s5-lesson2">
+        <h2 class="ch1-card-title">פרק 1 שיעור 2</h2>
+        <div class="ch1-yt-main-wrap">
+            <iframe
+                src="https://www.youtube-nocookie.com/embed/os8rLHPxnkE?autoplay=0"
+                title="פרק 1 שיעור 2"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+        </div>
+        <div class="ch1-expvid" id="s5-expvid-1" style="margin-top:1rem;">
+            <span class="ch1-expvid-tag">סרטון הרחבה</span>
+            <div class="ch1-expvid-overlay" onclick="ch1PlayVideo('s5-expvid-1')">לחץ להרחבה על הנפקת חברות</div>
+            <iframe
+                id="s5-expvid-1-iframe"
+                src="https://www.youtube-nocookie.com/embed/PLACEHOLDER_3?autoplay=0"
+                title="הרחבה על הנפקת חברות"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+
+    <!-- ===== SECTION 6: לי-מונדה ===== -->
+    <div class="ch1-card" id="s6-lemonade">
+        <h2 class="ch1-card-title">דוגמא - לי-מונדה בע״מ</h2>
+        <div class="ch1-yt-main-wrap">
+            <iframe
+                src="https://www.youtube-nocookie.com/embed/YzAYK22mX7o?autoplay=0"
+                title="לי-מונדה בע״מ"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+        </div>
+        <div class="ch1-expvid" id="s6-expvid-1" style="margin-top:1rem;">
+            <span class="ch1-expvid-tag">סרטון הרחבה</span>
+            <div class="ch1-expvid-overlay" onclick="ch1PlayVideo('s6-expvid-1')">לחץ למקור המורחב של סיפור הלימונדה</div>
+            <iframe
+                id="s6-expvid-1-iframe"
+                src="https://www.youtube-nocookie.com/embed/PLACEHOLDER_4?autoplay=0"
+                title="סיפור הלימונדה המורחב"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+
+    <!-- ===== SECTION 7: אירועי מניות נוספים ===== -->
+    <div class="ch1-card" id="s7-stock-events">
+        <h2 class="ch1-card-title">אירועי מניות נוספים</h2>
+        <div class="ch1-yt-main-wrap">
+            <iframe
+                src="https://www.youtube-nocookie.com/embed/a8RjOdmQXNg?autoplay=0"
+                title="אירועי מניות נוספים"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+        </div>
+
+        <!-- 2 הידעת widgets side by side -->
+        <div class="ch1-sidebyside" style="margin-top:1.5rem;">
+
+            <!-- הידעת 1: ספליט -->
+            <div class="ch1-dyk" id="s7-dyk-split">
+                <div class="ch1-dyk-teaser">
+                    <div class="ch1-dyk-teaser-title">💡 ?הידעת</div>
+                    <div class="ch1-dyk-teaser-sub">אירועי ספליט</div>
+                    <div class="ch1-dyk-teaser-prompt">לחץ למידע נוסף</div>
+                </div>
+                <div class="ch1-dyk-content">
+                    <div class="ch1-dyk-content-title">אירועי ספליט</div>
+                    <p class="ch1-dyk-content-text">מחקר של Bank of America מצא שמניות שעוברות ספליט נוטות להציג תשואת יתר על השוק. הסיבה היא לא הספליט עצמו, אלא העובדה שספליט הוא בדרך כלל סימן לחברה איכותית וצומחת שהגיעה למחיר מניה גבוה בזכות הצלחה עסקית.</p>
+                    <img class="ch1-dyk-content-img" src="https://images.ravpages.co.il/xsite_resources/user_content/cp_new_production/d4/83/50/cb/d48350cb1a786c4790a92b5444c0e526/images/3309dbd807151809e7ac72367e36eff1.jpeg" alt="מניות ספליט תשואת יתר">
+                </div>
+            </div>
+
+            <!-- הידעת 2: BuyBack -->
+            <div class="ch1-dyk" id="s7-dyk-buyback">
+                <div class="ch1-dyk-teaser">
+                    <div class="ch1-dyk-teaser-title">💡 ?הידעת</div>
+                    <div class="ch1-dyk-teaser-sub">אירועי BuyBack</div>
+                    <div class="ch1-dyk-teaser-prompt">לחץ למידע נוסף</div>
+                </div>
+                <div class="ch1-dyk-content">
+                    <div class="ch1-dyk-content-title">אירועי BuyBack</div>
+                    <p class="ch1-dyk-content-text">כאשר חברה רוכשת חזרה את מניותיה מהשוק, היא מקטינה את מספר המניות הקיימות. כתוצאה מכך, כל מניה שנותרת מייצגת חלק גדול יותר מהחברה — מה שמגדיל את הרווח למניה (EPS) ולרוב מעלה את מחיר המניה.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ===== SECTION 8: TRADINGVIEW GRAPH ===== -->
+    <div class="ch1-card-dark" id="s8-tv-graph">
+        <h2 class="ch1-card-title-white">גרף מחירים של מדדי ה-S&amp;P500, NASDAQ100 ו-TA125</h2>
+
+        <div class="ch1-tv-wrap">
+            <!-- TradingView Symbol Overview Widget -->
+            <div class="tradingview-widget-container" id="s8-tv-container">
+                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js" async>
+                {
+                    "symbols": [
+                        ["TASE:TA125"],
+                        ["SP:SPX"],
+                        ["NASDAQ:NDX"]
+                    ],
+                    "chartOnly": false,
+                    "width": "100%",
+                    "height": "500",
+                    "locale": "he_IL",
+                    "colorTheme": "dark",
+                    "autosize": true,
+                    "showVolume": true,
+                    "showMA": true,
+                    "hideDateRanges": false,
+                    "hideMarketStatus": false,
+                    "hideSymbolLogo": false,
+                    "scalePosition": "right",
+                    "scaleMode": "Normal",
+                    "fontFamily": "Assistant, sans-serif",
+                    "fontSize": "12",
+                    "noTimeScale": false,
+                    "valuesTracking": "1",
+                    "changeMode": "price-and-percent",
+                    "chartType": "line",
+                    "maLineColor": "#2962FF",
+                    "maLineWidth": 1,
+                    "maLength": 9,
+                    "headerFontSize": "medium",
+                    "lineWidth": 2,
+                    "lineType": 0
+                }
+                </script>
+            </div>
+        </div>
+
+        <p class="ch1-caption-white">נסו לזהות ימי משבר בשוק (כמו משבר הקורונה, מלחמת חרבות ברזל וכו') ולראות את ההשפעה שלהם על השוק</p>
+    </div>
+
+    <!-- ===== SECTION 9: מניות הבורסה לאורך ולרוחב ===== -->
+    <div class="ch1-card" id="s9-stocks-wide">
+        <h2 class="ch1-card-title">מניות הבורסה לאורך ולרוחב</h2>
+        <div class="ch1-yt-main-wrap">
+            <iframe
+                src="https://www.youtube-nocookie.com/embed/a8RjOdmQXNg?autoplay=0"
+                title="מניות הבורסה לאורך ולרוחב"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+        </div>
+
+        <!-- TradingView Heatmap -->
+        <div class="ch1-tv-wrap">
+            <div class="tradingview-widget-container" id="s9-heatmap-container">
+                <div class="tradingview-widget-container__widget"></div>
+                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-stock-heatmap.js" async>
+                {
+                    "exchanges": ["TASE"],
+                    "dataSource": "TA125",
+                    "grouping": "sector",
+                    "blockSize": "market_cap_basic",
+                    "blockColor": "Perf.Y",
+                    "locale": "he_IL",
+                    "symbolUrl": "",
+                    "colorTheme": "dark",
+                    "hasTopBar": false,
+                    "isDataSetEnabled": false,
+                    "isZoomEnabled": false,
+                    "hasSymbolTooltip": true,
+                    "isMonoSize": false,
+                    "width": "100%",
+                    "height": 400
+                }
+                </script>
+            </div>
+        </div>
+
+        <!-- 2 Expansion Videos side by side -->
+        <div class="ch1-sidebyside">
+            <div class="ch1-expvid" id="s9-expvid-1">
+                <span class="ch1-expvid-tag">סרטון הרחבה</span>
+                <div class="ch1-expvid-overlay" onclick="ch1PlayVideo('s9-expvid-1')">לחץ להרחבה על אינפלציה</div>
+                <iframe
+                    id="s9-expvid-1-iframe"
+                    src="https://www.youtube-nocookie.com/embed/PLACEHOLDER_5?autoplay=0"
+                    title="הרחבה על אינפלציה"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+                </iframe>
+            </div>
+            <div class="ch1-expvid" id="s9-expvid-2">
+                <span class="ch1-expvid-tag">סרטון הרחבה</span>
+                <div class="ch1-expvid-overlay" onclick="ch1PlayVideo('s9-expvid-2')">לחץ להרחבה על מינוף עסקי</div>
+                <iframe
+                    id="s9-expvid-2-iframe"
+                    src="https://www.youtube-nocookie.com/embed/PLACEHOLDER_6?autoplay=0"
+                    title="הרחבה על מינוף עסקי"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== SECTION 10: ספרי השקעות מומלצים ===== -->
+    <div class="ch1-books-section" id="s10-books">
+        <div class="book-dossier-widget" id="book-dossier">
+            <div class="dossier-header">
+                <h1 class="main-title">ספרי השקעות מומלצים</h1>
+            </div>
+            <div class="dossier-main-content" id="dossier-main-content"></div>
+            <nav class="dossier-nav-bookshelf">
+                <div class="bookshelf-scroller" id="bookshelf-scroller"></div>
+            </nav>
+        </div>
+    </div>
+
+    <!-- ===== SECTION 11: BOTTOM NAVIGATION ===== -->
+    <div class="ch1-card-dark" id="s11-bottom-nav">
+        <div class="ch1-bottom-nav">
+            <a href="chapter-2.html" class="ch1-btn-gold">לפרק הבא ←</a>
+            <a href="/investor-academy/lessons/" class="ch1-btn-outline">חזרה לרשימת הפרקים</a>
+        </div>
+    </div>
+
+</div><!-- end ch1-container -->
+
+<script>
+/* ===== SIGNOUT ===== */
+document.getElementById('ch1-signout-btn').addEventListener('click', async function () {
+    try {
+        const client = window.supabase || (window._supabase);
+        if (client && client.auth) {
+            await client.auth.signOut();
+        }
+    } catch (e) { /* ignore */ }
+    window.location.href = '/';
+});
+
+/* ===== QUOTE ANIMATION ===== */
+(function () {
+    const qc = document.getElementById('ch1-quote-container');
+    if (!qc) return;
+    const obs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+            if (e.isIntersecting) {
+                e.target.classList.add('visible');
+                obs.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.15 });
+    obs.observe(qc);
+})();
+
+/* ===== EXPANSION VIDEO PLAYER ===== */
+function ch1PlayVideo(wrapperId) {
+    var wrapper = document.getElementById(wrapperId);
+    if (!wrapper) return;
+    var overlay = wrapper.querySelector('.ch1-expvid-overlay');
+    var iframe  = wrapper.querySelector('iframe');
+    if (overlay) overlay.style.display = 'none';
+    if (iframe) {
+        var src = iframe.src;
+        iframe.src = src.replace('autoplay=0', 'autoplay=1');
+    }
+}
+
+/* ===== הידעת WIDGETS ===== */
+(function () {
+    document.querySelectorAll('.ch1-dyk').forEach(function (el) {
+        el.addEventListener('click', function () {
+            if (!el.classList.contains('is-expanded')) {
+                el.classList.add('is-expanded');
+            }
+        });
+    });
+})();
+
+/* ===== BOOK DOSSIER ===== */
+(function () {
+    var bookData = {
+        'intelligent-investor': {
+            title: 'המשקיע הנבון',
+            author: 'בנג\'מין גראהם',
+            imgSrc: 'https://images.ravpages.co.il/xsite_resources/user_content/cp_new_production/d4/83/50/cb/d48350cb1a786c4790a92b5444c0e526/images/c3e21993d78bfa2270cf095b07c3e956.jpg',
+            description: 'נחשב לתנ"ך של "השקעות ערך". הוא נכתב על ידי המנטור של וורן באפט, ומציג תפיסת עולם שלמה להשקעות שקולות, הגנתיות ונטולות אמוציות, אשר עמדה במבחן הזמן.',
+            takeaways: [
+                'הכר את "מר שוק" ולמד להתעלם מהמצבים הרגשיים שלו.',
+                'השקע תמיד עם "מרווח ביטחון" משמעותי.',
+                'התמקד בלהיות בעלים של עסק, לא בספקולציות על מחיר מניה.'
+            ]
+        },
+        'random-walk': {
+            title: 'הליכה אקראית בוול סטריט',
+            author: 'ברטון מלכיאל',
+            imgSrc: 'https://images.ravpages.co.il/xsite_resources/user_content/cp_new_production/d4/83/50/cb/d48350cb1a786c4790a92b5444c0e526/images/a7ed898d3045e8987c8def4d071cc37a.jpg',
+            description: 'ספר קלאסי שמסביר בשפה פשוטה את עולם ההשקעות, מתאוריית השוק היעיל ועד בועות ספקולטיביות. מומלץ מאוד למשקיעים מתחילים שמחפשים הבנה רחבה.',
+            takeaways: [
+                'בטווח הארוך, קשה מאוד "לנצח" את השוק באופן עקבי.',
+                'השקעה במדדים רחבים ובעלות נמוכה היא האסטרטגיה הטובה ביותר עבור רוב האנשים.',
+                'היזהר מבועות פיננסיות ופסיכולוגיית העדר.'
+            ]
+        },
+        'one-up': {
+            title: 'One Up On Wall Street',
+            author: 'פיטר לינץ\'',
+            imgSrc: 'https://images.ravpages.co.il/xsite_resources/user_content/cp_new_production/d4/83/50/cb/d48350cb1a786c4790a92b5444c0e526/images/4871df3969af1c15a9956722a684fd2b.jpg',
+            description: 'פיטר לינץ\', מנהל קרן מגלן האגדי, טוען שמשקיעים פרטיים יכולים להצליח יותר מהמומחים על ידי שימוש בידע היומיומי שלהם כדי לזהות חברות מצוינות לפני וול סטריט.',
+            takeaways: [
+                'השקע במה שאתה מכיר ומבין מהחיים האישיים שלך.',
+                'חפש חברות "tenbagger" - אלו שיכולות להכפיל את ערכן פי 10.',
+                'עשה את שיעורי הבית שלך והבן את הסיפור מאחורי המניה.'
+            ]
+        },
+        'charlie-munger': {
+            title: 'צ\'רלי מאנגר: המשקיע השלם',
+            author: 'טרן גריפין',
+            imgSrc: 'https://images.ravpages.co.il/xsite_resources/user_content/cp_new_production/d4/83/50/cb/d48350cb1a786c4790a92b5444c0e526/images/e59aa799b4cdde75f25abd8996fed314.jpg',
+            description: 'הספר חושף את שיטות החשיבה והעקרונות המנחים של צ\'רלי מאנגר, שותפו הגאון של וורן באפט. הוא מלמד לחשוב בעזרת "מודלים מנטליים" מתחומים שונים כדי לקבל החלטות השקעה טובות יותר.',
+            takeaways: [
+                'אסוף "ארגז כלים" של מודלים מנטליים כדי לנתח בעיות.',
+                'הימנעות מטיפשות חשובה יותר מניסיון להיות מבריק.',
+                'הכר בפסיכולוגיה האנושית ובהטיות הקוגניטיביות שלך.'
+            ]
+        },
+        'most-important-thing': {
+            title: 'הדבר החשוב ביותר',
+            author: 'הווארד מארקס',
+            imgSrc: 'https://images.ravpages.co.il/xsite_resources/user_content/cp_new_production/d4/83/50/cb/d48350cb1a786c4790a92b5444c0e526/images/2204ac1d7a30268819db07d9c4288d2c.jpg',
+            description: 'הווארד מארקס, יו"ר Oaktree Capital, מסכם את פילוסופיית ההשקעות שלו. הספר מדגיש את חשיבותה של "חשיבה מסדר שני" — היכולת לחשוב מעבר למה שכולם רואים.',
+            takeaways: [
+                'התמקד בשליטה על הסיכון, התשואות יגיעו בעקבותיה.',
+                'הבן איפה אנחנו נמצאים במחזור השוק הנוכחי.',
+                'חפש את מה שהשוק מפספס (חשיבה מסדר שני).'
+            ]
+        },
+        'value-investing': {
+            title: 'השקעות ערך: מגראהם עד באפט',
+            author: 'ברוס גרינוואלד',
+            imgSrc: 'https://images.ravpages.co.il/xsite_resources/user_content/cp_new_production/d4/83/50/cb/d48350cb1a786c4790a92b5444c0e526/images/8fb411872eecc3a61f4de8c72ee130d6.jpg',
+            description: 'גרינוואלד מציג גישה מודרנית להשקעות ערך. הספר משלב ניתוח אקדמי עם דוגמאות מעשיות, ומדגיש כיצד ליישם את העקרונות האלמותיים של גראהם בעולם העסקי המורכב של היום.',
+            takeaways: [
+                'הערך האמיתי של חברה נובע מהיתרונות התחרותיים שלה.',
+                'התמקד בהערכת שווי נכסים, כוח רווח, ופוטנציאל צמיחה.',
+                'השקעות ערך הן תהליך שיטתי, לא הימור ספקולטיבי.'
+            ]
+        }
+    };
+
+    var mainContent = document.getElementById('dossier-main-content');
+    var bookshelf   = document.getElementById('bookshelf-scroller');
+    if (!mainContent || !bookshelf) return;
+
+    var isAnimating = false;
+
+    function makeCardHTML(book) {
+        return '<div class="book-cover-container">' +
+            '<img src="' + book.imgSrc + '" alt="' + book.title + '" class="book-cover">' +
+            '</div>' +
+            '<div class="book-details">' +
+            '<h2 class="book-title">' + book.title + '</h2>' +
+            '<p class="book-author">מאת ' + book.author + '</p>' +
+            '<p class="book-description">' + book.description + '</p>' +
+            '<h3 class="takeaways-title">עקרונות מפתח מהספר:</h3>' +
+            '<ul class="takeaways-list">' +
+            book.takeaways.map(function (t) { return '<li>' + t + '</li>'; }).join('') +
+            '</ul></div>';
+    }
+
+    function displayBook(bookId) {
+        if (isAnimating) return;
+        isAnimating = true;
+        var book = bookData[bookId];
+
+        bookshelf.querySelectorAll('.bookshelf-item').forEach(function (item) {
+            item.classList.toggle('active', item.dataset.bookId === bookId);
+        });
+
+        var currentCard = mainContent.querySelector('.book-display-card');
+        var exitDone = new Promise(function (resolve) {
+            if (currentCard) {
+                currentCard.classList.add('is-exiting');
+                currentCard.addEventListener('transitionend', resolve, { once: true });
+            } else {
+                resolve();
+            }
+        });
+
+        exitDone.then(function () {
+            if (currentCard) currentCard.remove();
+            var newCard = document.createElement('div');
+            newCard.className = 'book-display-card';
+            newCard.innerHTML = makeCardHTML(book);
+            newCard.style.visibility = 'hidden';
+            mainContent.appendChild(newCard);
+            var endHeight = newCard.offsetHeight + 40;
+            mainContent.style.height = endHeight + 'px';
+            newCard.style.visibility = 'visible';
+            requestAnimationFrame(function () {
+                requestAnimationFrame(function () { newCard.classList.add('is-active'); });
+            });
+            setTimeout(function () { isAnimating = false; }, 500);
+        });
+    }
+
+    /* Build bookshelf thumbnails */
+    Object.keys(bookData).forEach(function (bookId) {
+        var book = bookData[bookId];
+        var btn  = document.createElement('button');
+        btn.className       = 'bookshelf-item';
+        btn.dataset.bookId  = bookId;
+        btn.innerHTML       = '<img src="' + book.imgSrc + '" alt="' + book.title + '">';
+        btn.addEventListener('click', function () { displayBook(bookId); });
+        bookshelf.appendChild(btn);
+    });
+
+    /* Show first book */
+    var firstId   = Object.keys(bookData)[0];
+    var firstBook = bookData[firstId];
+    bookshelf.querySelector('[data-book-id="' + firstId + '"]').classList.add('active');
+
+    var initialCard = document.createElement('div');
+    initialCard.className = 'book-display-card is-active';
+    initialCard.innerHTML = makeCardHTML(firstBook);
+    mainContent.appendChild(initialCard);
+
+    function setInitialHeight() {
+        mainContent.style.height = (initialCard.offsetHeight + 40) + 'px';
+    }
+    var firstImg = initialCard.querySelector('.book-cover');
+    if (firstImg && firstImg.complete) { setInitialHeight(); }
+    else if (firstImg) { firstImg.addEventListener('load', setInitialHeight, { once: true }); }
+    else { setInitialHeight(); }
+})();
+</script>
+
+</body>
+</html>
