@@ -643,17 +643,161 @@
             .ch1-card-title-white { font-size: 1.3rem; }
             .ch1-nav         { padding: 0 1rem; }
         }
+
+        /* ===== HAMBURGER CHAPTER NAV ===== */
+        .hbnav-btn {
+            position: fixed;
+            top: 9px;
+            left: 14px;
+            z-index: 1001;
+            width: 44px;
+            height: 44px;
+            background: #5e817d;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            transition: background 0.2s;
+        }
+        .hbnav-btn:hover { background: #4a6d69; }
+        .hbnav-btn span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: #fefefe;
+            border-radius: 2px;
+            transition: transform 0.3s, opacity 0.3s;
+        }
+        .hbnav-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .hbnav-btn.open span:nth-child(2) { opacity: 0; }
+        .hbnav-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+        .hbnav-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.45);
+            z-index: 999;
+        }
+        .hbnav-overlay.open { display: block; }
+
+        .hbnav-panel {
+            position: fixed;
+            top: 62px;
+            right: 0;
+            height: calc(100vh - 62px);
+            width: 270px;
+            background: #0c3d52;
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+            padding: 1.5rem 1rem;
+            box-shadow: -4px 0 20px rgba(0,0,0,0.35);
+        }
+        .hbnav-panel.open { transform: translateX(0); }
+
+        .hbnav-panel-title {
+            color: #b3e0dc;
+            font-family: 'Rubik', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(179,224,220,0.2);
+        }
+        .hbnav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            padding: 0.75rem 0.85rem;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #fefefe;
+            font-family: 'Assistant', sans-serif;
+            font-size: 0.95rem;
+            transition: background 0.18s;
+            margin-bottom: 4px;
+        }
+        .hbnav-item:hover { background: rgba(179,224,220,0.12); }
+        .hbnav-item.active { background: rgba(179,224,220,0.18); font-weight: 700; }
+        .hbnav-item.disabled { opacity: 0.45; pointer-events: none; }
+        .hbnav-icon {
+            width: 34px;
+            height: 34px;
+            background: rgba(179,224,220,0.15);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 1rem;
+        }
+        .hbnav-text { display: flex; flex-direction: column; }
+        .hbnav-name { font-size: 0.95rem; }
+        .hbnav-sub  { font-size: 0.75rem; color: #b3e0dc; opacity: 0.7; }
+
+        @media (min-width: 768px) {
+            .hbnav-btn { display: none; }
+            .hbnav-panel {
+                top: 62px;
+                right: auto;
+                left: 0;
+                width: 220px;
+                height: calc(100vh - 62px);
+                transform: translateX(0);
+                box-shadow: 4px 0 20px rgba(0,0,0,0.25);
+            }
+            .hbnav-overlay { display: none !important; }
+            .ch1-container { margin-right: auto; margin-left: 220px; }
+            .ch1-hero > * { margin-left: 220px; }
+        }
     </style>
 </head>
 <body>
 
 <!-- ===== NAVBAR ===== -->
 <nav class="ch1-nav">
+    <button class="hbnav-btn" id="hbnav-toggle" aria-label="תפריט פרקים" aria-expanded="false">
+        <span></span><span></span><span></span>
+    </button>
     <a href="/" class="ch1-nav-logo">NewGen Finance</a>
     <div class="ch1-nav-links">
         <a href="/members/" class="ch1-nav-link">אזור החברים</a>
         <button class="ch1-nav-signout" id="ch1-signout-btn">התנתקות</button>
     </div>
+</nav>
+
+<!-- Hamburger chapter nav overlay + panel -->
+<div class="hbnav-overlay" id="hbnav-overlay"></div>
+<nav class="hbnav-panel" id="hbnav-panel" aria-label="ניווט פרקים">
+    <div class="hbnav-panel-title">הקורס — פרקים</div>
+    <a href="/investor-academy/lessons/intro.html" class="hbnav-item">
+        <div class="hbnav-icon">🚀</div>
+        <div class="hbnav-text"><span class="hbnav-name">הקדמה</span><span class="hbnav-sub">למסע שלך</span></div>
+    </a>
+    <a href="/investor-academy/lessons/chapter-1.html" class="hbnav-item active">
+        <div class="hbnav-icon">🔑</div>
+        <div class="hbnav-text"><span class="hbnav-name">פרק 1</span><span class="hbnav-sub">שלב הכניסה</span></div>
+    </a>
+    <a href="/investor-academy/lessons/chapter-2.html" class="hbnav-item">
+        <div class="hbnav-icon">🧭</div>
+        <div class="hbnav-text"><span class="hbnav-name">פרק 2</span><span class="hbnav-sub">שלב האסטרטגיה</span></div>
+    </a>
+    <a href="/investor-academy/lessons/chapter-3.html" class="hbnav-item">
+        <div class="hbnav-icon">🛠️</div>
+        <div class="hbnav-text"><span class="hbnav-name">פרק 3</span><span class="hbnav-sub">שלב הכלים</span></div>
+    </a>
+    <a href="/investor-academy/lessons/chapter-4.html" class="hbnav-item">
+        <div class="hbnav-icon">📊</div>
+        <div class="hbnav-text"><span class="hbnav-name">פרק 4</span><span class="hbnav-sub">שלב הניהול</span></div>
+    </a>
 </nav>
 
 <!-- ===== SECTION 1: HERO ===== -->
@@ -1001,8 +1145,8 @@
     <!-- ===== SECTION 11: BOTTOM NAVIGATION ===== -->
     <div class="ch1-card-dark" id="s11-bottom-nav">
         <div class="ch1-bottom-nav">
-            <a href="chapter-2.html" class="ch1-btn-gold">לפרק הבא ←</a>
-            <a href="/investor-academy/lessons/" class="ch1-btn-outline">חזרה לרשימת הפרקים</a>
+            <a href="/investor-academy/lessons/chapter-2.html" class="ch1-btn-gold">לפרק הבא ←</a>
+            <a href="/investor-academy/lessons/intro.html" class="ch1-btn-outline">→ הקדמה</a>
         </div>
     </div>
 
@@ -1214,6 +1358,20 @@ function ch1PlayVideo(wrapperId) {
     if (firstImg && firstImg.complete) { setInitialHeight(); }
     else if (firstImg) { firstImg.addEventListener('load', setInitialHeight, { once: true }); }
     else { setInitialHeight(); }
+})();
+</script>
+
+<script>
+/* ===== HAMBURGER NAV ===== */
+(function () {
+    var btn     = document.getElementById('hbnav-toggle');
+    var panel   = document.getElementById('hbnav-panel');
+    var overlay = document.getElementById('hbnav-overlay');
+    function open()  { btn.classList.add('open'); panel.classList.add('open'); overlay.classList.add('open'); btn.setAttribute('aria-expanded','true'); }
+    function close() { btn.classList.remove('open'); panel.classList.remove('open'); overlay.classList.remove('open'); btn.setAttribute('aria-expanded','false'); }
+    btn.addEventListener('click', function () { panel.classList.contains('open') ? close() : open(); });
+    overlay.addEventListener('click', close);
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
 })();
 </script>
 

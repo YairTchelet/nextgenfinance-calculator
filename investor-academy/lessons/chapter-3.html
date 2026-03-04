@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>פרק 3 — שלב הכלים | NewGen Finance</title>
+
+    <!-- Auth protection -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <script src="/assets/js/supabase-config.js"></script>
+    <script src="/assets/js/auth-guard.js"></script>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: #1a6985; font-family: 'Assistant', 'Rubik', sans-serif; direction: rtl; color: #394140; min-height: 100vh; }
+        .nav { background: #0c3d52; padding: 0 1.5rem; height: 62px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,0.35); }
+        .nav-logo { color: #b3e0dc; font-family: 'Rubik', sans-serif; font-weight: 700; font-size: 1.2rem; text-decoration: none; }
+        .nav-links { display: flex; align-items: center; gap: 1rem; }
+        .nav-link { color: #fefefe; text-decoration: none; font-size: 0.95rem; transition: color 0.2s; }
+        .nav-link:hover { color: #b3e0dc; }
+        .nav-signout { background: transparent; border: 1px solid rgba(240,248,250,0.35); color: #fefefe; font-family: 'Assistant', sans-serif; font-size: 0.9rem; padding: 0.4rem 1rem; border-radius: 20px; cursor: pointer; transition: all 0.2s; }
+        .nav-signout:hover { border-color: #b3e0dc; color: #b3e0dc; }
+        .hbnav-btn { position: fixed; top: 9px; left: 14px; z-index: 1001; width: 44px; height: 44px; background: #5e817d; border: none; border-radius: 10px; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px; transition: background 0.2s; }
+        .hbnav-btn:hover { background: #4a6d69; }
+        .hbnav-btn span { display: block; width: 22px; height: 2px; background: #fefefe; border-radius: 2px; transition: transform 0.3s, opacity 0.3s; }
+        .hbnav-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .hbnav-btn.open span:nth-child(2) { opacity: 0; }
+        .hbnav-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+        .hbnav-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 999; }
+        .hbnav-overlay.open { display: block; }
+        .hbnav-panel { position: fixed; top: 62px; right: 0; height: calc(100vh - 62px); width: 270px; background: #0c3d52; z-index: 1000; transform: translateX(100%); transition: transform 0.3s ease; overflow-y: auto; padding: 1.5rem 1rem; box-shadow: -4px 0 20px rgba(0,0,0,0.35); }
+        .hbnav-panel.open { transform: translateX(0); }
+        .hbnav-panel-title { color: #b3e0dc; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(179,224,220,0.2); }
+        .hbnav-item { display: flex; align-items: center; gap: 0.9rem; padding: 0.75rem 0.85rem; border-radius: 10px; text-decoration: none; color: #fefefe; font-size: 0.95rem; transition: background 0.18s; margin-bottom: 4px; }
+        .hbnav-item:hover { background: rgba(179,224,220,0.12); }
+        .hbnav-item.active { background: rgba(179,224,220,0.18); font-weight: 700; }
+        .hbnav-icon { width: 34px; height: 34px; background: rgba(179,224,220,0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1rem; }
+        .hbnav-text { display: flex; flex-direction: column; }
+        .hbnav-name { font-size: 0.95rem; }
+        .hbnav-sub  { font-size: 0.75rem; color: #b3e0dc; opacity: 0.7; }
+        @media (min-width: 768px) {
+            .hbnav-btn { display: none; }
+            .hbnav-panel { top: 62px; right: auto; left: 0; width: 220px; height: calc(100vh - 62px); transform: translateX(0); box-shadow: 4px 0 20px rgba(0,0,0,0.25); }
+            .hbnav-overlay { display: none !important; }
+            .page-container { margin-left: 220px; }
+        }
+        .coming-soon { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: calc(100vh - 62px); padding: 3rem 1rem; text-align: center; }
+        .cs-icon { font-size: 4rem; margin-bottom: 1.5rem; }
+        .cs-label { display: inline-block; background: rgba(179,224,220,0.15); color: #b3e0dc; font-size: 0.82rem; font-weight: 700; padding: 0.35rem 1rem; border-radius: 20px; border: 1px solid rgba(179,224,220,0.3); margin-bottom: 1.2rem; }
+        .cs-title { font-family: 'Rubik', sans-serif; font-size: 2.2rem; font-weight: 700; color: #fefefe; margin-bottom: 0.75rem; }
+        .cs-sub { color: #b3e0dc; font-size: 1.05rem; max-width: 460px; line-height: 1.65; margin-bottom: 2.5rem; opacity: 0.85; }
+        .cs-back { display: inline-block; background: #b3e0dc; color: #394140; font-family: 'Rubik', sans-serif; font-size: 1rem; font-weight: 700; padding: 0.8rem 2.2rem; border-radius: 30px; text-decoration: none; transition: background 0.2s, transform 0.15s; box-shadow: 0 4px 14px rgba(0,0,0,0.2); margin-left: 0.75rem; }
+        .cs-back:hover { background: #8fc9c4; transform: translateY(-2px); }
+        .cs-outline { display: inline-block; background: transparent; color: #b3e0dc; font-family: 'Rubik', sans-serif; font-size: 1rem; font-weight: 600; padding: 0.8rem 2.2rem; border-radius: 30px; text-decoration: none; border: 1.5px solid rgba(179,224,220,0.5); transition: border-color 0.2s, color 0.2s; }
+        .cs-outline:hover { border-color: #b3e0dc; color: #fefefe; }
+    </style>
+</head>
+<body>
+
+<nav class="nav">
+    <button class="hbnav-btn" id="hbnav-toggle" aria-label="תפריט פרקים" aria-expanded="false">
+        <span></span><span></span><span></span>
+    </button>
+    <a href="/" class="nav-logo">NewGen Finance</a>
+    <div class="nav-links">
+        <a href="/members/" class="nav-link">אזור החברים</a>
+        <button class="nav-signout" id="signout-btn">התנתקות</button>
+    </div>
+</nav>
+
+<div class="hbnav-overlay" id="hbnav-overlay"></div>
+<nav class="hbnav-panel" id="hbnav-panel" aria-label="ניווט פרקים">
+    <div class="hbnav-panel-title">הקורס — פרקים</div>
+    <a href="/investor-academy/lessons/intro.html" class="hbnav-item">
+        <div class="hbnav-icon">🚀</div>
+        <div class="hbnav-text"><span class="hbnav-name">הקדמה</span><span class="hbnav-sub">למסע שלך</span></div>
+    </a>
+    <a href="/investor-academy/lessons/chapter-1.html" class="hbnav-item">
+        <div class="hbnav-icon">🔑</div>
+        <div class="hbnav-text"><span class="hbnav-name">פרק 1</span><span class="hbnav-sub">שלב הכניסה</span></div>
+    </a>
+    <a href="/investor-academy/lessons/chapter-2.html" class="hbnav-item">
+        <div class="hbnav-icon">🧭</div>
+        <div class="hbnav-text"><span class="hbnav-name">פרק 2</span><span class="hbnav-sub">שלב האסטרטגיה</span></div>
+    </a>
+    <a href="/investor-academy/lessons/chapter-3.html" class="hbnav-item active">
+        <div class="hbnav-icon">🛠️</div>
+        <div class="hbnav-text"><span class="hbnav-name">פרק 3</span><span class="hbnav-sub">שלב הכלים</span></div>
+    </a>
+    <a href="/investor-academy/lessons/chapter-4.html" class="hbnav-item">
+        <div class="hbnav-icon">📊</div>
+        <div class="hbnav-text"><span class="hbnav-name">פרק 4</span><span class="hbnav-sub">שלב הניהול</span></div>
+    </a>
+</nav>
+
+<div class="page-container">
+    <div class="coming-soon">
+        <div class="cs-icon">🛠️</div>
+        <div class="cs-label">פרק 3</div>
+        <h1 class="cs-title">שלב הכלים</h1>
+        <p class="cs-sub">TradingView, ניתוח טכני, כלים מקצועיים ובניית תיק — בקרוב!</p>
+        <div>
+            <a href="/investor-academy/lessons/chapter-2.html" class="cs-back">→ חזרה לפרק 2</a>
+            <a href="/investor-academy/lessons/intro.html" class="cs-outline">הקדמה</a>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('signout-btn').addEventListener('click', async function () {
+    const _c = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    await _c.auth.signOut();
+    window.location.replace('/auth/login/');
+});
+(function () {
+    var btn = document.getElementById('hbnav-toggle');
+    var panel = document.getElementById('hbnav-panel');
+    var overlay = document.getElementById('hbnav-overlay');
+    function open()  { btn.classList.add('open'); panel.classList.add('open'); overlay.classList.add('open'); btn.setAttribute('aria-expanded','true'); }
+    function close() { btn.classList.remove('open'); panel.classList.remove('open'); overlay.classList.remove('open'); btn.setAttribute('aria-expanded','false'); }
+    btn.addEventListener('click', function () { panel.classList.contains('open') ? close() : open(); });
+    overlay.addEventListener('click', close);
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+})();
+</script>
+</body>
+</html>
