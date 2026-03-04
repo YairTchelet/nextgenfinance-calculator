@@ -747,6 +747,9 @@
         .hbnav-text { display: flex; flex-direction: column; }
         .hbnav-name { font-size: 0.95rem; }
         .hbnav-sub  { font-size: 0.75rem; color: #b3e0dc; opacity: 0.7; }
+        .hbnav-site-link { display: flex; align-items: center; padding: 0.55rem 0.85rem; border-radius: 8px; text-decoration: none; color: rgba(254,254,254,0.72); font-size: 0.88rem; font-family: 'Assistant', sans-serif; transition: background 0.18s; margin-bottom: 2px; }
+        .hbnav-site-link:hover { background: rgba(179,224,220,0.1); color: #fefefe; }
+        .hbnav-divider { height: 1px; background: rgba(179,224,220,0.15); margin: 0.85rem 0.5rem; }
 
     </style>
 </head>
@@ -769,6 +772,12 @@
 <!-- Hamburger chapter nav overlay + panel -->
 <div class="hbnav-overlay" id="hbnav-overlay"></div>
 <nav class="hbnav-panel" id="hbnav-panel" aria-label="ניווט פרקים">
+    <div class="hbnav-panel-title">אתר</div>
+    <a href="/" class="hbnav-site-link">ראשי</a>
+    <a href="/#tools" class="hbnav-site-link">כלים</a>
+    <a href="/#course" class="hbnav-site-link">קורסים</a>
+    <a href="/members/" class="hbnav-site-link">אזור החברים</a>
+    <div class="hbnav-divider"></div>
     <div class="hbnav-panel-title">הקורס — פרקים</div>
     <a href="/investor-academy/lessons/intro.html" class="hbnav-item">
         <div class="hbnav-icon">🚀</div>

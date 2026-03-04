@@ -634,6 +634,7 @@
     }
     .mobile-nav-item:hover { background: rgba(179,224,220,0.12); }
     .mobile-nav-item.highlighted { color: #b3e0dc; font-weight: 600; }
+    .mobile-nav-divider { height: 1px; background: rgba(179,224,220,0.15); margin: 0.85rem 0; }
 
     /* ─── RESPONSIVE ─────────────────────────────────── */
     @media (max-width: 900px) {
@@ -677,6 +678,16 @@
     <a href="#tools" class="mobile-nav-item">כלים</a>
     <a href="#course" class="mobile-nav-item">קורסים</a>
     <a href="/members/" class="mobile-nav-item highlighted" id="mobile-nav-members" style="display:none">אזור החברים</a>
+    <div class="mobile-nav-divider"></div>
+    <div class="mobile-nav-panel-title">הקורס</div>
+    <a href="/#course" class="mobile-nav-item" id="mobile-course-teaser">הקורס שלי ←</a>
+    <div id="mobile-course-episodes" style="display:none">
+      <a href="/investor-academy/lessons/intro.html" class="mobile-nav-item">🚀 הקדמה</a>
+      <a href="/investor-academy/lessons/chapter-1.html" class="mobile-nav-item">🔑 פרק 1</a>
+      <a href="/investor-academy/lessons/chapter-2.html" class="mobile-nav-item">🧭 פרק 2</a>
+      <a href="/investor-academy/lessons/chapter-3.html" class="mobile-nav-item">🛠️ פרק 3</a>
+      <a href="/investor-academy/lessons/chapter-4.html" class="mobile-nav-item">📊 פרק 4</a>
+    </div>
   </nav>
 
   <!-- ─── HERO ─────────────────────────────────────────── -->
@@ -839,6 +850,10 @@
 
         const mobileMembers = document.getElementById('mobile-nav-members');
         if (mobileMembers) mobileMembers.style.display = '';
+        const mobileEpisodes = document.getElementById('mobile-course-episodes');
+        const mobileTeaser = document.getElementById('mobile-course-teaser');
+        if (mobileEpisodes) mobileEpisodes.style.display = '';
+        if (mobileTeaser) mobileTeaser.style.display = 'none';
       }
     })();
 
