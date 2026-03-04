@@ -15,7 +15,7 @@
 
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html { scroll-behavior: smooth; }
+        html { scroll-behavior: smooth; overflow-x: hidden; }
         body {
             background: linear-gradient(155deg, #0b4a64 0%, #1680a0 48%, #0d6a82 100%);
             background-attachment: fixed;
@@ -325,7 +325,9 @@
         @media (max-width: 480px) {
             .hero-title { font-size: 1.8rem; }
             .card { padding: 1.25rem; }
-            .nav { padding: 0 1rem; }
+            .nav { padding: 0 0.75rem; }
+            .nav-logo { font-size: 1rem; }
+            .nav-link { display: none; }
         }
     </style>
 </head>

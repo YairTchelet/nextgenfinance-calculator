@@ -15,6 +15,7 @@
 
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { overflow-x: hidden; }
         body { background: linear-gradient(155deg, #0b4a64 0%, #1680a0 48%, #0d6a82 100%); background-attachment: fixed; font-family: 'Assistant', 'Rubik', sans-serif; direction: rtl; color: #394140; min-height: 100vh; }
         .nav { background: #0c3d52; padding: 0 1.5rem; height: 62px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,0.35); }
         .nav-logo { color: #b3e0dc; font-family: 'Rubik', sans-serif; font-weight: 700; font-size: 1.2rem; text-decoration: none; }
@@ -51,6 +52,11 @@
         .cs-back:hover { background: #8fc9c4; transform: translateY(-2px); }
         .cs-outline { display: inline-block; background: transparent; color: #b3e0dc; font-family: 'Rubik', sans-serif; font-size: 1rem; font-weight: 600; padding: 0.8rem 2.2rem; border-radius: 30px; text-decoration: none; border: 1.5px solid rgba(179,224,220,0.5); transition: border-color 0.2s, color 0.2s; }
         .cs-outline:hover { border-color: #b3e0dc; color: #fefefe; }
+        @media (max-width: 480px) {
+            .nav { padding: 0 0.75rem; }
+            .nav-logo { font-size: 1rem; }
+            .nav-link { display: none; }
+        }
     </style>
 </head>
 <body>

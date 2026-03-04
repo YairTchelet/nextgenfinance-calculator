@@ -16,7 +16,7 @@
     <style>
         /* ===== RESET & BASE ===== */
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html { scroll-behavior: smooth; }
+        html { scroll-behavior: smooth; overflow-x: hidden; }
         body {
             background: linear-gradient(155deg, #0b4a64 0%, #1680a0 48%, #0d6a82 100%);
             background-attachment: fixed;
@@ -642,7 +642,9 @@
             .ch1-card-dark   { padding: 1.25rem; }
             .ch1-card-title  { font-size: 1.3rem; }
             .ch1-card-title-white { font-size: 1.3rem; }
-            .ch1-nav         { padding: 0 1rem; }
+            .ch1-nav         { padding: 0 0.75rem; }
+            .ch1-nav-logo    { font-size: 1rem; }
+            .ch1-nav-link    { display: none; }
         }
 
         /* ===== HAMBURGER CHAPTER NAV ===== */

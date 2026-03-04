@@ -15,6 +15,7 @@
 
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { overflow-x: hidden; }
         body {
             background: linear-gradient(155deg, #0b4a64 0%, #1680a0 48%, #0d6a82 100%);
             background-attachment: fixed;
@@ -155,6 +156,11 @@
             transition: border-color 0.2s, color 0.2s;
         }
         .cs-outline:hover { border-color: #b3e0dc; color: #fefefe; }
+        @media (max-width: 480px) {
+            .nav { padding: 0 0.75rem; }
+            .nav-logo { font-size: 1rem; }
+            .nav-link { display: none; }
+        }
     </style>
 </head>
 <body>
