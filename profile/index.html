@@ -424,6 +424,53 @@
       color: var(--text-mid);
     }
 
+    /* ─── ACCESS REQUEST FORM ────────────────────────── */
+    .access-request-btn {
+      background: var(--teal);
+      color: #ffffff;
+      border-color: var(--teal);
+      padding: 10px 22px;
+      font-size: 0.9rem;
+    }
+
+    .access-request-btn:hover:not(:disabled) {
+      background: var(--teal-dark);
+      border-color: var(--teal-dark);
+      box-shadow: 0 6px 18px rgba(94, 129, 125, 0.35);
+    }
+
+    .access-request-form {
+      margin-top: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .access-request-form textarea {
+      min-height: 100px;
+    }
+
+    .access-msg {
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 10px 14px;
+      border-radius: 8px;
+      margin-top: 12px;
+      display: none;
+    }
+
+    .access-msg-success {
+      background: #f0faf5;
+      border: 1.5px solid #a3d9c5;
+      color: #1b7a55;
+    }
+
+    .access-msg-error {
+      background: #fff0f0;
+      border: 1.5px solid #f5c6c6;
+      color: #c0392b;
+    }
+
     /* ─── DANGER ZONE CARD ───────────────────────────── */
     .card-danger {
       background: var(--card-bg);
@@ -768,10 +815,67 @@
           '</div>';
       } else {
         accessEl.innerHTML =
-          '<div class="access-denied">' +
-            '<span class="access-denied-text">אין לך גישה לקורס</span>' +
-            '<a href="/investor-academy/" class="btn btn-gold">לרכישת הקורס</a>' +
-          '</div>';
+          '<div class="access-denied-text">אין לך גישה לקורס עדיין</div>' +
+          '<button class="btn access-request-btn" id="show-request-form-btn" style="margin-top:14px;">בקש גישה לקורס</button>' +
+          '<form class="access-request-form" id="access-request-form" style="display:none;" novalidate>' +
+            '<div class="form-field">' +
+              '<label for="req-name">שם מלא</label>' +
+              '<input type="text" id="req-name" placeholder="שם מלא">' +
+            '</div>' +
+            '<div class="form-field">' +
+              '<label for="req-phone">טלפון</label>' +
+              '<input type="text" id="req-phone" placeholder="05X-XXXXXXX">' +
+            '</div>' +
+            '<div class="form-field">' +
+              '<label for="req-message">הודעה</label>' +
+              '<textarea id="req-message" placeholder="ספר לנו קצת על עצמך ולמה אתה מעוניין בקורס"></textarea>' +
+            '</div>' +
+            '<button type="submit" class="btn access-request-btn" id="req-submit-btn">שלח בקשה</button>' +
+          '</form>' +
+          '<div class="access-msg access-msg-success" id="req-success">הבקשה נשלחה בהצלחה! ניצור איתך קשר בקרוב 🎉</div>' +
+          '<div class="access-msg access-msg-error" id="req-error">שגיאה בשליחה — נסה שוב או פנה אלינו ישירות</div>';
+
+        // Pre-fill request form with profile data
+        document.getElementById('req-name').value = fullName || '';
+        document.getElementById('req-phone').value = profile?.phone || '';
+
+        // Toggle form visibility
+        document.getElementById('show-request-form-btn').addEventListener('click', function () {
+          this.style.display = 'none';
+          document.getElementById('access-request-form').style.display = 'flex';
+        });
+
+        // Submit request
+        document.getElementById('access-request-form').addEventListener('submit', async function (e) {
+          e.preventDefault();
+          const submitBtn = document.getElementById('req-submit-btn');
+          const successEl = document.getElementById('req-success');
+          const errorEl   = document.getElementById('req-error');
+
+          submitBtn.disabled = true;
+          submitBtn.textContent = 'שולח...';
+          successEl.style.display = 'none';
+          errorEl.style.display   = 'none';
+
+          const reqName    = document.getElementById('req-name').value.trim();
+          const reqPhone   = document.getElementById('req-phone').value.trim();
+          const reqMessage = document.getElementById('req-message').value.trim();
+
+          try {
+            const res = await fetch('/api/request-access', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ name: reqName, email: user.email, phone: reqPhone, message: reqMessage }),
+            });
+            if (!res.ok) throw new Error('failed');
+            document.getElementById('access-request-form').style.display = 'none';
+            successEl.style.display = 'block';
+          } catch (_) {
+            errorEl.style.display = 'block';
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'שלח בקשה';
+          }
+        });
       }
 
       // Show page
