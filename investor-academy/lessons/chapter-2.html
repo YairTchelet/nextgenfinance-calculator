@@ -16,7 +16,8 @@
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            background: #1a6985;
+            background: linear-gradient(155deg, #0b4a64 0%, #1680a0 48%, #0d6a82 100%);
+            background-attachment: fixed;
             font-family: 'Assistant', 'Rubik', sans-serif;
             direction: rtl;
             color: #394140;
@@ -54,14 +55,16 @@
         .nav-signout:hover { border-color: #b3e0dc; color: #b3e0dc; }
 
         /* HAMBURGER NAV */
+        .nav-brand { display: flex; align-items: center; gap: 0.7rem; }
         .hbnav-btn {
-            position: fixed; top: 9px; left: 14px; z-index: 1001;
-            width: 44px; height: 44px; background: #5e817d;
-            border: none; border-radius: 10px; cursor: pointer;
+            width: 40px; height: 40px;
+            background: rgba(179,224,220,0.15);
+            border: 1px solid rgba(179,224,220,0.3);
+            border-radius: 10px; cursor: pointer;
             display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px;
-            transition: background 0.2s;
+            transition: background 0.2s, border-color 0.2s; flex-shrink: 0;
         }
-        .hbnav-btn:hover { background: #4a6d69; }
+        .hbnav-btn:hover { background: rgba(179,224,220,0.28); border-color: rgba(179,224,220,0.55); }
         .hbnav-btn span { display: block; width: 22px; height: 2px; background: #fefefe; border-radius: 2px; transition: transform 0.3s, opacity 0.3s; }
         .hbnav-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
         .hbnav-btn.open span:nth-child(2) { opacity: 0; }
@@ -85,12 +88,6 @@
         .hbnav-text { display: flex; flex-direction: column; }
         .hbnav-name { font-size: 0.95rem; }
         .hbnav-sub  { font-size: 0.75rem; color: #b3e0dc; opacity: 0.7; }
-        @media (min-width: 768px) {
-            .hbnav-btn { display: none; }
-            .hbnav-panel { top: 62px; right: auto; left: 0; width: 220px; height: calc(100vh - 62px); transform: translateX(0); box-shadow: 4px 0 20px rgba(0,0,0,0.25); }
-            .hbnav-overlay { display: none !important; }
-            .page-container { margin-left: 220px; }
-        }
 
         /* COMING SOON */
         .coming-soon {
@@ -163,10 +160,12 @@
 <body>
 
 <nav class="nav">
-    <button class="hbnav-btn" id="hbnav-toggle" aria-label="תפריט פרקים" aria-expanded="false">
-        <span></span><span></span><span></span>
-    </button>
-    <a href="/" class="nav-logo">NewGen Finance</a>
+    <div class="nav-brand">
+        <button class="hbnav-btn" id="hbnav-toggle" aria-label="תפריט פרקים" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+        <a href="/" class="nav-logo">NewGen Finance</a>
+    </div>
     <div class="nav-links">
         <a href="/members/" class="nav-link">אזור החברים</a>
         <button class="nav-signout" id="signout-btn">התנתקות</button>
