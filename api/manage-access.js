@@ -54,6 +54,13 @@ module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(204).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
+  var _b = req.body || {};
+  console.log('manage-access called with:', { userId: _b.userId, action: _b.action });
+  console.log('ADMIN_SECRET exists:', !!process.env.ADMIN_SECRET);
+  console.log('SUPABASE_SERVICE_KEY exists:', !!process.env.SUPABASE_SERVICE_KEY);
+
+  try {
+
   // Verify admin token
   var adminToken   = req.headers['x-admin-token'];
   var ADMIN_SECRET = process.env.ADMIN_SECRET;
@@ -76,7 +83,6 @@ module.exports = async function handler(req, res) {
     return res.status(500).json({ error: 'Server configuration error: missing Supabase env vars' });
   }
 
-  var _b = req.body || {};
   var userId = _b.userId;
   var action = _b.action;  // 'approve' | 'deny' | 'toggle'
 
@@ -142,7 +148,7 @@ module.exports = async function handler(req, res) {
     return res.status(200).json({ success: true });
 
   } catch (err) {
-    console.error('manage-access failed:', err.message);
-    return res.status(500).json({ error: 'Internal server error' });
+    console.error('manage-access error:', err.message, err.stack);
+    return res.status(500).json({ error: err.message });
   }
 };
