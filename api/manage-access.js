@@ -55,11 +55,16 @@ module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   // Verify admin token
-  var adminToken = req.headers['x-admin-token'];
+  var adminToken   = req.headers['x-admin-token'];
   var ADMIN_SECRET = process.env.ADMIN_SECRET;
-  if (!ADMIN_SECRET || adminToken !== ADMIN_SECRET) {
-    console.warn('Unauthorized manage-access attempt');
-    return res.status(401).json({ error: 'Unauthorized' });
+  console.log('manage-access: token received:', adminToken ? '[present]' : '[missing]');
+  if (!ADMIN_SECRET) {
+    console.error('manage-access: ADMIN_SECRET env var is not set');
+    return res.status(500).json({ error: 'Server misconfiguration: ADMIN_SECRET not set' });
+  }
+  if (adminToken !== ADMIN_SECRET) {
+    console.warn('manage-access: invalid admin token — expected ADMIN_SECRET, got:', adminToken ? '[wrong value]' : '[empty]');
+    return res.status(401).json({ error: 'Unauthorized: invalid admin token' });
   }
 
   var RESEND_API_KEY       = process.env.RESEND_API_KEY;
@@ -67,13 +72,15 @@ module.exports = async function handler(req, res) {
   var SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
 
   if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
-    console.error('Missing Supabase env vars');
-    return res.status(500).json({ error: 'Server configuration error' });
+    console.error('manage-access: missing SUPABASE_URL or SUPABASE_SERVICE_KEY');
+    return res.status(500).json({ error: 'Server configuration error: missing Supabase env vars' });
   }
 
   var _b = req.body || {};
   var userId = _b.userId;
-  var action = _b.action;  // 'approve' | 'deny' | 'set_access'
+  var action = _b.action;  // 'approve' | 'deny' | 'toggle'
+
+  console.log('manage-access: action =', action, '| userId =', userId);
 
   if (!userId || !action) {
     return res.status(400).json({ error: 'Missing userId or action' });
@@ -112,11 +119,21 @@ module.exports = async function handler(req, res) {
         await sendEmail(RESEND_API_KEY, rows[0].email, tpl.subject, tpl.html);
       }
 
-    } else if (action === 'set_access') {
-      // Direct toggle — no email sent
-      var newValue = _b.value === true || _b.value === 'true';
+    } else if (action === 'toggle') {
+      // Read current has_access value, then flip it — no email sent
+      var current = await sbFetch(SUPABASE_URL, SUPABASE_SERVICE_KEY,
+        'profiles?id=eq.' + userId + '&select=has_access', 'GET');
+
+      if (!current || current.length === 0) {
+        console.error('manage-access: profile not found for userId', userId);
+        return res.status(404).json({ error: 'Profile not found' });
+      }
+
+      var flipped = !current[0].has_access;
+      console.log('manage-access: toggling has_access from', current[0].has_access, 'to', flipped);
+
       await sbFetch(SUPABASE_URL, SUPABASE_SERVICE_KEY,
-        'profiles?id=eq.' + userId, 'PATCH', { has_access: newValue });
+        'profiles?id=eq.' + userId, 'PATCH', { has_access: flipped });
 
     } else {
       return res.status(400).json({ error: 'Unknown action: ' + action });

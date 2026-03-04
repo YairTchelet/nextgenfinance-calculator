@@ -477,7 +477,7 @@
       btn.disabled = true;
       var newAccess = !currentAccess;
       try {
-        await callManageAccess({ userId: userId, action: 'set_access', value: newAccess });
+        await callManageAccess({ userId: userId, action: 'toggle' });
         // Update badge
         var badge = document.getElementById('user-badge-' + idx);
         badge.className = 'badge ' + (newAccess ? 'badge-access' : 'badge-no-access');
