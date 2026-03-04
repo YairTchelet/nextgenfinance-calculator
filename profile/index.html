@@ -862,11 +862,16 @@
           const reqMessage = document.getElementById('req-message').value.trim();
 
           try {
+            console.log('Sending request to:', '/api/request-access');
+            console.log('Data:', { name: reqName, email: user.email, phone: reqPhone, message: reqMessage });
             const res = await fetch('/api/request-access', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ name: reqName, email: user.email, phone: reqPhone, message: reqMessage }),
             });
+            console.log('Response status:', res.status);
+            const responseText = await res.text();
+            console.log('Response body:', responseText);
             if (!res.ok) throw new Error('failed');
             document.getElementById('access-request-form').style.display = 'none';
             successEl.style.display = 'block';
