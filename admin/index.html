@@ -273,7 +273,7 @@
         <span>👥 כל המשתמשים</span>
         <label style="font-size:0.8rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;">
           <input type="checkbox" id="show-all-users" style="cursor:pointer;">
-          הצג הכל
+          הסתר פעילים
         </label>
       </div>
       <div class="table-card">
@@ -372,12 +372,12 @@
         var pendingRequests = requests.filter(function (r) { return r.status === 'pending'; });
         renderRequests(pendingRequests);
 
-        // ── Users table — hide those with access by default ──
+        // ── Users table — show all by default ──
         window._allProfiles = profiles;
-        renderUsers(profiles.filter(function (p) { return !p.has_access; }));
+        renderUsers(profiles);
 
         document.getElementById('show-all-users').addEventListener('change', function () {
-          renderUsers(this.checked ? profiles : profiles.filter(function (p) { return !p.has_access; }));
+          renderUsers(this.checked ? profiles.filter(function (p) { return !p.has_access; }) : profiles);
         });
 
       } catch (err) {
