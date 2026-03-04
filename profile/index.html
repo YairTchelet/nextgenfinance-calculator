@@ -874,7 +874,7 @@
             const res = await fetch('/api/request-access', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ name: reqName, email: user.email, phone: reqPhone, message: reqMessage }),
+              body: JSON.stringify({ userId: user.id, name: reqName, email: user.email, phone: reqPhone, message: reqMessage }),
             });
             console.log('Response status:', res.status);
             const responseText = await res.text();

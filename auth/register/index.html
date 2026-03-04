@@ -335,7 +335,14 @@
         return;
       }
 
-      // Success — hide form, show confirmation
+      // Success — send welcome email (best-effort, non-blocking)
+      fetch('/api/send-welcome', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: fullName, email: email }),
+      }).catch(function (err) { console.warn('Welcome email failed:', err); });
+
+      // Hide form, show confirmation
       form.style.display = 'none';
       successMsg.textContent = 'נשלח אליך אימייל לאימות — בדוק את תיבת הדואר שלך';
       successMsg.classList.add('visible');
