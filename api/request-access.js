@@ -84,7 +84,7 @@ async function saveToSupabase(supabaseUrl, serviceKey, userId, name, email, phon
 
   if (!response.ok) {
     var errText = await response.text();
-    console.error('Supabase insert error:', response.status, errText);
+    console.error('Supabase insert error:', errText);
     // Non-fatal — don't block the user if DB insert fails
   } else {
     console.log('Access request saved to Supabase');
@@ -110,9 +110,13 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
-  var RESEND_API_KEY    = process.env.RESEND_API_KEY;
-  var SUPABASE_URL      = process.env.SUPABASE_URL;
+  var RESEND_API_KEY       = process.env.RESEND_API_KEY;
+  var SUPABASE_URL         = process.env.SUPABASE_URL;
   var SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
+
+  console.log('SUPABASE_SERVICE_KEY exists:', !!SUPABASE_SERVICE_KEY);
+  console.log('SUPABASE_URL exists:', !!SUPABASE_URL);
+  console.log('Inserting request for:', email);
 
   if (!RESEND_API_KEY) {
     console.error('RESEND_API_KEY not set');
