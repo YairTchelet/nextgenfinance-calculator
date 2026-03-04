@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>שוק ההון 2026 — NewGen Finance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/Draggable.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+  <style>
+    /* ─── SITE TOKENS ─────────────────────────────────── */
+    :root {
+      --font: 'Heebo', sans-serif;
+      --nav-bg: rgba(12, 61, 82, 0.97);
+      --card-bg: #ece8e5;
+      --teal: #5e817d;
+      --teal-dark: #4a6b67;
+      --teal-dim: rgba(94, 129, 125, 0.15);
+      --gold: #b3e0dc;
+      --gold-dark: #8fc9c4;
+      --text-dark: #394140;
+      --text-mid: #6b7d7c;
+      --text-light: #fefefe;
+      --text-sub: rgba(254, 254, 254, 0.75);
+      --shadow: 0 4px 20px rgba(0,0,0,0.15);
+      --shadow-hover: 0 12px 40px rgba(0,0,0,0.22);
+      --radius: 16px;
+      --transition: 0.22s ease;
+
+      /* Page-level palette (remapped from original) */
+      --color-primary: #5e817d;
+      --color-primary-light: #b3e0dc;
+      --color-primary-dark: #4a6b67;
+      --color-secondary: #394140;
+      --color-secondary-light: #5e817d;
+      --color-gradient-1: #5e817d;
+      --color-gradient-2: #394140;
+      --color-accent: #b3e0dc;
+      --color-success: #27ae60;
+      --color-dark: #394140;
+      --color-darker: #1a2e38;
+      --color-light: #ece8e5;
+      --color-white: #ffffff;
+      --color-text: #4a6472;
+      --color-text-muted: #6b7d7c;
+      --color-bg-light: #f0f8fa;
+      --color-warning: #d4a843;
+      --color-danger: #c0392b;
+
+      --gradient-primary: linear-gradient(45deg, var(--color-gradient-1), var(--color-gradient-2));
+      --gradient-secondary: linear-gradient(135deg, var(--color-primary-light), var(--color-primary));
+      --gradient-background: linear-gradient(135deg, #f0f8fa, #e8f4f2);
+
+      --card-shadow: 0 10px 30px rgba(57,65,64,0.08);
+      --card-shadow-hover: 0 15px 40px rgba(57,65,64,0.14);
+      --border-radius: 16px; --border-radius-lg: 24px; --border-radius-sm: 8px; --border-radius-pill: 50px;
+      --font-family: 'Heebo', sans-serif;
+      --transition-speed: 0.3s;
+      --anim-timing: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --transition-smooth: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-family);
+      background: var(--color-white);
+      color: var(--color-text);
+      line-height: 1.8;
+      font-size: 16px;
+      overflow-x: hidden;
+      direction: rtl;
+    }
+    a { text-decoration: none; color: inherit; }
+    p { font-size: 1.1rem; margin-bottom: 1.4em; color: var(--color-text); line-height: 1.9; }
+
+    /* ─── NAVBAR ─────────────────────────────────────── */
+    .navbar {
+      position: sticky;
+      top: 0; z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(20px, 5vw, 80px);
+      height: 68px;
+      background: var(--nav-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .navbar-brand { display: flex; align-items: center; gap: 20px; }
+    .logo { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.3px; color: var(--text-light); direction: ltr; unicode-bidi: embed; }
+    .logo span { color: var(--teal); }
+    .nav-links { display: flex; align-items: center; gap: clamp(16px, 3vw, 36px); list-style: none; }
+    .nav-links a { font-size: 0.95rem; font-weight: 500; color: var(--text-sub); transition: color var(--transition); }
+    .nav-links a:hover { color: var(--text-light); }
+    .nav-auth { display: flex; align-items: center; gap: 10px; }
+    .btn-nav {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 6px 16px; border-radius: 8px; font-family: var(--font);
+      font-size: 0.875rem; font-weight: 600; cursor: pointer;
+      border: 1.5px solid transparent;
+      transition: background var(--transition), color var(--transition), border-color var(--transition), transform var(--transition);
+      white-space: nowrap; text-decoration: none; line-height: 1.5;
+    }
+    .btn-nav:hover { transform: translateY(-1px); }
+    .btn-nav-outline { background: transparent; color: var(--text-light); border-color: rgba(255,255,255,0.4); }
+    .btn-nav-outline:hover { border-color: rgba(255,255,255,0.75); background: rgba(255,255,255,0.07); }
+    .btn-nav-gold { background: var(--gold); color: #394140; border-color: var(--gold); }
+    .btn-nav-gold:hover { background: var(--gold-dark); border-color: var(--gold-dark); }
+    .nav-greeting { font-size: 0.875rem; font-weight: 500; color: var(--text-sub); white-space: nowrap; }
+    .nav-user-link { font-size: 0.875rem; font-weight: 600; color: var(--teal); transition: color var(--transition); white-space: nowrap; }
+    .nav-user-link:hover { color: var(--text-light); }
+    .nav-signout { background: none; border: none; font-family: var(--font); font-size: 0.875rem; font-weight: 500; color: var(--text-sub); cursor: pointer; padding: 0; transition: color var(--transition); white-space: nowrap; }
+    .nav-signout:hover { color: var(--text-light); }
+    .mobile-menu-btn {
+      display: none; width: 38px; height: 38px;
+      background: rgba(179,224,220,0.12); border: 1px solid rgba(179,224,220,0.25);
+      border-radius: 8px; cursor: pointer; flex-direction: column;
+      justify-content: center; align-items: center; gap: 5px; transition: background 0.2s; flex-shrink: 0;
+    }
+    .mobile-menu-btn:hover { background: rgba(179,224,220,0.22); }
+    .mobile-menu-btn span { display: block; width: 20px; height: 2px; background: #fefefe; border-radius: 2px; transition: transform 0.3s, opacity 0.3s; }
+    .mobile-menu-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .mobile-menu-btn.open span:nth-child(2) { opacity: 0; }
+    .mobile-menu-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .mobile-nav-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 999; }
+    .mobile-nav-overlay.open { display: block; }
+    .mobile-nav-panel {
+      position: fixed; top: 68px; right: 0; height: calc(100vh - 68px); width: 260px;
+      background: #0c3d52; z-index: 1000; transform: translateX(100%);
+      transition: transform 0.3s ease; overflow-y: auto; padding: 1.25rem 1rem;
+      box-shadow: -4px 0 20px rgba(0,0,0,0.35);
+    }
+    .mobile-nav-panel.open { transform: translateX(0); }
+    .mobile-nav-panel-title { color: rgba(179,224,220,0.6); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.75rem; padding-bottom: 0.6rem; border-bottom: 1px solid rgba(179,224,220,0.15); }
+    .mobile-nav-item { display: flex; align-items: center; padding: 0.75rem 0.85rem; border-radius: 10px; text-decoration: none; color: #fefefe; font-size: 0.95rem; transition: background 0.18s; margin-bottom: 4px; }
+    .mobile-nav-item:hover { background: rgba(179,224,220,0.12); }
+    .mobile-nav-item.highlighted { color: #b3e0dc; font-weight: 600; }
+    .mobile-nav-divider { height: 1px; background: rgba(179,224,220,0.15); margin: 0.85rem 0; }
+
+    /* ─── SITE FOOTER ────────────────────────────────── */
+    .site-footer-bar {
+      background: #0c3d52;
+      padding: 28px clamp(20px, 5vw, 80px);
+    }
+    .site-footer-inner {
+      max-width: 1140px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 16px;
+    }
+    .footer-logo { font-size: 1rem; font-weight: 800; color: var(--text-light); direction: ltr; unicode-bidi: embed; }
+    .footer-logo span { color: var(--teal); }
+    .footer-right { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+    .footer-links { display: flex; gap: 16px; }
+    .footer-links a { font-size: 0.82rem; color: var(--text-sub); transition: color var(--transition); }
+    .footer-links a:hover { color: var(--text-light); }
+    .footer-copy { font-size: 0.82rem; color: var(--text-sub); }
+
+    /* ─── UTILITY ────────────────────────────────────── */
+    .container { max-width: 1140px; margin: 0 auto; padding: 0 20px; }
+    .section { padding: 100px 0; position: relative; overflow: hidden; }
+    .section-bg-gradient { background: var(--gradient-background); }
+    .section-bg-white { background: var(--color-white); }
+    .section-bg-light { background: #f0f8fa; }
+
+    .section-title { font-size: 2.8rem; font-weight: 800; margin-bottom: 25px; text-align: center; color: var(--color-darker); position: relative; display: inline-block; }
+    .section-title-container { text-align: center; margin-bottom: 60px; }
+    .section-title::after { content: ''; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); width: 80px; height: 4px; background: var(--gradient-primary); border-radius: 2px; opacity: 0.6; }
+    .section-subtitle { font-size: 1.25rem; color: var(--color-text-muted); text-align: center; max-width: 750px; margin: 0 auto 60px; line-height: 1.8; }
+
+    .highlight { background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; padding: 0 0.1em; display: inline; }
+
+    .cta-button {
+      display: inline-block; background: var(--gradient-primary); color: var(--color-white);
+      font-size: 1.2rem; font-weight: 700; padding: 18px 40px;
+      border-radius: var(--border-radius-pill); text-decoration: none;
+      box-shadow: 0 8px 25px rgba(94,129,125,0.3); position: relative; overflow: hidden;
+      transition: all var(--transition-speed) ease; border: none; cursor: pointer; z-index: 1;
+    }
+    .cta-button::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transition: left 0.6s ease; z-index: -1; }
+    .cta-button:hover { transform: translateY(-5px) scale(1.03); box-shadow: 0 12px 35px rgba(94,129,125,0.4); color: #fff; }
+    .cta-button:hover::before { left: 100%; }
+    .cta-button-accent { background: var(--color-accent); box-shadow: 0 8px 25px rgba(179,224,220,0.4); color: var(--color-darker); }
+    .cta-button-accent:hover { box-shadow: 0 12px 35px rgba(179,224,220,0.5); color: var(--color-darker); }
+
+    /* ─── HERO ───────────────────────────────────────── */
+    .hero-section {
+      padding: 80px 0 60px;
+      background: linear-gradient(135deg, #0b4a64 0%, #1680a0 48%, #0d6a82 100%);
+      text-align: center; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; min-height: 80vh;
+    }
+    .hero-content { max-width: 850px; animation: fadeIn 1s ease-out; margin-bottom: 40px; }
+    .hero-title { font-size: 3.5rem; font-weight: 900; color: #fefefe; margin-bottom: 25px; line-height: 1.3; }
+    .hero-title .year { display: block; font-size: 6rem; color: var(--gold); margin-top: 15px; }
+    .hero-subtitle { font-size: 1.35rem; color: rgba(254,254,254,0.85); margin-bottom: 45px; max-width: 700px; margin-left: auto; margin-right: auto; }
+    .hero-cta { margin-top: 45px; }
+    .hero-bottom-visual { width: 100%; max-width: 450px; margin: 50px auto 0; aspect-ratio: 10 / 3; animation: fadeIn 1s 0.5s ease-out backwards; }
+    .hero-bottom-visual svg { display: block; width: 100%; height: 100%; }
+    .hero-svg-bar { fill: url(#heroBarGradient); transition: transform 0.3s ease-out; }
+    .hero-svg-pixel { fill: var(--color-primary-light); opacity: 0; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ─── PROBLEM SECTION ────────────────────────────── */
+    .problem-section { padding: 100px 0 60px; }
+    .problem-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; }
+    .problem-item { text-align: center; padding: 35px 25px; border-radius: var(--border-radius); background: var(--color-white); box-shadow: var(--card-shadow); transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease; }
+    .problem-item:hover { transform: translateY(-8px); box-shadow: var(--card-shadow-hover); }
+    .problem-icon { font-size: 3.8rem; line-height: 1; margin-bottom: 25px; }
+    .problem-item h3 { font-size: 1.4rem; font-weight: 700; color: var(--color-darker); margin-bottom: 15px; }
+    .problem-item p { font-size: 1.05rem; color: var(--color-text-muted); }
+    .social-proof { margin-top: 60px; text-align: center; font-size: 1.2rem; color: var(--color-text-muted); padding: 30px; background-color: rgba(236,232,229,0.5); border-radius: var(--border-radius); border: 1px solid rgba(57,65,64,0.08); }
+    .social-proof strong { color: var(--color-secondary); font-weight: 700; }
+    .solution-cta { text-align: center; margin-top: 45px; }
+    .solution-cta h3 { font-size: 1.9rem; font-weight: 700; margin-bottom: 25px; color: var(--color-darker); }
+
+    /* ─── JOURNEY SECTION ────────────────────────────── */
+    .journey-section { padding: 100px 0; }
+    .journey-content { display: grid; grid-template-columns: 1.5fr 1fr; gap: 60px; align-items: center; }
+    .journey-image img { max-width: 100%; height: auto; border-radius: var(--border-radius-lg); box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+    .journey-text h3 { font-size: 1.6rem; font-weight: 700; color: var(--color-primary); margin-bottom: 20px; display: inline-block; }
+    .journey-text p { font-size: 1.15rem; margin-bottom: 25px; line-height: 1.9; }
+    .journey-text blockquote { font-size: 1.3rem; font-style: italic; color: var(--color-primary-dark); border-right: 5px solid var(--color-primary); padding-right: 25px; margin: 35px 0; }
+
+    /* ─── STEPS SECTION ──────────────────────────────── */
+    .steps-section { padding: 100px 0; position: relative; background: var(--gradient-background); }
+    .steps-header { text-align: center; margin-bottom: 60px; }
+    .steps-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 50px; padding: 0; position: relative; z-index: 5; perspective: 1000px; max-width: 1200px; margin: 0 auto; }
+    .step { width: calc(50% - 40px); max-width: 500px; min-width: 300px; position: relative; transition: all 0.4s var(--anim-timing); transform-style: preserve-3d; perspective: 1000px; }
+    .step-content { position: relative; background: var(--color-white); border-radius: var(--border-radius); box-shadow: var(--card-shadow); padding: 40px 30px; min-height: 540px; overflow: hidden; display: flex; flex-direction: column; backface-visibility: hidden; border: 1px solid rgba(236,232,229,0.8); transition: box-shadow 0.4s ease, border-color 0.4s ease, transform 0.4s ease; }
+    .step.active .step-content { box-shadow: var(--card-shadow-hover); transform: translateY(0) scale(1.03); border-color: rgba(94,129,125,0.2); }
+    .step-content:hover { box-shadow: var(--card-shadow-hover); transform: translateY(-10px); }
+    .step-number { position: absolute; top: -25px; right: 15px; font-size: 130px; font-weight: 900; background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; opacity: 0.2; z-index: -1; line-height: 1; transition: all 0.5s ease; user-select: none; }
+    .step.active .step-number { opacity: 0.35; transform: scale(1.05); }
+    .step-title { font-size: 1.8rem; font-weight: 800; margin-bottom: 20px; background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; position: relative; display: inline-block; }
+    .step-title::after { content: ''; position: absolute; bottom: -8px; right: 0; width: 40px; height: 3px; background: var(--gradient-primary); border-radius: 2px; transition: width 0.5s ease; }
+    .step.active .step-title::after { width: 100%; }
+    .step-description { font-size: 1.1rem; line-height: 1.8; margin-bottom: 30px; color: var(--color-text); position: relative; z-index: 2; flex-grow: 0; }
+    .step-tag { position: absolute; top: 15px; left: 15px; padding: 8px 16px; font-size: 0.85rem; font-weight: 700; border-radius: 50px; color: white; z-index: 10; box-shadow: 0 5px 15px rgba(0,0,0,0.1); background: var(--gradient-primary); }
+    .step-visual { flex-grow: 1; position: relative; margin-top: auto; overflow: hidden; border-radius: 16px; background: linear-gradient(135deg, #f0f8fa, #e8f4f2); min-height: 300px; box-shadow: inset 0 0 15px rgba(0,0,0,0.03); border: 1px solid rgba(236,232,229,0.6); }
+    .entrance-visual, .buffett-visual, .tools-visual, .money-visual { position: relative; height: 100%; overflow: hidden; }
+    .entrance-container, .buffett-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+    .entrance-door-frame { position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); width: 120px; height: 180px; background: linear-gradient(to right, var(--color-primary-dark), var(--color-primary)); border-radius: 10px 10px 0 0; box-shadow: 0 10px 20px rgba(0,0,0,0.1); overflow: hidden; z-index: 2; }
+    .entrance-door { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(45deg, var(--color-primary), var(--color-primary-light)); transform-origin: left; border-radius: 8px 8px 0 0; box-shadow: 5px 0 15px rgba(0,0,0,0.1); }
+    .door-handle { position: absolute; top: 50%; right: 15px; width: 10px; height: 10px; background: rgba(255,255,255,0.8); border-radius: 50%; box-shadow: 0 0 10px rgba(0,0,0,0.2); }
+    .entrance-light { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(ellipse at center, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%); opacity: 0; z-index: 1; }
+    .entrance-path { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 60%; height: 40px; background: linear-gradient(to bottom, var(--color-primary-light), transparent); opacity: 0.5; border-radius: 5px 5px 0 0; }
+    .character { position: absolute; bottom: 40px; left: 10%; width: 30px; height: 40px; z-index: 3; }
+    .character svg { width: 100%; height: 100%; fill: var(--color-primary-dark); }
+    .entrance-steps { position: absolute; left: 0; width: 100%; display: flex; justify-content: center; z-index: 3; bottom: 20px; padding: 0 10px; gap: 10px; }
+    .entrance-step { flex: 1; text-align: center; background: white; padding: 12px 8px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); opacity: 0; transform: translateY(20px); display: flex; flex-direction: column; align-items: center; gap: 8px; max-width: 100px; }
+    .step-icon { width: 35px; height: 35px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .step-icon svg { width: 60%; height: 60%; fill: white; }
+    .step-text { font-size: 0.8rem; font-weight: 600; color: var(--color-dark); }
+    .buffett-figure { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); width: 140px; height: 160px; z-index: 3; }
+    .buffett-head { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 80px; height: 80px; background: #ffdbac; border-radius: 50%; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+    .buffett-glasses { position: absolute; top: 35px; left: 50%; transform: translateX(-50%); width: 70px; height: 20px; border: 2px solid #333; border-radius: 10px; }
+    .buffett-glass-left, .buffett-glass-right { position: absolute; top: 0; width: 22px; height: 16px; border-radius: 50%; background: rgba(160,220,255,0.5); border: 2px solid #333; }
+    .buffett-glass-left { left: 5px; } .buffett-glass-right { right: 5px; }
+    .buffett-hair { position: absolute; top: -5px; left: 50%; transform: translateX(-50%); width: 84px; height: 30px; background: #e6e6e6; border-radius: 40px 40px 0 0; }
+    .buffett-smile { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); width: 30px; height: 10px; border-bottom: 3px solid #333; border-radius: 0 0 20px 20px; }
+    .buffett-body { position: absolute; top: 75px; left: 50%; transform: translateX(-50%); width: 100px; height: 80px; background: #394140; border-radius: 20px 20px 0 0; }
+    .buffett-tie { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 20px; height: 60px; background: #5e817d; clip-path: polygon(50% 0%, 100% 0%, 70% 100%, 50% 80%, 30% 100%, 0% 0%); }
+    .quote-bubble { position: absolute; top: 20px; right: 60%; padding: 15px; background: white; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); opacity: 0; transform: translateY(20px) scale(0.8); z-index: 5; max-width: 150px; }
+    .quote-bubble::after { content: ''; position: absolute; right: -10px; top: 50%; transform: translateY(-50%); border-left: 15px solid white; border-top: 10px solid transparent; border-bottom: 10px solid transparent; }
+    .quote-text { font-size: 0.85rem; text-align: right; font-weight: 600; color: var(--color-darker); }
+    .principles-container { position: absolute; bottom: 20px; left: 0; width: 100%; display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; padding: 0 15px; z-index: 4; }
+    .principle-pill { padding: 8px 15px; background: white; border-radius: 50px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); font-size: 0.85rem; font-weight: 600; color: var(--color-primary); transform: translateY(30px); opacity: 0; white-space: nowrap; }
+    .phone-frame { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); width: 110px; height: 220px; background: var(--color-darker); border-radius: 24px; border: 5px solid #333; box-shadow: 0 20px 40px rgba(0,0,0,0.2); z-index: 2; overflow: hidden; }
+    .phone-screen { position: absolute; top: 5px; left: 5px; right: 5px; bottom: 5px; background: linear-gradient(135deg, #1a2a35, #0f1720); border-radius: 18px; overflow: hidden; z-index: 1; }
+    .screen-content { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(94,129,125,0.1) 0%, rgba(57,65,64,0.1) 100%); overflow: hidden; }
+    .chart-line { position: absolute; top: 50%; left: 0; width: 0; height: 2px; background: var(--gradient-primary); z-index: 2; }
+    .chart-line::before { content: ''; position: absolute; right: 0; top: -4px; width: 8px; height: 8px; background: var(--color-primary-light); border-radius: 50%; }
+    .grid-lines { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.2; z-index: 1; background: linear-gradient(to bottom, transparent 9px, var(--color-primary) 1px, transparent 10px) 0 0 / 10px 10px, linear-gradient(to right, transparent 9px, var(--color-primary) 1px, transparent 10px) 0 0 / 10px 10px; }
+    .tool-icon { position: absolute; width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; opacity: 0; transform: scale(0); z-index: 2; box-shadow: 0 10px 20px rgba(0,0,0,0.1); transition: all 0.3s ease; }
+    .tool-icon:hover { transform: scale(1.1) !important; box-shadow: 0 15px 25px rgba(0,0,0,0.15); }
+    .tool-icon svg { width: 60%; height: 60%; fill: white; }
+    .icon-1 { top: 20%; right: 15%; background: linear-gradient(45deg, #4a6b67, #5e817d); }
+    .icon-2 { bottom: 25%; right: 25%; background: linear-gradient(45deg, #394140, #5e817d); }
+    .icon-3 { top: 35%; left: 15%; background: linear-gradient(45deg, #5e817d, #b3e0dc); }
+    .icon-4 { bottom: 30%; left: 20%; background: linear-gradient(45deg, #4a6b67, #8fc9c4); }
+    .ripple { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) scale(0); width: 100px; height: 100px; border-radius: 50%; border: 2px solid rgba(94,129,125,0.5); z-index: 1; opacity: 1; }
+    .chart-container { position: absolute; bottom: 30px; left: 10%; width: 80%; height: 70%; overflow: hidden; }
+    .chart-grid { position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; border-bottom: 2px dashed rgba(0,0,0,0.08); border-left: 2px dashed rgba(0,0,0,0.08); opacity: 0; }
+    .chart-grid::before, .chart-grid::after { content: ''; position: absolute; left: 0; width: 100%; height: 1px; background: rgba(0,0,0,0.05); }
+    .chart-grid::before { top: 33%; } .chart-grid::after { top: 66%; }
+    .chart-bar-wrapper { position: absolute; bottom: 0; width: 20px; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; }
+    .chart-bar { width: 100%; border-radius: 10px 10px 0 0; background: var(--gradient-primary); transform-origin: bottom; transform: scaleY(0); opacity: 0.85; position: relative; overflow: hidden; }
+    .chart-bar::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(255,255,255,0.2) 0%, transparent 50%, transparent 100%); }
+    .chart-value { position: absolute; top: -25px; left: 50%; transform: translateX(-50%); font-size: 0.75rem; font-weight: 600; color: var(--color-primary); opacity: 0; }
+    .money-coin { position: absolute; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; opacity: 0; transform: scale(0); z-index: 3; background: var(--gradient-primary); box-shadow: 0 15px 35px rgba(94,129,125,0.3); color: white; font-size: 1.4rem; }
+    .money-coin::before { content: '₪'; }
+    .coin-1 { top: 25%; right: 20%; } .coin-2 { top: 40%; left: 25%; } .coin-3 { bottom: 35%; right: 30%; }
+    .coin-particles { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; }
+    .coin-particle { position: absolute; width: 8px; height: 8px; border-radius: 50%; background: var(--color-primary); opacity: 0; }
+    .step-glow { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(94,129,125,0.08) 0%, rgba(94,129,125,0) 50%); opacity: 0; z-index: 1; border-radius: var(--border-radius); pointer-events: none; transition: opacity 0.3s ease; }
+    .step-content:hover .step-glow { opacity: 1; }
+    .floating-particles { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; pointer-events: none; z-index: 0; }
+    .particle { position: absolute; background: var(--color-primary); border-radius: 50%; opacity: 0.3; }
+    .navigation { display: flex; justify-content: center; margin-top: 50px; gap: 12px; }
+    .nav-dot { width: 12px; height: 12px; border-radius: 50%; background: #ddd; cursor: pointer; transition: all 0.3s ease; }
+    .nav-dot.active { background: var(--color-primary); transform: scale(1.3); box-shadow: 0 0 10px rgba(94,129,125,0.5); }
+
+    /* ─── BENEFITS SECTION ───────────────────────────── */
+    .benefits-section { padding: 100px 0; background: var(--color-white); }
+    .benefits-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 60px; align-items: flex-start; }
+    .benefits-image img { display: block; max-width: 100%; height: auto; border-radius: var(--border-radius-lg); box-shadow: var(--card-shadow); }
+    .benefits-list { list-style: none; padding: 0; margin: 0; }
+    .benefits-list li { display: flex; align-items: flex-start; font-size: 1.15rem; color: var(--color-text); margin-bottom: 1.5em; line-height: 1.8; }
+    .benefits-list .checkmark { flex-shrink: 0; width: 1.3em; height: 1.3em; border-radius: 50%; background-color: var(--color-success); margin-left: 0.8em; position: relative; top: 0.25em; display: inline-block; }
+    .benefits-list .checkmark::after { content: ''; display: block; width: 0.3em; height: 0.6em; border: solid white; border-width: 0 3px 3px 0; transform: rotate(45deg) translate(-50%, -60%); position: absolute; top: 50%; left: 50%; }
+    .benefits-list strong { font-weight: 700; color: var(--color-darker); }
+    .benefits-summary { margin-top: 2em; font-size: 1.1rem; color: var(--color-text-muted); line-height: 1.8; text-align: right; border-top: 1px solid var(--color-light); padding-top: 1.5em; }
+
+    /* ─── CALCULATOR ─────────────────────────────────── */
+    .value-section { padding: 100px 0; background: var(--color-light); }
+    .invest-calc-wrapper *, .invest-calc-wrapper *::before, .invest-calc-wrapper *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    .invest-calc-wrapper { font-family: 'Heebo', sans-serif; max-width: 1200px; margin: 0 auto; padding: 0 25px; direction: rtl; position: relative; z-index: 1; font-size: 16px; line-height: 1.7; }
+    .invest-calc-container { position: relative; background: rgba(255,255,255,0.95); border-radius: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.12); overflow: hidden; margin-bottom: 30px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); }
+    .invest-calc-header { position: relative; padding: 40px 0; text-align: center; overflow: hidden; }
+    .invest-calc-header-bg { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, #394140 0%, #5e817d 100%); z-index: -1; }
+    .invest-calc-header-content { position: relative; z-index: 1; padding: 0 30px; }
+    .invest-calc-title { font-size: 2.4rem; font-weight: 800; margin-bottom: 15px; color: #ffffff; text-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    .invest-calc-subtitle { font-size: 1.3rem; font-weight: 400; color: rgba(255,255,255,0.9); max-width: 800px; margin: 0 auto; }
+    .invest-calc-body { padding: 40px 30px; }
+    .invest-calc-controls { background: rgba(255,255,255,0.7); border-radius: 16px; padding: 30px; margin-bottom: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid rgba(179,224,220,0.3); position: relative; z-index: 2; }
+    .invest-calc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+    .invest-calc-control-group { display: flex; flex-direction: column; }
+    .invest-calc-control-label { font-weight: 600; margin-bottom: 15px; color: #1c2541; font-size: 1.15rem; display: flex; justify-content: space-between; align-items: center; }
+    .invest-calc-control-value { font-weight: 700; color: var(--teal); background: rgba(94,129,125,0.1); padding: 4px 10px; border-radius: 100px; font-size: 0.95rem; }
+    .invest-calc-slider-container { position: relative; height: 8px; background: linear-gradient(to right, #ece8e5, #b3e0dc); border-radius: 4px; margin: 10px 0; }
+    .invest-calc-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 8px; background-color: transparent !important; background: transparent !important; outline: none; position: absolute; top: 0; left: 0; margin: 0; z-index: 3; }
+    .invest-calc-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 24px; height: 24px; border-radius: 50%; background: linear-gradient(135deg, #394140, #5e817d); box-shadow: 0 4px 10px rgba(94,129,125,0.4); cursor: pointer; transition: all 0.3s cubic-bezier(0.25,0.46,0.45,0.94); border: 2px solid white; z-index: 4; }
+    .invest-calc-slider::-moz-range-thumb { width: 24px; height: 24px; border-radius: 50%; background: linear-gradient(135deg, #394140, #5e817d); box-shadow: 0 4px 10px rgba(94,129,125,0.4); cursor: pointer; transition: all 0.3s; border: 2px solid white; z-index: 4; }
+    .invest-calc-slider::-webkit-slider-thumb:hover, .invest-calc-slider::-webkit-slider-thumb:active { transform: scale(1.2); box-shadow: 0 4px 15px rgba(94,129,125,0.6); }
+    .invest-calc-labels { display: flex; justify-content: space-between; font-size: 0.85rem; color: #74839f; margin-top: 8px; }
+    .invest-calc-visualization { background: rgba(255,255,255,0.95); border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); margin-bottom: 40px; overflow: hidden; border: 1px solid rgba(179,224,220,0.3); position: relative; z-index: 2; }
+    .invest-calc-chart-header { padding: 20px 30px; border-bottom: 1px solid rgba(179,224,220,0.3); display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.7); flex-wrap: wrap; gap: 15px; }
+    .invest-calc-chart-title { font-weight: 700; font-size: 1.3rem; color: #1c2541; }
+    .invest-calc-chart-legend { display: flex; gap: 20px; flex-wrap: wrap; }
+    .invest-calc-legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.95rem; }
+    .invest-calc-legend-marker { width: 14px; height: 14px; border-radius: 3px; }
+    .invest-calc-regular-marker { background: linear-gradient(135deg, #485563, #29323c); }
+    .invest-calc-improved-marker { background: linear-gradient(135deg, #394140, #5e817d); }
+    .invest-calc-chart-container { height: 450px; padding: 25px; position: relative; }
+    .invest-calc-results { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-bottom: 40px; position: relative; z-index: 2; }
+    .invest-calc-result-card { background: rgba(255,255,255,0.95); border-radius: 16px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); transition: all 0.3s cubic-bezier(0.25,0.46,0.45,0.94); display: flex; flex-direction: column; border: 1px solid rgba(179,224,220,0.3); position: relative; overflow: hidden; text-align: center; }
+    .invest-calc-result-card:after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 5px; }
+    .invest-calc-regular-result:after { background: linear-gradient(135deg, #485563, #29323c); }
+    .invest-calc-improved-result:after { background: linear-gradient(135deg, #394140, #5e817d); }
+    .invest-calc-difference-result:after { background: linear-gradient(135deg, #b3e0dc, #5e817d); }
+    .invest-calc-result-card:hover { transform: translateY(-10px); box-shadow: 0 15px 35px rgba(94,129,125,0.2); }
+    .invest-calc-result-title { color: #74839f; font-size: 1.05rem; font-weight: 500; margin-bottom: 20px; }
+    .invest-calc-result-value { font-size: 2.6rem; font-weight: 800; color: #1c2541; margin-top: auto; line-height: 1.2; }
+    .invest-calc-regular-result .invest-calc-result-value { color: #485563; }
+    .invest-calc-improved-result .invest-calc-result-value { color: var(--teal); }
+    .invest-calc-difference-result .invest-calc-result-value { color: var(--teal-dark); }
+    .invest-calc-footer { text-align: center; padding: 20px 30px; background: rgba(255,255,255,0.5); color: #74839f; font-size: 0.95rem; border-top: 1px solid rgba(179,224,220,0.3); }
+    .invest-calc-animation { animation: invest-calc-pulse 2s infinite; }
+    @keyframes invest-calc-pulse { 0% { box-shadow: 0 0 0 0 rgba(94,129,125,0.4); } 70% { box-shadow: 0 0 0 15px rgba(94,129,125,0); } 100% { box-shadow: 0 0 0 0 rgba(94,129,125,0); } }
+
+    /* ─── BONUS / OFFER SECTION ──────────────────────── */
+    .bonus-section { padding: 100px 0; background: var(--color-white); }
+    .bonus-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 45px; }
+    .bonus-item { background-color: var(--color-white); border-radius: var(--border-radius); box-shadow: var(--card-shadow); text-align: right; display: flex; flex-direction: column; transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease; overflow: hidden; }
+    .bonus-item:hover { transform: translateY(-8px); box-shadow: var(--card-shadow-hover); }
+    .bonus-visual { height: 200px; background: var(--gradient-background); position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--color-light); font-size: 5rem; color: var(--color-primary); }
+    .bonus-text-content { padding: 40px; }
+    .bonus-item h3 { font-size: 1.3rem; font-weight: 700; color: var(--color-darker); margin-bottom: 0.8em; }
+    .bonus-item p { font-size: 1.05rem; line-height: 1.7; color: var(--color-text); }
+    .offer-section { padding: 100px 0; text-align: center; background: var(--color-light); }
+    .offer-section .section-subtitle { margin-bottom: 1em; font-size: 1.3rem; }
+    .pricing-box { max-width: 520px; margin: 1.8em auto; background: var(--color-white); padding: 2em 2.5em; border-radius: var(--border-radius-lg); box-shadow: 0 20px 60px rgba(94,129,125,0.2); border: 2px solid var(--color-primary); position: relative; }
+    .pricing-box .launch-badge { position: absolute; top: -1em; left: 50%; transform: translateX(-50%); background: var(--gradient-primary); color: white; padding: 0.5em 1.2em; border-radius: var(--border-radius-pill); font-size: 0.9rem; font-weight: 700; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+    .pricing-box .cta-button { margin-top: 1.2em; font-size: 1.15rem; padding: 16px 40px; }
+    .access-info { margin-top: 1.2em; font-size: 0.95rem; color: var(--color-text-muted); }
+
+    /* ─── INSTRUCTOR SECTION ─────────────────────────── */
+    .intro-section-instructor { padding: 100px 0; background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(236,244,242,0.95)); position: relative; overflow: hidden; }
+    .intro-container-instructor { max-width: 1150px; margin: 0 auto; padding: 0 25px; position: relative; z-index: 2; display: flex; gap: 60px; align-items: flex-start; }
+    .intro-bg-elements { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; pointer-events: none; z-index: 0; }
+    .bg-circle { position: absolute; border-radius: 50%; background: radial-gradient(circle, rgba(94,129,125,0.1) 0%, rgba(94,129,125,0) 70%); opacity: 0.8; }
+    .bg-circle-1 { width: 350px; height: 350px; top: -120px; right: -120px; }
+    .bg-circle-2 { width: 300px; height: 300px; bottom: -100px; left: -100px; background: radial-gradient(circle, rgba(57,65,64,0.08) 0%, rgba(57,65,64,0) 70%); }
+    .profile-area { flex: 0 0 350px; margin-top: 30px; text-align: center; }
+    .profile-image-container { width: 100%; max-width: 310px; height: 550px; border-radius: var(--border-radius); overflow: hidden; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.15); margin: 0 auto 30px; border: 6px solid white; }
+    .profile-image { width: 100%; height: 100%; object-fit: cover; display: block; object-position: center; }
+    .profile-name { font-size: 2.2rem; font-weight: 800; color: var(--color-darker); margin-bottom: 0.6em; background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; position: relative; display: inline-block; text-align: center; }
+    .profile-name::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 100%; height: 3px; background: var(--gradient-primary); border-radius: 2px; transform-origin: right; transition: transform 0.5s ease; transform: scaleX(0); }
+    .profile-area.animate .profile-name::after { transform: scaleX(1); transform-origin: left; }
+    .profile-title-instructor { font-size: 1.4rem; color: var(--color-primary-dark); font-weight: 600; text-align: center; margin-bottom: 0.8em; }
+    .intro-content-instructor { flex: 1; }
+    .intro-heading { font-size: 2.8rem; font-weight: 800; margin-bottom: 1.2em; color: var(--color-darker); position: relative; display: inline-block; text-align: right; width: auto; }
+    .intro-heading::after { content: ''; position: absolute; bottom: -12px; right: 0; transform: none; width: 0; height: 4px; background: var(--gradient-primary); border-radius: 2px; transition: width 0.5s ease 0.3s; }
+    .intro-content-instructor.animate .intro-heading::after { width: 120px; }
+    .intro-paragraph { font-size: 1.15rem; line-height: 1.9; color: var(--color-dark); margin-bottom: 1.2em; position: relative; text-align: right; }
+    .intro-paragraph strong { font-weight: 700; color: var(--color-darker); }
+    .divider { width: 100%; height: 1px; background: linear-gradient(to right, transparent, rgba(94,129,125,0.3), transparent); margin: 1.8em 0; }
+    .principles-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 30px; margin-top: 1.8em; }
+    .principle-item { background: var(--color-white); border-radius: var(--border-radius); padding: 1.4em; box-shadow: var(--card-shadow); transition: all 0.4s var(--anim-timing); position: relative; overflow: hidden; border-top: 4px solid transparent; }
+    .principle-item:hover { box-shadow: var(--card-shadow-hover); transform: translateY(-5px); border-top-color: var(--color-primary); }
+    .principle-icon { font-size: 2.2rem; margin-bottom: 0.8em; color: var(--color-primary); text-align: right; }
+    .principle-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.8em; color: var(--color-darker); text-align: right; }
+    .principle-text { font-size: 1.1rem; line-height: 1.7; color: var(--color-text); text-align: right; }
+
+    /* ─── TESTIMONIAL SECTION ────────────────────────── */
+    .testimonial-section { padding: 100px 0; background: var(--gradient-background); }
+    .testimonial-container { max-width: 850px; margin: 0 auto; text-align: center; }
+    .testimonial-card { background: var(--color-white); padding: 50px 40px; border-radius: var(--border-radius-lg); box-shadow: var(--card-shadow); position: relative; margin-top: 70px; }
+    .testimonial-image { width: 140px; height: 140px; border-radius: 50%; object-fit: cover; border: 6px solid var(--color-white); box-shadow: 0 5px 20px rgba(0,0,0,0.1); position: absolute; top: -70px; left: 50%; transform: translateX(-50%); }
+    .testimonial-quote { font-size: 1.3rem; font-style: italic; color: var(--color-text); margin-bottom: 1.2em; line-height: 1.9; position: relative; padding: 0 25px; }
+    .testimonial-quote::before, .testimonial-quote::after { content: '"'; font-size: 4.5rem; color: var(--color-primary); opacity: 0.15; position: absolute; line-height: 1; }
+    .testimonial-quote::before { top: -0.3em; right: -0.3em; }
+    .testimonial-quote::after { content: '"'; bottom: -0.5em; left: -0.3em; }
+    .testimonial-author { font-size: 1.2rem; font-weight: 700; color: var(--color-darker); }
+    .testimonial-author span { display: block; font-size: 1rem; font-weight: 500; color: var(--color-text-muted); margin-top: 0.4em; }
+
+    /* ─── FAQ SECTION ────────────────────────────────── */
+    .faq-header { text-align: center; margin: 40px auto 50px; max-width: 800px; padding: 0 20px; }
+    .faq-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 15px; background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block; position: relative; }
+    .faq-title::after { content: ''; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); width: 80px; height: 4px; background: var(--gradient-primary); border-radius: 2px; }
+    .faq-subtitle { font-size: 1.1rem; color: var(--color-text-muted); max-width: 600px; margin: 0 auto; }
+    .faq-container { width: 100%; max-width: 850px; padding: 20px; box-sizing: border-box; margin: 0 auto 60px; }
+    .faq-item { background: var(--color-white); border-radius: var(--border-radius); margin-bottom: 16px; box-shadow: var(--card-shadow); overflow: hidden; transition: var(--transition-smooth); position: relative; }
+    .faq-item:hover { box-shadow: var(--card-shadow-hover); transform: translateY(-3px); }
+    .faq-item::before { content: ''; position: absolute; top: 0; right: 0; width: 6px; height: 100%; background: var(--gradient-primary); opacity: 0; transition: opacity 0.3s ease; }
+    .faq-item.active::before { opacity: 1; }
+    .faq-question { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 22px 25px; background: none; border: none; text-align: right; font-family: 'Heebo', sans-serif; font-size: 1.15rem; font-weight: 600; color: var(--color-darker); cursor: pointer; position: relative; transition: color 0.3s ease; }
+    .faq-item.active .faq-question { color: var(--color-primary-dark); }
+    .faq-item:hover .faq-question { color: var(--color-primary); }
+    .faq-icon { width: 24px; height: 24px; position: relative; flex-shrink: 0; margin-right: 15px; }
+    .faq-icon::before, .faq-icon::after { content: ''; position: absolute; background-color: var(--color-primary); transition: all 0.3s ease; }
+    .faq-icon::before { width: 100%; height: 2px; top: 50%; left: 0; transform: translateY(-50%); }
+    .faq-icon::after { width: 2px; height: 100%; top: 0; left: 50%; transform: translateX(-50%); }
+    .faq-item.active .faq-icon::after { transform: translateX(-50%) rotate(90deg); opacity: 0; }
+    .faq-answer { max-height: 0; overflow: hidden; padding: 0 25px; font-size: 1rem; color: #596677; line-height: 1.8; transition: all 0.35s ease; }
+    .faq-answer p { margin: 0; padding: 0 0 25px; }
+    .faq-answer strong { color: var(--color-darker); font-weight: 600; }
+    .faq-answer .highlight { background: rgba(94,129,125,0.12); padding: 0.2em 0.4em; border-radius: 4px; font-weight: 500; -webkit-text-fill-color: initial; }
+    .faq-item.active .faq-answer { max-height: 500px; }
+    .faq-item.active .faq-answer p { animation: fadeIn 0.5s ease forwards; }
+
+    /* ─── DISCLAIMER FOOTER ──────────────────────────── */
+    .disclaimer-footer { padding: 80px 0 40px; background: var(--color-darker); color: var(--color-light); }
+    .disclaimer-container { max-width: 900px; margin: 0 auto; }
+    .disclaimer-title { font-size: 2rem; font-weight: 800; color: var(--color-white); margin-bottom: 25px; text-align: center; position: relative; display: inline-block; left: 50%; transform: translateX(-50%); }
+    .disclaimer-title::after { content: ''; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); width: 80px; height: 4px; background: var(--color-primary); border-radius: 2px; opacity: 0.6; }
+    .disclaimer-intro { background: rgba(255,255,255,0.05); border: 1px solid rgba(94,129,125,0.3); border-radius: var(--border-radius); padding: 30px; margin-bottom: 30px; }
+    .disclaimer-intro p { color: var(--color-light); margin-bottom: 0.8em; font-size: 1rem; }
+    .disclaimer-highlight { font-size: 1.2rem; font-weight: 700; color: var(--color-primary-light); margin-top: 0.5em; display: block; }
+    .disclaimer-sections { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-bottom: 30px; }
+    .disclaimer-card { background: rgba(255,255,255,0.04); border-radius: var(--border-radius); padding: 30px; }
+    .card-icon { font-size: 2rem; margin-bottom: 12px; }
+    .card-title { font-size: 1.3rem; font-weight: 700; color: var(--color-white); margin-bottom: 12px; }
+    .card-content p { color: rgba(236,232,229,0.8); font-size: 0.95rem; line-height: 1.7; margin: 0; }
+    .risk-alert { background: rgba(192,57,43,0.1); border-right: 4px solid var(--color-danger); border-radius: var(--border-radius); padding: 24px; margin-bottom: 40px; }
+    .risk-icon { font-size: 2rem; margin-bottom: 10px; }
+    .risk-title { font-size: 1.3rem; font-weight: 700; color: var(--color-danger); margin-bottom: 10px; }
+    .risk-content p { color: var(--color-light); font-size: 0.95rem; line-height: 1.7; margin: 0; }
+
+    /* ─── INTRO SECTION ──────────────────────────────── */
+    .intro-section { padding: 100px 0; }
+    .intro-content-wrapper { max-width: 850px; margin: 0 auto; text-align: center; }
+    .intro-text h2 { font-size: 2.6rem; font-weight: 700; color: var(--color-darker); margin-bottom: 30px; line-height: 1.4; }
+    .intro-text p { font-size: 1.2rem; line-height: 1.9; margin-bottom: 30px; }
+    .intro-text strong { font-weight: 700; color: var(--color-primary-dark); }
+
+    /* ─── RESPONSIVE ─────────────────────────────────── */
+    @media (max-width: 992px) {
+      .journey-content { grid-template-columns: 1fr; }
+      .journey-image { max-width: 400px; margin: 0 auto 40px; }
+      .intro-container-instructor { flex-direction: column; align-items: center; }
+      .profile-area { margin-bottom: 40px; }
+      .invest-calc-results { grid-template-columns: 1fr; }
+      .steps-container { gap: 30px; }
+      .step { width: calc(50% - 30px); }
+      .benefits-grid { grid-template-columns: 1fr; gap: 40px; }
+      .benefits-image { max-width: 70%; margin: 0 auto 40px; }
+    }
+    @media (max-width: 768px) {
+      .section { padding: 70px 0; }
+      .section-title { font-size: 2.2rem; }
+      .hero-title { font-size: 2.8rem; }
+      .hero-title .year { font-size: 4.5rem; }
+      .problem-grid { grid-template-columns: 1fr; }
+      .steps-container { flex-direction: column; gap: 40px; align-items: center; }
+      .step { width: 95%; max-width: 450px; }
+      .step-content { min-height: auto; }
+      .step-visual { min-height: 250px; }
+      .details-grid, .bonus-grid { grid-template-columns: 1fr; }
+      .invest-calc-chart-container { height: 350px; }
+      .invest-calc-title { font-size: 1.8rem; }
+      .invest-calc-results { grid-template-columns: 1fr; }
+      .invest-calc-body, .invest-calc-controls, .invest-calc-result-card { padding: 20px; }
+      .intro-container-instructor { gap: 30px; }
+      .profile-image-container { height: 450px; max-width: 280px; }
+      .faq-title { font-size: 2rem; }
+      .faq-question { font-size: 1.05rem; padding: 18px 20px; }
+      .disclaimer-sections { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .mobile-menu-btn { display: flex; }
+      .site-footer-inner { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 480px) {
+      .section-title { font-size: 2rem; }
+      .hero-title { font-size: 2.4rem; }
+      .hero-title .year { font-size: 3.8rem; }
+      .invest-calc-chart-container { height: 300px; padding: 15px; }
+      .cta-button { font-size: 1.1rem; padding: 15px 30px; }
+      .invest-calc-title { font-size: 1.6rem; }
+      .invest-calc-body, .invest-calc-controls, .invest-calc-result-card { padding: 15px; }
+      .profile-image-container { height: 400px; max-width: 250px; }
+      .testimonial-card { padding: 40px 20px; margin-top: 60px; }
+      .testimonial-image { width: 100px; height: 100px; top: -50px; }
+      .invest-calc-grid { grid-template-columns: 1fr; }
+      .invest-calc-labels { display: none; }
+      .faq-title { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+  <!-- SVG Defs -->
+  <svg width="0" height="0" style="position:absolute;">
+    <defs>
+      <path id="character-path" d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z" />
+      <path id="wallet-icon" d="M21,18V19A2,2 0 0,1 19,21H5C3.89,21 3,20.1 3,19V5A2,2 0 0,1 5,3H19A2,2 0 0,1 21,5V6H12C10.89,6 10,6.9 10,8V16A2,2 0 0,0 12,18H21M12,16H22V8H12V16M16,13.5A1.5,1.5 0 0,1 14.5,12A1.5,1.5 0 0,1 16,10.5A1.5,1.5 0 0,1 17.5,12A1.5,1.5 0 0,1 16,13.5Z" />
+      <path id="book-icon" d="M19 2L14 6.5V17.5L19 13V2M6.5 5C4.55 5 2.45 5.4 1 6.5V21.16C1 21.41 1.25 21.66 1.5 21.66C1.6 21.66 1.65 21.59 1.75 21.59C3.1 20.94 5.05 20.5 6.5 20.5C8.45 20.5 10.55 20.9 12 22C13.35 21.15 15.8 20.5 17.5 20.5C19.15 20.5 20.85 20.81 22.25 21.56C22.35 21.61 22.4 21.59 22.5 21.59C22.75 21.59 23 21.34 23 21.09V6.5C22.4 6.05 21.75 5.75 21 5.5V19C19.9 18.65 18.7 18.5 17.5 18.5C15.8 18.5 13.35 19.15 12 20V6.5C10.55 5.4 8.45 5 6.5 5Z" />
+      <path id="newspaper-icon" d="M4.2,10.7L19.8,5L20.5,6.9L6.4,12H19.8L21,21H3L4.2,10.7M19.6,14H8.9L8.5,17H19.6L19.6,14M19.6,19L19.7,18H8.2L8.4,19H19.6Z" />
+      <path id="filter-icon" d="M16 17V19H2V17H16ZM21.5 19H18.5V21H21.5V19ZM16 13V15H2V13H16ZM21.5 15H18.5V17H21.5V15ZM16 9V11H2V9H16ZM21.5 11H18.5V13H21.5V11ZM16 5V7H2V5H16ZM21.5 7H18.5V9H21.5V7Z" />
+      <path id="chart-bar-icon" d="M3,13H7V23H3V13M10,9H14V23H10V9M17,5H21V23H17V5Z" />
+      <path id="chart-line-icon" d="M6,16.5L3,19.44V11H6M11,14.66L9.43,13.32L8,14.64V7H11M16,13L13,16V3H16M18.81,12.81L17,11H22V16L20.21,14.21L13,21.36L9.53,18.34L5.75,22H3L9.47,15.66L13,18.64" />
+      <path id="cash-icon" d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M11,17V16H9V14H13V13H10A1,1 0 0,1 9,12V9A1,1 0 0,1 10,8H11V7H13V8H15V10H11V11H14A1,1 0 0,1 15,12V15A1,1 0 0,1 14,16H13V17H11Z" />
+      <linearGradient id="heroLineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#5e817d" />
+        <stop offset="100%" stop-color="#394140" />
+      </linearGradient>
+      <linearGradient id="heroBarGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#b3e0dc" />
+        <stop offset="100%" stop-color="#5e817d" />
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <!-- ─── NAVBAR ──────────────────────────────────────── -->
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="תפריט" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <a href="/" class="logo">NewGen <span>Finance</span></a>
+      <div id="nav-auth" class="nav-auth"></div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="/">ראשי</a></li>
+      <li><a href="/#tools">כלים</a></li>
+      <li><a href="/investor-academy/" style="color:#b3e0dc;font-weight:700;">הקורס</a></li>
+      <li><a href="/investor-academy/lessons/">שיעורים</a></li>
+    </ul>
+  </nav>
+  <div class="mobile-nav-overlay" id="mobile-nav-overlay"></div>
+  <nav class="mobile-nav-panel" id="mobile-nav-panel" aria-label="תפריט ניווט">
+    <div class="mobile-nav-panel-title">ניווט</div>
+    <a href="/" class="mobile-nav-item">ראשי</a>
+    <a href="/#tools" class="mobile-nav-item">כלים</a>
+    <a href="/investor-academy/" class="mobile-nav-item highlighted">הקורס</a>
+    <a href="/members/" class="mobile-nav-item highlighted" id="mobile-nav-members" style="display:none">אזור החברים</a>
+    <div class="mobile-nav-divider"></div>
+    <a href="/auth/register/" class="mobile-nav-item" id="mobile-cta-link">בקש גישה לקורס</a>
+  </nav>
+
+  <!-- ─── HERO ─────────────────────────────────────────── -->
+  <section class="hero-section" id="hero">
+    <div class="container hero-content">
+      <h1 class="hero-title">
+        הכסף שלכם יכול לעבוד קשה יותר מכם.
+        <span class="year">שוק ההון 2026</span>
+      </h1>
+      <p class="hero-subtitle">הפסיקו להשאיר כסף על השולחן בפיקדון בנקאי שלא מנצח את האינפלציה. גלו את השיטה שמחברת את חוכמת ההשקעות של וורן באפט עם הכלים הטכנולוגיים של העתיד, והופכת את החסכונות שלכם למנוע צמיחה אמיתי. <strong>גם אם אתם מתחילים מאפס.</strong></p>
+      <div class="hero-cta">
+        <a href="/auth/register/" class="cta-button cta-button-accent main-cta-link">בקש גישה לקורס</a>
+      </div>
+    </div>
+    <div class="hero-bottom-visual">
+      <svg viewBox="0 0 150 45" preserveAspectRatio="xMidYMid meet">
+        <g>
+          <rect class="hero-svg-bar gsap-element" x="10" y="30" width="15" height="15" rx="2"></rect>
+          <rect class="hero-svg-bar gsap-element" x="35" y="20" width="15" height="25" rx="2"></rect>
+          <rect class="hero-svg-bar gsap-element" x="60" y="10" width="15" height="35" rx="2"></rect>
+          <rect class="hero-svg-bar gsap-element" x="85" y="15" width="15" height="30" rx="2"></rect>
+          <rect class="hero-svg-bar gsap-element" x="110" y="5" width="15" height="40" rx="2"></rect>
+          <rect class="hero-svg-bar gsap-element" x="135" y="25" width="15" height="20" rx="2"></rect>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ─── PROBLEM SECTION ──────────────────────────────── -->
+  <section class="problem-section section-bg-light" id="problems">
+    <div class="container">
+      <div class="section-title-container">
+        <h2 class="section-title">אם המשפטים האלה מוכרים לך, אתה במקום הנכון</h2>
+      </div>
+      <div class="problem-grid">
+        <div class="problem-item gsap-element">
+          <div class="problem-icon">🎰</div>
+          <h3>"שוק ההון זה קזינו"</h3>
+          <p>הרגשת שהצלחה דורשת מזל או גאונות, ולא שיטה מסודרת שכל אחד יכול ללמוד.</p>
+        </div>
+        <div class="problem-item gsap-element" style="--delay: 0.1s;">
+          <div class="problem-icon">⏱️</div>
+          <h3>"אין לי זמן לזה"</h3>
+          <p>חשבת שהשקעות דורשות שעות התעסקות יומיומית והעדפת לא להתחיל בכלל.</p>
+        </div>
+        <div class="problem-item gsap-element" style="--delay: 0.2s;">
+          <div class="problem-icon">❓</div>
+          <h3>"זה מסובך מדי"</h3>
+          <p>ידעת שצריך להשקיע, אבל הרגשת אבוד מול המושגים והאפשרויות האינסופיות.</p>
+        </div>
+        <div class="problem-item gsap-element" style="--delay: 0.3s;">
+          <div class="problem-icon">📉</div>
+          <h3>"אני מפחד להפסיד הכל"</h3>
+          <p>חששת לסכן את החסכונות שעבדת עליהם כל כך קשה, בלי לדעת איך להגן עליהם.</p>
+        </div>
+      </div>
+      <div class="social-proof gsap-element">
+        <p>זו לא אשמתך. עולם ההשקעות נראה מאיים ומסובך בכוונה. הבנקים ובתי ההשקעות מרוויחים מהפחד שלך, ומשאירים אותך עם תשואות זעומות בזמן שהכסף שלך יכול היה לצמוח בעשרות אחוזים. <strong>האמת היא, יש דרך אחרת. דרך פשוטה ובטוחה יותר ממה שאי פעם דמיינת.</strong></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── JOURNEY SECTION ──────────────────────────────── -->
+  <section class="journey-section section-bg-white" id="solution">
+    <div class="container journey-content">
+      <div class="journey-text gsap-element">
+        <div class="section-title-container" style="text-align: right;">
+          <h2 class="section-title" style="text-align: right; display: inline-block;">הפריצה הגדולה שלי: הפסקתי לחפש "קיצורי דרך" וחזרתי לבסיס</h2>
+        </div>
+        <p>גם אני הייתי שם. קראתי ספרים, עקבתי אחרי "גורואים", וניסיתי כל מיני אסטרטגיות מסובכות. הרגשתי אבוד ומתוסכל.</p>
+        <p>ואז נפל לי האסימון. חזרתי למקורות — למשקיעים הגדולים בהיסטוריה כמו וורן באפט. גיליתי שהעקרונות שלהם פשוטים להפליא: השקעה בחברות מעולות, לטווח ארוך, ובמחיר הוגן.</p>
+        <h3>החיבור המנצח</h3>
+        <p>הבעיה? פעם זה דרש עבודת נמלים וניתוחים שלקחו שבועות. <br><strong>ההזדמנות של היום? הטכנולוגיה.</strong></p>
+        <p>הבנתי שהשילוב בין <span class="highlight">החוכמה המוכחת של באפט</span> לבין <span class="highlight">הכלים הטכנולוגיים של 2026</span> (כלי AI, אתרים לניתוח נתונים, אוטומציות) יוצר הזדמנות חסרת תקדים. פתאום, כל אחד יכול ליישם את השיטות של הגדולים ביותר — בפחות זמן ובלי צורך בתואר בכלכלה.</p>
+        <p><strong>זו השיטה שאני הולך ללמד אותך. וכך היא עובדת:</strong></p>
+      </div>
+      <div class="journey-image gsap-element">
+        <img src="https://imgur.com/QgiGUi8.png" alt="איור מופשט של חשיבה ואסטרטגיה">
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── STEPS SECTION ────────────────────────────────── -->
+  <section class="steps-section section-bg-gradient" id="method">
+    <div class="container">
+      <div class="steps-header">
+        <h2 class="section-title">שיטת "שוק ההון 2026": 4 שלבים להצלחה</h2>
+        <p class="section-subtitle">השיטה פשוטה ומורכבת מארבעה שלבים ברורים שיובילו אותך <span class="highlight">להצלחה בשוק ההון.</span></p>
+      </div>
+      <div class="steps-container">
+        <!-- Step 1 -->
+        <div class="step gsap-element" id="step-1" data-step="1">
+          <div class="step-tag">הבנה</div>
+          <div class="step-content">
+            <div class="step-glow"></div>
+            <div class="step-number">1</div>
+            <h3 class="step-title">שלב הכניסה</h3>
+            <p class="step-description">נלמד את יסודות שוק ההון, נבין מושגי מפתח ואיך השוק עובד. נפתח יחד חשבון השקעות ראשון בצורה בטוחה ומודרכת.</p>
+            <div class="step-visual entrance-visual">
+              <div class="entrance-container">
+                <div class="entrance-door-frame"><div class="entrance-door"><div class="door-handle"></div></div></div>
+                <div class="entrance-light"></div>
+                <div class="entrance-path"></div>
+                <div class="character"><svg viewBox="0 0 24 24"><use href="#character-path" /></svg></div>
+                <div class="entrance-steps">
+                  <div class="entrance-step step-1"><div class="step-icon"><svg viewBox="0 0 24 24"><use href="#wallet-icon" /></svg></div><span class="step-text">פתיחת חשבון</span></div>
+                  <div class="entrance-step step-2"><div class="step-icon"><svg viewBox="0 0 24 24"><use href="#book-icon" /></svg></div><span class="step-text">למידת מושגים</span></div>
+                  <div class="entrance-step step-3"><div class="step-icon"><svg viewBox="0 0 24 24"><use href="#newspaper-icon" /></svg></div><span class="step-text">הכרת השוק</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Step 2 -->
+        <div class="step gsap-element" id="step-2" data-step="2">
+          <div class="step-tag">חכמה</div>
+          <div class="step-content">
+            <div class="step-glow"></div>
+            <div class="step-number">2</div>
+            <h3 class="step-title">שלב האסטרטגיה</h3>
+            <p class="step-description">נצלול לעומק אסטרטגיית 'השקעות ערך' בהשראת וורן באפט. נלמד לזהות חברות איכותיות, להעריך שווי הוגן ולבנות 'חפיר כלכלי' להשקעות שלנו.</p>
+            <div class="step-visual buffett-visual">
+              <div class="buffett-container">
+                <div class="quote-bubble"><p class="quote-text">לעולם אל תשקיע במשהו שאינך מבין.</p></div>
+                <div class="buffett-figure">
+                  <div class="buffett-hair"></div>
+                  <div class="buffett-head">
+                    <div class="buffett-glasses">
+                      <div class="buffett-glass-left"></div>
+                      <div class="buffett-glass-right"></div>
+                    </div>
+                    <div class="buffett-smile"></div>
+                  </div>
+                  <div class="buffett-body"><div class="buffett-tie"></div></div>
+                </div>
+                <div class="principles-container">
+                  <div class="principle-pill">מרווח ביטחון</div>
+                  <div class="principle-pill">השקעה לטווח ארוך</div>
+                  <div class="principle-pill">השקעה בעסקים מובנים</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Step 3 -->
+        <div class="step gsap-element" id="step-3" data-step="3">
+          <div class="step-tag">יעילות</div>
+          <div class="step-content">
+            <div class="step-glow"></div>
+            <div class="step-number">3</div>
+            <h3 class="step-title">שלב הכלים</h3>
+            <p class="step-description">נכיר ונתרגל כלים דיגיטליים ואנליטיים מתקדמים לניתוח מניות, מעקב אחר התיק וקבלת החלטות מושכלות — מהמחשב ומהנייד.</p>
+            <div class="step-visual tools-visual">
+              <div class="phone-frame" id="phone"><div class="phone-screen"><div class="screen-content"><div class="chart-line"></div><div class="grid-lines"></div></div></div></div>
+              <div class="tool-icon icon-1"><svg viewBox="0 0 24 24"><use href="#filter-icon" /></svg></div>
+              <div class="tool-icon icon-2"><svg viewBox="0 0 24 24"><use href="#chart-bar-icon" /></svg></div>
+              <div class="tool-icon icon-3"><svg viewBox="0 0 24 24"><use href="#chart-line-icon" /></svg></div>
+              <div class="tool-icon icon-4"><svg viewBox="0 0 24 24"><use href="#cash-icon" /></svg></div>
+              <div class="ripple" id="ripple-1"></div>
+              <div class="ripple" id="ripple-2"></div>
+            </div>
+          </div>
+        </div>
+        <!-- Step 4 -->
+        <div class="step gsap-element" id="step-4" data-step="4">
+          <div class="step-tag">רווח</div>
+          <div class="step-content">
+            <div class="step-glow"></div>
+            <div class="step-number">4</div>
+            <h3 class="step-title">שלב הכסף</h3>
+            <p class="step-description">נלמד לבנות תהליך שיטתי לאיתור הזדמנויות, ניהול סיכונים ובניית תיק השקעות מנצח שמייצר צמיחה לאורך זמן, תוך שימוש בקיצורי דרך טכנולוגיים.</p>
+            <div class="step-visual money-visual">
+              <div class="chart-container">
+                <div class="chart-grid"></div>
+                <div class="chart-bar-wrapper" style="left: 8%;"><div class="chart-value">+28%</div><div class="chart-bar" data-height="50%"></div></div>
+                <div class="chart-bar-wrapper" style="left: 22%;"><div class="chart-value">+35%</div><div class="chart-bar" data-height="60%"></div></div>
+                <div class="chart-bar-wrapper" style="left: 36%;"><div class="chart-value">+26%</div><div class="chart-bar" data-height="45%"></div></div>
+                <div class="chart-bar-wrapper" style="left: 50%;"><div class="chart-value">+42%</div><div class="chart-bar" data-height="75%"></div></div>
+                <div class="chart-bar-wrapper" style="left: 64%;"><div class="chart-value">+36%</div><div class="chart-bar" data-height="65%"></div></div>
+                <div class="chart-bar-wrapper" style="left: 78%;"><div class="chart-value">+52%</div><div class="chart-bar" data-height="90%"></div></div>
+              </div>
+              <div class="money-coin coin-1"></div>
+              <div class="money-coin coin-2"></div>
+              <div class="money-coin coin-3"></div>
+              <div class="coin-particles" id="coin-particles"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="navigation">
+        <div class="nav-dot active" data-step="1"></div>
+        <div class="nav-dot" data-step="2"></div>
+        <div class="nav-dot" data-step="3"></div>
+        <div class="nav-dot" data-step="4"></div>
+      </div>
+      <div class="floating-particles" id="particles-steps"></div>
+    </div>
+  </section>
+
+  <!-- ─── CALCULATOR SECTION ───────────────────────────── -->
+  <section class="value-section section-bg-light" id="proof">
+    <div class="container">
+      <div class="section-title-container">
+        <h2 class="section-title">אל תאמינו לי, תראו בעצמכם מה אפשרי</h2>
+        <p class="section-subtitle">הכניסו את הנתונים שלכם למחשבון וגלו את פוטנציאל הצמיחה האמיתי של הכסף שלכם עם אסטרטגיה חכמה יותר.</p>
+      </div>
+      <div class="invest-calc-wrapper">
+        <main class="invest-calc-container gsap-element">
+          <section class="invest-calc-header">
+            <div class="invest-calc-header-bg"></div>
+            <div class="invest-calc-header-content">
+              <h2 class="invest-calc-title">גלה את פוטנציאל הצמיחה של הכסף שלך</h2>
+              <p class="invest-calc-subtitle">השוואה בין השקעה סטנדרטית לבין האסטרטגיה המתקדמת שלנו עם תשואה משופרת של 5%</p>
+            </div>
+          </section>
+          <div class="invest-calc-body">
+            <section class="invest-calc-controls">
+              <div class="invest-calc-grid">
+                <div class="invest-calc-control-group">
+                  <label class="invest-calc-control-label">סכום ההשקעה ההתחלתי <span id="invest-calc-principalValue" class="invest-calc-control-value">₪100,000</span></label>
+                  <div class="invest-calc-slider-container"><input type="range" id="invest-calc-principal" class="invest-calc-slider" min="10000" max="1000000" step="10000" value="100000"></div>
+                  <div class="invest-calc-labels"><span>₪10,000</span><span>₪1,000,000</span></div>
+                </div>
+                <div class="invest-calc-control-group">
+                  <label class="invest-calc-control-label">הפקדה חודשית <span id="invest-calc-monthlyDepositValue" class="invest-calc-control-value">₪1,000</span></label>
+                  <div class="invest-calc-slider-container"><input type="range" id="invest-calc-monthlyDeposit" class="invest-calc-slider" min="0" max="20000" step="500" value="1000"></div>
+                  <div class="invest-calc-labels"><span>₪0</span><span>₪20,000</span></div>
+                </div>
+                <div class="invest-calc-control-group">
+                  <label class="invest-calc-control-label">הריבית הנוכחית שלך <span id="invest-calc-rateValue" class="invest-calc-control-value">5%</span></label>
+                  <div class="invest-calc-slider-container"><input type="range" id="invest-calc-rate" class="invest-calc-slider" min="0" max="20" step="0.5" value="5"></div>
+                  <div class="invest-calc-labels"><span>0%</span><span>20%</span></div>
+                </div>
+                <div class="invest-calc-control-group">
+                  <label class="invest-calc-control-label">תקופת ההשקעה <span id="invest-calc-yearsValue" class="invest-calc-control-value">20 שנים</span></label>
+                  <div class="invest-calc-slider-container"><input type="range" id="invest-calc-years" class="invest-calc-slider" min="5" max="40" step="1" value="20"></div>
+                  <div class="invest-calc-labels"><span>5 שנים</span><span>40 שנים</span></div>
+                </div>
+              </div>
+            </section>
+            <section class="invest-calc-visualization">
+              <div class="invest-calc-chart-header">
+                <h3 class="invest-calc-chart-title">השוואת צמיחת ההשקעה לאורך זמן</h3>
+                <div class="invest-calc-chart-legend">
+                  <div class="invest-calc-legend-item"><div class="invest-calc-legend-marker invest-calc-regular-marker"></div><span>השקעה בדרך הרגילה</span></div>
+                  <div class="invest-calc-legend-item"><div class="invest-calc-legend-marker invest-calc-improved-marker"></div><span>השקעה ביישום האסטרטגיה שלנו</span></div>
+                </div>
+              </div>
+              <div class="invest-calc-chart-container">
+                <canvas id="invest-calc-chart" aria-label="גרף השוואת השקעות" role="img"></canvas>
+              </div>
+            </section>
+            <section class="invest-calc-results">
+              <div class="invest-calc-result-card invest-calc-regular-result gsap-element">
+                <h4 class="invest-calc-result-title">שווי ההשקעה בדרך הרגילה</h4>
+                <div id="invest-calc-regularResult" class="invest-calc-result-value">₪0</div>
+              </div>
+              <div class="invest-calc-result-card invest-calc-improved-result gsap-element">
+                <h4 class="invest-calc-result-title">שווי ההשקעה עם האסטרטגיה שלנו</h4>
+                <div id="invest-calc-improvedResult" class="invest-calc-result-value">₪0</div>
+              </div>
+              <div class="invest-calc-result-card invest-calc-difference-result invest-calc-animation gsap-element">
+                <h4 class="invest-calc-result-title">הרווח הנוסף שלך</h4>
+                <div id="invest-calc-differenceResult" class="invest-calc-result-value">₪0</div>
+              </div>
+            </section>
+          </div>
+          <footer class="invest-calc-footer">המחשבון מיועד להמחשה בלבד ואינו מהווה ייעוץ השקעות או הבטחה לתשואה עתידית | הנתונים מוצגים לפני מס</footer>
+        </main>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── TESTIMONIAL SECTION ──────────────────────────── -->
+  <section class="testimonial-section section-bg-white" id="testimonials">
+    <div class="container testimonial-container">
+      <div class="testimonial-card gsap-element">
+        <img src="https://imgur.com/23cSvOC.png" alt="יאיר אייזיק" class="testimonial-image">
+        <blockquote class="testimonial-quote">
+          "הסתכלתי על התכנים והשיטה שיאיר מציג כאן, וזה באמת נראה שונה מכל מה שראיתי עד היום בתחום. הגישה שמחברת בין העקרונות הקלאסיים לכלים החדשים היא בדיוק מה שהיה חסר בשוק. הידע פה יכול להיות שווה המון למי שרוצה להשקיע בצורה רצינית ולאורך זמן."
+        </blockquote>
+        <div class="testimonial-author">
+          יאיר אייזיק
+          <span>יזם ומשקיע</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── INSTRUCTOR SECTION ───────────────────────────── -->
+  <section class="intro-section-instructor section-bg-light" id="instructor">
+    <div class="intro-container-instructor">
+      <div class="profile-area gsap-element">
+        <div class="profile-image-container">
+          <img src="https://imgur.com/768hpgK.png" alt="יאיר תכלת — יוצר ומעביר הקורס" class="profile-image">
+        </div>
+        <h3 class="profile-name">יאיר תכלת</h3>
+        <p class="profile-title-instructor">יוצר ומעביר הקורס 'השקעות בעידן החדש'</p>
+      </div>
+      <div class="intro-content-instructor gsap-element">
+        <h2 class="intro-heading">נעים להכיר, ולמה כדאי לכם להקשיב לי</h2>
+        <p class="intro-paragraph">לפני 4 שנים עמדתי <strong>בדיוק איפה שאתה עומד היום</strong> — משקיע טרי שמחפש את דרכו במבוך ההשקעות.</p>
+        <p class="intro-paragraph">עבדתי קשה עד שהצלחתי לסלול את הדרך לגישת השקעות <strong>פשוטה ומודרנית</strong> שמשלבת טכנולוגיה עם חוכמה מסורתית.</p>
+        <div class="divider"></div>
+        <p class="intro-paragraph">מצאתי דרך <span class="highlight">ללמוד להשקיע</span>, בלי להסתבך בתאוריות ומילים גבוהות.</p>
+        <p class="intro-paragraph">העקרונות שאני מלמד אינם חדשים — הם קיימים ומוכחים כבר <strong>מעל 100 שנה</strong>. במשך שנים רבות, יישומם נתפס כמורכב ודרש מומחיות, ולכן רבים נטו לחפש קיצורי דרך. גיליתי ששילוב נכון של העקרונות העוצמתיים הללו עם <strong>כלים טכנולוגיים מודרניים</strong> הופך את היישום לפשוט ונגיש מאי פעם — ומאפשר למנף את הקידמה לטובתנו הפיננסית.</p>
+        <div class="principles-grid">
+          <div class="principle-item gsap-element" data-index="1">
+            <div class="principle-icon">💡</div>
+            <h4 class="principle-title">למידה בגובה העיניים</h4>
+            <p class="principle-text">אני מאמין בלמידה ישר ולעניין. לא אסבך אתכם — תקבלו חלוקה ברורה בין התכל'ס להרחבות בקורס.</p>
+          </div>
+          <div class="principle-item gsap-element" data-index="2">
+            <div class="principle-icon">🚀</div>
+            <h4 class="principle-title">תמיד בחזית הטכנולוגיה</h4>
+            <p class="principle-text">גם כיום אני ממשיך להעמיק את השיטה ותהיו בטוחים שמהפכת ה-AI תביא לשכלולים נוספים לקורס.</p>
+          </div>
+          <div class="principle-item gsap-element" data-index="3">
+            <div class="principle-icon">🔍</div>
+            <h4 class="principle-title">להשקיע אחרת</h4>
+            <p class="principle-text">שכלולים שרק יעצימו את הפער בין אלו שנשארו מאחור שמבולבלים וחוששים מהעולם החדש, ואלו שבחרו למנף את הקידמה לטובתם.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="intro-bg-elements">
+      <div class="bg-circle bg-circle-1"></div>
+      <div class="bg-circle bg-circle-2"></div>
+    </div>
+  </section>
+
+  <!-- ─── OFFER / BONUSES SECTION ──────────────────────── -->
+  <section class="bonus-section offer-section section-bg-white" id="offer-anchor">
+    <div class="container">
+      <div class="section-title-container">
+        <h2 class="section-title">מה תקבלו בקורס</h2>
+        <p class="section-subtitle">הנה כל מה שתקבלו כשתצטרפו:</p>
+      </div>
+      <div class="bonus-grid">
+        <div class="bonus-item gsap-element">
+          <div class="bonus-visual">📈</div>
+          <div class="bonus-text-content"><h3>מודל 4 השלבים המלא</h3><p>הדרכה צעד-אחר-צעד, מהבסיס המוחלט ועד לבניית תיק השקעות מנצח. פשוט, ברור וממוקד תוצאות.</p></div>
+        </div>
+        <div class="bonus-item gsap-element" style="--delay: 0.1s;">
+          <div class="bonus-visual">🔧</div>
+          <div class="bonus-text-content"><h3>ארגז הכלים הטכנולוגי</h3><p>רשימה וסקירה של האתרים, האפליקציות וכלי ה-AI שיחסכו לכם שעות מחקר ויעזרו לכם לאתר מניות מנצחות.</p></div>
+        </div>
+        <div class="bonus-item gsap-element" style="--delay: 0.2s;">
+          <div class="bonus-visual">🤝</div>
+          <div class="bonus-text-content"><h3>ליווי בפתיחת חשבון מסחר</h3><p>נמאס לכם מהבירוקרטיה? נעבור יחד את כל התהליך, כדי שתהיו מוכנים להשקיע תוך זמן קצר ובעמלות הנמוכות ביותר.</p></div>
+        </div>
+        <div class="bonus-item gsap-element" style="--delay: 0.3s;">
+          <div class="bonus-visual">📊</div>
+          <div class="bonus-text-content"><h3>בונוס: מחשבון "בריאות פיננסית"</h3><p>כלי אקסל בלעדי שמאפשר לכם לנתח כל חברה ב-5 דקות ולקבל החלטה מושכלת.</p></div>
+        </div>
+        <div class="bonus-item gsap-element" style="--delay: 0.4s;">
+          <div class="bonus-visual">🎮</div>
+          <div class="bonus-text-content"><h3>בונוס: משחק השקעות ייעודי</h3><p>הדרך המהנה והבטוחה ביותר לתרגל את השיטה בלי לסכן שקל אחד מהכסף שלכם.</p></div>
+        </div>
+        <div class="bonus-item gsap-element" style="--delay: 0.5s;">
+          <div class="bonus-visual" style="font-size:2rem;font-weight:800;color:#394140;">lifetime</div>
+          <div class="bonus-text-content"><h3>בונוס: גישה לכל החיים ועדכונים</h3><p>שוק ההשקעות משתנה, והקורס הזה איתו. תיהנו מכל שיעור חדש וכל כלי טכנולוגי שאוסיף בעתיד — בחינם.</p></div>
+        </div>
+      </div>
+
+      <!-- CTA Box -->
+      <div class="pricing-box gsap-element" style="margin-top: 60px; text-align: center;">
+        <span class="launch-badge">מבצע השקה מיוחד!</span>
+        <p style="font-size: 1.2rem; font-weight: 700; color: var(--color-darker); margin: 1.5em 0 0.5em;">רוצה להצטרף לקורס?</p>
+        <p style="font-size: 1.05rem; color: var(--color-text-muted); margin-bottom: 0.5em;">שלח בקשת גישה ונחזור אליך תוך 24 שעות.</p>
+        <a href="/auth/register/" class="cta-button cta-button-accent main-cta-link">בקש גישה לקורס</a>
+        <p class="access-info">חשבון קיים? <a href="/profile/" style="color: var(--teal); font-weight: 600;" id="profile-link">שלח בקשה מהפרופיל שלך</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FAQ SECTION ──────────────────────────────────── -->
+  <section id="faq" class="section section-bg-light">
+    <div class="container">
+      <div class="faq-header">
+        <h2 class="faq-title">שאלות נפוצות</h2>
+        <p class="faq-subtitle">כל מה שצריך לדעת לפני ההרשמה לקורס</p>
+      </div>
+      <div class="faq-container">
+        <div class="faq-item">
+          <button class="faq-question">כמה עולה הקורס? <span class="faq-icon"></span></button>
+          <div class="faq-answer"><p>הקורס המלא מוצע במחיר של <strong>529 ₪</strong>, אבל ברגע זה אפשר לקבל <span class="highlight">הנחת השקה מיוחדת</span> ולשלם רק <strong>200 ₪</strong>! זו הזדמנות חד פעמית לקבל את כל הידע והכלים שפיתחתי במחיר נגיש במיוחד.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">התשואה שאתה מדבר עליה, האם היא מובטחת? <span class="faq-icon"></span></button>
+          <div class="faq-answer"><p>בשוק ההון אין הבטחות, וחשוב לי להיות שקוף איתך לגמרי. מה שכן — בקורס תקבל את <strong>אותם כלים וידע</strong> שאפשרו לי להשיג תשואות גבוהות משמעותית מהממוצע. אני מלמד אותך את השיטה המדויקת שאני עצמי משתמש בה, ומצייד אותך בכלים לקבלת החלטות השקעה מושכלות, המבוססות על נתונים ואסטרטגיה מוכחת.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">איך מקבלים גישה לקורס? <span class="faq-icon"></span></button>
+          <div class="faq-answer"><p>שלח בקשת גישה דרך הכפתור בעמוד זה. לאחר אישור הבקשה, תקבל אימייל עם קישור לפלטפורמת הקורס. הקישור מאפשר לך <strong>גישה מיידית ובלתי מוגבלת</strong> לכל תכני הקורס, כולל כל העדכונים העתידיים. הקורס זמין 24/7 מכל מכשיר.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">כמה זמן לוקח לעבור את הקורס? <span class="faq-icon"></span></button>
+          <div class="faq-answer"><p>הקורס מכיל כ-10 שעות של תוכן איכותי, מחולק ליחידות קצרות וממוקדות. רוב המשתתפים משלימים את החומר תוך 1-3 שבועות, כשהם לומדים בקצב שנוח להם. <strong>המטרה שלי היא</strong> שתוכל להתחיל ליישם את השיטה ולבנות תיק השקעות מנצח <span class="highlight">תוך חודש מקבלת הגישה</span>.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">למה שתעזור לי להרוויח בשוק ההון? <span class="faq-icon"></span></button>
+          <div class="faq-answer"><p>אני מאמין שלכל אחד מגיעה הזדמנות לבנות עצמאות כלכלית ולהתעשר בנחת. הידע שצברתי סייע לי לשנות את המצב הפיננסי שלי, ואני רוצה לחלוק אותו עם אחרים. <strong>ההצלחה שלך היא גם ההצלחה שלי.</strong></p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">מה אם אני לא מרוצה מהקורס? <span class="faq-icon"></span></button>
+          <div class="faq-answer"><p>אני בטוח לגמרי בערך שתקבל מהקורס, ולכן אני מציע <strong>הבטחת החזר כספי מלא</strong> ל-14 יום. אם מסיבה כלשהי תרגיש שהקורס לא עומד בציפיות שלך, פשוט שלח לי מייל ואבצע החזר מלא ללא שאלות מיותרות.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">האם הקורס מתאים למתחילים לגמרי? <span class="faq-icon"></span></button>
+          <div class="faq-answer"><p>בהחלט! הקורס בנוי במיוחד כך שיתאים גם למי שמעולם לא השקיע בשוק ההון. אני מתחיל מהבסיס ומדריך אותך צעד אחר צעד, החל מפתיחת חשבון השקעות ראשון ועד לבניית תיק מנצח. <strong>המטרה שלי</strong> היא להפוך את עולם ההשקעות לנגיש ופשוט להבנה, גם אם אין לך רקע קודם בתחום.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">למה שלא אחפש את המידע הזה בגוגל בעצמי? <span class="faq-icon"></span></button>
+          <div class="faq-answer"><p>זו שאלה מצוינת! התשובה פשוטה: <strong>זמן וחיסכון בטעויות יקרות</strong>. לי לקח למעלה מ-100 שעות של מחקר, ניסוי וטעייה עד שמצאתי את השיטה שעובדת. הקורס שלי מזקק את כל הידע הזה לפורמט מעשי ונגיש שחוסך לך את כל הדרך הארוכה הזו.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── DISCLAIMER / LEGAL FOOTER ───────────────────── -->
+  <div class="disclaimer-footer">
+    <div class="container">
+      <div class="disclaimer-container">
+        <h2 class="disclaimer-title">חשוב להדגיש</h2>
+        <div class="disclaimer-intro">
+          <p>הקורס מציע עקרונות וכלים להשקעה עצמאית, אך אינו מהווה ייעוץ השקעות.</p>
+          <p>אתה תקבל את הידע והכלים לקבלת החלטות, אך ההחלטות וההשקעות הן באחריותך בלבד.</p>
+          <span class="disclaimer-highlight">בהתאם לחוק, חשוב שתדע:</span>
+        </div>
+        <div class="disclaimer-sections">
+          <div class="disclaimer-card">
+            <div class="card-icon">ℹ️</div>
+            <h3 class="card-title">גילוי נאות</h3>
+            <div class="card-content"><p>המידע והתכנים בקורס נועדו להעשרה ולימוד בלבד. אין בהם משום ייעוץ פיננסי, השקעתי או המלצה לפעולה כלשהי. כל החלטה המתקבלת על בסיס תכני הקורס היא באחריותך הבלעדית.</p></div>
+          </div>
+          <div class="disclaimer-card">
+            <div class="card-icon">⚠️</div>
+            <h3 class="card-title">אזהרת סיכון</h3>
+            <div class="card-content"><p>השקעות בשוק ההון כרוכות בסיכון משמעותי ועלולות להוביל להפסד חלקי או מלא של כספי ההשקעה. יש לבחון כל החלטה בהתאם למצבך הפיננסי ויכולת הסיכון האישית שלך.</p></div>
+          </div>
+        </div>
+        <div class="risk-alert">
+          <div class="risk-icon">⛔</div>
+          <h3 class="risk-title">היעדר אחריות</h3>
+          <div class="risk-content"><p>בעלי האתר, יוצרי הקורס ומפעיליו לא יישאו באחריות כלשהי לנזקים או הפסדים העלולים להיגרם כתוצאה מהשימוש במידע המופיע בקורס או באתר.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SITE FOOTER ──────────────────────────────────── -->
+  <footer class="site-footer-bar">
+    <div class="site-footer-inner">
+      <div class="footer-logo">NewGen <span>Finance</span></div>
+      <div class="footer-right">
+        <div class="footer-links">
+          <a href="#">פרטיות</a>
+          <a href="#">תנאי שימוש</a>
+        </div>
+        <span class="footer-copy">© 2025 NewGen Finance — כל הזכויות שמורות</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ─── SUPABASE AUTH ─────────────────────────────────── -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="/assets/js/supabase-config.js"></script>
+  <script>
+    (async () => {
+      const _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      const { data: { session } } = await _sb.auth.getSession();
+      const navAuth = document.getElementById('nav-auth');
+
+      if (!session) {
+        navAuth.innerHTML =
+          '<a href="/auth/login/" class="btn-nav btn-nav-outline">כניסה</a>' +
+          '<a href="/auth/register/" class="btn-nav btn-nav-gold">הרשמה</a>';
+      } else {
+        const user = session.user;
+        const { data: profile } = await _sb
+          .from('profiles')
+          .select('full_name')
+          .eq('id', user.id)
+          .single();
+
+        const rawName = profile?.full_name || user.email;
+        const safeName = rawName
+          .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+        navAuth.innerHTML =
+          '<span class="nav-greeting">שלום, ' + safeName + '</span>' +
+          '<a href="/members/" class="nav-user-link">אזור החברים</a>' +
+          '<button class="nav-signout" id="nav-signout-btn">התנתק</button>';
+
+        document.getElementById('nav-signout-btn').addEventListener('click', async () => {
+          await _sb.auth.signOut();
+          window.location.reload();
+        });
+
+        const mobileMembers = document.getElementById('mobile-nav-members');
+        if (mobileMembers) mobileMembers.style.display = '';
+
+        // Update CTA links to profile
+        document.querySelectorAll('.main-cta-link').forEach(function(link) {
+          link.href = '/profile/';
+        });
+        var mobileCta = document.getElementById('mobile-cta-link');
+        if (mobileCta) mobileCta.href = '/profile/';
+      }
+    })();
+
+    // Mobile nav toggle
+    (function () {
+      var btn = document.getElementById('mobile-menu-btn');
+      var panel = document.getElementById('mobile-nav-panel');
+      var overlay = document.getElementById('mobile-nav-overlay');
+      function open()  { btn.classList.add('open'); panel.classList.add('open'); overlay.classList.add('open'); btn.setAttribute('aria-expanded','true'); }
+      function close() { btn.classList.remove('open'); panel.classList.remove('open'); overlay.classList.remove('open'); btn.setAttribute('aria-expanded','false'); }
+      btn.addEventListener('click', function () { panel.classList.contains('open') ? close() : open(); });
+      overlay.addEventListener('click', close);
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+    })();
+  </script>
+
+  <!-- ─── PAGE SCRIPTS ─────────────────────────────────── -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, Draggable);
+
+      const isMobile = window.innerWidth <= 768;
+
+      // ── Calculator ──
+      (function() {
+        if (typeof Chart === 'undefined') return;
+        const RATE_IMPROVEMENT = 0.05;
+        function formatCurrency(value) {
+          if (isNaN(value) || !isFinite(value)) return '₪0';
+          if (value >= 1000000) return (value / 1000000).toFixed(1).replace('.0','') + ' מיליון ₪';
+          if (value >= 1000) return (value / 1000).toFixed(0) + ' אלף ₪';
+          return Math.round(value).toLocaleString('he-IL') + ' ₪';
+        }
+        function calculateYearlyGrowth(principal, monthlyDeposit, annualRate, years) {
+          var balances = []; var balance = principal;
+          if (years <= 0) return balances;
+          var monthlyRate = annualRate / 12;
+          for (var year = 1; year <= years; year++) {
+            for (var month = 1; month <= 12; month++) { balance += monthlyDeposit; balance *= (1 + monthlyRate); }
+            balances.push(Math.round(balance));
+          }
+          return balances;
+        }
+        function initializeChart() {
+          var canvas = document.getElementById('invest-calc-chart');
+          if (!canvas) return null;
+          var ctx = canvas.getContext('2d');
+          if (!ctx) return null;
+          var regularGradient = ctx.createLinearGradient(0, 0, 0, isMobile ? 300 : 400);
+          regularGradient.addColorStop(0, 'rgba(66,85,99,0.7)'); regularGradient.addColorStop(1, 'rgba(41,50,60,0.1)');
+          var improvedGradient = ctx.createLinearGradient(0, 0, 0, isMobile ? 300 : 400);
+          improvedGradient.addColorStop(0, 'rgba(94,129,125,0.7)'); improvedGradient.addColorStop(1, 'rgba(57,65,64,0.1)');
+          var chartConfig = {
+            type: 'line',
+            data: { labels: [], datasets: [
+              { label: 'השקעה בדרך הרגילה', data: [], borderColor: '#29323c', backgroundColor: regularGradient, borderWidth: isMobile ? 2 : 3, tension: 0.4, fill: true, pointRadius: isMobile ? 0 : 4, pointHoverRadius: isMobile ? 6 : 8, pointBackgroundColor: '#29323c', pointBorderColor: '#ffffff', pointBorderWidth: 2 },
+              { label: 'השקעה ביישום האסטרטגיה שלנו', data: [], borderColor: '#5e817d', backgroundColor: improvedGradient, borderWidth: isMobile ? 2 : 3, tension: 0.4, fill: true, pointRadius: isMobile ? 0 : 4, pointHoverRadius: isMobile ? 6 : 8, pointBackgroundColor: '#5e817d', pointBorderColor: '#ffffff', pointBorderWidth: 2 }
+            ]},
+            options: {
+              responsive: true, maintainAspectRatio: false,
+              interaction: { mode: 'index', intersect: false },
+              animation: { duration: 800, easing: 'easeOutQuart'},
+              scales: {
+                x: { grid: { display: false }, ticks: { font: { size: isMobile ? 10 : 12, family: "'Heebo', sans-serif" }, color: '#74839f', maxRotation: 0, autoSkip: true, maxTicksLimit: isMobile ? 6 : 10 } },
+                y: { grid: { color: 'rgba(116,131,159,0.1)' }, ticks: { font: { size: isMobile ? 10 : 12, family: "'Heebo', sans-serif" }, color: '#74839f', callback: function(value) { if (value >= 1000000) return (value / 1000000).toFixed(1) + 'M'; if (value >= 1000) return (value / 1000).toFixed(0) + 'K'; return value; } }, beginAtZero: true }
+              },
+              plugins: {
+                legend: { display: false },
+                tooltip: { backgroundColor: 'rgba(255,255,255,0.95)', titleColor: '#1c2541', bodyColor: '#1c2541', borderColor: 'rgba(179,224,220,0.5)', borderWidth: 1, padding: isMobile ? 10 : 15, cornerRadius: 10, titleFont: { size: isMobile ? 12 : 14, weight: 'bold', family: "'Heebo', sans-serif" }, bodyFont: { size: isMobile ? 12 : 14, family: "'Heebo', sans-serif" }, callbacks: { label: function(context) { return context.dataset.label + ': ' + formatCurrency(context.raw); } } }
+              }
+            }
+          };
+          try { return new Chart(ctx, chartConfig); } catch(e) { return null; }
+        }
+        function updateCalculations(chart) {
+          var principal = parseFloat(document.getElementById('invest-calc-principal').value) || 0;
+          var monthlyDeposit = parseFloat(document.getElementById('invest-calc-monthlyDeposit').value) || 0;
+          var rate = parseFloat(document.getElementById('invest-calc-rate').value) / 100;
+          var years = parseInt(document.getElementById('invest-calc-years').value) || 0;
+          var regularGrowth = calculateYearlyGrowth(principal, monthlyDeposit, rate, years);
+          var improvedGrowth = calculateYearlyGrowth(principal, monthlyDeposit, rate + RATE_IMPROVEMENT, years);
+          var regularFinal = regularGrowth.length > 0 ? regularGrowth[regularGrowth.length - 1] : principal;
+          var improvedFinal = improvedGrowth.length > 0 ? improvedGrowth[improvedGrowth.length - 1] : principal;
+          document.getElementById('invest-calc-regularResult').textContent = formatCurrency(regularFinal);
+          document.getElementById('invest-calc-improvedResult').textContent = formatCurrency(improvedFinal);
+          document.getElementById('invest-calc-differenceResult').textContent = formatCurrency(improvedFinal - regularFinal);
+          if (chart && chart.update) {
+            chart.data.labels = Array.from({length: years}, function(_, i) { return 'שנה ' + (i+1); });
+            chart.data.datasets[0].data = regularGrowth;
+            chart.data.datasets[1].data = improvedGrowth;
+            try { chart.update(); } catch(e) {}
+          }
+        }
+        var investmentChart = initializeChart();
+        var valueElements = {
+          'invest-calc-principal': document.getElementById('invest-calc-principalValue'),
+          'invest-calc-monthlyDeposit': document.getElementById('invest-calc-monthlyDepositValue'),
+          'invest-calc-rate': document.getElementById('invest-calc-rateValue'),
+          'invest-calc-years': document.getElementById('invest-calc-yearsValue')
+        };
+        document.querySelectorAll('.invest-calc-slider').forEach(function(slider) {
+          var valEl = valueElements[slider.id];
+          if (!valEl) return;
+          function updateLabel() {
+            if (slider.id === 'invest-calc-rate') valEl.textContent = slider.value + '%';
+            else if (slider.id === 'invest-calc-years') valEl.textContent = slider.value + ' שנים';
+            else valEl.textContent = '₪' + parseInt(slider.value).toLocaleString();
+          }
+          updateLabel();
+          slider.addEventListener('input', function() { updateLabel(); updateCalculations(investmentChart); });
+        });
+        updateCalculations(investmentChart);
+      })();
+
+      // ── Steps Animations ──
+      (function() {
+        var steps = document.querySelectorAll('.step');
+        steps.forEach(function(step, index) {
+          var stepContent = step.querySelector('.step-content');
+          var stepTag = step.querySelector('.step-tag');
+          var visualContainer = step.querySelector('.step-visual');
+          var mobileDelay = 0.1 + index * 0.1;
+          if (isMobile) {
+            gsap.set(stepContent, { opacity: 1, y: 0 });
+            gsap.to(stepTag, { opacity: 1, y: 0, duration: 0.6, delay: mobileDelay + 0.2, ease: 'back.out(1.7)' });
+          } else {
+            gsap.fromTo(stepContent, { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.8, delay: 0.2 + index * 0.15, ease: 'power3.out', scrollTrigger: { trigger: step, start: 'top 80%', toggleActions: 'play none none none' } });
+            gsap.fromTo(stepTag, { opacity: 0, y: -10 }, { opacity: 1, y: 0, duration: 0.6, delay: 0.4 + index * 0.15, ease: 'back.out(1.7)', scrollTrigger: { trigger: step, start: 'top 80%', toggleActions: 'play none none none' } });
+          }
+          if (visualContainer) {
+            var tlOptions = { repeat: -1, repeatDelay: 2 + Math.random(), yoyo: true };
+            if (!isMobile) tlOptions.scrollTrigger = { trigger: step, start: 'top 60%', toggleActions: 'play pause resume pause' };
+            switch(index) {
+              case 0:
+                var door = visualContainer.querySelector('.entrance-door');
+                var light = visualContainer.querySelector('.entrance-light');
+                var character = visualContainer.querySelector('.character');
+                var entranceSteps = visualContainer.querySelectorAll('.entrance-step');
+                var tl1 = gsap.timeline(tlOptions);
+                if (door) tl1.fromTo(door, {rotationY:0}, {rotationY:-85, duration:1.2, ease:'power2.out'}, 0);
+                if (light) tl1.fromTo(light, {opacity:0}, {opacity:0.7, duration:1.5, ease:'power2.inOut'}, .5);
+                if (character) tl1.fromTo(character, {x:0,y:0,scale:1}, {x:'+=100',y:'-=20',scale:1.2, duration:1.8, ease:'power1.inOut'}, .7);
+                if (entranceSteps.length > 0) tl1.fromTo(entranceSteps, {opacity:0,y:20}, {opacity:1,y:0,stagger:.2,duration:.5,ease:'back.out(1.7)'}, 1.2);
+                break;
+              case 1:
+                var buffettFigure = visualContainer.querySelector('.buffett-figure');
+                var quoteBubble = visualContainer.querySelector('.quote-bubble');
+                var principles = visualContainer.querySelectorAll('.principle-pill');
+                var tl2 = gsap.timeline(tlOptions);
+                if (buffettFigure) tl2.fromTo(buffettFigure, {scale:0}, {scale:1, duration:1, ease:'back.out(1.7)'}, 0);
+                if (quoteBubble) tl2.fromTo(quoteBubble, {opacity:0,y:20,scale:.8}, {opacity:1,y:0,scale:1, duration:.7, ease:'back.out(1.4)'}, .5);
+                if (principles.length > 0) tl2.fromTo(principles, {opacity:0,y:30}, {opacity:1,y:0,stagger:.2,duration:.5,ease:'back.out(1.7)'}, .8);
+                break;
+              case 2:
+                var phone = visualContainer.querySelector('#phone');
+                var chartLine = visualContainer.querySelector('.chart-line');
+                var toolIcons = visualContainer.querySelectorAll('.tool-icon');
+                var ripple1 = visualContainer.querySelector('#ripple-1');
+                var ripple2 = visualContainer.querySelector('#ripple-2');
+                var tl3 = gsap.timeline(tlOptions);
+                if (phone) tl3.fromTo(phone, {scale:0}, {scale:1, duration:.8, ease:'back.out(1.7)'}, 0);
+                if (chartLine) tl3.fromTo(chartLine, {width:'0%'}, {width:'100%', duration:1.5, ease:'power2.inOut'}, .5);
+                if (toolIcons.length > 0) tl3.fromTo(toolIcons, {opacity:0,scale:0}, {opacity:1,scale:1,stagger:.15,duration:.6,ease:'back.out(1.7)'}, .8);
+                var rippleTlOpts = { repeat:-1, repeatDelay:1, delay:1 };
+                if (!isMobile) rippleTlOpts.scrollTrigger = tlOptions.scrollTrigger;
+                var rippleTl = gsap.timeline(rippleTlOpts);
+                if (ripple1) rippleTl.fromTo(ripple1, {scale:0,opacity:1}, {scale:2,opacity:0,duration:2,ease:'sine.out'}, 0);
+                if (ripple2) rippleTl.fromTo(ripple2, {scale:0,opacity:1}, {scale:2,opacity:0,duration:2,ease:'sine.out'}, 1);
+                toolIcons.forEach(function(icon, idx) {
+                  var opts = { y:-10+Math.random()*5, x:-5+Math.random()*10, duration:2+Math.random(), repeat:-1, yoyo:true, ease:'sine.inOut', delay:1+idx*.2 };
+                  if (!isMobile) opts.scrollTrigger = tlOptions.scrollTrigger;
+                  gsap.to(icon, opts);
+                });
+                break;
+              case 3:
+                var chartGrid = visualContainer.querySelector('.chart-grid');
+                var chartValues = visualContainer.querySelectorAll('.chart-value');
+                var chartBars = visualContainer.querySelectorAll('.chart-bar');
+                var moneyCoins = visualContainer.querySelectorAll('.money-coin');
+                var coinParticlesContainer = visualContainer.querySelector('#coin-particles');
+                var tl4 = gsap.timeline(tlOptions);
+                if (chartGrid) tl4.fromTo(chartGrid, {opacity:0}, {opacity:1,duration:.8,ease:'power2.out'}, 0);
+                chartBars.forEach(function(bar) {
+                  var targetHeight = bar.dataset.height || '50%';
+                  tl4.fromTo(bar, {scaleY:0}, {scaleY:1,height:targetHeight,duration:.8,ease:'power3.out'}, .3+Math.random()*.3);
+                });
+                if (chartValues.length > 0) tl4.fromTo(chartValues, {opacity:0}, {opacity:1,stagger:.15,duration:.5,ease:'power2.out'}, 1);
+                if (moneyCoins.length > 0) tl4.fromTo(moneyCoins, {opacity:0,scale:0}, {opacity:1,scale:1,stagger:.2,duration:.7,ease:'back.out(1.7)'}, 1.1);
+                if (coinParticlesContainer) {
+                  for (var i = 0; i < 15; i++) {
+                    var p = document.createElement('div'); p.className = 'coin-particle';
+                    p.style.left = (Math.random()*100) + '%'; p.style.top = (Math.random()*100) + '%';
+                    coinParticlesContainer.appendChild(p);
+                    var particleOpts = { y: -50 - Math.random()*30, opacity: 0.6+Math.random()*0.4, duration: 0.5+Math.random(), delay: 1.5+Math.random()*.5, repeat:-1, repeatDelay:2+Math.random(), ease:'power1.out' };
+                    if (!isMobile) particleOpts.scrollTrigger = tlOptions.scrollTrigger;
+                    gsap.fromTo(p, {y:0,opacity:0}, particleOpts);
+                  }
+                }
+                moneyCoins.forEach(function(coin, idx) {
+                  var a1 = { y:-15, duration:1.5+Math.random(), repeat:-1, yoyo:true, ease:'sine.inOut', delay:1.5+idx*.3 };
+                  var a2 = { rotation:-10+Math.random()*20, duration:3+Math.random()*2, repeat:-1, yoyo:true, ease:'sine.inOut', delay:1.7+idx*.3 };
+                  if (!isMobile) { a1.scrollTrigger = a2.scrollTrigger = tlOptions.scrollTrigger; }
+                  gsap.to(coin, a1); gsap.to(coin, a2);
+                });
+                break;
+            }
+          }
+          if (!isMobile) {
+            var glow = stepContent.querySelector('.step-glow');
+            if (glow) {
+              stepContent.addEventListener('mousemove', function(e) {
+                var rect = stepContent.getBoundingClientRect();
+                var x = (e.clientX - rect.left) / rect.width * 100;
+                var y = (e.clientY - rect.top) / rect.height * 100;
+                gsap.to(glow, { '--x': x+'%', '--y': y+'%', opacity:1, duration:0.3, ease:'power1.out' });
+              });
+              stepContent.addEventListener('mouseleave', function() {
+                gsap.to(glow, { opacity:0, duration:0.5, ease:'power1.out' });
+              });
+            }
+          }
+        });
+
+        var navDots = document.querySelectorAll('.nav-dot');
+        function activateStepVisuals(stepNumber) {
+          if (!stepNumber || isNaN(stepNumber) || stepNumber < 1) return;
+          navDots.forEach(function(d) { d.classList.remove('active'); });
+          var dot = document.querySelector('.nav-dot[data-step="' + stepNumber + '"]');
+          if (dot) dot.classList.add('active');
+          document.querySelectorAll('.step').forEach(function(s) { s.classList.remove('active'); });
+          var activeStep = document.querySelector('.step[data-step="' + stepNumber + '"]');
+          if (activeStep) activeStep.classList.add('active');
+        }
+        activateStepVisuals(1);
+        navDots.forEach(function(dot) {
+          dot.addEventListener('click', function() {
+            var n = parseInt(this.getAttribute('data-step'));
+            activateStepVisuals(n);
+            var target = document.querySelector('.step[data-step="' + n + '"]');
+            if (target) gsap.to(window, { duration:0.8, scrollTo:{ y:target, offsetY:100 }, ease:'power2.inOut' });
+          });
+        });
+
+        var particlesContainer = document.getElementById('particles-steps');
+        if (particlesContainer && !isMobile) {
+          for (var i = 0; i < 30; i++) {
+            var pp = document.createElement('div'); pp.className = 'particle';
+            var size = 2 + Math.random() * 6;
+            pp.style.width = size + 'px'; pp.style.height = size + 'px';
+            pp.style.top = (Math.random() * 100) + '%'; pp.style.left = (Math.random() * 100) + '%';
+            pp.style.background = 'hsl(' + (180 + Math.random()*40) + ',' + (60+Math.random()*40) + '%,' + (60+Math.random()*20) + '%)';
+            pp.style.opacity = 0.1 + Math.random() * 0.2;
+            gsap.to(pp, { x: (-100+Math.random()*200)+'px', y: (-100+Math.random()*200)+'px', opacity: Math.random()*0.3, duration: 10+Math.random()*15, repeat:-1, yoyo:true, ease:'sine.inOut' });
+            particlesContainer.appendChild(pp);
+          }
+        }
+      })();
+
+      // ── Instructor Animation ──
+      (function() {
+        var profileArea = document.querySelector('.profile-area');
+        var introContent = document.querySelector('.intro-content-instructor');
+        var principleItems = gsap.utils.toArray('.principle-item');
+        if (isMobile) {
+          gsap.to(profileArea, { opacity:1, y:0, duration:0.8, delay:0.1, ease:'power3.out', onComplete: function() { profileArea && profileArea.classList.add('animate'); } });
+          gsap.to(introContent, { opacity:1, y:0, duration:0.8, delay:0.2, ease:'power3.out', onComplete: function() { introContent && introContent.classList.add('animate'); } });
+          gsap.to(principleItems, { opacity:1, y:0, stagger:0.15, duration:0.7, delay:0.3, ease:'back.out(1.5)' });
+        } else {
+          var tc = { start:'top 85%', toggleActions:'play none none none' };
+          gsap.to(profileArea, { opacity:1, y:0, duration:0.8, ease:'power3.out', scrollTrigger:{trigger:profileArea,...tc}, onComplete: function() { profileArea && profileArea.classList.add('animate'); } });
+          gsap.to(introContent, { opacity:1, y:0, duration:0.8, ease:'power3.out', scrollTrigger:{trigger:introContent,...tc}, onComplete: function() { introContent && introContent.classList.add('animate'); } });
+          gsap.fromTo(principleItems, {opacity:0,y:30}, {opacity:1,y:0,stagger:0.15,duration:0.7,ease:'back.out(1.5)', scrollTrigger:{trigger:'.principles-grid',start:'top 90%',toggleActions:'play none none none'}});
+        }
+        gsap.to('.bg-circle-1', {x:'random(-40,40)',y:'random(-30,30)',scale:'random(1,1.15)',duration:20,repeat:-1,yoyo:true,ease:'sine.inOut'});
+        gsap.to('.bg-circle-2', {x:'random(-30,30)',y:'random(-20,20)',scale:'random(1,1.2)',duration:18,repeat:-1,yoyo:true,ease:'sine.inOut',delay:1});
+      })();
+
+      // ── GSAP General ──
+      gsap.utils.toArray('.gsap-element').forEach(function(elem) {
+        gsap.set(elem, { autoAlpha: 0 });
+        var delay = parseFloat(elem.style.getPropertyValue('--delay')) || (isMobile ? 0.1 : 0);
+        var fromConfig = { autoAlpha: 0 };
+        var config = { duration: 0.8, autoAlpha: 1, delay: delay, ease: 'power2.out', overwrite: 'auto' };
+        if (elem.matches('.problem-item,.bonus-item,.testimonial-card,.invest-calc-container,.invest-calc-result-card,.profile-area,.intro-content-instructor,.principle-item')) {
+          fromConfig.y = 30; config.y = 0;
+        } else if (elem.matches('.journey-image')) {
+          fromConfig.x = -30; config.x = 0;
+        } else if (elem.matches('.journey-text')) {
+          fromConfig.x = 30; config.x = 0;
+        } else if (elem.matches('.pricing-box')) {
+          fromConfig.scale = 0.8; config.scale = 1; config.ease = 'back.out(1.7)';
+        } else {
+          config.duration = 1;
+        }
+        if (isMobile) {
+          gsap.fromTo(elem, fromConfig, config);
+        } else {
+          config.scrollTrigger = { trigger: elem, start: 'top 85%', toggleActions: 'play none none none' };
+          gsap.fromTo(elem, fromConfig, config);
+        }
+      });
+
+      // ── Hero SVG bars ──
+      var heroBars = gsap.utils.toArray('.hero-svg-bar');
+      if (isMobile) {
+        gsap.set(heroBars, { scaleY: 1, transformOrigin: 'bottom center' });
+      } else {
+        gsap.fromTo(heroBars, { scaleY: 0, transformOrigin: 'bottom center' }, { scaleY: 1, duration: 0.8, stagger: 0.1, ease: 'power3.out', scrollTrigger: { trigger: '.hero-bottom-visual', start: 'top 85%', toggleActions: 'play none none none' } });
+      }
+
+      // ── Smooth Scroll ──
+      document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+        anchor.addEventListener('click', function(e) {
+          var targetId = this.getAttribute('href');
+          if (targetId.length > 1 && targetId.startsWith('#')) {
+            var targetEl = document.querySelector(targetId);
+            if (targetEl) { e.preventDefault(); gsap.to(window, { duration:1, scrollTo:{y:targetEl,offsetY:80}, ease:'power2.inOut' }); }
+          }
+        });
+      });
+
+      // ── FAQ Accordion ──
+      var faqItems = document.querySelectorAll('.faq-item');
+      faqItems.forEach(function(item) {
+        item.querySelector('.faq-question').addEventListener('click', function() {
+          var isActive = item.classList.contains('active');
+          faqItems.forEach(function(oi) { oi.classList.remove('active'); });
+          if (!isActive) item.classList.add('active');
+        });
+      });
+
+      ScrollTrigger.refresh();
+    });
+  </script>
+</body>
+</html>
