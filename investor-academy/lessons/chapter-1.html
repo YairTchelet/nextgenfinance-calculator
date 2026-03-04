@@ -248,69 +248,58 @@
         }
 
         /* ===== הידעת WIDGET ===== */
-        .ch1-dyk {
-            background: rgba(236, 232, 229, 0.95);
+        .did-you-know-widget {
+            --dyk-accent: linear-gradient(135deg, #5e817d, #1680a0);
+            --dyk-highlight-bg: rgba(94, 129, 125, 0.12);
+            --dyk-text: #1a202c;
+            --dyk-sub: #4a5568;
+            font-family: 'Assistant', 'Rubik', sans-serif;
+            width: 100%;
+            background: rgba(236, 232, 229, 0.97);
             border: 1px solid rgba(0, 0, 0, 0.08);
             border-radius: 16px;
             box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             padding: 1.5rem;
+            box-sizing: border-box;
             cursor: pointer;
+            transition: min-height 0.6s cubic-bezier(0.19, 1, 0.22, 1), box-shadow 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+        .did-you-know-widget:hover { box-shadow: 0 8px 28px rgba(0,0,0,0.13); }
+        .did-you-know-widget .card-teaser { text-align: center; transition: opacity 0.4s ease; }
+        .did-you-know-widget .teaser-title {
+            font-size: 1.5rem; font-weight: 700; margin: 0;
+            background: var(--dyk-accent);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .did-you-know-widget .teaser-subtitle { font-size: 1rem; font-weight: 700; color: var(--dyk-text); margin: 0.35rem 0; }
+        .did-you-know-widget .teaser-prompt { font-size: 0.85rem; font-weight: 500; color: var(--dyk-sub); margin: 0; }
+        .did-you-know-widget .card-content {
+            position: absolute;
+            top: 1.5rem; left: 1.5rem; right: 1.5rem;
+            opacity: 0; transform: translateY(20px);
+            transition: opacity 0.5s 0.2s ease, transform 0.5s 0.2s ease;
             text-align: center;
-            transition: box-shadow 0.2s;
         }
-        .ch1-dyk:hover { box-shadow: 0 8px 28px rgba(0,0,0,0.13); }
-        .ch1-dyk.is-expanded { cursor: default; }
-        .ch1-dyk-teaser-title {
-            font-family: 'Rubik', sans-serif;
-            font-size: 1.4rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #5e817d, #4a7b8a);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 0.3rem;
+        .did-you-know-widget .content-title {
+            font-size: 1.2rem; font-weight: 700; margin: 0 0 0.9rem 0;
+            background: var(--dyk-accent);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
         }
-        .ch1-dyk-teaser-sub {
-            font-family: 'Rubik', sans-serif;
-            font-size: 1rem;
-            font-weight: 600;
-            color: #394140;
-            margin-bottom: 0.25rem;
+        .did-you-know-widget .content-text { font-size: 0.97rem; line-height: 1.75; color: var(--dyk-text); margin: 0 0 1rem 0; }
+        .did-you-know-widget .content-text .highlight {
+            background-color: var(--dyk-highlight-bg);
+            padding: 0.1em 0.4em; border-radius: 6px;
+            font-weight: 700; color: var(--dyk-text);
         }
-        .ch1-dyk-teaser-prompt {
-            font-size: 0.85rem;
-            color: #6b7d7c;
-        }
-        .ch1-dyk-content { display: none; }
-        .ch1-dyk.is-expanded .ch1-dyk-teaser { display: none; }
-        .ch1-dyk.is-expanded .ch1-dyk-content {
-            display: block;
-            animation: ch1DykFadeIn 0.4s ease both;
-        }
-        @keyframes ch1DykFadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-        .ch1-dyk-content-title {
-            font-family: 'Rubik', sans-serif;
-            font-size: 1.2rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #5e817d, #4a7b8a);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 0.75rem;
-        }
-        .ch1-dyk-content-text {
-            font-family: 'Assistant', sans-serif;
-            font-size: 0.97rem;
-            line-height: 1.7;
-            color: #2d3748;
-            margin-bottom: 0.75rem;
-        }
-        .ch1-dyk-content-img {
-            width: 100%;
-            border-radius: 10px;
-            margin-top: 0.5rem;
-        }
+        .did-you-know-widget .content-image { width: 100%; max-width: 500px; height: auto; border-radius: 10px; margin: 0 auto; display: block; box-shadow: 0 8px 18px rgba(0,0,0,0.1); }
+        .did-you-know-widget.is-expanded { cursor: default; }
+        .did-you-know-widget.is-expanded .card-teaser { opacity: 0; pointer-events: none; }
+        .did-you-know-widget.is-expanded .card-content { position: relative; top: auto; left: auto; right: auto; opacity: 1; transform: translateY(0); }
+        .ch1-sidebyside .did-you-know-widget { max-width: none; margin: 0; }
 
         /* ===== QUOTE SECTION ===== */
         .ch1-quote-section {
@@ -989,29 +978,34 @@
         <div class="ch1-sidebyside" style="margin-top:1.5rem;">
 
             <!-- הידעת 1: ספליט -->
-            <div class="ch1-dyk" id="s7-dyk-split">
-                <div class="ch1-dyk-teaser">
-                    <div class="ch1-dyk-teaser-title">💡 ?הידעת</div>
-                    <div class="ch1-dyk-teaser-sub">אירועי ספליט</div>
-                    <div class="ch1-dyk-teaser-prompt">לחץ למידע נוסף</div>
-                </div>
-                <div class="ch1-dyk-content">
-                    <div class="ch1-dyk-content-title">אירועי ספליט</div>
-                    <p class="ch1-dyk-content-text">מחקר של Bank of America מצא שמניות שעוברות ספליט נוטות להציג תשואת יתר על השוק. הסיבה היא לא הספליט עצמו, אלא העובדה שספליט הוא בדרך כלל סימן לחברה איכותית וצומחת שהגיעה למחיר מניה גבוה בזכות הצלחה עסקית.</p>
-                    <img class="ch1-dyk-content-img" src="https://images.ravpages.co.il/xsite_resources/user_content/cp_new_production/d4/83/50/cb/d48350cb1a786c4790a92b5444c0e526/images/3309dbd807151809e7ac72367e36eff1.jpeg" alt="מניות ספליט תשואת יתר">
+            <div class="did-you-know-widget" id="s7-dyk-split">
+                <div class="card-inner-wrapper">
+                    <div class="card-teaser">
+                        <h2 class="teaser-title">💡 ?הידעת</h2>
+                        <p class="teaser-subtitle">אירועי ספליט</p>
+                        <p class="teaser-prompt">לחץ למידע נוסף</p>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="content-title">אירועי ספליט</h3>
+                        <p class="content-text">מחקר של <span class="highlight">Bank of America</span> מצא שמניות שעוברות ספליט נוטות להציג <span class="highlight">תשואת יתר</span> על השוק. הסיבה היא לא הספליט עצמו, אלא העובדה שספליט הוא בדרך כלל סימן לחברה איכותית וצומחת שהגיעה למחיר מניה גבוה בזכות הצלחה עסקית.</p>
+                        <img class="content-image" src="https://images.ravpages.co.il/xsite_resources/user_content/cp_new_production/d4/83/50/cb/d48350cb1a786c4790a92b5444c0e526/images/3309dbd807151809e7ac72367e36eff1.jpeg" alt="מניות ספליט תשואת יתר">
+                    </div>
                 </div>
             </div>
 
             <!-- הידעת 2: BuyBack -->
-            <div class="ch1-dyk" id="s7-dyk-buyback">
-                <div class="ch1-dyk-teaser">
-                    <div class="ch1-dyk-teaser-title">💡 ?הידעת</div>
-                    <div class="ch1-dyk-teaser-sub">אירועי BuyBack</div>
-                    <div class="ch1-dyk-teaser-prompt">לחץ למידע נוסף</div>
-                </div>
-                <div class="ch1-dyk-content">
-                    <div class="ch1-dyk-content-title">אירועי BuyBack</div>
-                    <p class="ch1-dyk-content-text">כאשר חברה רוכשת חזרה את מניותיה מהשוק, היא מקטינה את מספר המניות הקיימות. כתוצאה מכך, כל מניה שנותרת מייצגת חלק גדול יותר מהחברה — מה שמגדיל את הרווח למניה (EPS) ולרוב מעלה את מחיר המניה.</p>
+            <div class="did-you-know-widget" id="s7-dyk-buyback">
+                <div class="card-inner-wrapper">
+                    <div class="card-teaser">
+                        <h2 class="teaser-title">💡 ?הידעת</h2>
+                        <p class="teaser-subtitle">אירועי BuyBack</p>
+                        <p class="teaser-prompt">לחץ למידע נוסף</p>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="content-title">אירועי BuyBack</h3>
+                        <p class="content-text">חברת <span class="highlight">AutoZone</span> ביצעה רכישה חוזרת (BuyBack) של מעל <span class="highlight">87%</span> ממניותיה, מה שהקפיץ, בין היתר, את ערך המניה ב-<span class="highlight">45,218%</span> ב-30 השנים האחרונות.</p>
+                        <img class="content-image" src="https://a.storyblok.com/f/182663/2054x2460/404bda0404/cannibal-azo.png/m/1024x0/filters:quality(85)" alt="AutoZone Cannibal Chart">
+                    </div>
                 </div>
             </div>
 
@@ -1195,11 +1189,33 @@ function ch1PlayVideo(wrapperId) {
 
 /* ===== הידעת WIDGETS ===== */
 (function () {
-    document.querySelectorAll('.ch1-dyk').forEach(function (el) {
-        el.addEventListener('click', function () {
-            if (!el.classList.contains('is-expanded')) {
-                el.classList.add('is-expanded');
-            }
+    document.querySelectorAll('.did-you-know-widget').forEach(function (widget) {
+        var content = widget.querySelector('.card-content');
+        var teaser  = widget.querySelector('.card-teaser');
+        if (!content || !teaser) return;
+
+        content.style.display = 'none';
+
+        widget.addEventListener('click', function () {
+            if (widget.classList.contains('is-expanded')) return;
+
+            var startHeight = widget.offsetHeight;
+
+            content.style.display = 'block';
+            teaser.style.display  = 'none';
+
+            var endHeight = widget.scrollHeight;
+
+            widget.style.minHeight = startHeight + 'px';
+
+            requestAnimationFrame(function () {
+                widget.style.minHeight = endHeight + 'px';
+                widget.classList.add('is-expanded');
+            });
+
+            widget.addEventListener('transitionend', function () {
+                widget.style.minHeight = 'auto';
+            }, { once: true });
         });
     });
 })();
