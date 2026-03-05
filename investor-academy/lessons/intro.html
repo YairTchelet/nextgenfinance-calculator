@@ -3,17 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>הקדמה — NewGen Finance</title>
+    <title>פרק הקדמה — למסע שלך | NewGen Finance</title>
 
     <!-- Auth protection -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
     <script src="/assets/js/supabase-config.js"></script>
-    <script src="/assets/js/auth-guard.js"></script>
+    <script src="/assets/js/course-guard.js"></script>
+
+    <!-- Chart.js (shared by calculators and wealth widget) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
 
     <style>
+        /* ===== RESET & BASE ===== */
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         html { scroll-behavior: smooth; overflow-x: hidden; }
         body {
@@ -24,9 +28,10 @@
             color: #394140;
             min-height: 100vh;
         }
+        img { max-width: 100%; height: auto; }
 
         /* ===== NAVBAR ===== */
-        .nav {
+        .intro-nav {
             background: #0c3d52;
             padding: 0 1.5rem;
             height: 62px;
@@ -38,22 +43,24 @@
             z-index: 100;
             box-shadow: 0 2px 12px rgba(0,0,0,0.35);
         }
-        .nav-logo {
+        .intro-nav-brand { display: flex; align-items: center; gap: 0.7rem; }
+        .intro-nav-logo {
             color: #b3e0dc;
             font-family: 'Rubik', sans-serif;
             font-weight: 700;
             font-size: 1.2rem;
             text-decoration: none;
         }
-        .nav-links { display: flex; align-items: center; gap: 1rem; }
-        .nav-link {
+        .intro-nav-links { display: flex; align-items: center; gap: 1rem; }
+        .intro-nav-link {
             color: #fefefe;
             text-decoration: none;
+            font-family: 'Assistant', sans-serif;
             font-size: 0.95rem;
             transition: color 0.2s;
         }
-        .nav-link:hover { color: #b3e0dc; }
-        .nav-signout {
+        .intro-nav-link:hover { color: #b3e0dc; }
+        .intro-nav-signout {
             background: transparent;
             border: 1px solid rgba(240,248,250,0.35);
             color: #fefefe;
@@ -64,293 +71,377 @@
             cursor: pointer;
             transition: all 0.2s;
         }
-        .nav-signout:hover { border-color: #b3e0dc; color: #b3e0dc; }
+        .intro-nav-signout:hover { border-color: #b3e0dc; color: #b3e0dc; }
 
-        /* ===== HAMBURGER NAV ===== */
-        .nav-brand {
-            display: flex;
-            align-items: center;
-            gap: 0.7rem;
-        }
+        /* ===== HAMBURGER BUTTON ===== */
         .hbnav-btn {
-            width: 40px;
-            height: 40px;
+            width: 40px; height: 40px;
             background: rgba(179,224,220,0.15);
             border: 1px solid rgba(179,224,220,0.3);
             border-radius: 10px;
             cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 5px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px;
             transition: background 0.2s, border-color 0.2s;
             flex-shrink: 0;
         }
         .hbnav-btn:hover { background: rgba(179,224,220,0.28); border-color: rgba(179,224,220,0.55); }
-        .hbnav-btn span {
-            display: block;
-            width: 22px;
-            height: 2px;
-            background: #fefefe;
-            border-radius: 2px;
-            transition: transform 0.3s, opacity 0.3s;
-        }
+        .hbnav-btn span { display: block; width: 22px; height: 2px; background: #fefefe; border-radius: 2px; transition: transform 0.3s, opacity 0.3s; }
         .hbnav-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
         .hbnav-btn.open span:nth-child(2) { opacity: 0; }
         .hbnav-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-        .hbnav-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.45);
-            z-index: 999;
-        }
+        /* ===== SLIDE-IN CHAPTER PANEL ===== */
+        .hbnav-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 999; }
         .hbnav-overlay.open { display: block; }
-
         .hbnav-panel {
-            position: fixed;
-            top: 62px;
-            right: 0;
-            height: calc(100vh - 62px);
-            width: 270px;
-            background: #0c3d52;
-            z-index: 1000;
-            transform: translateX(100%);
-            transition: transform 0.3s ease;
-            overflow-y: auto;
-            padding: 1.5rem 1rem;
+            position: fixed; top: 62px; right: 0;
+            height: calc(100vh - 62px); width: 270px;
+            background: #0c3d52; z-index: 1000;
+            transform: translateX(100%); transition: transform 0.3s ease;
+            overflow-y: auto; padding: 1.5rem 1rem;
             box-shadow: -4px 0 20px rgba(0,0,0,0.35);
         }
         .hbnav-panel.open { transform: translateX(0); }
         .hbnav-panel-title {
-            color: #b3e0dc;
-            font-size: 0.75rem;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            margin-bottom: 1rem;
-            padding-bottom: 0.75rem;
-            border-bottom: 1px solid rgba(179,224,220,0.2);
+            color: #b3e0dc; font-family: 'Rubik', sans-serif;
+            font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+            margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(179,224,220,0.2);
         }
         .hbnav-item {
-            display: flex;
-            align-items: center;
-            gap: 0.9rem;
-            padding: 0.75rem 0.85rem;
-            border-radius: 10px;
-            text-decoration: none;
-            color: #fefefe;
-            font-size: 0.95rem;
-            transition: background 0.18s;
-            margin-bottom: 4px;
+            display: flex; align-items: center; gap: 0.9rem;
+            padding: 0.75rem 0.85rem; border-radius: 10px;
+            text-decoration: none; color: #fefefe;
+            font-family: 'Assistant', sans-serif; font-size: 0.95rem;
+            transition: background 0.18s; margin-bottom: 4px;
         }
         .hbnav-item:hover { background: rgba(179,224,220,0.12); }
         .hbnav-item.active { background: rgba(179,224,220,0.18); font-weight: 700; }
-        .hbnav-icon {
-            width: 34px; height: 34px;
-            background: rgba(179,224,220,0.15);
-            border-radius: 8px;
-            display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0; font-size: 1rem;
-        }
+        .hbnav-item.disabled { opacity: 0.45; pointer-events: none; }
+        .hbnav-icon { width: 34px; height: 34px; background: rgba(179,224,220,0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1rem; }
         .hbnav-text { display: flex; flex-direction: column; }
         .hbnav-name { font-size: 0.95rem; }
         .hbnav-sub  { font-size: 0.75rem; color: #b3e0dc; opacity: 0.7; }
-        .hbnav-site-link { display: flex; align-items: center; padding: 0.55rem 0.85rem; border-radius: 8px; text-decoration: none; color: rgba(254,254,254,0.72); font-size: 0.88rem; transition: background 0.18s; margin-bottom: 2px; }
+        .hbnav-site-link { display: flex; align-items: center; padding: 0.55rem 0.85rem; border-radius: 8px; text-decoration: none; color: rgba(254,254,254,0.72); font-size: 0.88rem; font-family: 'Assistant', sans-serif; transition: background 0.18s; margin-bottom: 2px; }
         .hbnav-site-link:hover { background: rgba(179,224,220,0.1); color: #fefefe; }
         .hbnav-divider { height: 1px; background: rgba(179,224,220,0.15); margin: 0.85rem 0.5rem; }
 
-
         /* ===== HERO ===== */
-        .hero {
-            background: #0c3d52;
-            padding: 3.5rem 1rem 3rem;
-            text-align: center;
-        }
-        .hero-badge {
-            display: inline-block;
-            background: rgba(179,224,220,0.15);
-            color: #b3e0dc;
-            font-size: 0.85rem;
-            font-weight: 600;
-            padding: 0.35rem 1.1rem;
-            border-radius: 20px;
-            border: 1px solid rgba(179,224,220,0.3);
-            margin-bottom: 1.2rem;
-        }
-        .hero-title {
-            font-family: 'Rubik', sans-serif;
-            font-size: 2.4rem;
-            font-weight: 700;
-            color: #fefefe;
-            margin-bottom: 0.75rem;
-            line-height: 1.2;
-        }
-        .hero-sub {
-            color: #b3e0dc;
-            font-size: 1.1rem;
-            max-width: 520px;
-            margin: 0 auto 2rem;
-            line-height: 1.6;
-        }
-        .hero-cta {
-            display: inline-block;
-            background: #b3e0dc;
-            color: #394140;
-            font-family: 'Rubik', sans-serif;
-            font-size: 1.05rem;
-            font-weight: 700;
-            padding: 0.85rem 2.5rem;
-            border-radius: 30px;
-            text-decoration: none;
-            transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.2);
-        }
-        .hero-cta:hover {
-            background: #8fc9c4;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 22px rgba(0,0,0,0.25);
-        }
+        .intro-hero { background: #0c3d52; padding: 3rem 1rem 2.5rem; text-align: center; }
+        .intro-hero-title { font-family: 'Rubik', sans-serif; font-size: 2.2rem; font-weight: 700; color: #fefefe; margin-bottom: 1.5rem; }
+        .intro-hero-yt-wrap { width: 100%; max-width: 700px; margin: 0 auto; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,0.4); aspect-ratio: 16/9; }
+        .intro-hero-yt-wrap iframe { width: 100%; height: 100%; border: none; display: block; }
+        .intro-hero-badge { display: inline-block; margin-top: 1.5rem; background: #b3e0dc; color: #394140; font-family: 'Rubik', sans-serif; font-size: 1.15rem; font-weight: 700; padding: 0.5rem 2rem; border-radius: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
 
         /* ===== CONTAINER ===== */
-        .container {
-            max-width: 720px;
-            margin: 0 auto;
-            padding: 2.5rem 1rem 4rem;
-        }
+        .intro-container { max-width: 700px; margin: 0 auto; padding: 2rem 1rem 4rem; }
 
-        /* ===== CARD ===== */
-        .card {
-            background: rgba(236,232,229,0.97);
+        /* ===== CARDS ===== */
+        .intro-card {
+            background: rgba(236, 232, 229, 0.97);
             border-radius: 16px;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
             padding: 2rem;
             margin-bottom: 2rem;
+            overflow: hidden;
         }
-        .card-title {
-            font-family: 'Rubik', sans-serif;
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: #394140;
-            margin-bottom: 1.2rem;
-            text-align: center;
-        }
-        .card-text {
-            color: #4a6472;
-            font-size: 1rem;
-            line-height: 1.75;
-            margin-bottom: 0.9rem;
-        }
-
-        /* ===== CHAPTERS GRID ===== */
-        .chapters-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 1rem;
-        }
-        .chapter-card {
-            background: #0c3d52;
-            border-radius: 12px;
-            padding: 1.4rem 1.2rem;
-            text-decoration: none;
-            display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-            transition: transform 0.18s, box-shadow 0.18s;
-            box-shadow: 0 3px 14px rgba(0,0,0,0.25);
-        }
-        .chapter-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.35);
-        }
-        .chapter-card-icon {
-            font-size: 1.6rem;
-            flex-shrink: 0;
-            width: 44px;
-            height: 44px;
-            background: rgba(179,224,220,0.15);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .chapter-card-body { flex: 1; }
-        .chapter-card-name {
-            font-family: 'Rubik', sans-serif;
-            font-size: 1rem;
-            font-weight: 700;
-            color: #fefefe;
-            margin-bottom: 0.25rem;
-        }
-        .chapter-card-sub {
-            font-size: 0.82rem;
-            color: #b3e0dc;
-            opacity: 0.8;
-        }
-        .chapter-card-badge {
-            display: inline-block;
-            margin-top: 0.5rem;
-            font-size: 0.72rem;
-            font-weight: 700;
-            padding: 0.2rem 0.6rem;
-            border-radius: 10px;
-            background: rgba(179,224,220,0.2);
-            color: #b3e0dc;
-        }
-        .chapter-card-badge.available { background: rgba(179,224,220,0.25); color: #b3e0dc; }
-
-        /* ===== BOTTOM NAV ===== */
-        .bottom-nav-card {
+        .intro-card-dark {
             background: #0c3d52;
             border-radius: 16px;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.35);
-            padding: 1.75rem 2rem;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+            padding: 2rem;
             margin-bottom: 2rem;
-            display: flex;
-            justify-content: flex-end;
+            overflow: hidden;
         }
-        .btn-gold {
-            background: #b3e0dc;
-            color: #394140;
-            font-family: 'Rubik', sans-serif;
-            font-size: 1rem;
-            font-weight: 700;
-            padding: 0.75rem 2rem;
-            border-radius: 30px;
-            text-decoration: none;
-            transition: background 0.18s, transform 0.15s;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.2);
-        }
-        .btn-gold:hover { background: #8fc9c4; transform: translateY(-1px); }
+        .intro-card-title { font-family: 'Rubik', sans-serif; font-size: 1.55rem; font-weight: 700; color: #394140; text-align: center; margin-bottom: 1.25rem; }
+        .intro-card-text { font-family: 'Assistant', sans-serif; font-size: 1.05rem; line-height: 1.75; color: #6b7d7c; margin-bottom: 1.25rem; text-align: center; }
 
+        /* ===== YOUTUBE EMBEDS ===== */
+        .intro-yt-wrap { width: 100%; aspect-ratio: 16/9; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.2); margin-bottom: 1.25rem; }
+        .intro-yt-wrap iframe { width: 100%; height: 100%; border: none; display: block; }
+
+        /* ===== SIDE BY SIDE ===== */
+        .intro-sidebyside { display: flex; gap: 1rem; margin-top: 1.25rem; }
+        .intro-sidebyside > * { flex: 1; min-width: 0; }
+        @media (max-width: 560px) { .intro-sidebyside { flex-direction: column; } }
+
+        /* ===== BOTTOM NAV BUTTONS ===== */
+        .intro-bottom-nav { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+        .intro-btn-gold { display: inline-block; background: #b3e0dc; color: #394140; font-family: 'Rubik', sans-serif; font-weight: 700; font-size: 1.1rem; padding: 0.8rem 2.5rem; border-radius: 30px; text-decoration: none; box-shadow: 0 4px 14px rgba(179,224,220,0.45); transition: all 0.2s; }
+        .intro-btn-gold:hover { background: #8fc9c4; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(179,224,220,0.55); }
+        .intro-btn-outline { display: inline-block; background: transparent; border: 2px solid rgba(240,248,250,0.45); color: #fefefe; font-family: 'Assistant', sans-serif; font-size: 1rem; padding: 0.65rem 2rem; border-radius: 30px; text-decoration: none; transition: all 0.2s; }
+        .intro-btn-outline:hover { border-color: #b3e0dc; color: #b3e0dc; }
+
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 480px) {
-            .hero-title { font-size: 1.8rem; }
-            .card { padding: 1.25rem; }
-            .nav { padding: 0 0.75rem; }
-            .nav-logo { font-size: 1rem; }
-            .nav-link { display: none; }
+            .intro-hero-title { font-size: 1.75rem; }
+            .intro-card { padding: 1.25rem; }
+            .intro-card-dark { padding: 1.25rem; }
+            .intro-card-title { font-size: 1.3rem; }
+            .intro-nav { padding: 0 0.75rem; }
+            .intro-nav-logo { font-size: 1rem; }
+            .intro-nav-link { display: none; }
         }
+
+        /* ================================================================
+           WIDGET STYLES — each scoped to its own root class
+           ================================================================ */
+
+        /* ===== TOC WIDGET ===== */
+        .toc-widget {
+            --text-primary: #1a202c;
+            --text-secondary: #4a5568;
+            --accent-gradient: linear-gradient(90deg, #38b2ac, #3182ce);
+            font-family: 'Rubik', sans-serif;
+            width: 100%; max-width: 100%; margin: 0;
+            background: transparent; padding: 0; box-sizing: border-box;
+        }
+        .toc-widget .main-title { text-align: center; font-size: 2rem; font-weight: 700; margin: 0 0 2rem 0; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
+        .toc-widget .sections-container { display: flex; flex-direction: column; gap: 1.25rem; }
+        .toc-widget .section { text-align: right; border-radius: 12px; padding: 0.75rem; }
+        .toc-widget .section-title { display: inline-block; position: relative; text-decoration: none; font-size: 1.3rem; font-weight: 700; margin-bottom: 0.75rem; cursor: pointer; background: var(--accent-gradient); background-size: 200% auto; color: var(--text-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-position: 100%; transition: background-position 0.4s ease; }
+        .toc-widget .section:hover .section-title { background-position: 0%; }
+        .toc-widget .subchapter-list { list-style: none !important; margin: 0; padding-right: 20px; position: relative; }
+        .toc-widget .subchapter-list::before { content: ''; position: absolute; right: 0; top: 0.5em; bottom: 0.5em; width: 2px; background: var(--accent-gradient); transform: scaleY(0); transform-origin: top; transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1); }
+        .toc-widget .section:hover .subchapter-list::before { transform: scaleY(1); }
+        .toc-widget .subchapter-list li { margin-bottom: 0.6rem; list-style-type: none !important; }
+        .toc-widget .subchapter-list li:last-child { margin-bottom: 0; }
+        .toc-widget .item { font-size: 1rem; font-weight: 500; text-decoration: none; display: inline-block; color: var(--text-primary); background: var(--accent-gradient); background-size: 200% auto; -webkit-background-clip: text; background-position: 100%; -webkit-text-fill-color: var(--text-primary); transition: color 0.3s ease, background-position 0.4s ease; }
+        .toc-widget .item:hover { background-position: 0%; -webkit-text-fill-color: transparent; }
+
+        /* ===== INVESTMENT CALCULATOR ===== */
+        .modern-investment-calculator {
+            font-family: 'Rubik', sans-serif; color: #2d3748; width: 100%; max-width: 100%;
+            margin: 1.5rem 0 0; background: rgba(255,255,255,0.85); border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 24px; padding: 2rem; box-shadow: 0 10px 30px -5px rgba(0,0,0,0.05);
+            backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+            box-sizing: border-box; transition: opacity 0.4s ease, filter 0.4s ease;
+        }
+        .modern-investment-calculator * { box-sizing: border-box; }
+        .modern-investment-calculator input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 8px; background-image: linear-gradient(to left, #38b2ac, #3182ce); background-size: var(--background-size, 0%) 100%; background-repeat: no-repeat; background-position: right; border-radius: 8px; outline: none; cursor: pointer; }
+        .modern-investment-calculator input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 24px; height: 24px; background: #fff; border-radius: 50%; border: 3px solid #3182ce; box-shadow: 0 3px 6px rgba(49,130,206,0.2); cursor: pointer; margin-top: -8px; transition: transform 0.2s ease; }
+        .modern-investment-calculator input[type="range"]::-moz-range-thumb { width: 24px; height: 24px; background: #fff; border-radius: 50%; border: 3px solid #3182ce; box-shadow: 0 3px 6px rgba(49,130,206,0.2); cursor: pointer; }
+        .modern-investment-calculator input[type="range"]::-webkit-slider-runnable-track { height: 8px; background: rgba(0,0,0,0.1); border-radius: 8px; }
+        .modern-investment-calculator input[type="range"]::-moz-range-track { height: 8px; background: rgba(0,0,0,0.1); border-radius: 8px; }
+        .modern-investment-calculator input[type="range"]:active::-webkit-slider-thumb { transform: scale(1.15); }
+        .modern-investment-calculator input[type="range"]:active::-moz-range-thumb { transform: scale(1.15); }
+        .modern-investment-calculator .input-panel { padding-bottom: 0; }
+        .modern-investment-calculator .output-panel-container { margin-top: 1.5rem; }
+        .modern-investment-calculator .control-group { margin-bottom: 1.5rem; transition: opacity 0.4s ease, filter 0.4s ease, transform 0.4s ease; }
+        .modern-investment-calculator .control-label { display: flex; justify-content: flex-start; align-items: baseline; gap: 0.5rem; margin-bottom: 1rem; font-size: 1rem; color: #718096; }
+        .modern-investment-calculator .control-label strong { font-size: 1.1rem; font-weight: 500; color: #2d3748; }
+        .modern-investment-calculator.is-focused .control-group:not(.focus-active),
+        .modern-investment-calculator.is-focused .output-panel-container { opacity: 0.5; }
+        .modern-investment-calculator.is-focused .focus-active { transform: scale(1.01); }
+        .modern-investment-calculator .result-card { text-align: center; padding: 1rem 0; }
+        .modern-investment-calculator #annual-rate-display { font-size: 3rem; font-weight: 700; background: linear-gradient(to left, #38b2ac, #3182ce); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.2; }
+        .modern-investment-calculator .chart-container { position: relative; min-height: 300px; }
+        .modern-investment-calculator .secondary-results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; text-align: center; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(0,0,0,0.1); }
+        .modern-investment-calculator .secondary-results-grid p { margin: 0; font-size: 0.9rem; color: #718096; }
+        .modern-investment-calculator .secondary-results-grid strong { font-size: 1.2rem; font-weight: 700; color: #2d3748; display: block; }
+        @media (min-width: 960px) {
+            .modern-investment-calculator .input-panel { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; padding: 0 0 0.5rem; align-items: end; }
+            .modern-investment-calculator .output-panel-container { display: grid; grid-template-columns: 280px 1fr; align-items: center; gap: 2rem; }
+            .modern-investment-calculator .results-container { display: flex; flex-direction: column; justify-content: center; }
+            .modern-investment-calculator .chart-container { min-height: 350px; }
+        }
+
+        /* ===== COMPARISON TABLE ===== */
+        .my-widget { box-sizing: border-box; text-align: center; max-width: 100%; width: 100%; margin: 1.5rem 0 0; font-family: 'Rubik', sans-serif; background: rgba(255,255,255,0.85); border: 1px solid rgba(0,0,0,0.1); border-radius: 24px; padding: 2rem; box-shadow: 0 10px 30px -5px rgba(0,0,0,0.05); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+        .my-widget h2 { color: #2d3748; font-size: 2rem; margin-top: 0; margin-bottom: 0.5rem; }
+        .my-widget .info { font-size: 1rem; color: #718096; margin-bottom: 2rem; }
+        .my-widget .toggle-buttons { position: relative; display: inline-flex; background-color: rgba(0,0,0,0.05); border-radius: 12px; padding: 5px; margin-bottom: 2rem; }
+        .my-widget .toggle-buttons button { position: relative; z-index: 2; padding: 10px 20px; font-size: 1rem; font-weight: 500; font-family: 'Rubik', sans-serif; color: #718096; background-color: transparent; border: none; border-radius: 8px; cursor: pointer; transition: color 0.4s ease; }
+        .my-widget .toggle-buttons button.active { color: #fff; font-weight: 700; }
+        .my-widget .toggle-buttons button:not(.active):hover { color: #2d3748; }
+        .my-widget .sliding-background { position: absolute; z-index: 1; top: 5px; bottom: 5px; border-radius: 8px; background: linear-gradient(90deg, #38b2ac, #3182ce); box-shadow: 0 3px 10px -2px rgba(49,130,206,0.3); transition: left 0.4s cubic-bezier(0.25,0.8,0.25,1), width 0.4s cubic-bezier(0.25,0.8,0.25,1); }
+        .table-wrapper { overflow: hidden; transition: height 0.4s cubic-bezier(0.25,0.8,0.25,1); }
+        .my-widget table { width: 100%; border-collapse: collapse; background: transparent; }
+        .my-widget th, .my-widget td { padding: 1rem; text-align: right; color: #2d3748; font-size: 1.1rem; border-bottom: 1px solid rgba(0,0,0,0.1); }
+        .my-widget td:last-child, .my-widget th:last-child { text-align: left; font-weight: 700; }
+        .my-widget th { color: #718096; font-weight: 500; text-transform: uppercase; font-size: 0.9rem; }
+        .my-widget tr:last-child td { border-bottom: none; }
+        .my-widget tr:hover td { background-color: rgba(0,0,0,0.03); }
+        @media (max-width: 768px) {
+            .my-widget .sliding-background { display: none; }
+            .my-widget .toggle-buttons { display: flex; flex-direction: column; width: 100%; background: transparent; padding: 0; gap: 0.5rem; }
+            .my-widget .toggle-buttons button { background-color: rgba(0,0,0,0.05); }
+            .my-widget .toggle-buttons button.active { background: linear-gradient(90deg, #38b2ac, #3182ce); color: #fff; }
+        }
+
+        /* ===== DIVIDEND CALCULATOR ===== */
+        .modern-dividend-calculator { font-family: 'Rubik', sans-serif; color: #2d3748; width: 100%; max-width: 100%; margin: 1.5rem 0 0; background: rgba(255,255,255,0.85); border: 1px solid rgba(0,0,0,0.1); border-radius: 24px; padding: 2rem; box-shadow: 0 10px 30px -5px rgba(0,0,0,0.05); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-sizing: border-box; }
+        .modern-dividend-calculator * { box-sizing: border-box; }
+        .modern-dividend-calculator h2 { text-align: center; color: #2d3748; font-size: 2rem; margin-top: 0; margin-bottom: 0.5rem; }
+        .modern-dividend-calculator .info { text-align: center; font-size: 1rem; color: #718096; margin-bottom: 2.5rem; }
+        .modern-dividend-calculator .calculator-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; align-items: center; }
+        @media (min-width: 960px) { .modern-dividend-calculator .calculator-grid { grid-template-columns: 1fr 1fr; } }
+        .modern-dividend-calculator .controls-panel { display: flex; flex-direction: column; gap: 1.5rem; }
+        .modern-dividend-calculator .control-group { margin-bottom: 1rem; }
+        .modern-dividend-calculator .control-label { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem; gap: 1rem; }
+        .modern-dividend-calculator .control-label span { font-size: 1rem; color: #718096; white-space: nowrap; flex-shrink: 0; }
+        .modern-dividend-calculator .control-label strong { font-size: 1.1rem; font-weight: 500; color: #2d3748; min-width: 0; text-align: left; direction: ltr; }
+        .modern-dividend-calculator input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 8px; background-image: linear-gradient(to left, #38b2ac, #3182ce); background-size: var(--background-size, 0%) 100%; background-repeat: no-repeat; background-position: right; border-radius: 8px; outline: none; cursor: pointer; }
+        .modern-dividend-calculator input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 24px; height: 24px; background: #fff; border-radius: 50%; border: 3px solid #3182ce; box-shadow: 0 3px 6px rgba(49,130,206,0.2); cursor: pointer; margin-top: -8px; transition: transform 0.2s ease; }
+        .modern-dividend-calculator input[type="range"]::-moz-range-thumb { width: 24px; height: 24px; background: #fff; border-radius: 50%; border: 3px solid #3182ce; box-shadow: 0 3px 6px rgba(49,130,206,0.2); cursor: pointer; }
+        .modern-dividend-calculator input[type="range"]::-webkit-slider-runnable-track { height: 8px; background: rgba(0,0,0,0.1); border-radius: 8px; }
+        .modern-dividend-calculator input[type="range"]::-moz-range-track { height: 8px; background: rgba(0,0,0,0.1); border-radius: 8px; }
+        .modern-dividend-calculator input[type="range"]:active::-webkit-slider-thumb,
+        .modern-dividend-calculator input[type="range"]:active::-moz-range-thumb { transform: scale(1.15); }
+        .modern-dividend-calculator .toggle-tax { text-align: center; margin-top: 1rem; }
+        .modern-dividend-calculator .toggle-tax button { padding: 10px 20px; font-size: 1rem; font-weight: 500; font-family: 'Rubik', sans-serif; color: #718096; background-color: rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.1); border-radius: 8px; cursor: pointer; transition: all 0.3s ease; }
+        .modern-dividend-calculator .toggle-tax button.active { color: #fff; background: linear-gradient(to left, #38b2ac, #3182ce); border-color: transparent; }
+        .modern-dividend-calculator .results-panel { text-align: center; padding: 2rem; background: rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.1); border-radius: 16px; }
+        .modern-dividend-calculator .results-panel p { margin: 0 0 0.5rem 0; font-size: 1.1rem; color: #718096; }
+        .modern-dividend-calculator #monthlyIncomeDisplay { font-size: 3.5rem; font-weight: 700; line-height: 1.2; margin-bottom: 1rem; background: linear-gradient(to left, #38b2ac, #3182ce); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .modern-dividend-calculator #annualIncomeDisplay { font-size: 1.2rem; font-weight: 500; color: #2d3748; }
+        .modern-dividend-calculator #annualIncomeDisplay span { color: #718096; }
+
+        /* ===== HIDAAT FLIP WIDGETS ===== */
+        .did-you-know-widget {
+            --card-bg-color: rgba(255,255,255,0.8);
+            --border-color: rgba(0,0,0,0.08);
+            --text-primary: #1a202c;
+            --text-secondary: #4a5568;
+            --accent-gradient: linear-gradient(135deg, #38b2ac, #3182ce);
+            --highlight-bg: rgba(56,178,172,0.1);
+            font-family: 'Rubik', sans-serif; width: 100%;
+            background: var(--card-bg-color); border: 1px solid var(--border-color);
+            border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.1);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            padding: 2rem; box-sizing: border-box; cursor: pointer;
+            transition: min-height 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+            position: relative; overflow: hidden;
+        }
+        .intro-sidebyside .did-you-know-widget { margin: 0; }
+        .did-you-know-widget .card-teaser { text-align: center; transition: opacity 0.4s ease; }
+        .did-you-know-widget .teaser-title { font-size: 1.7rem; font-weight: 700; margin: 0; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .did-you-know-widget .teaser-subtitle { font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin: 0.5rem 0; }
+        .did-you-know-widget .teaser-prompt { font-size: 0.9rem; font-weight: 500; color: var(--text-secondary); margin: 0; }
+        .did-you-know-widget .card-content { position: absolute; top: 2rem; left: 2rem; right: 2rem; opacity: 0; transform: translateY(20px); transition: opacity 0.5s 0.2s ease, transform 0.5s 0.2s ease; text-align: center; }
+        .did-you-know-widget .content-title { font-size: 1.3rem; font-weight: 700; margin: 0 0 1rem 0; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .did-you-know-widget .content-text { font-size: 0.97rem; line-height: 1.8; color: var(--text-primary); margin: 0 0 1rem 0; }
+        .did-you-know-widget .content-text .highlight { background-color: var(--highlight-bg); padding: 0.1em 0.4em; border-radius: 6px; font-weight: 700; color: var(--text-primary); }
+        .did-you-know-widget .content-image { width: 100%; max-width: 180px; height: auto; border-radius: 12px; margin: 0 auto; display: block; box-shadow: 0 8px 18px rgba(0,0,0,0.1); }
+        .did-you-know-widget.is-expanded { cursor: default; }
+        .did-you-know-widget.is-expanded .card-teaser { opacity: 0; pointer-events: none; }
+        .did-you-know-widget.is-expanded .card-content { position: relative; top: auto; left: auto; right: auto; opacity: 1; transform: translateY(0); }
+
+        /* ===== GOALS WIDGET ===== */
+        .modern-goals-widget { font-family: 'Rubik', sans-serif; color: #2d3748; width: 100%; max-width: 100%; margin: 1.5rem 0 0; background: rgba(255,255,255,0.85); border: 1px solid rgba(0,0,0,0.1); border-radius: 24px; padding: 2rem; box-shadow: 0 10px 30px -5px rgba(0,0,0,0.05); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-sizing: border-box; text-align: center; }
+        .modern-goals-widget * { box-sizing: border-box; }
+        .modern-goals-widget h2 { color: #2d3748; font-size: 2rem; margin-top: 0; margin-bottom: 1.5rem; }
+        .modern-goals-widget .goal-display-container { position: relative; height: 90px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .modern-goals-widget .goal-text { font-size: 1.5rem; font-weight: 700; margin: 0; padding: 0 1rem; position: absolute; transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out; opacity: 0; transform: translateY(30px); background: linear-gradient(90deg, #38b2ac, #3182ce); -webkit-background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
+        .modern-goals-widget .goal-text.is-visible { opacity: 1; transform: translateY(0); }
+        .modern-goals-widget .goal-text.is-exiting { transform: translateY(-30px); opacity: 0; }
+        @media (max-width: 600px) {
+            .modern-goals-widget { padding: 1.5rem; }
+            .modern-goals-widget h2 { font-size: 1.5rem; }
+            .modern-goals-widget .goal-display-container { height: 120px; }
+            .modern-goals-widget .goal-text { font-size: 1.2rem; }
+        }
+
+        /* ===== DOSSIER WIDGET ===== */
+        .dossier-widget {
+            --card-bg-color: rgba(255,255,255,0.8);
+            --border-color: rgba(0,0,0,0.08);
+            --text-primary: #1a202c;
+            --text-secondary: #4a5568;
+            --accent-gradient: linear-gradient(135deg, #38b2ac, #3182ce);
+            font-family: 'Rubik', sans-serif; width: 100%; max-width: 100%; margin: 0 0 1.5rem;
+            background: var(--card-bg-color); border: 1px solid var(--border-color);
+            border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.1);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+        }
+        .dossier-widget .dossier-tabs { display: flex; padding: 1rem 1.5rem 0 1.5rem; border-bottom: 1px solid var(--border-color); }
+        .dossier-widget .tab { font-size: 1.1rem; font-weight: 700; padding: 1rem 1.5rem; cursor: pointer; color: var(--text-secondary); position: relative; transition: color 0.3s ease; }
+        .dossier-widget .tab::after { content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 3px; background: var(--accent-gradient); transform: scaleX(0); transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1); }
+        .dossier-widget .tab.active { color: var(--text-primary); }
+        .dossier-widget .tab.active::after { transform: scaleX(1); }
+        .dossier-widget .dossier-content-area { padding: 2.5rem; text-align: center; }
+        .dossier-widget .content-title { font-size: 2.5rem; font-weight: 700; margin: 0 0 1.5rem 0; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
+        .dossier-widget .content-fader { position: relative; min-height: 400px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .dossier-widget .content-text { position: absolute; width: 100%; max-width: 550px; transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.5s ease; opacity: 0; transform: translateY(30px); }
+        .dossier-widget .content-text.is-active { opacity: 1; transform: translateY(0); }
+        .dossier-widget .content-text.is-exiting { opacity: 0; transform: translateY(-30px); }
+        .dossier-widget .main-point { font-size: 1.5rem; font-weight: 700; color: var(--text-primary); margin: 0 0 1rem 0; }
+        .dossier-widget .detail-text { font-size: 1.1rem; color: var(--text-secondary); line-height: 1.8; margin: 0; text-align: right; }
+        .dossier-widget .quote-block { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color); }
+        .dossier-widget .quote-text { font-size: 1.1rem; font-style: italic; color: var(--text-secondary); position: relative; padding: 0 20px; text-align: center; }
+        .dossier-widget .quote-text::before { content: '\201C'; font-size: 1.5em; opacity: 0.5; position: absolute; right: 0; top: 0; }
+        .dossier-widget .quote-text::after  { content: '\201D'; font-size: 1.5em; opacity: 0.5; position: absolute; left: 0; bottom: -0.5em; }
+        .dossier-widget .quote-author { display: block; margin-top: 0.75rem; font-weight: 700; color: var(--text-primary); font-style: normal; }
+        .dossier-widget .content-nav { margin-top: 2rem; display: flex; justify-content: center; align-items: center; gap: 1rem; }
+        .dossier-widget .nav-arrow { background: rgba(0,0,0,0.03); border: 1px solid var(--border-color); color: var(--text-secondary); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; transition: all 0.3s ease; }
+        .dossier-widget .nav-arrow:hover { background: rgba(0,0,0,0.07); color: var(--text-primary); transform: scale(1.1); }
+        .dossier-widget .nav-progress { font-size: 1rem; font-weight: 700; color: var(--text-secondary); min-width: 60px; text-align: center; }
+        @media (max-width: 600px) {
+            .dossier-widget .tab { font-size: 1rem; padding: 1rem 0.5rem; }
+            .dossier-widget .dossier-content-area { padding: 2rem 1.5rem; }
+            .dossier-widget .content-title { font-size: 2rem; }
+            .dossier-widget .main-point { font-size: 1.25rem; }
+            .dossier-widget .detail-text, .dossier-widget .quote-text { font-size: 1rem; }
+            .dossier-widget .content-fader { min-height: 450px; }
+        }
+
+        /* ===== WEALTH COMPARISON WIDGET ===== */
+        .wealth-comparison-widget {
+            --accent-start: #38b2ac; --accent-end: #3182ce;
+            --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+            --card-bg-color: rgba(255,255,255,0.85); --border-color: rgba(0,0,0,0.08);
+            --text-primary: #1a202c; --text-secondary: #4a5568; --highlight-bg: rgba(56,178,172,0.1);
+            width: 100%; max-width: 100%; margin: 0;
+            background: var(--card-bg-color); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border-radius: 24px; padding: 28px; border: 1px solid var(--border-color);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.1);
+            text-align: center; direction: rtl;
+            font-family: 'Rubik', system-ui, sans-serif; box-sizing: border-box;
+        }
+        .wealth-comparison-widget header.widget-head { display: flex; gap: 18px; align-items: center; justify-content: center; margin-bottom: 6px; }
+        .wealth-comparison-widget header.widget-head h2 { margin: 0; font-size: 2rem; font-weight: 700; display: flex; align-items: center; gap: 12px; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .wealth-comparison-widget .icon { width: 40px; height: 40px; padding: 6px; border-radius: 10px; background: var(--accent-gradient); color: white; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 18px rgba(49,130,206,0.12); }
+        .wealth-comparison-widget > p { margin: 10px auto 22px; max-width: 820px; color: var(--text-secondary); font-size: 1.05rem; line-height: 1.65; text-align: right; }
+        .wealth-comparison-widget .comparison-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+        .wealth-comparison-widget .comparison-column { text-align: right; background: rgba(255,255,255,0.6); border-radius: 16px; padding: 18px; border: 1px solid rgba(0,0,0,0.04); min-height: 260px; transition: transform .28s ease, box-shadow .28s ease; }
+        .wealth-comparison-widget .comparison-column:hover { transform: translateY(-6px); box-shadow: 0 14px 40px rgba(16,24,40,0.06); }
+        .wealth-comparison-widget .comparison-column h3 { margin: 0 0 12px 0; font-size: 1.25rem; color: var(--text-primary); font-weight: 600; }
+        .wealth-comparison-widget .chart-row { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        .wealth-comparison-widget .chart-container { position: relative; max-width: 320px; width: 100%; margin: 0 auto; height: 220px; }
+        .wealth-comparison-widget .chips { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 8px; }
+        .wealth-comparison-widget .chip { display: inline-flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 999px; background: rgba(15,23,42,0.03); font-size: 0.92rem; color: var(--text-secondary); }
+        .wealth-comparison-widget .chip .sw { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+        .wealth-comparison-widget .explanation-text { color: var(--text-secondary); font-size: 0.98rem; line-height: 1.6; margin-top: 8px; }
+        .wealth-comparison-widget .explanation-text strong { color: var(--text-primary); font-weight: 600; }
+        .wealth-comparison-widget .conclusion { margin-top: 22px; background: var(--highlight-bg); padding: 16px; border-radius: 12px; border: 1px solid rgba(56,178,172,0.15); color: var(--text-primary); font-size: 1.03rem; line-height: 1.7; text-align: right; }
+        .wealth-comparison-widget .conclusion strong { color: #2b6cb0; }
+        .wealth-comparison-widget .center-label { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); font-weight: 700; font-size: 1.15rem; color: var(--text-primary); pointer-events: none; opacity: 0; }
+        .wealth-comparison-widget .legend-item:focus { outline: 3px solid rgba(49,130,206,0.18); outline-offset: 3px; border-radius: 8px; }
+        @media (max-width: 900px) {
+            .wealth-comparison-widget .comparison-container { grid-template-columns: 1fr; }
+            .wealth-comparison-widget header.widget-head h2 { font-size: 1.6rem; }
+            .wealth-comparison-widget .chart-container { height: 240px; }
+        }
+        @media (prefers-reduced-motion: reduce) { .wealth-comparison-widget * { transition: none !important; } }
+
     </style>
 </head>
 <body>
 
 <!-- ===== NAVBAR ===== -->
-<nav class="nav">
-    <div class="nav-brand">
+<nav class="intro-nav">
+    <div class="intro-nav-brand">
         <button class="hbnav-btn" id="hbnav-toggle" aria-label="תפריט פרקים" aria-expanded="false">
             <span></span><span></span><span></span>
         </button>
-        <a href="/" class="nav-logo">NewGen Finance</a>
+        <a href="/" class="intro-nav-logo">NewGen Finance</a>
     </div>
-    <div class="nav-links">
-        <a href="/members/" class="nav-link">אזור החברים</a>
-        <button class="nav-signout" id="signout-btn">התנתקות</button>
+    <div class="intro-nav-links">
+        <a href="/members/" class="intro-nav-link">אזור החברים</a>
+        <button class="intro-nav-signout" id="intro-signout-btn">התנתקות</button>
     </div>
 </nav>
 
-<!-- Hamburger chapter nav -->
+<!-- Hamburger overlay + panel -->
 <div class="hbnav-overlay" id="hbnav-overlay"></div>
 <nav class="hbnav-panel" id="hbnav-panel" aria-label="ניווט פרקים">
     <div class="hbnav-panel-title">אתר</div>
@@ -361,115 +452,626 @@
     <div class="hbnav-divider"></div>
     <div class="hbnav-panel-title">הקורס — פרקים</div>
     <a href="/investor-academy/lessons/intro.html" class="hbnav-item active">
-        <div class="hbnav-icon">🚀</div>
+        <div class="hbnav-icon">&#128640;</div>
         <div class="hbnav-text"><span class="hbnav-name">הקדמה</span><span class="hbnav-sub">למסע שלך</span></div>
     </a>
     <a href="/investor-academy/lessons/chapter-1.html" class="hbnav-item">
-        <div class="hbnav-icon">🔑</div>
+        <div class="hbnav-icon">&#128273;</div>
         <div class="hbnav-text"><span class="hbnav-name">פרק 1</span><span class="hbnav-sub">שלב הכניסה</span></div>
     </a>
-    <a href="/investor-academy/lessons/chapter-2.html" class="hbnav-item">
-        <div class="hbnav-icon">🧭</div>
-        <div class="hbnav-text"><span class="hbnav-name">פרק 2</span><span class="hbnav-sub">שלב האסטרטגיה</span></div>
+    <a href="#" class="hbnav-item disabled">
+        <div class="hbnav-icon">&#129517;</div>
+        <div class="hbnav-text"><span class="hbnav-name">פרק 2</span><span class="hbnav-sub">בקרוב</span></div>
     </a>
-    <a href="/investor-academy/lessons/chapter-3.html" class="hbnav-item">
-        <div class="hbnav-icon">🛠️</div>
-        <div class="hbnav-text"><span class="hbnav-name">פרק 3</span><span class="hbnav-sub">שלב הכלים</span></div>
+    <a href="#" class="hbnav-item disabled">
+        <div class="hbnav-icon">&#128295;</div>
+        <div class="hbnav-text"><span class="hbnav-name">פרק 3</span><span class="hbnav-sub">בקרוב</span></div>
     </a>
-    <a href="/investor-academy/lessons/chapter-4.html" class="hbnav-item">
-        <div class="hbnav-icon">📊</div>
-        <div class="hbnav-text"><span class="hbnav-name">פרק 4</span><span class="hbnav-sub">שלב הניהול</span></div>
+    <a href="#" class="hbnav-item disabled">
+        <div class="hbnav-icon">&#128202;</div>
+        <div class="hbnav-text"><span class="hbnav-name">פרק 4</span><span class="hbnav-sub">בקרוב</span></div>
+    </a>
+    <a href="#" class="hbnav-item disabled">
+        <div class="hbnav-icon">&#127942;</div>
+        <div class="hbnav-text"><span class="hbnav-name">פרק 5</span><span class="hbnav-sub">בקרוב</span></div>
     </a>
 </nav>
 
-<div class="page-container">
+<!-- ===== SECTION 1: HERO ===== -->
+<section class="intro-hero">
+    <h1 class="intro-hero-title">פרק הקדמה &#8212; למסע שלך</h1>
+    <div class="intro-hero-yt-wrap">
+        <iframe
+            src="https://www.youtube-nocookie.com/embed/FwMUFh7x1mw?autoplay=0"
+            title="פרק הקדמה — למסע שלך"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+        </iframe>
+    </div>
+    <div class="intro-hero-badge">!בהצלחה</div>
+</section>
 
-    <!-- ===== HERO ===== -->
-    <section class="hero">
-        <div class="hero-badge">ברוך הבא לקורס</div>
-        <h1 class="hero-title">ברוכים הבאים לאקדמיית המשקיעים</h1>
-        <p class="hero-sub">הכל מתחיל כאן. לפני שנצלול לעולם ההשקעות — הקדמה קצרה על מה שמחכה לך.</p>
-        <a href="/investor-academy/lessons/chapter-1.html" class="hero-cta">התחל בפרק 1 ←</a>
-    </section>
+<!-- ===== MAIN CONTAINER ===== -->
+<div class="intro-container">
 
-    <div class="container">
-
-        <!-- About the course -->
-        <div class="card">
-            <h2 class="card-title">על הקורס</h2>
-            <p class="card-text">
-                קורס "אקדמיית המשקיעים" של NewGen Finance הוא תכנית לימודים מקיפה שנבנתה עבור מי שרוצה להבין לעומק את עולם שוק ההון — מהבסיס ועד לכלים המתקדמים שמשתמשים בהם משקיעים מקצועיים.
-            </p>
-            <p class="card-text">
-                הקורס בנוי בארבעה פרקים מרכזיים, כל פרק מתמקד בשלב חיוני אחר במסע של המשקיע. אתה יכול ללמוד בקצב שלך, לחזור על שיעורים ולצפות בסרטונים כמה פעמים שתרצה.
-            </p>
+    <!-- ===== SECTION 2: TABLE OF CONTENTS ===== -->
+    <div class="intro-card" id="s2-toc">
+        <div class="toc-widget">
+            <h1 class="main-title">תוכן עניינים</h1>
+            <div class="sections-container">
+                <div class="section">
+                    <span class="section-title">מבוא והקדמה</span>
+                    <ul class="subchapter-list">
+                        <li><span class="item">1. מה נלמד בקורס</span></li>
+                        <li><span class="item">2. מה צפוי לנו בקורס</span></li>
+                        <li><span class="item">3. מה לא צפוי לנו בקורס</span></li>
+                    </ul>
+                </div>
+                <div class="section">
+                    <span class="section-title">שיעור 1: הזדמנויות</span>
+                    <ul class="subchapter-list">
+                        <li><span class="item">1. הזדמנויות משנה חיים</span></li>
+                        <li><span class="item">2. יריד הלימונדות הגדול</span></li>
+                    </ul>
+                </div>
+                <div class="section">
+                    <span class="section-title">שיעור 2: הצבת מטרות</span>
+                    <ul class="subchapter-list">
+                        <li><span class="item">1. ניתוח מטרת השקעות ברורה</span></li>
+                        <li><span class="item">2. הצבת יעדים לטווח ארוך</span></li>
+                        <li><span class="item">3. הגדרת רף ביטחון</span></li>
+                        <li><span class="item">4. תכנון פיננסי</span></li>
+                    </ul>
+                </div>
+            </div>
         </div>
+    </div>
 
-        <!-- Chapters overview -->
-        <div class="card">
-            <h2 class="card-title">מבנה הקורס</h2>
-            <div class="chapters-grid">
-                <a href="/investor-academy/lessons/chapter-1.html" class="chapter-card">
-                    <div class="chapter-card-icon">🔑</div>
-                    <div class="chapter-card-body">
-                        <div class="chapter-card-name">פרק 1 — שלב הכניסה</div>
-                        <div class="chapter-card-sub">יסודות שוק ההון, מניות, מדדים</div>
-                        <span class="chapter-card-badge available">זמין עכשיו</span>
+    <!-- ===== SECTION 3: COURSE DESCRIPTION ===== -->
+    <div class="intro-card" id="s3-course-desc">
+        <h2 class="intro-card-title">תיאור הקורס</h2>
+        <div class="intro-yt-wrap">
+            <iframe
+                src="https://www.youtube-nocookie.com/embed/HkxoXAYSuTc?autoplay=0"
+                title="תיאור הקורס"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+
+    <!-- ===== SECTION 4: LESSON 1 ===== -->
+    <div class="intro-card" id="s4-lesson1">
+        <h2 class="intro-card-title">פרק 0 שיעור 1</h2>
+        <div class="intro-yt-wrap">
+            <iframe
+                src="https://www.youtube-nocookie.com/embed/0c078bh8sJM?autoplay=0"
+                title="פרק 0 שיעור 1"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+        </div>
+        <p class="intro-card-text">כדי לחשב בצורה קלה יותר מה הריבית שתצטרכו לייצר עבור החלומות שלכם &#8212; תרגישו חופשי להשתמש במחשבון ההשקעות הרטרואקטיבי הזה:</p>
+
+        <!-- Investment Calculator Widget -->
+        <div class="modern-investment-calculator">
+            <div class="input-panel">
+                <div class="control-group">
+                    <label for="principal" class="control-label">
+                        <strong>&#8362;<span id="principalValueText">100,000</span></strong>
+                        <span>סכום התחלתי</span>
+                    </label>
+                    <input type="range" id="principal" min="10000" max="1000000" step="10000" value="100000">
+                </div>
+                <div class="control-group">
+                    <label for="years" class="control-label">
+                        <strong><span id="yearsValueText">11</span> שנים</strong>
+                        <span>משך ההשקעה</span>
+                    </label>
+                    <input type="range" id="years" min="1" max="40" step="1" value="11">
+                </div>
+                <div class="control-group">
+                    <label for="target" class="control-label">
+                        <strong>&#8362;<span id="targetValueText">200,000</span></strong>
+                        <span>סכום יעד</span>
+                    </label>
+                    <input type="range" id="target" min="1000" max="5000000" step="1000" value="200000">
+                </div>
+            </div>
+            <div class="output-panel-container">
+                <div class="results-container">
+                    <div class="result-card">
+                        <p>תשואה שנתית נדרשת</p>
+                        <div id="annual-rate-display">0.00%</div>
                     </div>
-                </a>
-                <a href="/investor-academy/lessons/chapter-2.html" class="chapter-card">
-                    <div class="chapter-card-icon">🧭</div>
-                    <div class="chapter-card-body">
-                        <div class="chapter-card-name">פרק 2 — שלב האסטרטגיה</div>
-                        <div class="chapter-card-sub">ניתוח חברות, אסטרטגיות השקעה</div>
-                        <span class="chapter-card-badge">בקרוב</span>
+                    <div class="secondary-results-grid">
+                        <div><p>תשואה כוללת</p><strong id="total-return-percentage-value">0.00%</strong></div>
+                        <div><p>רווח כולל</p><strong id="total-profit-value">&#8362;0</strong></div>
                     </div>
-                </a>
-                <a href="/investor-academy/lessons/chapter-3.html" class="chapter-card">
-                    <div class="chapter-card-icon">🛠️</div>
-                    <div class="chapter-card-body">
-                        <div class="chapter-card-name">פרק 3 — שלב הכלים</div>
-                        <div class="chapter-card-sub">כלים מקצועיים, TradingView, תיקים</div>
-                        <span class="chapter-card-badge">בקרוב</span>
-                    </div>
-                </a>
-                <a href="/investor-academy/lessons/chapter-4.html" class="chapter-card">
-                    <div class="chapter-card-icon">📊</div>
-                    <div class="chapter-card-body">
-                        <div class="chapter-card-name">פרק 4 — שלב הניהול</div>
-                        <div class="chapter-card-sub">ניהול תיק, פסיכולוגיה, סיכונים</div>
-                        <span class="chapter-card-badge">בקרוב</span>
-                    </div>
-                </a>
+                </div>
+                <div class="chart-container"><canvas id="growthChart"></canvas></div>
             </div>
         </div>
 
-        <!-- Bottom nav -->
-        <div class="bottom-nav-card">
-            <a href="/investor-academy/lessons/chapter-1.html" class="btn-gold">מתחילים! פרק 1 ←</a>
+        <!-- Comparison Table Widget -->
+        <div class="my-widget">
+            <h2 id="table-title">תשואות מדד S&amp;P500</h2>
+            <p class="info">המידע נכון לתאריך 1 בינואר 2025</p>
+            <div class="toggle-buttons" id="toggle-container">
+                <div class="sliding-background"></div>
+                <button onclick="showSP500(this)" class="active">S&amp;P 500</button>
+                <button onclick="showBerkshire(this)">ברקשייר האת'אוויי</button>
+                <button onclick="showTA35(this)">ת"א 35</button>
+                <button onclick="showNasdaq(this)">NASDAQ 100</button>
+            </div>
+            <div class="table-wrapper" id="table-wrapper">
+                <table id="data-table">
+                    <thead><tr><th>טווח שנים</th><th>תשואה ממוצעת (%)</th></tr></thead>
+                    <tbody id="table-body"></tbody>
+                </table>
+            </div>
         </div>
 
+        <!-- Second video in lesson 1 -->
+        <div class="intro-yt-wrap" style="margin-top:1.5rem;">
+            <iframe
+                src="https://www.youtube-nocookie.com/embed/CF-pV__3cjQ?autoplay=0"
+                title="שיעור 1 — הרחבה"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+        </div>
+
+        <!-- Dividend Calculator Widget -->
+        <div class="modern-dividend-calculator">
+            <h2>מחשבון הכנסה פסיבית מדיבידנדים</h2>
+            <p class="info">חשב את ההכנסה הפוטנציאלית שלך מהשקעות מניבות דיבידנד</p>
+            <div class="calculator-grid">
+                <div class="controls-panel">
+                    <div class="control-group">
+                        <label for="investment" class="control-label">
+                            <span>סכום השקעה כולל</span>
+                            <strong id="investmentValueText">&#8362;1,000,000</strong>
+                        </label>
+                        <input type="range" id="investment" min="10000" max="5000000" step="10000" value="1000000">
+                    </div>
+                    <div class="control-group">
+                        <label for="divyield" class="control-label">
+                            <span>תשואת דיבידנד שנתית</span>
+                            <strong id="yieldValueText">4.0%</strong>
+                        </label>
+                        <input type="range" id="divyield" min="1" max="10" step="0.1" value="4">
+                    </div>
+                    <div class="toggle-tax">
+                        <button id="toggleTax">הפעל מיסוי (25%)</button>
+                    </div>
+                </div>
+                <div class="results-panel">
+                    <p>הכנסה חודשית (נטו)</p>
+                    <div id="monthlyIncomeDisplay">&#8362;0</div>
+                    <div id="annualIncomeDisplay">
+                        <span>הכנסה שנתית:</span>
+                        <strong>&#8362;0</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+
+    <!-- ===== SECTION 5: LESSON 2 ===== -->
+    <div class="intro-card" id="s5-lesson2">
+        <h2 class="intro-card-title">פרק 0 שיעור 2</h2>
+        <div class="intro-yt-wrap">
+            <iframe
+                src="https://www.youtube-nocookie.com/embed/b-ZwYVhJV7U?autoplay=0"
+                title="פרק 0 שיעור 2"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+        </div>
+
+        <!-- Hidaat side by side -->
+        <div class="intro-sidebyside">
+            <div class="did-you-know-widget" id="dyk-apple">
+                <div class="card-inner-wrapper">
+                    <div class="card-teaser">
+                        <h2 class="teaser-title">&#128161; ?הידעת</h2>
+                        <p class="teaser-subtitle">ההחלטה היקרה בהיסטוריה</p>
+                        <p class="teaser-prompt">לחץ למידע נוסף</p>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="content-title">הטעות של רונלד ויין</h3>
+                        <p class="content-text">
+                            <span class="highlight">רונלד ויין</span>, המייסד השלישי של אפל, מכר את חלקו בחברה (<span class="highlight">10%</span>) בשנת 1976 תמורת <span class="highlight">800 דולר</span> בלבד, 12 ימים לאחר הקמתה. הוא חשש שהחברה תיכשל ושהוא יישא באחריות לחובותיה. ההחלטה הזו, שנבעה מפחד, עלתה לו במה שהיה יכול להיות הון של יותר מ-<span class="highlight">300 מיליארד דולר</span> כיום.
+                        </p>
+                        <img class="content-image" src="https://images.ravpages.co.il/xsite_resources/user_content/cp_new_production/d4/83/50/cb/d48350cb1a786c4790a92b5444c0e526/images/b2edd333814ab9a91b0e9c3f5796107a.jpg?cc=8&convert=webp&maxWidth=250&maxHeight=175" alt="לוגו אפל">
+                    </div>
+                </div>
+            </div>
+
+            <div class="did-you-know-widget" id="dyk-coke">
+                <div class="card-inner-wrapper">
+                    <div class="card-teaser">
+                        <h2 class="teaser-title">&#128161; ?הידעת</h2>
+                        <p class="teaser-subtitle">ההשקעה המתוקה בהיסטוריה</p>
+                        <p class="teaser-prompt">לחץ למידע נוסף</p>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="content-title">מניית קוקה-קולה: שיעור בסבלנות</h3>
+                        <p class="content-text">
+                            מניה אחת של <span class="highlight">קוקה-קולה</span> שנקנתה ב-<span class="highlight">40 דולר</span> בשנת 1919, הייתה שווה היום (עם השקעת הדיבידנדים מחדש) יותר מ-<span class="highlight">25 מיליון דולר</span>. הצמיחה המדהימה הזו לא נובעת רק מעליית ערך המניה, אלא בעיקר מהשקעה חוזרת של הדיבידנדים ו-11 פיצולי מניות לאורך השנים, שהפכו מניה בודדת לאלפי מניות.
+                        </p>
+                        <img class="content-image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Coca-Cola_logo.svg/1200px-Coca-Cola_logo.svg.png" alt="לוגו קוקה-קולה">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Goals Widget -->
+        <div class="modern-goals-widget">
+            <h2>מטרות השקעה לדוגמה</h2>
+            <div class="goal-display-container" id="goalContainer"></div>
+        </div>
+    </div>
+
+    <!-- ===== SECTION 6: EXTENSIONS ===== -->
+    <div class="intro-card" id="s6-extensions">
+        <h2 class="intro-card-title">הרחבות למתעניינים</h2>
+
+        <!-- Dossier (עקרונות ליבה) Widget -->
+        <div class="dossier-widget" id="investment-dossier-widget">
+            <div class="dossier-tabs">
+                <div class="tab active" data-topic="principles">&#128176; עקרונות ליבה</div>
+                <div class="tab" data-topic="risk">&#128737; ניהול סיכונים</div>
+                <div class="tab" data-topic="volatility">&#128200; הבנת תנודתיות</div>
+            </div>
+            <div class="dossier-content-area">
+                <h3 class="content-title" id="dossier-content-title"></h3>
+                <div class="content-fader" id="dossier-content-fader"></div>
+                <div class="content-nav">
+                    <button class="nav-arrow prev">&#8594;</button>
+                    <span class="nav-progress" id="dossier-nav-progress"></span>
+                    <button class="nav-arrow next">&#8592;</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Wealth Comparison Widget (ההבדל ביצירת עושר) -->
+        <div class="wealth-comparison-widget" role="region" aria-labelledby="wealthWidgetTitle">
+            <header class="widget-head">
+                <div class="icon" aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 18v-5.25M12 12.75c0 .33.5.6 1 .6s1-.27 1-.6M3.25 18c3 1.25 8.5 1.25 13.5 0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <h2 id="wealthWidgetTitle">הידעת?</h2>
+            </header>
+            <p>ההבדל המהותי בבניית עושר אינו רק בסכומים, אלא בתפיסת העולם: המעבר מצבירת חיסכון פאסיבית לבעלות אקטיבית על מערכות שמייצרות הכנסה.</p>
+            <div class="comparison-container">
+                <section class="comparison-column" aria-labelledby="avgTitle">
+                    <h3 id="avgTitle">משק הבית הממוצע: צבירת חיסכון</h3>
+                    <div class="chart-row">
+                        <div class="chart-container">
+                            <canvas id="averageHouseholdChart"></canvas>
+                            <div class="center-label" id="avgCenter">60%</div>
+                        </div>
+                        <div class="chips" id="avgChips">
+                            <div class="chip"><span class="sw" style="background:#38b2ac"></span>בית מגורים</div>
+                            <div class="chip"><span class="sw" style="background:#3182ce"></span>חיסכון פאסיבי</div>
+                            <div class="chip"><span class="sw" style="background:#718096"></span>נכסים אחרים</div>
+                        </div>
+                    </div>
+                    <div class="explanation-text">העושר נבנה על ידי <strong>שמירת חלק מההכנסה מעבודה</strong>. ההשקעות הן לרוב עקיפות ופאסיביות (קרנות פנסיה, ETFs) &#8212; קניית חלק קטן מהשוק ללא שליטה ישירה.</div>
+                </section>
+                <section class="comparison-column" aria-labelledby="richTitle">
+                    <h3 id="richTitle">העשירון העליון: בעלות על מערכות</h3>
+                    <div class="chart-row">
+                        <div class="chart-container">
+                            <canvas id="wealthyHouseholdChart"></canvas>
+                            <div class="center-label" id="richCenter">75%</div>
+                        </div>
+                        <div class="chips" id="richChips">
+                            <div class="chip"><span class="sw" style="background:#38b2ac"></span>בעלות על עסקים ומערכות</div>
+                            <div class="chip"><span class="sw" style="background:#3182ce"></span>נדל"ן מניב</div>
+                            <div class="chip"><span class="sw" style="background:#718096"></span>נכסים אחרים</div>
+                        </div>
+                    </div>
+                    <div class="explanation-text">העושר נבנה על ידי <strong>בעלות ישירה על "מנועי" הכלכלה</strong> &#8212; עסקים, חברות ונכסים מניבים. מבנה זה מספק שליטה, פוטנציאל צמיחה גבוה ויתרונות בתכנון מס.</div>
+                </section>
+            </div>
+            <div class="conclusion"><strong>השיעור החשוב למשקיעים:</strong> המטרה האסטרטגית היא לעבור מחשיבה של "כמה כסף חסכתי?" לחשיבה של "כמה מערכות מייצרות הכנסה יש בבעלותי?". זהו שינוי התפיסה שמפריד בין ביטחון פיננסי ליצירת עושר אמיתי.</div>
+        </div>
+    </div>
+
+    <!-- ===== SECTION 7: BOTTOM NAVIGATION ===== -->
+    <div class="intro-card-dark" id="s7-bottom-nav">
+        <div class="intro-bottom-nav">
+            <a href="/investor-academy/lessons/chapter-1.html" class="intro-btn-gold">לפרק 1 &#8592;</a>
+            <a href="/investor-academy/lessons/" class="intro-btn-outline">חזרה לרשימת הפרקים</a>
+        </div>
+    </div>
+
+</div><!-- end intro-container -->
 
 <script>
-/* Sign out */
-document.getElementById('signout-btn').addEventListener('click', async function () {
-    const _c = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    await _c.auth.signOut();
-    window.location.replace('/auth/login/');
+/* ===== SIGNOUT ===== */
+document.getElementById('intro-signout-btn').addEventListener('click', async function () {
+    try { var c = window.supabase || window._supabase; if (c && c.auth) await c.auth.signOut(); } catch (e) {}
+    window.location.href = '/';
 });
 
-/* Hamburger nav */
+/* ===== HAMBURGER MENU ===== */
 (function () {
-    var btn     = document.getElementById('hbnav-toggle');
-    var panel   = document.getElementById('hbnav-panel');
-    var overlay = document.getElementById('hbnav-overlay');
-    function open()  { btn.classList.add('open'); panel.classList.add('open'); overlay.classList.add('open'); btn.setAttribute('aria-expanded','true'); }
-    function close() { btn.classList.remove('open'); panel.classList.remove('open'); overlay.classList.remove('open'); btn.setAttribute('aria-expanded','false'); }
-    btn.addEventListener('click', function () { panel.classList.contains('open') ? close() : open(); });
-    overlay.addEventListener('click', close);
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+    var btn = document.getElementById('hbnav-toggle');
+    var ov  = document.getElementById('hbnav-overlay');
+    var pan = document.getElementById('hbnav-panel');
+    if (!btn) return;
+    function open()  { btn.classList.add('open'); ov.classList.add('open'); pan.classList.add('open'); btn.setAttribute('aria-expanded','true'); }
+    function close() { btn.classList.remove('open'); ov.classList.remove('open'); pan.classList.remove('open'); btn.setAttribute('aria-expanded','false'); }
+    btn.addEventListener('click', function () { pan.classList.contains('open') ? close() : open(); });
+    ov.addEventListener('click', close);
+})();
+
+/* ===== INVESTMENT CALCULATOR ===== */
+(function () {
+    var calc = document.querySelector('.modern-investment-calculator');
+    if (!calc) return;
+    var sliders = Array.from(calc.querySelectorAll('input[type="range"]'));
+    var sP = document.getElementById('principal');
+    var sY = document.getElementById('years');
+    var sT = document.getElementById('target');
+    var tP = document.getElementById('principalValueText');
+    var tY = document.getElementById('yearsValueText');
+    var tT = document.getElementById('targetValueText');
+    var rD = document.getElementById('annual-rate-display');
+    var rP = document.getElementById('total-profit-value');
+    var rR = document.getElementById('total-return-percentage-value');
+    var ctx = document.getElementById('growthChart').getContext('2d');
+    var curRate = 0;
+
+    var chart = new Chart(ctx, {
+        type: 'line',
+        data: { labels: [], datasets: [{ label: 'צמיחת ההשקעה', data: [], borderColor: 'rgba(56,178,172,1)', backgroundColor: 'rgba(56,178,172,0.2)', pointBackgroundColor: 'rgba(56,178,172,1)', pointBorderColor: '#fff', pointRadius: 4, pointHoverRadius: 7, tension: 0.4, fill: true }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#718096', font: { family: 'Rubik' } }, grid: { color: 'rgba(0,0,0,0.05)' } }, y: { ticks: { color: '#718096', font: { family: 'Rubik' }, callback: function (v) { return '\u20AA' + (v/1000) + 'k'; } }, grid: { color: 'rgba(0,0,0,0.05)' } } } }
+    });
+
+    function fill(s) { s.style.setProperty('--background-size', ((s.value-s.min)/(s.max-s.min)*100)+'%'); }
+
+    function animate(el, from, to, dur, sfx) {
+        var st = null;
+        (function step(ts) { if (!st) st=ts; var p=Math.min((ts-st)/dur,1); el.textContent=(p*(to-from)+from).toFixed(2)+sfx; if(p<1) requestAnimationFrame(step); })(performance.now());
+    }
+
+    function update() {
+        sliders.forEach(fill);
+        var p=parseFloat(sP.value), y=parseInt(sY.value), t=parseFloat(sT.value);
+        tP.textContent=p.toLocaleString(); tY.textContent=y.toLocaleString(); tT.textContent=t.toLocaleString();
+        var rate=0, ret=0, profit=t-p;
+        if(p>0&&y>0){ rate=(Math.pow(t/p,1/y)-1)*100; ret=(profit/p)*100; }
+        animate(rD, curRate, rate, 500, '%'); curRate=rate;
+        rP.textContent='\u20AA'+profit.toLocaleString();
+        rR.textContent=ret.toFixed(2)+'%';
+        var labels=Array.from({length:y+1},function(_,i){return i;});
+        chart.data.labels=labels;
+        chart.data.datasets[0].data=labels.map(function(yr){return p*Math.pow(1+rate/100,yr);});
+        chart.update('none');
+    }
+
+    sliders.forEach(function (s) {
+        s.addEventListener('input', update);
+        var g=s.closest('.control-group');
+        var on=function(){calc.classList.add('is-focused');g.classList.add('focus-active');};
+        var off=function(){calc.classList.remove('is-focused');g.classList.remove('focus-active');};
+        s.addEventListener('mousedown',on); s.addEventListener('touchstart',on,{passive:true});
+        s.addEventListener('mouseup',off); s.addEventListener('touchend',off); s.addEventListener('mouseleave',off);
+    });
+    update();
+})();
+
+/* ===== COMPARISON TABLE ===== */
+var dataStore = {
+    sp500:     { title:'תשואות מדד S&P 500',                       data:[{range:'5 השנים האחרונות',return:'10.74'},{range:'10 השנים האחרונות',return:'10.02'},{range:'20 השנים האחרונות',return:'7.72'},{range:'30 השנים האחרונות',return:'8.26'},{range:'50 השנים האחרונות',return:'8.41'},{range:'100 השנים האחרונות',return:'7.41'},{range:'150 השנים האחרונות',return:'6.99'}]},
+    berkshire: { title:"תשואות ברקשייר האת'אוויי (וורן באפט)",      data:[{range:'5 השנים האחרונות',return:'18.71'},{range:'10 השנים האחרונות',return:'15.15'},{range:'20 השנים האחרונות',return:'12.68'},{range:'40 השנים האחרונות',return:'17.71'},{range:'מההתחלה (44 שנים)',return:'20.93'}]},
+    ta35:      { title:'תשואות מדד ת"א 35',                         data:[{range:'5 השנים האחרונות',return:'8.68'},{range:'10 השנים האחרונות',return:'5.86'},{range:'20 השנים האחרונות',return:'9.68'}]},
+    nasdaq:    { title:'תשואות מדד NASDAQ 100',                      data:[{range:'5 השנים האחרונות',return:'23.99'},{range:'10 השנים האחרונות',return:'20.27'},{range:'20 השנים האחרונות',return:'16.65'},{range:'מההתחלה (39 שנים)',return:'18.23'}]}
+};
+
+function moveSlider(btn) {
+    var bg=document.querySelector('.sliding-background');
+    if(bg){bg.style.left=btn.offsetLeft+'px';bg.style.width=btn.offsetWidth+'px';}
+}
+function updateTable(ds, btn) {
+    var wrap=document.getElementById('table-wrapper'), tbl=document.getElementById('data-table');
+    var tb=document.getElementById('table-body'), tt=document.getElementById('table-title');
+    var tc=document.getElementById('toggle-container');
+    var old=tc.querySelector('.active'); if(old) old.classList.remove('active');
+    btn.classList.add('active'); moveSlider(btn);
+    var sh=wrap.getBoundingClientRect().height; wrap.style.height=sh+'px';
+    tb.innerHTML=''; tt.innerText=ds.title;
+    ds.data.forEach(function(r){var tr=document.createElement('tr');tr.innerHTML='<td>'+r.range+'</td><td>'+r.return+'%</td>';tb.appendChild(tr);});
+    wrap.style.height=tbl.getBoundingClientRect().height+'px';
+    wrap.addEventListener('transitionend',function(){wrap.style.height='auto';},{once:true});
+}
+function showSP500(b)     { updateTable(dataStore.sp500,b); }
+function showBerkshire(b) { updateTable(dataStore.berkshire,b); }
+function showTA35(b)      { updateTable(dataStore.ta35,b); }
+function showNasdaq(b)    { updateTable(dataStore.nasdaq,b); }
+
+document.addEventListener('DOMContentLoaded', function () {
+    var tb=document.getElementById('table-body'), initBtn=document.querySelector('.toggle-buttons .active');
+    dataStore.sp500.data.forEach(function(r){var tr=document.createElement('tr');tr.innerHTML='<td>'+r.range+'</td><td>'+r.return+'%</td>';tb.appendChild(tr);});
+    var bg=document.querySelector('.sliding-background');
+    if(bg&&initBtn){bg.style.transition='none';moveSlider(initBtn);setTimeout(function(){bg.style.transition='left 0.4s cubic-bezier(0.25,0.8,0.25,1),width 0.4s cubic-bezier(0.25,0.8,0.25,1)';},50);}
+});
+
+/* ===== DIVIDEND CALCULATOR ===== */
+(function () {
+    var sI=document.getElementById('investment'), sY=document.getElementById('divyield');
+    if(!sI||!sY) return;
+    var taxBtn=document.getElementById('toggleTax');
+    var tI=document.getElementById('investmentValueText'), tY=document.getElementById('yieldValueText');
+    var mD=document.getElementById('monthlyIncomeDisplay'), aD=document.querySelector('#annualIncomeDisplay strong');
+    var tax=false;
+    function fill(s){s.style.setProperty('--background-size',((s.value-s.min)/(s.max-s.min)*100)+'%');}
+    function calc(){
+        fill(sI);fill(sY);
+        var inv=parseFloat(sI.value), yld=parseFloat(sY.value);
+        var annual=inv*(yld/100); if(tax) annual*=0.75;
+        var mo=annual/12;
+        tI.textContent='\u20AA'+inv.toLocaleString();
+        tY.textContent=yld.toFixed(1)+'%';
+        mD.textContent='\u20AA'+Math.round(mo).toLocaleString();
+        aD.textContent='\u20AA'+Math.round(annual).toLocaleString();
+    }
+    taxBtn.addEventListener('click',function(){tax=!tax;this.classList.toggle('active');this.textContent=tax?'מיסוי מופעל':'הפעל מיסוי (25%)';calc();});
+    sI.addEventListener('input',calc); sY.addEventListener('input',calc);
+    calc();
+})();
+
+/* ===== HIDAAT FLIP WIDGETS ===== */
+(function () {
+    ['dyk-apple','dyk-coke'].forEach(function (id) {
+        var w=document.getElementById(id); if(!w) return;
+        var teaser=w.querySelector('.card-teaser'), content=w.querySelector('.card-content');
+        content.style.display='none';
+        w.addEventListener('click', function () {
+            if(w.classList.contains('is-expanded')) return;
+            var sh=w.offsetHeight;
+            content.style.display='block'; teaser.style.display='none';
+            var eh=w.scrollHeight;
+            w.style.minHeight=sh+'px';
+            requestAnimationFrame(function(){w.style.minHeight=eh+'px';w.classList.add('is-expanded');});
+            w.addEventListener('transitionend',function(){w.style.minHeight='auto';},{once:true});
+        });
+    });
+})();
+
+/* ===== GOALS WIDGET ===== */
+(function () {
+    var goals=[
+        '\u05DC\u05D7\u05E1\u05D5\u05DA 300,000 \u20AA \u05DB\u05D4\u05D5\u05DF \u05E2\u05E6\u05DE\u05D9 \u05DC\u05D3\u05D9\u05E8\u05D4 \u05EA\u05D5\u05DA 5 \u05E9\u05E0\u05D9\u05DD, \u05E2\u05DD \u05D7\u05D9\u05E1\u05DB\u05D5\u05DF \u05D7\u05D5\u05D3\u05E9\u05D9 \u05E9\u05DC 5,000 \u20AA.',
+        '\u05DC\u05D1\u05E0\u05D5\u05EA \u05E7\u05E8\u05DF \u05D7\u05D9\u05E8\u05D5\u05DD \u05E9\u05DC 50,000 \u20AA \u05DC\u05DE\u05E7\u05E8\u05D4 \u05E9\u05DC \u05D4\u05D5\u05E6\u05D0\u05D5\u05EA \u05D1\u05DC\u05EA\u05D9 \u05E6\u05E4\u05D5\u05D9\u05D5\u05EA.',
+        '\u05DC\u05D4\u05D2\u05D9\u05E2 \u05DC\u05EA\u05D9\u05E7 \u05D4\u05E9\u05E7\u05E2\u05D5\u05EA \u05E9\u05DC 2 \u05DE\u05D9\u05DC\u05D9\u05D5\u05DF \u20AA \u05E9\u05D9\u05D9\u05E6\u05E8 \u05D4\u05DB\u05E0\u05E1\u05D4 \u05E4\u05E1\u05D9\u05D1\u05D9\u05EA \u05E9\u05DC 8,000 \u20AA \u05D1\u05D7\u05D5\u05D3\u05E9.',
+        '\u05DC\u05D4\u05E9\u05E7\u05D9\u05E2 \u05D1\u05E9\u05D5\u05E7 \u05D4\u05D4\u05D5\u05DF \u05D5\u05DC\u05D4\u05D2\u05D9\u05E2 \u05DC\u05EA\u05D9\u05E7 \u05E9\u05DC 100,000 \u20AA \u05EA\u05D5\u05DA 3 \u05E9\u05E0\u05D9\u05DD.',
+        '\u05DC\u05E4\u05E8\u05D5\u05E9 \u05DE\u05D5\u05E7\u05D3\u05DD \u05E2\u05DD \u05EA\u05D9\u05E7 \u05E9\u05DC 5 \u05DE\u05D9\u05DC\u05D9\u05D5\u05DF \u20AA \u05E9\u05D9\u05D7\u05DC\u05D9\u05E3 \u05D0\u05EA \u05D4\u05D4\u05DB\u05E0\u05E1\u05D4 \u05DE\u05D4\u05E2\u05D1\u05D5\u05D3\u05D4.',
+        '\u05DC\u05D4\u05D5\u05E1\u05D9\u05E3 1,500 \u20AA \u05D1\u05D7\u05D5\u05D3\u05E9 \u05DC\u05EA\u05E9\u05DC\u05D5\u05DD \u05D4\u05DE\u05E9\u05DB\u05E0\u05EA\u05D0 \u05D5\u05DC\u05E1\u05D9\u05D9\u05DD \u05D0\u05D5\u05EA\u05D4 10 \u05E9\u05E0\u05D9\u05DD \u05DE\u05D5\u05E7\u05D3\u05DD \u05D9\u05D5\u05EA\u05E8.',
+        '\u05DC\u05D4\u05D2\u05D3\u05D9\u05DC \u05D0\u05EA \u05D4\u05EA\u05E9\u05D5\u05D0\u05D4 \u05E2\u05DC \u05D4\u05EA\u05D9\u05E7 \u05DB\u05D3\u05D9 \u05DC\u05E0\u05E6\u05D7 \u05D0\u05EA \u05DE\u05D3\u05D3 \u05D4-S&P500 \u05D1\u05D8\u05D5\u05D5\u05D7 \u05D4\u05D0\u05E8\u05D5\u05DA.',
+        '\u05DC\u05D7\u05E1\u05D5\u05DA 100,000 \u20AA \u05D1\u05E9\u05E0\u05D4 \u05D5\u05DC\u05D4\u05E9\u05E7\u05D9\u05E2 \u05D0\u05D5\u05EA\u05DD \u05D1\u05DE\u05D3\u05D3\u05D9\u05DD.',
+        '\u05DC\u05D4\u05D2\u05D9\u05E2 \u05DC-10 \u05DE\u05D9\u05DC\u05D9\u05D5\u05DF \u20AA \u05E2\u05D3 \u05D2\u05D9\u05DC 60 \u05E2\u05DC \u05D9\u05D3\u05D9 \u05D7\u05D9\u05E1\u05DB\u05D5\u05DF \u05D5\u05D4\u05E9\u05E7\u05E2\u05D4 \u05E2\u05E7\u05D1\u05D9\u05EA.',
+        '\u05DC\u05D1\u05E0\u05D5\u05EA \u05EA\u05D9\u05E7 \u05D3\u05D9\u05D1\u05D9\u05D3\u05E0\u05D3\u05D9\u05DD \u05E9\u05DE\u05D9\u05D9\u05E6\u05E8 \u05D4\u05DB\u05E0\u05E1\u05D4 \u05E4\u05D0\u05E1\u05D9\u05D1\u05D9\u05EA \u05E9\u05DC 5,000 \u20AA \u05D1\u05D7\u05D5\u05D3\u05E9.'
+    ];
+    var con=document.getElementById('goalContainer'); if(!con) return;
+    var idx=0;
+    function next(){
+        var ex=con.querySelector('.goal-text');
+        if(ex){ex.classList.remove('is-visible');ex.classList.add('is-exiting');setTimeout(function(){if(ex.parentNode)ex.parentNode.removeChild(ex);},500);}
+        idx=(idx+1)%goals.length;
+        var el=document.createElement('p'); el.className='goal-text'; el.innerHTML=goals[idx];
+        con.appendChild(el); setTimeout(function(){el.classList.add('is-visible');},50);
+    }
+    var init=document.createElement('p'); init.className='goal-text'; init.innerHTML=goals[0];
+    con.appendChild(init); setTimeout(function(){init.classList.add('is-visible');},50);
+    setInterval(next,5000);
+})();
+
+/* ===== DOSSIER WIDGET ===== */
+(function () {
+    var w=document.getElementById('investment-dossier-widget'); if(!w) return;
+    var content={
+        principles:{title:'עקרונות ליבה',slides:[
+            {main:'שלם לעצמך קודם',detail:'זהו העיקרון הפיננסי החשוב ביותר. במקום לחסוך את מה שנשאר בסוף החודש, הגדר הוראת קבע אוטומטית של לפחות 15% מההכנסה שלך ישירות לחשבון השקעות, ביום קבלת המשכורת. אוטומציה מנצחת משמעת עצמית.',quote:'אל תחסוך מה שנשאר אחרי ההוצאות; הוצא מה שנשאר אחרי החיסכון.',author:'וורן באפט'},
+            {main:'כוחה של ריבית דריבית',detail:'סכום חודשי של 1,000 ₪ שהושקע במשך 40 שנה בתשואה שנתית ממוצעת של 8%, יצמח ליותר מ-3.5 מיליון ₪, למרות שהפקדת רק 480,000 ₪ מכיסך. הזמן הוא המרכיב החזק ביותר בהשקעות.',quote:'הפלא השמיני בתבל הוא ריבית דריבית. מי שמבין זאת, מרוויח אותה. מי שלא, משלם אותה.',author:'אלברט איינשטיין'},
+            {main:'זמן בשוק, לא תזמון השוק',detail:'מחקר של Bank of America מצא כי בין 1990 ל-2020, אם משקיע החמיץ את 10 ימי המסחר הטובים ביותר בכל עשור, התשואה הכוללת שלו הייתה 28% בלבד. אם הוא נשאר מושקע כל הזמן, התשואה הייתה 17,715%.'}
+        ]},
+        risk:{title:'ניהול סיכונים',slides:[
+            {main:'הקם קרן חירום תחילה',detail:'לפני שאתה משקיע בשוק ההון, ודא שיש לך קרן חירום נזילה של 3-6 חודשי הוצאות מחיה. קרן זו מונעת ממך את הצורך למכור השקעות בהפסד בזמן הכי גרוע.'},
+            {main:'הבן את פרופיל הסיכון שלך',detail:'האם ירידה פתאומית של 20% בתיק תגרום לך לפאניקה ולמכירת חיסול? אם כן, ייתכן שאתה לוקח סיכון גבוה מדי. התאם את תמהיל ההשקעות שלך לרמת הסיבולת האישית שלך לתנודתיות.'},
+            {main:'פזר את השקעותיך ביעילות',detail:'פיזור אמיתי הוא השקעה בנכסים שונים, בשווקים שונים ובענפים שונים. הדרך הקלה ביותר למשקיע מתחיל היא באמצעות קרנות סל רחבות (ETFs) העוקבות אחר מדדים כמו MSCI World.'}
+        ]},
+        volatility:{title:'הבנת תנודתיות',slides:[
+            {main:'תנודתיות אינה סיכון',detail:'תנודתיות היא "מחיר הכניסה" לשוק המניות. סיכון, לעומת זאת, הוא האפשרות להפסד קבוע של הון. עבור משקיע לטווח ארוך, תנודתיות היא רעש זמני, לא סיכון מהותי.'},
+            {main:'הפוך תנודתיות לחברה שלך',detail:'שיטת מיצוע עלויות (Dollar-Cost Averaging) — השקעת סכום קבוע בכל חודש — מורידה את עלות הרכישה הממוצעת שלך ומהפכת ירידות בשוק להזדמנויות קנייה.'},
+            {main:'הימנע מהחלטות רגשיות',detail:'פחד וחמדנות מניעים החלטות הרסניות. קבע אסטרטגיה ברורה מראש והיצמד אליה, במיוחד כשהרגשות שלך אומרים לך לעשות את ההפך.',quote:'המשקיע המצליח הוא ריאליסט שמוכר לאופטימיים וקונה מפסימיסטים.',author:'בנג\'מין גרהאם'}
+        ]}
+    };
+    var tabs=w.querySelectorAll('.tab'), titleEl=w.querySelector('#dossier-content-title');
+    var fader=w.querySelector('#dossier-content-fader'), prog=w.querySelector('#dossier-nav-progress');
+    var nextBtn=w.querySelector('.nav-arrow.next'), prevBtn=w.querySelector('.nav-arrow.prev');
+    var topic='principles', idx={principles:0,risk:0,volatility:0}, animating=false;
+
+    function show(){
+        if(animating) return; animating=true;
+        var t=content[topic], i=idx[topic];
+        titleEl.textContent=t.title; prog.textContent=(i+1)+' / '+t.slides.length;
+        var cur=fader.querySelector('.content-text');
+        new Promise(function(res){
+            if(cur){cur.classList.remove('is-active');cur.classList.add('is-exiting');cur.addEventListener('transitionend',res,{once:true});}else res();
+        }).then(function(){
+            if(cur) cur.remove();
+            var s=t.slides[i], el=document.createElement('div'); el.className='content-text';
+            var h='<p class="main-point">'+s.main+'</p><p class="detail-text">'+s.detail+'</p>';
+            if(s.quote&&s.author) h+='<div class="quote-block"><p class="quote-text">'+s.quote+'<span class="quote-author">\u2013 '+s.author+'</span></p></div>';
+            el.innerHTML=h; fader.appendChild(el);
+            requestAnimationFrame(function(){requestAnimationFrame(function(){el.classList.add('is-active');});});
+            setTimeout(function(){animating=false;},500);
+        });
+    }
+    function nav(dir){var tot=content[topic].slides.length;idx[topic]=dir==='next'?(idx[topic]+1)%tot:(idx[topic]-1+tot)%tot;show();}
+    tabs.forEach(function(tab){
+        tab.addEventListener('click',function(){var tp=tab.dataset.topic;if(tp===topic||animating)return;tabs.forEach(function(t){t.classList.remove('active');});tab.classList.add('active');topic=tp;show();});
+    });
+    nextBtn.addEventListener('click',function(){nav('next');});
+    prevBtn.addEventListener('click',function(){nav('prev');});
+    show();
+})();
+
+/* ===== WEALTH COMPARISON CHARTS ===== */
+(function () {
+    var reduced=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+    var clr={p:'#38b2ac',s:'#3182ce',o:'#718096'};
+    var centerPlugin={id:'centerLabel',afterDraw:function(ch){
+        if(!ch||!ch.ctx||!ch.chartArea||!ch.data) return;
+        var ctx=ch.ctx,a=ch.chartArea,meta=ch.getDatasetMeta(0);
+        var total=ch.data.datasets[0].data.reduce(function(s,v,i){return(meta&&meta.data&&meta.data[i]&&meta.data[i].hidden)?s:s+v;},0);
+        if(!total) return;
+        var li=0,lv=-Infinity;
+        ch.data.datasets[0].data.forEach(function(v,i){if(!(meta&&meta.data&&meta.data[i]&&meta.data[i].hidden)&&v>lv){lv=v;li=i;}});
+        var pct=Math.round((ch.data.datasets[0].data[li]/total)*100);
+        var cx=(a.left+a.right)/2,cy=(a.top+a.bottom)/2;
+        ctx.save();ctx.fillStyle='#1a202c';ctx.font='700 16px "Rubik",system-ui,Arial';ctx.textAlign='center';ctx.textBaseline='middle';
+        ctx.fillText(pct+'%',cx,cy-8);ctx.font='500 12px "Rubik"';ctx.fillStyle='#4a5568';ctx.fillText(ch.data.labels[li]||'',cx,cy+12);ctx.restore();
+    }};
+    Chart.register(centerPlugin);
+    var baseOpts={maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{padding:10,bodySpacing:6,callbacks:{label:function(c){return c.label+': '+c.parsed+'%';}}}},cutout:'55%'};
+    var avgEl=document.getElementById('averageHouseholdChart'),richEl=document.getElementById('wealthyHouseholdChart');
+    if(!avgEl||!richEl) return;
+    var avgChart=new Chart(avgEl.getContext('2d'),{type:'doughnut',data:{labels:['בית מגורים','חיסכון פאסיבי (פנסיה, קרנות)','נכסים אחרים'],datasets:[{data:[60,25,15],backgroundColor:[clr.p,clr.s,clr.o],borderColor:'#fff',borderWidth:6,hoverOffset:10}]},options:Object.assign({},baseOpts,{animation:{animateRotate:!reduced,duration:900}})});
+    var richChart=new Chart(richEl.getContext('2d'),{type:'doughnut',data:{labels:['בעלות על עסקים ומערכות','נדל"ן מניב','נכסים אחרים'],datasets:[{data:[75,15,10],backgroundColor:[clr.p,clr.s,clr.o],borderColor:'#fff',borderWidth:6,hoverOffset:10}]},options:Object.assign({},baseOpts,{animation:{animateRotate:!reduced,duration:900}})});
+
+    function syncCenter(chart,domId){
+        var dom=document.getElementById(domId); if(!dom||!chart) return;
+        var meta=chart.getDatasetMeta(0);
+        var total=chart.data.datasets[0].data.reduce(function(s,v,i){return(meta.data[i]&&meta.data[i].hidden)?s:s+v;},0);
+        if(!total){dom.textContent='';return;}
+        var li=0,lv=-Infinity;
+        chart.data.datasets[0].data.forEach(function(v,i){if(!(meta.data[i]&&meta.data[i].hidden)&&v>lv){lv=v;li=i;}});
+        dom.textContent=Math.round((chart.data.datasets[0].data[li]/total)*100)+'%';
+    }
+    function makeLegend(chart,cid,did){
+        var con=document.getElementById(cid); if(!con) return;
+        Array.from(con.querySelectorAll('.chip')).forEach(function(chip,i){
+            chip.classList.add('legend-item');chip.setAttribute('role','button');chip.setAttribute('tabindex','0');
+            chip.addEventListener('click',function(){
+                try{var m=chart.getDatasetMeta(0);if(m&&m.data&&m.data[i])m.data[i].hidden=!m.data[i].hidden;else chart.toggleDataVisibility(i);chart.update();setTimeout(function(){syncCenter(chart,did);},reduced?0:220);}catch(e){console.error(e);}
+            });
+            chip.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();chip.click();}});
+        });
+    }
+    makeLegend(avgChart,'avgChips','avgCenter');
+    makeLegend(richChart,'richChips','richCenter');
+    syncCenter(avgChart,'avgCenter');
+    syncCenter(richChart,'richCenter');
+    window.addEventListener('resize',function(){syncCenter(avgChart,'avgCenter');syncCenter(richChart,'richCenter');});
 })();
 </script>
 
