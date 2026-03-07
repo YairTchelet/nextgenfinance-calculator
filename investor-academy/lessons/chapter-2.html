@@ -8,14 +8,15 @@
     <!-- Auth protection -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
     <script src="/assets/js/supabase-config.js"></script>
-    <script src="/assets/js/auth-guard.js"></script>
+    <script src="/assets/js/course-guard.js"></script>
 
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800&family=Assistant:wght@300;400;600;700&display=swap" rel="stylesheet">
 
     <style>
+        /* ===== RESET & BASE ===== */
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html { overflow-x: hidden; }
+        html { scroll-behavior: smooth; overflow-x: hidden; }
         body {
             background: linear-gradient(155deg, #0b4a64 0%, #1680a0 48%, #0d6a82 100%);
             background-attachment: fixed;
@@ -25,8 +26,8 @@
             min-height: 100vh;
         }
 
-        /* NAVBAR */
-        .nav {
+        /* ===== NAVBAR ===== */
+        .ch2-nav {
             background: #0c3d52;
             padding: 0 1.5rem;
             height: 62px;
@@ -38,11 +39,12 @@
             z-index: 100;
             box-shadow: 0 2px 12px rgba(0,0,0,0.35);
         }
-        .nav-logo { color: #b3e0dc; font-family: 'Rubik', sans-serif; font-weight: 700; font-size: 1.2rem; text-decoration: none; }
-        .nav-links { display: flex; align-items: center; gap: 1rem; }
-        .nav-link { color: #fefefe; text-decoration: none; font-size: 0.95rem; transition: color 0.2s; }
-        .nav-link:hover { color: #b3e0dc; }
-        .nav-signout {
+        .ch2-nav-brand { display: flex; align-items: center; gap: 0.7rem; }
+        .ch2-nav-logo { color: #b3e0dc; font-family: 'Rubik', sans-serif; font-weight: 700; font-size: 1.2rem; text-decoration: none; }
+        .ch2-nav-links { display: flex; align-items: center; gap: 1rem; }
+        .ch2-nav-link { color: #fefefe; text-decoration: none; font-size: 0.95rem; transition: color 0.2s; }
+        .ch2-nav-link:hover { color: #b3e0dc; }
+        .ch2-nav-signout {
             background: transparent;
             border: 1px solid rgba(240,248,250,0.35);
             color: #fefefe;
@@ -53,11 +55,10 @@
             cursor: pointer;
             transition: all 0.2s;
         }
-        .nav-signout:hover { border-color: #b3e0dc; color: #b3e0dc; }
+        .ch2-nav-signout:hover { border-color: #b3e0dc; color: #b3e0dc; }
 
-        /* HAMBURGER NAV */
-        .nav-brand { display: flex; align-items: center; gap: 0.7rem; }
-        .hbnav-btn {
+        /* ===== HAMBURGER NAV ===== */
+        .ch2-hbnav-btn {
             width: 40px; height: 40px;
             background: rgba(179,224,220,0.15);
             border: 1px solid rgba(179,224,220,0.3);
@@ -65,14 +66,14 @@
             display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px;
             transition: background 0.2s, border-color 0.2s; flex-shrink: 0;
         }
-        .hbnav-btn:hover { background: rgba(179,224,220,0.28); border-color: rgba(179,224,220,0.55); }
-        .hbnav-btn span { display: block; width: 22px; height: 2px; background: #fefefe; border-radius: 2px; transition: transform 0.3s, opacity 0.3s; }
-        .hbnav-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-        .hbnav-btn.open span:nth-child(2) { opacity: 0; }
-        .hbnav-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-        .hbnav-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 999; }
-        .hbnav-overlay.open { display: block; }
-        .hbnav-panel {
+        .ch2-hbnav-btn:hover { background: rgba(179,224,220,0.28); border-color: rgba(179,224,220,0.55); }
+        .ch2-hbnav-btn span { display: block; width: 22px; height: 2px; background: #fefefe; border-radius: 2px; transition: transform 0.3s, opacity 0.3s; }
+        .ch2-hbnav-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .ch2-hbnav-btn.open span:nth-child(2) { opacity: 0; }
+        .ch2-hbnav-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+        .ch2-hbnav-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 999; }
+        .ch2-hbnav-overlay.open { display: block; }
+        .ch2-hbnav-panel {
             position: fixed; top: 62px; right: 0;
             height: calc(100vh - 62px); width: 270px;
             background: #0c3d52; z-index: 1000;
@@ -80,31 +81,38 @@
             overflow-y: auto; padding: 1.5rem 1rem;
             box-shadow: -4px 0 20px rgba(0,0,0,0.35);
         }
-        .hbnav-panel.open { transform: translateX(0); }
-        .hbnav-panel-title { color: #b3e0dc; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(179,224,220,0.2); }
-        .hbnav-item { display: flex; align-items: center; gap: 0.9rem; padding: 0.75rem 0.85rem; border-radius: 10px; text-decoration: none; color: #fefefe; font-size: 0.95rem; transition: background 0.18s; margin-bottom: 4px; }
-        .hbnav-item:hover { background: rgba(179,224,220,0.12); }
-        .hbnav-item.active { background: rgba(179,224,220,0.18); font-weight: 700; }
-        .hbnav-icon { width: 34px; height: 34px; background: rgba(179,224,220,0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1rem; }
-        .hbnav-text { display: flex; flex-direction: column; }
-        .hbnav-name { font-size: 0.95rem; }
-        .hbnav-sub  { font-size: 0.75rem; color: #b3e0dc; opacity: 0.7; }
-        .hbnav-site-link { display: flex; align-items: center; padding: 0.55rem 0.85rem; border-radius: 8px; text-decoration: none; color: rgba(254,254,254,0.72); font-size: 0.88rem; transition: background 0.18s; margin-bottom: 2px; }
-        .hbnav-site-link:hover { background: rgba(179,224,220,0.1); color: #fefefe; }
-        .hbnav-divider { height: 1px; background: rgba(179,224,220,0.15); margin: 0.85rem 0.5rem; }
+        .ch2-hbnav-panel.open { transform: translateX(0); }
+        .ch2-hbnav-panel-title { color: #b3e0dc; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(179,224,220,0.2); }
+        .ch2-hbnav-item { display: flex; align-items: center; gap: 0.9rem; padding: 0.75rem 0.85rem; border-radius: 10px; text-decoration: none; color: #fefefe; font-size: 0.95rem; transition: background 0.18s; margin-bottom: 4px; }
+        .ch2-hbnav-item:hover { background: rgba(179,224,220,0.12); }
+        .ch2-hbnav-item.active { background: rgba(179,224,220,0.18); font-weight: 700; }
+        .ch2-hbnav-icon { width: 34px; height: 34px; background: rgba(179,224,220,0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1rem; }
+        .ch2-hbnav-text { display: flex; flex-direction: column; }
+        .ch2-hbnav-name { font-size: 0.95rem; }
+        .ch2-hbnav-sub { font-size: 0.75rem; color: #b3e0dc; opacity: 0.7; }
+        .ch2-hbnav-site-link { display: flex; align-items: center; padding: 0.55rem 0.85rem; border-radius: 8px; text-decoration: none; color: rgba(254,254,254,0.72); font-size: 0.88rem; transition: background 0.18s; margin-bottom: 2px; }
+        .ch2-hbnav-site-link:hover { background: rgba(179,224,220,0.1); color: #fefefe; }
+        .ch2-hbnav-divider { height: 1px; background: rgba(179,224,220,0.15); margin: 0.85rem 0.5rem; }
 
-        /* COMING SOON */
-        .coming-soon {
+        /* ===== MAIN CONTAINER ===== */
+        .ch2-container {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 2rem 1.25rem 4rem;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: calc(100vh - 62px);
-            padding: 3rem 1rem;
-            text-align: center;
+            gap: 2rem;
         }
-        .cs-icon { font-size: 4rem; margin-bottom: 1.5rem; }
-        .cs-label {
+
+        /* ===== HERO ===== */
+        .ch2-hero {
+            background: #0c3d52;
+            border-radius: 20px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+        }
+        .ch2-hero-badge {
             display: inline-block;
             background: rgba(179,224,220,0.15);
             color: #b3e0dc;
@@ -113,134 +121,1040 @@
             padding: 0.35rem 1rem;
             border-radius: 20px;
             border: 1px solid rgba(179,224,220,0.3);
-            margin-bottom: 1.2rem;
+            margin-bottom: 1rem;
         }
-        .cs-title {
+        .ch2-hero-title {
             font-family: 'Rubik', sans-serif;
-            font-size: 2.2rem;
-            font-weight: 700;
+            font-size: 2.4rem;
+            font-weight: 800;
             color: #fefefe;
-            margin-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
         }
-        .cs-sub {
-            color: #b3e0dc;
-            font-size: 1.05rem;
-            max-width: 460px;
-            line-height: 1.65;
-            margin-bottom: 2.5rem;
-            opacity: 0.85;
-        }
-        .cs-back {
+        .ch2-hero-mint-badge {
             display: inline-block;
             background: #b3e0dc;
-            color: #394140;
+            color: #0c3d52;
             font-family: 'Rubik', sans-serif;
             font-size: 1rem;
             font-weight: 700;
-            padding: 0.8rem 2.2rem;
-            border-radius: 30px;
-            text-decoration: none;
-            transition: background 0.2s, transform 0.15s;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.2);
-            margin-left: 0.75rem;
+            padding: 0.4rem 1.2rem;
+            border-radius: 20px;
+            margin-top: 1.25rem;
         }
-        .cs-back:hover { background: #8fc9c4; transform: translateY(-2px); }
-        .cs-outline {
-            display: inline-block;
-            background: transparent;
-            color: #b3e0dc;
+
+        /* ===== CARDS ===== */
+        .ch2-card {
+            background: rgba(236,232,229,0.97);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+        }
+        .ch2-card-title {
             font-family: 'Rubik', sans-serif;
-            font-size: 1rem;
-            font-weight: 600;
-            padding: 0.8rem 2.2rem;
-            border-radius: 30px;
-            text-decoration: none;
-            border: 1.5px solid rgba(179,224,220,0.5);
-            transition: border-color 0.2s, color 0.2s;
+            font-size: 1.55rem;
+            font-weight: 700;
+            color: #0c3d52;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid rgba(179,224,220,0.5);
         }
-        .cs-outline:hover { border-color: #b3e0dc; color: #fefefe; }
-        @media (max-width: 480px) {
-            .nav { padding: 0 0.75rem; }
-            .nav-logo { font-size: 1rem; }
-            .nav-link { display: none; }
+        .ch2-card-dark {
+            background: #0c3d52;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+            text-align: center;
+        }
+        .ch2-card-dark-title { font-family: 'Rubik', sans-serif; font-size: 1.4rem; font-weight: 700; color: #fefefe; margin-bottom: 0.5rem; }
+        .ch2-card-dark-sub { color: rgba(179,224,220,0.8); font-size: 0.95rem; margin-bottom: 1.5rem; }
+        .ch2-bottom-btns { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+
+        /* ===== BUTTONS ===== */
+        .ch2-btn { display: inline-block; font-family: 'Rubik', sans-serif; font-weight: 700; font-size: 1rem; padding: 0.75rem 1.75rem; border-radius: 30px; text-decoration: none; transition: all 0.2s; cursor: pointer; border: none; }
+        .ch2-btn-primary { background: #b3e0dc; color: #394140; box-shadow: 0 4px 14px rgba(0,0,0,0.18); }
+        .ch2-btn-primary:hover { background: #8fc9c4; transform: translateY(-2px); }
+        .ch2-btn-secondary { background: rgba(179,224,220,0.15); color: #b3e0dc; border: 1.5px solid rgba(179,224,220,0.4); }
+        .ch2-btn-secondary:hover { background: rgba(179,224,220,0.25); border-color: #b3e0dc; }
+        .ch2-btn-outline { background: transparent; color: rgba(254,254,254,0.75); border: 1.5px solid rgba(254,254,254,0.25); }
+        .ch2-btn-outline:hover { border-color: rgba(254,254,254,0.55); color: #fefefe; }
+
+        /* ===== YOUTUBE WRAP ===== */
+        .ch2-yt-wrap {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            margin-bottom: 1.25rem;
+        }
+        .ch2-yt-wrap iframe { width: 100%; height: 100%; border: 0; }
+        .ch2-yt-wrap:last-child { margin-bottom: 0; }
+
+        /* ===== TOC WIDGET ===== */
+        .toc-widget {
+            --toc-accent: linear-gradient(90deg, #38b2ac, #3182ce);
+            font-family: 'Rubik', sans-serif;
+            width: 100%;
+            background: transparent;
+            box-sizing: border-box;
+        }
+        .toc-widget .main-title { text-align: center; font-size: 2rem; font-weight: 700; margin: 0 0 1.75rem 0; background: var(--toc-accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .toc-widget .sections-container { display: flex; flex-direction: column; gap: 1.1rem; }
+        .toc-widget .section { text-align: right; border-radius: 10px; padding: 0.6rem 0.75rem; }
+        .toc-widget .section-title { display: inline-block; position: relative; text-decoration: none; font-size: 1.3rem; font-weight: 700; margin-bottom: 0.6rem; cursor: pointer; background: var(--toc-accent); background-size: 200% auto; color: #1a202c; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-position: 100%; transition: background-position 0.4s ease; }
+        .toc-widget .section:hover .section-title { background-position: 0%; }
+        .toc-widget .subchapter-list { list-style: none !important; margin: 0; padding-right: 18px; position: relative; }
+        .toc-widget .subchapter-list::before { content: ''; position: absolute; right: 0; top: 0.5em; bottom: 0.5em; width: 2px; background: var(--toc-accent); transform: scaleY(0); transform-origin: top; transition: transform 0.4s cubic-bezier(0.19,1,0.22,1); }
+        .toc-widget .section:hover .subchapter-list::before { transform: scaleY(1); }
+        .toc-widget .subchapter-list li { margin-bottom: 0.5rem; list-style-type: none !important; }
+        .toc-widget .subchapter-list li:last-child { margin-bottom: 0; }
+        .toc-widget .item { font-size: 0.98rem; font-weight: 500; text-decoration: none; display: inline-block; color: #1a202c; background: var(--toc-accent); background-size: 200% auto; -webkit-background-clip: text; background-position: 100%; -webkit-text-fill-color: #1a202c; transition: background-position 0.4s ease; }
+        .toc-widget .item:hover { background-position: 0%; -webkit-text-fill-color: transparent; }
+        @media (max-width: 600px) { .toc-widget .main-title { font-size: 1.6rem; } .toc-widget .section-title { font-size: 1.1rem; } }
+
+        /* ===== QUOTE WIDGET ===== */
+        .warren-buffett-quote-widget-container * { box-sizing: border-box; }
+        .warren-buffett-quote-widget-container { font-family: 'Assistant', sans-serif; width: 100%; max-width: 800px; margin: 0 auto; background-color: transparent; padding: 8px 20px; }
+        .warren-buffett-quote-widget__inner { display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; padding: 1.75rem; direction: rtl; min-height: 150px; background-color: transparent; opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+        .warren-buffett-quote-widget__inner.quote-visible { opacity: 1; transform: translateY(0); }
+        .warren-buffett-quote-widget__reveal { position: relative; display: flex; justify-content: center; align-items: center; color: white; font-size: 2rem; font-weight: 700; text-align: center; white-space: pre-wrap; max-width: 80%; line-height: 1.5; padding: 0 2rem; }
+        .warren-buffett-quote-widget__author { font-size: 1.2rem; font-weight: 400; color: white; margin-top: 0.5rem; opacity: 0; transition: opacity 0.5s ease-in-out 1s; }
+        .warren-buffett-quote-widget__inner.quote-visible .warren-buffett-quote-widget__author { opacity: 1; }
+        .warren-buffett-quote-widget__reveal::before, .warren-buffett-quote-widget__reveal::after { position: absolute; content: ""; top: 8%; height: 84%; width: 2px; background: #6ee1f5; opacity: 0; transition: all 1.5s ease-out; }
+        .warren-buffett-quote-widget__reveal::before { right: calc(50% + 1.5rem); }
+        .warren-buffett-quote-widget__reveal::after { left: calc(50% + 1.5rem); }
+        .warren-buffett-quote-widget__inner.quote-visible .warren-buffett-quote-widget__reveal { animation: ch2-quote-expand 0.7s cubic-bezier(0.215,0.610,0.355,1.000) both; }
+        .warren-buffett-quote-widget__inner.quote-visible .warren-buffett-quote-widget__reveal::before { right: -3.5%; opacity: 1; }
+        .warren-buffett-quote-widget__inner.quote-visible .warren-buffett-quote-widget__reveal::after { left: -3.5%; opacity: 1; }
+        @keyframes ch2-quote-expand { 0% { letter-spacing: -0.5em; opacity: 0; } 40% { opacity: 0.6; } 100% { opacity: 1; } }
+        @media screen and (max-width: 768px) {
+            .warren-buffett-quote-widget__reveal { font-size: 1.2rem; padding: 0 1rem; }
+            .warren-buffett-quote-widget__author { font-size: 1rem; }
+            .warren-buffett-quote-widget__reveal::before { right: calc(50% + 1rem); }
+            .warren-buffett-quote-widget__reveal::after { left: calc(50% + 1rem); }
+            .warren-buffett-quote-widget__inner.quote-visible .warren-buffett-quote-widget__reveal::before { right: -3%; }
+            .warren-buffett-quote-widget__inner.quote-visible .warren-buffett-quote-widget__reveal::after { left: -3%; }
+        }
+
+        /* ===== CAROUSEL WIDGET ===== */
+        .carousel-widget { width: 100%; background: rgba(255,255,255,0.88); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-radius: 18px; padding: 1.5rem; border: 1px solid rgba(0,0,0,0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.08); margin-top: 1.25rem; }
+        .carousel-header { text-align: center; margin-bottom: 1.25rem; }
+        .carousel-header h2 { margin: 0; font-size: 1.55rem; font-weight: 700; background: linear-gradient(135deg,#38b2ac,#3182ce); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .carousel-viewport { position: relative; overflow: hidden; }
+        .carousel-track { display: flex; transition: transform 0.5s cubic-bezier(0.25,0.8,0.25,1); }
+        .carousel-slide { width: 100%; flex-shrink: 0; padding: 0 2px; }
+        .video-container { width: 100%; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; box-shadow: 0 8px 18px rgba(0,0,0,0.07); transform: translateZ(0); }
+        .video-container iframe { width: 100%; height: 100%; border: 0; }
+        .carousel-button { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.85); border: 1px solid rgba(0,0,0,0.05); border-radius: 50%; width: 40px; height: 40px; cursor: pointer; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: all 0.2s ease; z-index: 10; }
+        .carousel-button:hover { transform: translateY(-50%) scale(1.1); background: white; }
+        .carousel-button.prev { right: -12px; }
+        .carousel-button.next { left: -12px; }
+        .carousel-button svg { width: 22px; height: 22px; color: #4a5568; }
+        .carousel-nav { display: flex; justify-content: center; gap: 8px; margin-top: 1.25rem; flex-wrap: wrap; }
+        .nav-item { border: none; background: rgba(0,0,0,0.05); color: #4a5568; padding: 7px 14px; border-radius: 99px; font-family: 'Rubik', sans-serif; font-size: 0.88rem; font-weight: 500; cursor: pointer; transition: all 0.3s ease; }
+        .nav-item:hover { background: rgba(0,0,0,0.1); }
+        .nav-item.active { background: linear-gradient(135deg,#38b2ac,#3182ce); color: white; font-weight: 600; box-shadow: 0 4px 12px rgba(49,130,206,0.2); transform: scale(1.05); }
+        @media (max-width: 600px) { .carousel-button { width: 34px; height: 34px; } .carousel-button.prev { right: 4px; } .carousel-button.next { left: 4px; } }
+
+        /* ===== DEBT WIDGET ===== */
+        :root {
+            --debt-accent-start: #38b2ac;
+            --debt-accent-end: #3182ce;
+            --debt-accent-gradient: linear-gradient(135deg,var(--debt-accent-start),var(--debt-accent-end));
+        }
+        #debt-types-leverage-widget { font-family: 'Rubik', system-ui, sans-serif; width: 100%; background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 16px; padding: 1.75rem; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 20px 50px -15px rgba(0,0,0,0.08); position: relative; overflow: hidden; text-align: center; transition: min-height .45s cubic-bezier(.19,1,.22,1); margin: 1.25rem 0 0 0; }
+        #debt-types-leverage-widget .widget-teaser { display: block; transition: opacity .3s; }
+        #debt-types-leverage-widget .teaser-title { font-size: 2rem; font-weight: 700; margin: 0; background: var(--debt-accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        #debt-types-leverage-widget .teaser-subtitle { font-size: 1rem; font-weight: 500; color: #1a202c; margin: .5rem 0 0 0; }
+        #debt-types-leverage-widget .widget-content { opacity: 0; transform: translateY(16px); transition: opacity .4s .06s ease, transform .4s .06s ease; display: flex; flex-direction: column; gap: 1.25rem; align-items: stretch; }
+        #debt-types-leverage-widget[aria-expanded="true"] .widget-teaser { opacity: 0; pointer-events: none; height: 0; margin: 0; padding: 0; }
+        #debt-types-leverage-widget[aria-expanded="true"] .widget-content { opacity: 1; transform: translateY(0); }
+        #debt-types-leverage-widget .widget-header h2 { margin: 0; font-size: 1.7rem; font-weight: 700; background: var(--debt-accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        #debt-types-leverage-widget .reason-card { background: rgba(255,255,255,0.95); border-radius: 12px; padding: 1.25rem; border: 1px solid rgba(0,0,0,0.04); cursor: pointer; transition: transform .18s, box-shadow .18s, opacity .18s; min-height: 260px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; outline: none; }
+        #debt-types-leverage-widget .reason-card:focus { box-shadow: 0 8px 30px rgba(49,130,206,0.12); transform: translateY(-4px); }
+        #debt-types-leverage-widget .reason-card.is-changing { opacity: 0; transform: scale(.99); }
+        #debt-types-leverage-widget .reason-icon { width: 52px; height: 52px; margin-bottom: .9rem; border-radius: 12px; background: var(--debt-accent-gradient); color: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(49,130,206,0.12); }
+        #debt-types-leverage-widget .reason-icon svg { width: 26px; height: 26px; }
+        #debt-types-leverage-widget .reason-title { margin: 0 0 .5rem 0; font-size: 1.2rem; color: #1a202c; font-weight: 600; text-align: center; }
+        #debt-types-leverage-widget .reason-text { margin: 0 0 1rem 0; font-size: 0.98rem; line-height: 1.6; color: #4a5568; max-width: 820px; text-align: right; direction: rtl; }
+        #debt-types-leverage-widget .reason-example { margin-top: auto; padding-top: 1rem; border-top: 1px solid rgba(0,0,0,0.05); font-size: .9rem; color: #4a5568; width: 100%; text-align: right; direction: rtl; }
+        #debt-types-leverage-widget .reason-example strong { color: var(--debt-accent-start); font-weight: 700; }
+        #debt-types-leverage-widget .widget-footer { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: .6rem; }
+        #debt-types-leverage-widget .progress-text { font-size: .88rem; color: #4a5568; font-weight: 500; }
+        #debt-types-leverage-widget .progress-bar { flex-grow: 1; height: 6px; background: rgba(0,0,0,0.06); border-radius: 99px; overflow: hidden; margin: 0 10px; }
+        #debt-types-leverage-widget .progress-indicator { height: 100%; width: 0; background: var(--debt-accent-gradient); border-radius: 99px; transition: width .35s ease; }
+        #debt-types-leverage-widget .next-button { background: var(--debt-accent-end); color: #fff; border: none; padding: .5rem 1rem; border-radius: 99px; font-family: 'Rubik', sans-serif; font-size: .9rem; font-weight: 500; cursor: pointer; transition: background .15s, transform .12s; }
+        #debt-types-leverage-widget .next-button:hover { background: var(--debt-accent-start); transform: translateY(-1px); }
+        @media (max-width: 600px) { #debt-types-leverage-widget { padding: 1.1rem; } #debt-types-leverage-widget .teaser-title { font-size: 1.5rem; } #debt-types-leverage-widget .reason-card { min-height: 300px; } }
+
+        /* ===== STRATEGIC WIDGET ===== */
+        #strategic-mergers-acquisitions-widget {
+            --ma-accent-start: #38b2ac;
+            --ma-accent-end: #3182ce;
+            --ma-accent-gradient: linear-gradient(135deg,var(--ma-accent-start),var(--ma-accent-end));
+            font-family: 'Rubik', system-ui, sans-serif;
+            width: 100%; background: rgba(255,255,255,0.88); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border-radius: 18px; padding: 1.75rem; border: 1px solid rgba(0,0,0,0.08);
+            box-shadow: 0 20px 45px -12px rgba(0,0,0,0.1); text-align: center; cursor: pointer;
+            transition: min-height 0.6s cubic-bezier(0.19,1,0.22,1);
+            position: relative; overflow: hidden; margin: 1.25rem 0 0 0; box-sizing: border-box;
+        }
+        #strategic-mergers-acquisitions-widget .widget-teaser { transition: opacity 0.4s ease; }
+        #strategic-mergers-acquisitions-widget .teaser-title { font-size: 2rem; font-weight: 700; margin: 0; background: var(--ma-accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        #strategic-mergers-acquisitions-widget .teaser-subtitle { font-size: 1.15rem; font-weight: 500; color: #1a202c; margin: .5rem 0 0 0; }
+        #strategic-mergers-acquisitions-widget .widget-content { position: absolute; top: 1.75rem; left: 1.75rem; right: 1.75rem; opacity: 0; transform: translateY(20px); transition: opacity 0.5s 0.2s ease, transform 0.5s 0.2s ease; display: flex; flex-direction: column; gap: 1.25rem; }
+        #strategic-mergers-acquisitions-widget[aria-expanded="true"] { cursor: default; }
+        #strategic-mergers-acquisitions-widget[aria-expanded="true"] .widget-teaser { opacity: 0; pointer-events: none; }
+        #strategic-mergers-acquisitions-widget[aria-expanded="true"] .widget-content { position: relative; top: auto; left: auto; right: auto; opacity: 1; transform: translateY(0); }
+        #strategic-mergers-acquisitions-widget .widget-header h2 { margin: 0; font-size: 1.75rem; font-weight: 700; background: var(--ma-accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        #strategic-mergers-acquisitions-widget .reason-card { background: rgba(255,255,255,0.75); border-radius: 14px; padding: 1.35rem; border: 1px solid rgba(0,0,0,0.04); cursor: pointer; transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out; min-height: 260px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
+        #strategic-mergers-acquisitions-widget .reason-card:focus { box-shadow: 0 8px 30px rgba(49,130,206,0.12); transform: translateY(-4px); outline: none; }
+        #strategic-mergers-acquisitions-widget .reason-card.is-changing { opacity: 0; transform: scale(0.95); }
+        #strategic-mergers-acquisitions-widget .reason-icon { width: 52px; height: 52px; margin-bottom: .9rem; border-radius: 14px; background: var(--ma-accent-gradient); color: white; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(49,130,206,0.15); flex-shrink: 0; }
+        #strategic-mergers-acquisitions-widget .reason-icon svg { width: 26px; height: 26px; }
+        #strategic-mergers-acquisitions-widget .reason-title { margin: 0 0 .5rem 0; font-size: 1.35rem; color: #1a202c; font-weight: 600; }
+        #strategic-mergers-acquisitions-widget .reason-text { margin: 0 0 1rem 0; font-size: 1rem; line-height: 1.6; color: #4a5568; max-width: 500px; }
+        #strategic-mergers-acquisitions-widget .reason-example { margin-top: auto; padding-top: 1rem; border-top: 1px solid rgba(0,0,0,0.05); font-size: .9rem; color: #4a5568; width: 100%; }
+        #strategic-mergers-acquisitions-widget .reason-example strong { color: var(--ma-accent-start); font-weight: 600; }
+        #strategic-mergers-acquisitions-widget .widget-footer { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+        #strategic-mergers-acquisitions-widget .progress-text { font-size: .88rem; color: #4a5568; font-weight: 500; }
+        #strategic-mergers-acquisitions-widget .progress-bar { flex-grow: 1; height: 6px; background: rgba(0,0,0,0.06); border-radius: 99px; overflow: hidden; }
+        #strategic-mergers-acquisitions-widget .progress-indicator { height: 100%; width: 0; background: var(--ma-accent-gradient); border-radius: 99px; transition: width 0.3s ease; }
+        #strategic-mergers-acquisitions-widget .next-button { background: var(--ma-accent-end); color: white; border: none; padding: .55rem 1.1rem; border-radius: 99px; font-family: 'Rubik', sans-serif; font-size: .9rem; font-weight: 500; cursor: pointer; transition: background 0.2s, transform 0.2s; }
+        #strategic-mergers-acquisitions-widget .next-button:hover { background: var(--ma-accent-start); transform: translateY(-2px); }
+        @media (max-width: 600px) { #strategic-mergers-acquisitions-widget { padding: 1.35rem; } #strategic-mergers-acquisitions-widget .widget-header h2, #strategic-mergers-acquisitions-widget .teaser-title { font-size: 1.6rem; } #strategic-mergers-acquisitions-widget .reason-card { min-height: 300px; } }
+
+        /* ===== CALC INTRO WIDGET ===== */
+        :root {
+            --widget-accent-start: #00c2b8;
+            --widget-accent-end: #2b6cb0;
+            --widget-glass: rgba(255,255,255,0.92);
+            --widget-muted: #6b7280;
+            --widget-radius: 18px;
+            --widget-card-gap: 14px;
+        }
+        .calc-intro-widget { font-family: 'Rubik', sans-serif; color: #0f1724; width: 100%; margin: 1.25rem 0 0 0; border-radius: var(--widget-radius); background: var(--widget-glass); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 15px 40px rgba(10,25,50,0.08); padding: 20px; border: 1px solid rgba(43,108,176,0.08); overflow: hidden; }
+        .calc-intro-widget .top { display: flex; gap: var(--widget-card-gap); align-items: flex-start; }
+        .calc-intro-widget .hero { flex: 0 0 100px; height: 100px; border-radius: 12px; display: grid; place-items: center; background: linear-gradient(135deg,var(--widget-accent-start),var(--widget-accent-end)); color: white; }
+        .calc-intro-widget .hero svg { width: 44px; height: 44px; }
+        .calc-intro-widget .intro { flex: 1; }
+        .calc-intro-widget .title { font-size: 1.6rem; font-weight: 800; background: linear-gradient(90deg,var(--widget-accent-start),var(--widget-accent-end)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; }
+        .calc-intro-widget .subtitle { margin: 8px 0 0 0; color: var(--widget-muted); line-height: 1.5; font-size: 0.93rem; }
+        .calc-intro-widget .features { display: flex; gap: 10px; margin-top: 16px; }
+        .calc-intro-widget .feature { flex: 1; background: rgba(255,255,255,0.6); padding: 10px; border-radius: 10px; border: 1px solid rgba(0,0,0,0.03); display: flex; gap: 8px; align-items: center; transition: transform 0.28s cubic-bezier(.2,.9,.3,1), box-shadow 0.28s cubic-bezier(.2,.9,.3,1); }
+        .calc-intro-widget .feature:hover { transform: translateY(-4px); box-shadow: 0 10px 24px rgba(11,16,28,0.06); }
+        .calc-intro-widget .icon-wrap { width: 40px; height: 40px; border-radius: 9px; display: grid; place-items: center; flex-shrink: 0; background: white; box-shadow: 0 4px 14px rgba(43,108,176,0.08); }
+        .calc-intro-widget .icon-wrap svg { color: var(--widget-accent-start); }
+        .calc-intro-widget .feature h4 { margin: 0; font-size: 0.9rem; font-weight: 700; color: #1e293b; }
+        .calc-intro-widget .feature p { margin: 3px 0 0 0; color: var(--widget-muted); font-size: 0.82rem; line-height: 1.4; }
+        .calc-intro-widget .actions { text-align: center; margin-top: 20px; }
+        .calc-intro-widget .cta-btn { padding: 12px 28px; border-radius: 999px; border: 0; cursor: pointer; font-weight: 700; font-size: 1rem; font-family: 'Rubik', sans-serif; transition: all 0.2s ease; text-decoration: none; display: inline-block; }
+        .calc-intro-widget .cta-btn-primary { background: linear-gradient(90deg,var(--widget-accent-start),var(--widget-accent-end)); color: white; box-shadow: 0 8px 22px rgba(43,108,176,0.18); }
+        .calc-intro-widget .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(43,108,176,0.22); }
+        @media (max-width: 768px) { .calc-intro-widget .top { flex-direction: column; align-items: stretch; } .calc-intro-widget .features { flex-direction: column; } .calc-intro-widget .hero { width: 100%; height: 80px; } }
+
+        /* ===== GAME WIDGET ===== */
+        @keyframes ch2-game-fadein { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .game-widget { font-family: 'Rubik', sans-serif; color: #0f1724; width: 100%; margin: 1.25rem 0 0 0; border-radius: var(--widget-radius); background: var(--widget-glass); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 15px 40px rgba(10,25,50,0.08); padding: 20px; border: 1px solid rgba(43,108,176,0.08); overflow: hidden; }
+        .game-widget .top { display: flex; gap: var(--widget-card-gap); align-items: flex-start; }
+        .game-widget .hero { flex: 0 0 100px; height: 100px; border-radius: 12px; display: grid; place-items: center; background: linear-gradient(135deg,var(--widget-accent-start),var(--widget-accent-end)); color: white; }
+        .game-widget .hero svg { width: 44px; height: 44px; }
+        .game-widget .intro { flex: 1; }
+        .game-widget .title { font-size: 1.6rem; font-weight: 800; background: linear-gradient(90deg,var(--widget-accent-start),var(--widget-accent-end)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; }
+        .game-widget .subtitle { margin: 8px 0 0 0; color: var(--widget-muted); line-height: 1.5; }
+        .game-widget .features { display: flex; gap: 10px; margin-top: 16px; }
+        .game-widget .feature { flex: 1; background: rgba(255,255,255,0.6); padding: 10px; border-radius: 10px; border: 1px solid rgba(0,0,0,0.03); display: flex; gap: 8px; align-items: center; transition: transform 0.28s cubic-bezier(.2,.9,.3,1), box-shadow 0.28s cubic-bezier(.2,.9,.3,1); }
+        .game-widget .feature:hover { transform: translateY(-4px); box-shadow: 0 10px 24px rgba(11,16,28,0.06); }
+        .game-widget .icon-wrap { width: 40px; height: 40px; border-radius: 9px; display: grid; place-items: center; flex-shrink: 0; background: white; box-shadow: 0 4px 14px rgba(43,108,176,0.08); }
+        .game-widget .icon-wrap svg { color: var(--widget-accent-start); }
+        .game-widget .feature h4 { margin: 0; font-size: 0.9rem; font-weight: 700; color: #1e293b; }
+        .game-widget .feature p { margin: 3px 0 0 0; color: var(--widget-muted); font-size: 0.82rem; line-height: 1.4; }
+        .game-widget .minigame { display: none; margin-top: 18px; }
+        .game-widget.is-playing .features, .game-widget.is-playing .game-actions { display: none; }
+        .game-widget.is-playing .minigame { display: block; animation: ch2-game-fadein 0.6s cubic-bezier(0.16,1,0.3,1); }
+        .game-widget .game-actions { text-align: center; margin-top: 18px; }
+        .game-widget .game-btn { padding: 11px 24px; border-radius: 999px; border: 0; cursor: pointer; font-weight: 700; font-size: 0.95rem; font-family: 'Rubik', sans-serif; transition: all 0.2s ease; }
+        .game-widget .game-btn-primary { background: linear-gradient(90deg,var(--widget-accent-start),var(--widget-accent-end)); color: white; box-shadow: 0 8px 22px rgba(43,108,176,0.18); }
+        .game-widget .game-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(43,108,176,0.22); }
+        .game-widget .minigame-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: .9rem; }
+        .game-widget .back-btn { background: none; border: none; cursor: pointer; color: var(--widget-muted); display: flex; align-items: center; gap: 4px; padding: 4px; font-weight: 500; font-size: 0.88rem; border-radius: 6px; transition: background 0.2s; }
+        .game-widget .back-btn:hover { background: rgba(0,0,0,0.05); }
+        .game-widget .back-btn svg { width: 16px; height: 16px; }
+        .game-widget .company { display: flex; gap: 14px; align-items: flex-start; padding: 14px; background: white; border-radius: 12px; border: 1px solid rgba(0,0,0,0.04); }
+        .game-widget .company-info { flex: 1; text-align: right; }
+        .game-widget .company h3 { margin: 0; font-size: 1.15rem; color: var(--widget-accent-end); }
+        .game-widget .company p { margin: 5px 0 0 0; color: var(--widget-muted); line-height: 1.5; font-size: 0.9rem; }
+        .game-widget .metrics { display: flex; gap: 8px; margin-top: 12px; }
+        .game-widget .metric { flex: 1; background: rgba(43,108,176,0.05); padding: 8px; border-radius: 8px; text-align: center; }
+        .game-widget .metric small { display: block; color: var(--widget-muted); font-weight: 500; font-size: 0.75rem; }
+        .game-widget .metric strong { display: block; font-size: 1.2rem; margin-top: 3px; font-weight: 700; color: #1e293b; }
+        .game-widget .company-actions { display: flex; flex-direction: column; gap: 7px; }
+        .game-widget .game-btn-small { padding: 9px 20px; font-size: 0.88rem; width: 100%; }
+        .game-widget .game-btn-ghost { background: #f1f5f9; color: var(--widget-muted); border: 1px solid transparent; }
+        .game-widget .game-btn-ghost:hover { background: #e2e8f0; color: #334155; transform: none; box-shadow: none; }
+        .game-widget .feedback { display: none; margin-top: 12px; border-radius: 10px; padding: 12px; border-right: 4px solid; text-align: right; line-height: 1.5; font-size: 0.9rem; animation: ch2-game-fadein 0.5s ease; }
+        .game-widget .feedback.correct { background: rgba(34,197,94,0.08); border-right-color: #16a34a; color: #065f46; }
+        .game-widget .feedback.incorrect { background: rgba(239,68,68,0.07); border-right-color: #dc2626; color: #9b1c1c; }
+        .game-widget .play-full-game { display: none; margin-top: 14px; text-align: center; }
+        .game-widget .play-full-game .game-btn { font-size: 1rem; padding: 12px 28px; text-decoration: none; display: inline-block; }
+        @media (max-width: 768px) { .game-widget .top { flex-direction: column; align-items: stretch; } .game-widget .features { flex-direction: column; } .game-widget .hero { width: 100%; height: 80px; } .game-widget .company { flex-direction: column; } }
+
+        /* ===== MOBILE ===== */
+        @media (max-width: 600px) {
+            .ch2-container { padding: 1rem 0.75rem 3rem; gap: 1.5rem; }
+            .ch2-hero { padding: 1.75rem 1.25rem; }
+            .ch2-hero-title { font-size: 1.8rem; }
+            .ch2-card { padding: 1.5rem 1.25rem; }
+            .ch2-nav { padding: 0 0.75rem; }
+            .ch2-nav-logo { font-size: 1rem; }
         }
     </style>
 </head>
 <body>
 
-<nav class="nav">
-    <div class="nav-brand">
-        <button class="hbnav-btn" id="hbnav-toggle" aria-label="תפריט פרקים" aria-expanded="false">
+<!-- NAVBAR -->
+<nav class="ch2-nav">
+    <div class="ch2-nav-brand">
+        <button class="ch2-hbnav-btn" id="ch2-hbnav-toggle" aria-label="תפריט פרקים" aria-expanded="false">
             <span></span><span></span><span></span>
         </button>
-        <a href="/" class="nav-logo">NewGen Finance</a>
+        <a href="/" class="ch2-nav-logo">NewGen Finance</a>
     </div>
-    <div class="nav-links">
-        <a href="/members/" class="nav-link">אזור החברים</a>
-        <button class="nav-signout" id="signout-btn">התנתקות</button>
+    <div class="ch2-nav-links">
+        <a href="/members/" class="ch2-nav-link">אזור החברים</a>
+        <button class="ch2-nav-signout" id="ch2-signout-btn">התנתקות</button>
     </div>
 </nav>
 
-<div class="hbnav-overlay" id="hbnav-overlay"></div>
-<nav class="hbnav-panel" id="hbnav-panel" aria-label="ניווט פרקים">
-    <div class="hbnav-panel-title">אתר</div>
-    <a href="/" class="hbnav-site-link">ראשי</a>
-    <a href="/#tools" class="hbnav-site-link">כלים</a>
-    <a href="/#course" class="hbnav-site-link">קורסים</a>
-    <a href="/members/" class="hbnav-site-link">אזור החברים</a>
-    <div class="hbnav-divider"></div>
-    <div class="hbnav-panel-title">הקורס — פרקים</div>
-    <a href="/investor-academy/lessons/intro.html" class="hbnav-item">
-        <div class="hbnav-icon">🚀</div>
-        <div class="hbnav-text"><span class="hbnav-name">הקדמה</span><span class="hbnav-sub">למסע שלך</span></div>
+<div class="ch2-hbnav-overlay" id="ch2-hbnav-overlay"></div>
+<nav class="ch2-hbnav-panel" id="ch2-hbnav-panel" aria-label="ניווט פרקים">
+    <div class="ch2-hbnav-panel-title">אתר</div>
+    <a href="/" class="ch2-hbnav-site-link">ראשי</a>
+    <a href="/#tools" class="ch2-hbnav-site-link">כלים</a>
+    <a href="/#course" class="ch2-hbnav-site-link">קורסים</a>
+    <a href="/members/" class="ch2-hbnav-site-link">אזור החברים</a>
+    <div class="ch2-hbnav-divider"></div>
+    <div class="ch2-hbnav-panel-title">הקורס — פרקים</div>
+    <a href="/investor-academy/lessons/intro.html" class="ch2-hbnav-item">
+        <div class="ch2-hbnav-icon">🚀</div>
+        <div class="ch2-hbnav-text"><span class="ch2-hbnav-name">הקדמה</span><span class="ch2-hbnav-sub">למסע שלך</span></div>
     </a>
-    <a href="/investor-academy/lessons/chapter-1.html" class="hbnav-item">
-        <div class="hbnav-icon">🔑</div>
-        <div class="hbnav-text"><span class="hbnav-name">פרק 1</span><span class="hbnav-sub">שלב הכניסה</span></div>
+    <a href="/investor-academy/lessons/chapter-1.html" class="ch2-hbnav-item">
+        <div class="ch2-hbnav-icon">🔑</div>
+        <div class="ch2-hbnav-text"><span class="ch2-hbnav-name">פרק 1</span><span class="ch2-hbnav-sub">שלב הכניסה</span></div>
     </a>
-    <a href="/investor-academy/lessons/chapter-2.html" class="hbnav-item active">
-        <div class="hbnav-icon">🧭</div>
-        <div class="hbnav-text"><span class="hbnav-name">פרק 2</span><span class="hbnav-sub">שלב האסטרטגיה</span></div>
+    <a href="/investor-academy/lessons/chapter-2.html" class="ch2-hbnav-item active">
+        <div class="ch2-hbnav-icon">🧭</div>
+        <div class="ch2-hbnav-text"><span class="ch2-hbnav-name">פרק 2</span><span class="ch2-hbnav-sub">שלב האסטרטגיה</span></div>
     </a>
-    <a href="/investor-academy/lessons/chapter-3.html" class="hbnav-item">
-        <div class="hbnav-icon">🛠️</div>
-        <div class="hbnav-text"><span class="hbnav-name">פרק 3</span><span class="hbnav-sub">שלב הכלים</span></div>
-    </a>
-    <a href="/investor-academy/lessons/chapter-4.html" class="hbnav-item">
-        <div class="hbnav-icon">📊</div>
-        <div class="hbnav-text"><span class="hbnav-name">פרק 4</span><span class="hbnav-sub">שלב הניהול</span></div>
-    </a>
+    <span class="ch2-hbnav-item" style="opacity:0.4;pointer-events:none;cursor:default;">
+        <div class="ch2-hbnav-icon">🛠️</div>
+        <div class="ch2-hbnav-text"><span class="ch2-hbnav-name">פרק 3</span><span class="ch2-hbnav-sub">בקרוב</span></div>
+    </span>
+    <span class="ch2-hbnav-item" style="opacity:0.4;pointer-events:none;cursor:default;">
+        <div class="ch2-hbnav-icon">📊</div>
+        <div class="ch2-hbnav-text"><span class="ch2-hbnav-name">פרקים 4–5</span><span class="ch2-hbnav-sub">בקרוב</span></div>
+    </span>
 </nav>
 
-<div class="page-container">
-    <div class="coming-soon">
-        <div class="cs-icon">🧭</div>
-        <div class="cs-label">פרק 2</div>
-        <h1 class="cs-title">שלב האסטרטגיה</h1>
-        <p class="cs-sub">ניתוח חברות, אסטרטגיות השקעה ובניית תיק ראשון — בקרוב!</p>
-        <div>
-            <a href="/investor-academy/lessons/chapter-1.html" class="cs-back">→ חזרה לפרק 1</a>
-            <a href="/investor-academy/lessons/intro.html" class="cs-outline">הקדמה</a>
+<main class="ch2-container">
+
+    <!-- SECTION 1: HERO -->
+    <section class="ch2-hero">
+        <div class="ch2-hero-badge">פרק 2</div>
+        <h1 class="ch2-hero-title">פרק 2 — שלב האסטרטגיה</h1>
+        <div class="ch2-yt-wrap">
+            <iframe src="https://www.youtube.com/embed/7d_4GJeipTE" title="פרק 2 — שלב האסטרטגיה" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+        </div>
+        <div class="ch2-hero-mint-badge">!בהצלחה</div>
+    </section>
+
+    <!-- SECTION 2: TOC -->
+    <div class="ch2-card">
+        <div class="toc-widget">
+            <h2 class="main-title">תוכן העניינים לפרק 2</h2>
+            <div class="sections-container">
+                <div class="section">
+                    <a href="#s4-lesson0" class="section-title">פרק 2 שיעור 0: עקרונות השקעה כלליים</a>
+                    <ul class="subchapter-list">
+                        <li><a href="#s4-lesson0" class="item">1. השפעות מאקרו על מניות</a></li>
+                        <li><a href="#s4-lesson0" class="item">2. יחסי חברה-מדד גיאוגרפיים וסקטוריאליים</a></li>
+                        <li><a href="#s4-lesson0" class="item">3. השפעות מיקרו על מניות</a></li>
+                        <li><a href="#s4-lesson0" class="item">4. חברות ציקליות ועונתיות</a></li>
+                        <li><a href="#s4-lesson0" class="item">5. מקורות הכנסה והוצאה של חברות</a></li>
+                        <li><a href="#s4-lesson0" class="item">6. ציפיות שוק ותחזיות אנליסטים</a></li>
+                    </ul>
+                </div>
+                <div class="section">
+                    <a href="#s5-lesson1" class="section-title">פרק 2 שיעור 1: באפט והסיפור של השקעות ערך</a>
+                    <ul class="subchapter-list">
+                        <li><a href="#s5-lesson1" class="item">1. האמת הפשוטה</a></li>
+                        <li><a href="#s5-lesson1" class="item">2. איך הם עשו את זה</a></li>
+                        <li><a href="#s5-lesson1" class="item">3. ידע = כוח</a></li>
+                        <li><a href="#s5-lesson1" class="item">4. לראות מבעד ל"הייפ"</a></li>
+                        <li><a href="#s5-lesson1" class="item">5. זיהוי קריסות מדומות — להיכנס כשכולם בורחים</a></li>
+                        <li><a href="#s5-lesson1" class="item">6. באפט והונאת השמן לסלט</a></li>
+                    </ul>
+                </div>
+                <div class="section">
+                    <a href="#s6-lesson2" class="section-title">פרק 2 שיעור 2: איך מודדים ערך?</a>
+                    <ul class="subchapter-list">
+                        <li><a href="#s6-lesson2" class="item">1. סדר בדו"חות פיננסים</a></li>
+                        <li><a href="#s6-lesson2" class="item">2. מושגים בדוחות</a></li>
+                        <li><a href="#s6-lesson2" class="item">3. דו"ח תזרים מזומנים</a></li>
+                        <li><a href="#s6-lesson2" class="item">4. מאזן כספים</a></li>
+                        <li><a href="#s6-lesson2" class="item">5. דו"ח רווח\הפסד</a></li>
+                    </ul>
+                </div>
+                <div class="section">
+                    <a href="#s7-lesson3" class="section-title">פרק 2 שיעור 3: איך מתמחרים מניות?</a>
+                    <ul class="subchapter-list">
+                        <li><a href="#s7-lesson3" class="item">1. יחסים פיננסים מרכזיים בתמחור</a></li>
+                        <li><a href="#s7-lesson3" class="item">2. FCF - תזרים מזומנים חופשי</a></li>
+                        <li><a href="#s7-lesson3" class="item">3. יחס חוב להון - E/D</a></li>
+                        <li><a href="#s7-lesson3" class="item">4. יחס שוטף</a></li>
+                        <li><a href="#s7-lesson3" class="item">5. יחס מהיר</a></li>
+                        <li><a href="#s7-lesson3" class="item">6. שיעור רווח תפעולי</a></li>
+                        <li><a href="#s7-lesson3" class="item">7. צמיחת רווחים</a></li>
+                        <li><a href="#s7-lesson3" class="item">8. ההסתכלות השונה בשיטת השקעות צמיחה</a></li>
+                    </ul>
+                </div>
+                <div class="section">
+                    <a href="#s8-lesson4" class="section-title">פרק 2 שיעור 4: מכפילים ויחסי מניות-חברה</a>
+                    <ul class="subchapter-list">
+                        <li><a href="#s8-lesson4" class="item">1. EPS - רווח למנייה</a></li>
+                        <li><a href="#s8-lesson4" class="item">2. P/E - יחס מחיר לרווח מנייתי</a></li>
+                        <li><a href="#s8-lesson4" class="item">3. זווית מחשידה של חלק מהמדדים כיום</a></li>
+                        <li><a href="#s8-lesson4" class="item">4. ROIC/ROIE - תשואות על ההון</a></li>
+                        <li><a href="#s8-lesson4" class="item">5. PEG - יחס מחיר לרווח-צמיחה מתואם</a></li>
+                        <li><a href="#s8-lesson4" class="item">6. CROIC</a></li>
+                        <li><a href="#s8-lesson4" class="item">7. EBITDA - מרווחים תפעוליים</a></li>
+                        <li><a href="#s8-lesson4" class="item">8. דיבידנדים</a></li>
+                    </ul>
+                </div>
+                <div class="section">
+                    <a href="#s9-lesson5" class="section-title">פרק 2 שיעור 5: מה עלול להפוך חברה למעניינת?</a>
+                    <ul class="subchapter-list">
+                        <li><a href="#s9-lesson5" class="item">1. פיננסים חיוביים</a></li>
+                        <li><a href="#s9-lesson5" class="item">2. עתיד מזהיר</a></li>
+                        <li><a href="#s9-lesson5" class="item">3. יהלום לא מלוטש</a></li>
+                        <li><a href="#s9-lesson5" class="item">4. מנהלה איכותית</a></li>
+                        <li><a href="#s9-lesson5" class="item">5. אפקט המותג</a></li>
+                    </ul>
+                </div>
+                <div class="section">
+                    <a href="#s10-lesson6" class="section-title">פרק 2 שיעור 6: לפעמים גם באפט טועה — מה אפשר ללמוד?</a>
+                    <ul class="subchapter-list">
+                        <li><a href="#s10-lesson6" class="item">1. Dexter Shoes - השקעה עם שני רגליים שמאליות</a></li>
+                        <li><a href="#s10-lesson6" class="item">2. תיאוריית השוק היעיל</a></li>
+                        <li><a href="#s10-lesson6" class="item">3. כשהאיכות מצדיקה את המחיר</a></li>
+                        <li><a href="#s10-lesson6" class="item">4. הכוח בשילוב העקרונות — אין דרך אחת מושלמת</a></li>
+                        <li><a href="#s10-lesson6" class="item">5. גם באפט בגיל 94 התאים את שיטתו לעידן החדש</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
-</div>
 
+    <!-- SECTION 3: QUOTE 1 (no card) -->
+    <div class="warren-buffett-quote-widget-container">
+        <div class="warren-buffett-quote-widget__inner">
+            <div class="warren-buffett-quote-widget__reveal">אם אתה לא מוכן להחזיק מניה במשך 10 שנים, אל תחזיק בה אפילו 10 דקות."</div>
+            <div class="warren-buffett-quote-widget__author">– וורן באפט</div>
+        </div>
+    </div>
+
+    <!-- SECTION 4: שיעור 0 -->
+    <div class="ch2-card" id="s4-lesson0">
+        <h2 class="ch2-card-title">פרק 2 שיעור 0: עקרונות השקעה כלליים</h2>
+        <div class="ch2-yt-wrap">
+            <iframe src="https://www.youtube.com/embed/NZm8Eklm9ME" title="פרק 2 שיעור 0" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+        </div>
+    </div>
+
+    <!-- SECTION 5: שיעור 1 -->
+    <div class="ch2-card" id="s5-lesson1">
+        <h2 class="ch2-card-title">פרק 2 שיעור 1: באפט והסיפור של השקעות ערך</h2>
+        <div class="ch2-yt-wrap">
+            <iframe src="https://www.youtube.com/embed/dxZ5HTxRQ_A" title="פרק 2 שיעור 1 — חלק א" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+        </div>
+        <div class="warren-buffett-quote-widget-container">
+            <div class="warren-buffett-quote-widget__inner">
+                <div class="warren-buffett-quote-widget__reveal">השוק הוא מכונת הצבעה בטווח הקצר ומאזן שקילות בטווח הארוך"</div>
+                <div class="warren-buffett-quote-widget__author">– בנג'מין גרהאם</div>
+            </div>
+        </div>
+        <div class="ch2-yt-wrap">
+            <iframe src="https://www.youtube.com/embed/R7Cr-7qcLo8" title="פרק 2 שיעור 1 — חלק ב" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+        </div>
+    </div>
+
+    <!-- SECTION 6: שיעור 2 -->
+    <div class="ch2-card" id="s6-lesson2">
+        <h2 class="ch2-card-title">פרק 2 שיעור 2: איך מודדים ערך?</h2>
+        <div class="ch2-yt-wrap">
+            <iframe src="https://www.youtube.com/embed/prU9RG1Q3og" title="פרק 2 שיעור 2 — חלק א" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+        </div>
+        <div class="ch2-yt-wrap">
+            <iframe src="https://www.youtube.com/embed/hYYduQixJag" title="פרק 2 שיעור 2 — חלק ב" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+        </div>
+
+        <!-- Debt Types Widget -->
+        <div id="debt-types-leverage-widget" role="region" aria-label="הסבר על סוגי חוב" tabindex="0" aria-expanded="false">
+            <div class="widget-teaser">
+                <h2 class="teaser-title">חוב טוב מול חוב רע</h2>
+                <p class="teaser-subtitle">מתי המינוף מזניק את החברה ומתי הוא חבל תלייה?</p>
+            </div>
+            <div class="widget-content" aria-hidden="true">
+                <header class="widget-header"><h2>6 סיבות — למה חוב יכול להיות טוב או רע</h2></header>
+                <div class="reason-card" role="button" tabindex="0" aria-live="polite">
+                    <div class="reason-icon" aria-hidden="true"></div>
+                    <h3 class="reason-title"></h3>
+                    <div class="reason-text"></div>
+                    <div class="reason-example"></div>
+                </div>
+                <footer class="widget-footer">
+                    <span class="progress-text"></span>
+                    <div class="progress-bar" aria-hidden="true"><div class="progress-indicator"></div></div>
+                    <button class="next-button">הבא ←</button>
+                </footer>
+            </div>
+        </div>
+
+        <!-- Quote 3 -->
+        <div class="warren-buffett-quote-widget-container">
+            <div class="warren-buffett-quote-widget__inner">
+                <div class="warren-buffett-quote-widget__reveal">כדי להצליח לאורך זמן, אתה חייב להשקיע לפי עובדות ולא לפי דעות."</div>
+                <div class="warren-buffett-quote-widget__author">– לי לו (צ'ארלי מאנגר מכנה אותו &quot;וורן באפט הסיני&quot;)</div>
+            </div>
+        </div>
+
+        <!-- Carousel S2 -->
+        <div class="carousel-widget" id="carousel-s2"
+             data-title="פרק 2 שיעור 2"
+             data-videos='[{"videoId":"GEuzMOAKJEE","title":"איך מודדים ערך"},{"videoId":"e85BdLu8SRQ","title":"מאזן כספים"},{"videoId":"ajxS_SiKpmI","title":"דו\"ח רווח הפסד"},{"videoId":"vC8w3aFEFic","title":"דו\"ח תזרים מזומנים"}]'>
+            <header class="carousel-header"><h2 class="carousel-title-display"></h2></header>
+            <div class="carousel-viewport">
+                <div class="carousel-track"></div>
+                <button class="carousel-button prev" aria-label="הסרטון הקודם"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></button>
+                <button class="carousel-button next" aria-label="הסרטון הבא"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg></button>
+            </div>
+            <div class="carousel-nav"></div>
+        </div>
+    </div>
+
+    <!-- SECTION 7: שיעור 3 -->
+    <div class="ch2-card" id="s7-lesson3">
+        <h2 class="ch2-card-title">פרק 2 שיעור 3: איך מתמחרים מניות?</h2>
+
+        <!-- Quote 4 -->
+        <div class="warren-buffett-quote-widget-container">
+            <div class="warren-buffett-quote-widget__inner">
+                <div class="warren-buffett-quote-widget__reveal">התפקיד שלך הוא לא לנבא לאן השוק ינוע, אלא להבין מה ערכה של ההשקעה שלך."</div>
+                <div class="warren-buffett-quote-widget__author">– בנג'מין גרהאם</div>
+            </div>
+        </div>
+
+        <div class="ch2-yt-wrap">
+            <iframe src="https://www.youtube.com/embed/YbqBCSx3e20" title="פרק 2 שיעור 3" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+        </div>
+
+        <!-- Carousel S3 -->
+        <div class="carousel-widget" id="carousel-s3"
+             data-title="פרק 2 שיעור 3 - איך מתמחרים מנייה"
+             data-videos='[{"videoId":"rwUHq9DERwg","title":"יחס שוטף"},{"videoId":"3U2aus2Xl2s","title":"צמיחת רווחים"},{"videoId":"UbHRxLZy__A","title":"ROIC/ROI"},{"videoId":"Nqhl2ILUKtM","title":"CROIC"},{"videoId":"P1-tsac2kOE","title":"EBITDA"},{"videoId":"axG9G3TiOh4","title":"DCF"},{"videoId":"ny4po51GSwQ","title":"סיכום"}]'>
+            <header class="carousel-header"><h2 class="carousel-title-display"></h2></header>
+            <div class="carousel-viewport">
+                <div class="carousel-track"></div>
+                <button class="carousel-button prev" aria-label="הסרטון הקודם"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></button>
+                <button class="carousel-button next" aria-label="הסרטון הבא"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg></button>
+            </div>
+            <div class="carousel-nav"></div>
+        </div>
+
+        <!-- Strategic Widget -->
+        <div id="strategic-mergers-acquisitions-widget" aria-expanded="false">
+            <div class="widget-teaser">
+                <h2 class="teaser-title">הרחבה</h2>
+                <p class="teaser-subtitle">למה חברות רוכשות חברות אחרות?</p>
+            </div>
+            <div class="widget-content">
+                <header class="widget-header"><h2>7 סיבות אסטרטגיות לרכישת חברות</h2></header>
+                <div class="reason-card" role="button" tabindex="0" aria-live="polite">
+                    <div class="reason-icon"></div>
+                    <h3 class="reason-title"></h3>
+                    <p class="reason-text"></p>
+                    <div class="reason-example"></div>
+                </div>
+                <footer class="widget-footer">
+                    <span class="progress-text"></span>
+                    <div class="progress-bar" aria-hidden="true"><div class="progress-indicator"></div></div>
+                    <button class="next-button">הבא ←</button>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 8: שיעור 4 -->
+    <div class="ch2-card" id="s8-lesson4">
+        <h2 class="ch2-card-title">פרק 2 שיעור 4: מכפילים ויחסי מניות-חברה</h2>
+        <div class="ch2-yt-wrap">
+            <iframe src="https://www.youtube.com/embed/4kkQe-_EtW8" title="פרק 2 שיעור 4" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+        </div>
+
+        <!-- Carousel S4 -->
+        <div class="carousel-widget" id="carousel-s4"
+             data-title="שיעור 4 יחסי מנייה-חברה"
+             data-videos='[{"videoId":"sj6kXHHVmHw","title":"EPS FCF/S"},{"videoId":"uyWeggs3g9c","title":"יחס מחיר לרווח P/E"},{"videoId":"e6EuLvsRGgc","title":"PEG ו-BUYBACK"},{"videoId":"izsNp-QmJqE","title":"דיבידנדים"}]'>
+            <header class="carousel-header"><h2 class="carousel-title-display"></h2></header>
+            <div class="carousel-viewport">
+                <div class="carousel-track"></div>
+                <button class="carousel-button prev" aria-label="הסרטון הקודם"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></button>
+                <button class="carousel-button next" aria-label="הסרטון הבא"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg></button>
+            </div>
+            <div class="carousel-nav"></div>
+        </div>
+
+        <!-- Calculator Intro Widget -->
+        <div class="calc-intro-widget">
+            <div class="top">
+                <div class="hero" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.042 21.672L13.684 16.6m0 0l-2.51 2.225.569-9.47 5.227 7.917-3.286-.672zm-7.518-.267A8.25 8.25 0 1120.25 10.5M8.288 14.212A5.25 5.25 0 1117.25 10.5" />
+                    </svg>
+                </div>
+                <div class="intro">
+                    <h2 class="title">הכירו: מדד איכות פיננסית</h2>
+                    <p class="subtitle">כדי לעזור לכם לנתח חברות כמו מקצוענים, בניתי כלי שיטתי שמחשב ציון איכות פיננסית אובייקטיבי על בסיס 13 מדדים מרכזיים.</p>
+                </div>
+            </div>
+            <div class="features" role="list">
+                <div class="feature" role="listitem">
+                    <div class="icon-wrap" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg></div>
+                    <div><h4>ניתוח שיטתי ומובנה</h4><p>עוברים שלב אחר שלב על המדדים החשובים ביותר.</p></div>
+                </div>
+                <div class="feature" role="listitem">
+                    <div class="icon-wrap" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path><path d="M12 18a6 6 0 1 0 0-12 6 6 0 0 0 0 12z"></path></svg></div>
+                    <div><h4>ציון איכות אובייקטיבי</h4><p>מקבלים ציון סופי שמסכם את כל הנתונים למספר אחד.</p></div>
+                </div>
+                <div class="feature" role="listitem">
+                    <div class="icon-wrap" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
+                    <div><h4>התאמה למשקיע</h4><p>הכלי מתאים את עצמו לפרופיל שלכם: ערך, צמיחה או מאוזן.</p></div>
+                </div>
+            </div>
+            <div class="actions">
+                <a href="https://bluehorizons.ravpage.co.il/Investment_Health_Calculator" class="cta-btn cta-btn-primary">לפתיחת המחשבון וניתוח חברה</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 9: שיעור 5 -->
+    <div class="ch2-card" id="s9-lesson5">
+        <h2 class="ch2-card-title">פרק 2 שיעור 5: מה עלול להפוך חברה למעניינת?</h2>
+        <div class="ch2-yt-wrap">
+            <iframe src="https://www.youtube.com/embed/d5InJt7gyg8" title="פרק 2 שיעור 5" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+        </div>
+
+        <!-- Carousel S5 -->
+        <div class="carousel-widget" id="carousel-s5"
+             data-title="פרק 2 שיעור 5"
+             data-videos='[{"videoId":"kwI5JKlasQA","title":"פיננסים חיוביים"},{"videoId":"-xsYjtb7zlo","title":"יתרון תחרותי"},{"videoId":"KAlPUGEteqA","title":"עתיד מזהיר"},{"videoId":"AVfB-HTXdDg","title":"יהלום לא מלוטש"},{"videoId":"8zIL2Yn5Zsw","title":"הנהלה איכותית"},{"videoId":"Fq9F73eoykk","title":"אפקט המותג"}]'>
+            <header class="carousel-header"><h2 class="carousel-title-display"></h2></header>
+            <div class="carousel-viewport">
+                <div class="carousel-track"></div>
+                <button class="carousel-button prev" aria-label="הסרטון הקודם"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></button>
+                <button class="carousel-button next" aria-label="הסרטון הבא"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg></button>
+            </div>
+            <div class="carousel-nav"></div>
+        </div>
+    </div>
+
+    <!-- SECTION 10: שיעור 6 -->
+    <div class="ch2-card" id="s10-lesson6">
+        <h2 class="ch2-card-title">פרק 2 שיעור 6: לפעמים גם באפט טועה</h2>
+        <div class="ch2-yt-wrap">
+            <iframe src="https://www.youtube.com/embed/_iZXuc5j-Ec" title="פרק 2 שיעור 6 — חלק א" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+        </div>
+
+        <!-- Quote 5 -->
+        <div class="warren-buffett-quote-widget-container">
+            <div class="warren-buffett-quote-widget__inner">
+                <div class="warren-buffett-quote-widget__reveal">הדרך להצלחה רצופה טעויות – השאלה היא כמה מהר אתה לומד מהן"</div>
+                <div class="warren-buffett-quote-widget__author">– פיטר לינץ'</div>
+            </div>
+        </div>
+
+        <div class="ch2-yt-wrap">
+            <iframe src="https://www.youtube.com/embed/VNFXfrTIkfc" title="פרק 2 שיעור 6 — חלק ב" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+        </div>
+
+        <!-- Game Widget -->
+        <div class="game-widget">
+            <div class="top">
+                <div class="hero" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
+                    </svg>
+                </div>
+                <div class="intro">
+                    <h2 class="title">חדש בקורס: משחק ההשקעות שלכם</h2>
+                    <p class="subtitle">כדי להפוך ידע ליכולת, בניתי עבורכם משחק אינטראקטיבי. הוא יעזור לכם לתרגל ולפתח את הכישורים החשובים באמת:</p>
+                </div>
+            </div>
+            <div class="features" role="list">
+                <div class="feature" role="listitem">
+                    <div class="icon-wrap" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg></div>
+                    <div><h4>קבלת החלטות מהירה</h4><p>לנתח נתונים ולגבש דעה במהירות, כמו בעולם האמיתי.</p></div>
+                </div>
+                <div class="feature" role="listitem">
+                    <div class="icon-wrap" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 2v6h6M21.5 22v-6h-6"/><path d="M22 11.5A10 10 0 0 0 3.5 12.5"/><path d="M2 12.5a10 10 0 0 0 18.5-1"/></svg></div>
+                    <div><h4>חיבור סיפור למספרים</h4><p>לראות איך הסיפור העסקי משתקף בדוחות הכספיים.</p></div>
+                </div>
+                <div class="feature" role="listitem">
+                    <div class="icon-wrap" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg></div>
+                    <div><h4>פיתוח אינטואיציה</h4><p>לזהות הזדמנויות ולהרגיש מתי עסקה נראית "נכונה".</p></div>
+                </div>
+            </div>
+            <div class="game-actions">
+                <button class="game-btn game-btn-primary game-start-btn">רוצה לנסות? לחצו להתנסות מהירה</button>
+            </div>
+            <section class="minigame">
+                <div class="minigame-header">
+                    <button class="back-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
+                        חזור
+                    </button>
+                </div>
+                <div class="company">
+                    <div class="company-info">
+                        <h3>אלפא טק בע"מ</h3>
+                        <p>חברת תוכנה יציבה עם לקוחות נאמנים וצמיחה מתונה - שילוב שמעניין משקיע ערך.</p>
+                        <div class="metrics" role="list">
+                            <div class="metric" role="listitem"><small>P/E</small><strong>12</strong></div>
+                            <div class="metric" role="listitem"><small>צמיחה שנתית</small><strong>4%</strong></div>
+                            <div class="metric" role="listitem"><small>חוב לנכסים</small><strong>נמוך</strong></div>
+                        </div>
+                    </div>
+                    <div class="company-actions">
+                        <button class="game-btn game-btn-primary game-btn-small" data-choice="buy">קנה</button>
+                        <button class="game-btn game-btn-ghost game-btn-small" data-choice="pass">עבור</button>
+                    </div>
+                </div>
+                <div class="feedback"></div>
+                <div class="play-full-game">
+                    <a class="game-btn game-btn-primary" href="https://bluehorizons.ravpage.co.il/Value_Invest_Game">שחקו במשחק המלא</a>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- SECTION 11: BOTTOM NAV -->
+    <div class="ch2-card-dark">
+        <h2 class="ch2-card-dark-title">מוכנים להמשיך?</h2>
+        <p class="ch2-card-dark-sub">סיימתם את פרק 2 — שלב האסטרטגיה. בחרו את הדרך הבאה שלכם.</p>
+        <div class="ch2-bottom-btns">
+            <a href="/investor-academy/lessons/chapter-3.html" class="ch2-btn ch2-btn-primary">לפרק 3 ←</a>
+            <a href="/investor-academy/lessons/chapter-1.html" class="ch2-btn ch2-btn-secondary">חזרה לפרק 1</a>
+            <a href="/investor-academy/lessons/" class="ch2-btn ch2-btn-outline">חזרה לרשימת הפרקים</a>
+        </div>
+    </div>
+
+</main>
+
+<!-- YouTube IFrame API — ONCE -->
+<script src="https://www.youtube.com/iframe_api"></script>
 <script>
-document.getElementById('signout-btn').addEventListener('click', async function () {
+// ===== SIGNOUT =====
+document.getElementById('ch2-signout-btn').addEventListener('click', async function () {
     const _c = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     await _c.auth.signOut();
     window.location.replace('/auth/login/');
 });
+
+// ===== HAMBURGER NAV =====
 (function () {
-    var btn = document.getElementById('hbnav-toggle');
-    var panel = document.getElementById('hbnav-panel');
-    var overlay = document.getElementById('hbnav-overlay');
+    var btn = document.getElementById('ch2-hbnav-toggle');
+    var panel = document.getElementById('ch2-hbnav-panel');
+    var overlay = document.getElementById('ch2-hbnav-overlay');
     function open()  { btn.classList.add('open'); panel.classList.add('open'); overlay.classList.add('open'); btn.setAttribute('aria-expanded','true'); }
     function close() { btn.classList.remove('open'); panel.classList.remove('open'); overlay.classList.remove('open'); btn.setAttribute('aria-expanded','false'); }
     btn.addEventListener('click', function () { panel.classList.contains('open') ? close() : open(); });
     overlay.addEventListener('click', close);
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
 })();
+
+// ===== QUOTE WIDGETS =====
+(function () {
+    document.addEventListener('DOMContentLoaded', function () {
+        var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('quote-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.warren-buffett-quote-widget__inner').forEach(function (el) {
+            observer.observe(el);
+        });
+    });
+})();
+
+// ===== CAROUSEL =====
+function initCarousel(widget, widgetId) {
+    if (widget.dataset.initialized) return;
+    widget.dataset.initialized = 'true';
+    var videoData = JSON.parse(widget.dataset.videos);
+    var title = widget.dataset.title || 'קרוסלת סרטונים';
+    var track = widget.querySelector('.carousel-track');
+    var nav = widget.querySelector('.carousel-nav');
+    var nextBtn = widget.querySelector('.carousel-button.next');
+    var prevBtn = widget.querySelector('.carousel-button.prev');
+    var titleEl = widget.querySelector('.carousel-title-display');
+    var players = [], currentIndex = 0;
+    titleEl.textContent = title;
+    videoData.forEach(function (video, index) {
+        var playerId = 'ch2-player-' + widgetId + '-' + index;
+        var slide = document.createElement('div');
+        slide.className = 'carousel-slide';
+        slide.innerHTML = '<div class="video-container"><div id="' + playerId + '"></div></div>';
+        track.appendChild(slide);
+        var navItem = document.createElement('button');
+        navItem.className = 'nav-item';
+        navItem.textContent = video.title;
+        navItem.setAttribute('aria-label', 'עבור ל' + video.title);
+        nav.appendChild(navItem);
+    });
+    var slides = Array.from(track.children);
+    var navItems = Array.from(nav.children);
+    videoData.forEach(function (video, index) {
+        players[index] = new YT.Player('ch2-player-' + widgetId + '-' + index, {
+            height: '100%', width: '100%', videoId: video.videoId, playerVars: { playsinline: 1 }
+        });
+    });
+    function updateCarousel(targetIndex) {
+        if (targetIndex < 0 || targetIndex >= slides.length) return;
+        if (players[currentIndex] && typeof players[currentIndex].pauseVideo === 'function') players[currentIndex].pauseVideo();
+        track.style.transform = 'translateX(' + (targetIndex * slides[0].getBoundingClientRect().width) + 'px)';
+        navItems[currentIndex].classList.remove('active');
+        navItems[targetIndex].classList.add('active');
+        currentIndex = targetIndex;
+    }
+    nextBtn.addEventListener('click', function () { updateCarousel(currentIndex < slides.length - 1 ? currentIndex + 1 : 0); });
+    prevBtn.addEventListener('click', function () { updateCarousel(currentIndex > 0 ? currentIndex - 1 : slides.length - 1); });
+    nav.addEventListener('click', function (e) {
+        var t = e.target.closest('button.nav-item');
+        if (!t) return;
+        updateCarousel(navItems.findIndex(function (item) { return item === t; }));
+    });
+    var resizeTimeout;
+    window.addEventListener('resize', function () {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(function () {
+            track.style.transition = 'none';
+            updateCarousel(currentIndex);
+            track.offsetHeight;
+            track.style.transition = '';
+        }, 150);
+    });
+    updateCarousel(0);
+}
+
+window.onYouTubeIframeAPIReady = function () {
+    document.querySelectorAll('.carousel-widget').forEach(function (carousel, index) {
+        if (window.YT && window.YT.Player) initCarousel(carousel, index);
+    });
+};
+
+document.addEventListener('DOMContentLoaded', function () {
+    if (typeof window.onYouTubeIframeAPIReady === 'function' && window.YT && window.YT.Player) {
+        window.onYouTubeIframeAPIReady();
+    }
+});
+
+// ===== DEBT TYPES WIDGET =====
+(function () {
+    var widget = document.getElementById('debt-types-leverage-widget');
+    if (!widget) return;
+    var content = widget.querySelector('.widget-content');
+    var cardEl = widget.querySelector('.reason-card');
+    var iconContainer = widget.querySelector('.reason-icon');
+    var titleEl = widget.querySelector('.reason-title');
+    var textEl = widget.querySelector('.reason-text');
+    var exampleEl = widget.querySelector('.reason-example');
+    var nextButton = widget.querySelector('.next-button');
+    var progressText = widget.querySelector('.progress-text');
+    var progressIndicator = widget.querySelector('.progress-indicator');
+    var reasonsData = [
+        { title: "חוב שמשמש לבניית נכס אסטרטגי", icon: '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>', text: 'חוב שממומן להשקעה שמייצרת נכס עם ערך מתמשך הוא בדרך כלל חוב טוב. אם הנכס מייצר תזרים עתידי או מחזק את היכולת התפעולית, התועלת עולה על עלות הריבית.', example: '<strong>💡 דוגמה:</strong><br>Netflix מימנה השקעות בתוכן מקורי בעזרת חוב, וההשקעה הניבה עלייה במנויים ותזרים עתידי. החוב יוצר נכס שמחזיר את עצמו.' },
+        { title: "חוב לכיסוי הוצאות שוטפות בלבד", icon: '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>', text: 'כאשר חברה לוקחת חוב רק כדי לכסות עלויות תפעול שוטפות, אין יצירה של ערך חדש. החוב הופך לסיכון, כיוון שהוא מוסיף התחייבויות שלא מלוות בתזרים יציב.', example: '<strong>💡 דוגמה:</strong><br>חברות קמעונאיות שלקחו חוב לתשלום משכורות וחכירות ללא יצירת מכירות חדשות. כשהביקוש ירד — נוצרו בעיות נזילות חמורות.' },
+        { title: "העמסת חוב כתוצאה מרכישה ממונפת (LBO)", icon: '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="5" r="3" stroke-width="2"/><line x1="12" y1="22" x2="12" y2="8" stroke-width="2"/><path d="M5 12H2a10 10 0 0 0 20 0h-3" stroke-width="2" stroke-linecap="round"/></svg>', text: 'חוב כבד שנוצר כתוצאה מרכישה ממונפת עלול להיות מסוכן, כיוון שהחברה חייבת תשלומי ריבית גבוהים במקום להשקיע בפיתוח עסקי.', example: '<strong>💡 דוגמה:</strong><br>Toys "R" Us ב-LBO 2005 — החוב הגדול גרם לקיצוצים בהשקעות, והחברה לא הצליחה להתמודד עם ירידה במכירות.' },
+        { title: "חוב למימון רכישה אסטרטגית", icon: '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>', text: 'חוב שמממן רכישה שמייצרת סינרגיות או נכס מניב יכול להיות חיובי, כל עוד יש תכנון להחזרו ויכולת התזרים מספיקה.', example: '<strong>💡 דוגמה:</strong><br>Amazon רכשה את Whole Foods בחוב, מה שאפשר הרחבת הקמעונאות וחיזוק תזרים. החוב תמך בהגדלת הכנסה עתידית.' },
+        { title: "חוסר התאמה בין טווחי החוב לנכסים", icon: '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>', text: 'כאשר נכסים ארוכי טווח ממומנים בחוב קצר טווח, קיים סיכון נזילות — שינוי בתנאי אשראי או עיכוב בתזרים יכול לגרום לבעיות בפרעון החוב.', example: '<strong>💡 דוגמה:</strong><br>חברות נדל"ן שמימנו פרויקטים ארוכי טווח בהלוואות קצרות. כשהביקוש ירד, נאלצו למכור נכסים במחיר נמוך.' },
+        { title: "חוב למימון רכישות מניות (Buybacks)", icon: '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>', text: 'חוב למימון buybacks יכול להעלות EPS ולהיות חיובי אם התזרים יציב. אם התזרים נחלש, החוב הופך למקור סיכון שמקטין גמישות פיננסית.', example: '<strong>💡 דוגמה:</strong><br>Apple השתמשה בחוב למימון buybacks, מה שהגדיל את הרווח למניה. עם ניהול נכון — הפך לכלי פיננסי חכם.' }
+    ];
+    var currentIndex = 0;
+    function updateWidgetContent(i) {
+        var r = reasonsData[i];
+        iconContainer.innerHTML = r.icon;
+        titleEl.textContent = r.title;
+        textEl.innerHTML = '<p style="margin:.2rem 0">' + r.text + '</p>';
+        exampleEl.innerHTML = r.example;
+        progressIndicator.style.width = (((i + 1) / reasonsData.length) * 100) + '%';
+        progressText.textContent = (i + 1) + ' / ' + reasonsData.length;
+        nextButton.textContent = (i === reasonsData.length - 1) ? 'התחל מחדש ↻' : 'הבא ←';
+    }
+    function showNextReason() {
+        cardEl.classList.add('is-changing');
+        setTimeout(function () {
+            currentIndex = (currentIndex + 1) % reasonsData.length;
+            updateWidgetContent(currentIndex);
+            cardEl.classList.remove('is-changing');
+            cardEl.focus();
+        }, 180);
+    }
+    function expandWidgetIfNeeded() {
+        if (widget.getAttribute('aria-expanded') === 'true') return;
+        var startHeight = widget.offsetHeight;
+        content.style.display = 'flex';
+        requestAnimationFrame(function () {
+            var endHeight = widget.scrollHeight;
+            widget.style.minHeight = startHeight + 'px';
+            widget.setAttribute('aria-expanded', 'true');
+            content.setAttribute('aria-hidden', 'false');
+            requestAnimationFrame(function () { widget.style.minHeight = endHeight + 'px'; });
+            widget.addEventListener('transitionend', function () { widget.style.minHeight = 'auto'; }, { once: true });
+        });
+    }
+    widget.addEventListener('click', function (e) {
+        if (widget.getAttribute('aria-expanded') !== 'true' && !e.target.closest('.next-button')) {
+            expandWidgetIfNeeded();
+        }
+    });
+    widget.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            if (widget.getAttribute('aria-expanded') !== 'true') { expandWidgetIfNeeded(); return; }
+            var rc = widget.querySelector('.reason-card'); if (rc) rc.focus();
+        }
+    });
+    cardEl.addEventListener('click', function () {
+        if (widget.getAttribute('aria-expanded') !== 'true') { expandWidgetIfNeeded(); return; }
+        showNextReason();
+    });
+    cardEl.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); showNextReason(); } });
+    nextButton.addEventListener('click', function () {
+        if (widget.getAttribute('aria-expanded') !== 'true') { expandWidgetIfNeeded(); return; }
+        showNextReason();
+    });
+    updateWidgetContent(currentIndex);
+    setTimeout(function () { if (widget.getAttribute('aria-expanded') === 'false') content.style.display = 'none'; }, 50);
+})();
+
+// ===== STRATEGIC WIDGET =====
+(function () {
+    var widget = document.getElementById('strategic-mergers-acquisitions-widget');
+    if (!widget) return;
+    var teaser = widget.querySelector('.widget-teaser');
+    var content = widget.querySelector('.widget-content');
+    var cardEl = widget.querySelector('.reason-card');
+    var iconContainer = widget.querySelector('.reason-icon');
+    var titleEl = widget.querySelector('.reason-title');
+    var textEl = widget.querySelector('.reason-text');
+    var exampleEl = widget.querySelector('.reason-example');
+    var nextButton = widget.querySelector('.next-button');
+    var progressText = widget.querySelector('.progress-text');
+    var progressIndicator = widget.querySelector('.progress-indicator');
+    content.style.display = 'none';
+    var reasonsData = [
+        { title: "יצירת סינרגיות", text: "השילוב בין שתי חברות יכול לייצר יעילות תפעולית, לחסוך בעלויות כפולות ולשפר את הרווחיות הכוללת (אפקט 1+1=3).", icon: '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-5M3 4h5v5M9.879 14.121A3 3 0 1014.12 9.88l-4.242 4.242z"/></svg>', example: "<strong>💡 דוגמה:</strong> רכישת אולפני Fox על ידי דיסני — שילוב ספריית תוכן ענקית לשירות Disney+, חיסכון בעלויות וחיזוק כוח מיקוח." },
+        { title: "חיסול תחרות ונתח שוק", text: "רכישת מתחרה ישיר מסירה איום, מגדילה את כוח התמחור ומבססת מעמד דומיננטי יותר בענף.", icon: '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>', example: "<strong>💡 דוגמה:</strong> רכישת אינסטגרם על ידי פייסבוק — נטרול איום תחרותי וזכייה בבסיס משתמשים צעיר וצומח." },
+        { title: "רכישת טכנולוגיה וכישרון", text: "גישה מיידית לפטנטים, טכנולוגיות ייחודיות או צוותי פיתוח מבריקים שקשה לבנות באופן עצמאי.", icon: '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>', example: "<strong>💡 דוגמה:</strong> רכישת אנדרואיד על ידי גוגל — במקום לפתח מאפס, רכישת חברה קטנה שהפכה למערכת ההפעלה הפופולרית בעולם." },
+        { title: "התרחבות לשווקים חדשים", text: "רכישת חברה הפועלת במדינה אחרת היא קיצור דרך יעיל לכניסה לשווקים בינלאומיים.", icon: '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2h10a2 2 0 002-2v-1a2 2 0 012-2h1.945M7.737 16.95l.005.005M11.237 16.95l.005.005M14.737 16.95l.005.005"/></svg>', example: "<strong>💡 דוגמה:</strong> רכישת Flipkart ההודית על ידי וולמארט — דריסת רגל מיידית בשוק ההודי המורכב." },
+        { title: "צמיחה מהירה והגעה לקנה מידה", text: "רכישת חברה קיימת היא דרך מהירה להגדיל נתח שוק, הכנסות ובסיס לקוחות, במקום לבנות אותם מאפס.", icon: '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>', example: "<strong>💡 דוגמה:</strong> רכישת LinkedIn על ידי מיקרוסופט — גישה מיידית לרשת המקצועית הגדולה בעולם ולמאגר נתונים עסקי עצום." },
+        { title: "גיוון והורדת סיכון", text: "כניסה לתחום פעילות חדש מפזרת את מקורות ההכנסה ומפחיתה תלות בשוק יחיד.", icon: '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>', example: "<strong>💡 דוגמה:</strong> רכישת Whole Foods על ידי אמזון — כניסה לקמעונאות פיזית וגיוון מקורות ההכנסה." },
+        { title: "הקצאת הון חכמה", text: "חברות עם עודפי מזומנים גדולים יכולות להשתמש בהם לרכישה המייצרת תשואה גבוהה יותר מהשקעות אחרות.", icon: '<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>', example: "<strong>💡 דוגמה:</strong> רכישת Duracell על ידי ברקשייר האת'וויי — באפט השתמש בהון ברקשייר לרכישת עסק יציב עם תזרים חזק וצפוי." }
+    ];
+    var currentIndex = 0;
+    function updateWidgetContent(index) {
+        var r = reasonsData[index];
+        iconContainer.innerHTML = r.icon;
+        titleEl.textContent = r.title;
+        textEl.textContent = r.text;
+        exampleEl.innerHTML = r.example;
+        progressIndicator.style.width = (((index + 1) / reasonsData.length) * 100) + '%';
+        progressText.textContent = (index + 1) + ' / ' + reasonsData.length;
+        nextButton.textContent = (index === reasonsData.length - 1) ? 'התחל מחדש ↻' : 'הבא ←';
+    }
+    function showNextReason() {
+        cardEl.classList.add('is-changing');
+        setTimeout(function () {
+            currentIndex = (currentIndex + 1) % reasonsData.length;
+            updateWidgetContent(currentIndex);
+            cardEl.classList.remove('is-changing');
+            cardEl.focus();
+        }, 200);
+    }
+    function expandWidgetIfNeeded() {
+        if (widget.getAttribute('aria-expanded') === 'true') return;
+        var startHeight = widget.offsetHeight;
+        content.style.display = 'flex';
+        teaser.style.display = 'none';
+        requestAnimationFrame(function () {
+            var endHeight = widget.scrollHeight;
+            widget.style.minHeight = startHeight + 'px';
+            widget.setAttribute('aria-expanded', 'true');
+            requestAnimationFrame(function () { widget.style.minHeight = endHeight + 'px'; });
+            widget.addEventListener('transitionend', function () { widget.style.minHeight = 'auto'; }, { once: true });
+        });
+    }
+    widget.addEventListener('click', function (e) {
+        if (widget.getAttribute('aria-expanded') !== 'true' && !e.target.closest('.next-button')) expandWidgetIfNeeded();
+    });
+    nextButton.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (widget.getAttribute('aria-expanded') !== 'true') expandWidgetIfNeeded();
+        else showNextReason();
+    });
+    cardEl.addEventListener('click', function (e) { e.stopPropagation(); showNextReason(); });
+    cardEl.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); showNextReason(); } });
+    updateWidgetContent(currentIndex);
+})();
+
+// ===== GAME WIDGET =====
+(function () {
+    document.querySelectorAll('.game-widget').forEach(function (widget) {
+        var startBtn = widget.querySelector('.game-start-btn');
+        var backBtn = widget.querySelector('.back-btn');
+        var minigame = widget.querySelector('.minigame');
+        var companyActions = minigame.querySelector('.company-actions');
+        var feedbackArea = minigame.querySelector('.feedback');
+        var playFullGame = minigame.querySelector('.play-full-game');
+        var decisionMade = false;
+        var companyIsGoodValue = true;
+        function resetMinigame() {
+            decisionMade = false;
+            companyActions.style.display = 'flex';
+            feedbackArea.style.display = 'none';
+            playFullGame.style.display = 'none';
+        }
+        startBtn.addEventListener('click', function () { widget.classList.add('is-playing'); });
+        backBtn.addEventListener('click', function () { widget.classList.remove('is-playing'); resetMinigame(); });
+        companyActions.addEventListener('click', function (e) {
+            if (e.target.tagName !== 'BUTTON' || decisionMade) return;
+            decisionMade = true;
+            var isCorrect = (e.target.dataset.choice === 'buy') === companyIsGoodValue;
+            companyActions.style.display = 'none';
+            feedbackArea.style.display = 'block';
+            playFullGame.style.display = 'block';
+            feedbackArea.className = 'feedback ' + (isCorrect ? 'correct' : 'incorrect');
+            feedbackArea.innerHTML = isCorrect
+                ? '<strong>ניתוח מצוין!</strong> זיהיתם חברה יציבה במחיר סביר — דוגמה קלאסית להשקעת ערך.'
+                : '<strong>אפשר לחשוב שוב...</strong> המכפיל הנמוך והחוב הקטן הופכים אותה לאטרקטיבית בעיני משקיע ערך.';
+        });
+    });
+})();
 </script>
+
 </body>
 </html>
