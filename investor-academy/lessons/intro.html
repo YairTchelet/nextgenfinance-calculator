@@ -15,173 +15,9 @@
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/course.css">
 
     <style>
-        /* ===== RESET & BASE ===== */
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html { scroll-behavior: smooth; overflow-x: hidden; }
-        body {
-            background: linear-gradient(155deg, #0b4a64 0%, #1680a0 48%, #0d6a82 100%);
-            background-attachment: fixed;
-            font-family: 'Assistant', 'Rubik', sans-serif;
-            direction: rtl;
-            color: #394140;
-            min-height: 100vh;
-        }
-        img { max-width: 100%; height: auto; }
-
-        /* ===== NAVBAR ===== */
-        .intro-nav {
-            background: #0c3d52;
-            padding: 0 1.5rem;
-            height: 62px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.35);
-        }
-        .intro-nav-brand { display: flex; align-items: center; gap: 0.7rem; }
-        .intro-nav-logo {
-            color: #b3e0dc;
-            font-family: 'Rubik', sans-serif;
-            font-weight: 700;
-            font-size: 1.2rem;
-            text-decoration: none;
-        }
-        .intro-nav-links { display: flex; align-items: center; gap: 1rem; }
-        .intro-nav-link {
-            color: #fefefe;
-            text-decoration: none;
-            font-family: 'Assistant', sans-serif;
-            font-size: 0.95rem;
-            transition: color 0.2s;
-        }
-        .intro-nav-link:hover { color: #b3e0dc; }
-        .intro-nav-signout {
-            background: transparent;
-            border: 1px solid rgba(240,248,250,0.35);
-            color: #fefefe;
-            font-family: 'Assistant', sans-serif;
-            font-size: 0.9rem;
-            padding: 0.4rem 1rem;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .intro-nav-signout:hover { border-color: #b3e0dc; color: #b3e0dc; }
-
-        /* ===== HAMBURGER BUTTON ===== */
-        .hbnav-btn {
-            width: 40px; height: 40px;
-            background: rgba(179,224,220,0.15);
-            border: 1px solid rgba(179,224,220,0.3);
-            border-radius: 10px;
-            cursor: pointer;
-            display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px;
-            transition: background 0.2s, border-color 0.2s;
-            flex-shrink: 0;
-        }
-        .hbnav-btn:hover { background: rgba(179,224,220,0.28); border-color: rgba(179,224,220,0.55); }
-        .hbnav-btn span { display: block; width: 22px; height: 2px; background: #fefefe; border-radius: 2px; transition: transform 0.3s, opacity 0.3s; }
-        .hbnav-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-        .hbnav-btn.open span:nth-child(2) { opacity: 0; }
-        .hbnav-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-        /* ===== SLIDE-IN CHAPTER PANEL ===== */
-        .hbnav-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 999; }
-        .hbnav-overlay.open { display: block; }
-        .hbnav-panel {
-            position: fixed; top: 62px; right: 0;
-            height: calc(100vh - 62px); width: 270px;
-            background: #0c3d52; z-index: 1000;
-            transform: translateX(100%); transition: transform 0.3s ease;
-            overflow-y: auto; padding: 1.5rem 1rem;
-            box-shadow: -4px 0 20px rgba(0,0,0,0.35);
-        }
-        .hbnav-panel.open { transform: translateX(0); }
-        .hbnav-panel-title {
-            color: #b3e0dc; font-family: 'Rubik', sans-serif;
-            font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
-            margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(179,224,220,0.2);
-        }
-        .hbnav-item {
-            display: flex; align-items: center; gap: 0.9rem;
-            padding: 0.75rem 0.85rem; border-radius: 10px;
-            text-decoration: none; color: #fefefe;
-            font-family: 'Assistant', sans-serif; font-size: 0.95rem;
-            transition: background 0.18s; margin-bottom: 4px;
-        }
-        .hbnav-item:hover { background: rgba(179,224,220,0.12); }
-        .hbnav-item.active { background: rgba(179,224,220,0.18); font-weight: 700; }
-        .hbnav-item.disabled { opacity: 0.45; pointer-events: none; }
-        .hbnav-icon { width: 34px; height: 34px; background: rgba(179,224,220,0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1rem; }
-        .hbnav-text { display: flex; flex-direction: column; }
-        .hbnav-name { font-size: 0.95rem; }
-        .hbnav-sub  { font-size: 0.75rem; color: #b3e0dc; opacity: 0.7; }
-        .hbnav-site-link { display: flex; align-items: center; padding: 0.55rem 0.85rem; border-radius: 8px; text-decoration: none; color: rgba(254,254,254,0.72); font-size: 0.88rem; font-family: 'Assistant', sans-serif; transition: background 0.18s; margin-bottom: 2px; }
-        .hbnav-site-link:hover { background: rgba(179,224,220,0.1); color: #fefefe; }
-        .hbnav-divider { height: 1px; background: rgba(179,224,220,0.15); margin: 0.85rem 0.5rem; }
-
-        /* ===== HERO ===== */
-        .intro-hero { background: #0c3d52; padding: 3rem 1rem 2.5rem; text-align: center; }
-        .intro-hero-title { font-family: 'Rubik', sans-serif; font-size: 2.2rem; font-weight: 700; color: #fefefe; margin-bottom: 1.5rem; }
-        .intro-hero-yt-wrap { width: 100%; max-width: 700px; margin: 0 auto; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,0.4); aspect-ratio: 16/9; }
-        .intro-hero-yt-wrap iframe { width: 100%; height: 100%; border: none; display: block; }
-        .intro-hero-badge { display: inline-block; margin-top: 1.5rem; background: #b3e0dc; color: #394140; font-family: 'Rubik', sans-serif; font-size: 1.15rem; font-weight: 700; padding: 0.5rem 2rem; border-radius: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
-
-        /* ===== CONTAINER ===== */
-        .intro-container { max-width: 700px; margin: 0 auto; padding: 2rem 1rem 4rem; }
-
-        /* ===== CARDS ===== */
-        .intro-card {
-            background: rgba(236, 232, 229, 0.97);
-            border-radius: 16px;
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
-            padding: 2rem;
-            margin-bottom: 2rem;
-            overflow: hidden;
-        }
-        .intro-card-dark {
-            background: #0c3d52;
-            border-radius: 16px;
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
-            padding: 2rem;
-            margin-bottom: 2rem;
-            overflow: hidden;
-        }
-        .intro-card-title { font-family: 'Rubik', sans-serif; font-size: 1.55rem; font-weight: 700; color: #394140; text-align: center; margin-bottom: 1.25rem; }
-        .intro-card-text { font-family: 'Assistant', sans-serif; font-size: 1.05rem; line-height: 1.75; color: #6b7d7c; margin-bottom: 1.25rem; text-align: center; }
-
-        /* ===== YOUTUBE EMBEDS ===== */
-        .intro-yt-wrap { width: 100%; aspect-ratio: 16/9; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.2); margin-bottom: 1.25rem; }
-        .intro-yt-wrap iframe { width: 100%; height: 100%; border: none; display: block; }
-
-        /* ===== SIDE BY SIDE ===== */
-        .intro-sidebyside { display: flex; gap: 1rem; margin-top: 1.25rem; }
-        .intro-sidebyside > * { flex: 1; min-width: 0; }
-        @media (max-width: 560px) { .intro-sidebyside { flex-direction: column; } }
-
-        /* ===== BOTTOM NAV BUTTONS ===== */
-        .intro-bottom-nav { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
-        .intro-btn-gold { display: inline-block; background: #b3e0dc; color: #394140; font-family: 'Rubik', sans-serif; font-weight: 700; font-size: 1.1rem; padding: 0.8rem 2.5rem; border-radius: 30px; text-decoration: none; box-shadow: 0 4px 14px rgba(179,224,220,0.45); transition: all 0.2s; }
-        .intro-btn-gold:hover { background: #8fc9c4; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(179,224,220,0.55); }
-        .intro-btn-outline { display: inline-block; background: transparent; border: 2px solid rgba(240,248,250,0.45); color: #fefefe; font-family: 'Assistant', sans-serif; font-size: 1rem; padding: 0.65rem 2rem; border-radius: 30px; text-decoration: none; transition: all 0.2s; }
-        .intro-btn-outline:hover { border-color: #b3e0dc; color: #b3e0dc; }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 480px) {
-            .intro-hero-title { font-size: 1.75rem; }
-            .intro-card { padding: 1.25rem; }
-            .intro-card-dark { padding: 1.25rem; }
-            .intro-card-title { font-size: 1.3rem; }
-            .intro-nav { padding: 0 0.75rem; }
-            .intro-nav-logo { font-size: 1rem; }
-            .intro-nav-link { display: none; }
-        }
-
         /* ================================================================
            WIDGET STYLES — each scoped to its own root class
            ================================================================ */
@@ -312,7 +148,7 @@
             transition: min-height 0.6s cubic-bezier(0.19, 1, 0.22, 1);
             position: relative; overflow: hidden;
         }
-        .intro-sidebyside .did-you-know-widget { margin: 0; }
+        .course-sidebyside .did-you-know-widget { margin: 0; }
         .did-you-know-widget .card-teaser { text-align: center; transition: opacity 0.4s ease; }
         .did-you-know-widget .teaser-title { font-size: 1.7rem; font-weight: 700; margin: 0; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .did-you-know-widget .teaser-subtitle { font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin: 0.5rem 0; }
@@ -428,16 +264,16 @@
 <body>
 
 <!-- ===== NAVBAR ===== -->
-<nav class="intro-nav">
-    <div class="intro-nav-brand">
+<nav class="course-nav">
+    <div class="course-nav-brand">
         <button class="hbnav-btn" id="hbnav-toggle" aria-label="תפריט פרקים" aria-expanded="false">
             <span></span><span></span><span></span>
         </button>
-        <a href="/" class="intro-nav-logo">NewGen Finance</a>
+        <a href="/" class="course-nav-logo">NewGen Finance</a>
     </div>
-    <div class="intro-nav-links">
-        <a href="/members/" class="intro-nav-link">אזור החברים</a>
-        <button class="intro-nav-signout" id="intro-signout-btn">התנתקות</button>
+    <div class="course-nav-links">
+        <a href="/members/" class="course-nav-link">אזור החברים</a>
+        <button class="course-nav-signout" id="intro-signout-btn">התנתקות</button>
     </div>
 </nav>
 
@@ -459,28 +295,20 @@
         <div class="hbnav-icon">&#128273;</div>
         <div class="hbnav-text"><span class="hbnav-name">פרק 1</span><span class="hbnav-sub">שלב הכניסה</span></div>
     </a>
-    <a href="#" class="hbnav-item disabled">
+    <a href="/investor-academy/lessons/chapter-2.html" class="hbnav-item">
         <div class="hbnav-icon">&#129517;</div>
-        <div class="hbnav-text"><span class="hbnav-name">פרק 2</span><span class="hbnav-sub">בקרוב</span></div>
+        <div class="hbnav-text"><span class="hbnav-name">פרק 2</span><span class="hbnav-sub">שלב האסטרטגיה</span></div>
     </a>
     <a href="#" class="hbnav-item disabled">
         <div class="hbnav-icon">&#128295;</div>
-        <div class="hbnav-text"><span class="hbnav-name">פרק 3</span><span class="hbnav-sub">בקרוב</span></div>
-    </a>
-    <a href="#" class="hbnav-item disabled">
-        <div class="hbnav-icon">&#128202;</div>
-        <div class="hbnav-text"><span class="hbnav-name">פרק 4</span><span class="hbnav-sub">בקרוב</span></div>
-    </a>
-    <a href="#" class="hbnav-item disabled">
-        <div class="hbnav-icon">&#127942;</div>
-        <div class="hbnav-text"><span class="hbnav-name">פרק 5</span><span class="hbnav-sub">בקרוב</span></div>
+        <div class="hbnav-text"><span class="hbnav-name">פרקים 3–5</span><span class="hbnav-sub">בקרוב</span></div>
     </a>
 </nav>
 
 <!-- ===== SECTION 1: HERO ===== -->
-<section class="intro-hero">
-    <h1 class="intro-hero-title">פרק הקדמה &#8212; למסע שלך</h1>
-    <div class="intro-hero-yt-wrap">
+<section class="course-hero">
+    <h1 class="course-hero-title">פרק הקדמה &#8212; למסע שלך</h1>
+    <div class="course-yt-hero">
         <iframe
             src="https://www.youtube-nocookie.com/embed/FwMUFh7x1mw?autoplay=0"
             title="פרק הקדמה — למסע שלך"
@@ -488,14 +316,14 @@
             allowfullscreen>
         </iframe>
     </div>
-    <div class="intro-hero-badge">!בהצלחה</div>
+    <div class="course-hero-badge">!בהצלחה</div>
 </section>
 
 <!-- ===== MAIN CONTAINER ===== -->
-<div class="intro-container">
+<div class="course-container">
 
     <!-- ===== SECTION 2: TABLE OF CONTENTS ===== -->
-    <div class="intro-card" id="s2-toc">
+    <div class="course-card" id="s2-toc">
         <div class="toc-widget">
             <h1 class="main-title">תוכן עניינים</h1>
             <div class="sections-container">
@@ -528,9 +356,9 @@
     </div>
 
     <!-- ===== SECTION 3: COURSE DESCRIPTION ===== -->
-    <div class="intro-card" id="s3-course-desc">
-        <h2 class="intro-card-title">תיאור הקורס</h2>
-        <div class="intro-yt-wrap">
+    <div class="course-card" id="s3-course-desc">
+        <h2 class="course-section-title">תיאור הקורס</h2>
+        <div class="course-yt-main">
             <iframe
                 src="https://www.youtube-nocookie.com/embed/HkxoXAYSuTc?autoplay=0"
                 title="תיאור הקורס"
@@ -541,9 +369,9 @@
     </div>
 
     <!-- ===== SECTION 4: LESSON 1 ===== -->
-    <div class="intro-card" id="s4-lesson1">
-        <h2 class="intro-card-title">פרק 0 שיעור 1</h2>
-        <div class="intro-yt-wrap">
+    <div class="course-card" id="s4-lesson1">
+        <h2 class="course-section-title">פרק 0 שיעור 1</h2>
+        <div class="course-yt-main">
             <iframe
                 src="https://www.youtube-nocookie.com/embed/0c078bh8sJM?autoplay=0"
                 title="פרק 0 שיעור 1"
@@ -551,7 +379,7 @@
                 allowfullscreen>
             </iframe>
         </div>
-        <p class="intro-card-text">כדי לחשב בצורה קלה יותר מה הריבית שתצטרכו לייצר עבור החלומות שלכם &#8212; תרגישו חופשי להשתמש במחשבון ההשקעות הרטרואקטיבי הזה:</p>
+        <p class="course-card-text">כדי לחשב בצורה קלה יותר מה הריבית שתצטרכו לייצר עבור החלומות שלכם &#8212; תרגישו חופשי להשתמש במחשבון ההשקעות הרטרואקטיבי הזה:</p>
 
         <!-- Investment Calculator Widget -->
         <div class="modern-investment-calculator">
@@ -613,7 +441,7 @@
         </div>
 
         <!-- Second video in lesson 1 -->
-        <div class="intro-yt-wrap" style="margin-top:1.5rem;">
+        <div class="course-yt-main" style="margin-top:1.5rem;">
             <iframe
                 src="https://www.youtube-nocookie.com/embed/CF-pV__3cjQ?autoplay=0"
                 title="שיעור 1 — הרחבה"
@@ -659,9 +487,9 @@
     </div>
 
     <!-- ===== SECTION 5: LESSON 2 ===== -->
-    <div class="intro-card" id="s5-lesson2">
-        <h2 class="intro-card-title">פרק 0 שיעור 2</h2>
-        <div class="intro-yt-wrap">
+    <div class="course-card" id="s5-lesson2">
+        <h2 class="course-section-title">פרק 0 שיעור 2</h2>
+        <div class="course-yt-main">
             <iframe
                 src="https://www.youtube-nocookie.com/embed/b-ZwYVhJV7U?autoplay=0"
                 title="פרק 0 שיעור 2"
@@ -671,7 +499,7 @@
         </div>
 
         <!-- Hidaat side by side -->
-        <div class="intro-sidebyside">
+        <div class="course-sidebyside">
             <div class="did-you-know-widget" id="dyk-apple">
                 <div class="card-inner-wrapper">
                     <div class="card-teaser">
@@ -715,8 +543,8 @@
     </div>
 
     <!-- ===== SECTION 6: EXTENSIONS ===== -->
-    <div class="intro-card" id="s6-extensions">
-        <h2 class="intro-card-title">הרחבות למתעניינים</h2>
+    <div class="course-card" id="s6-extensions">
+        <h2 class="course-section-title">הרחבות למתעניינים</h2>
 
         <!-- Dossier (עקרונות ליבה) Widget -->
         <div class="dossier-widget" id="investment-dossier-widget">
@@ -784,14 +612,14 @@
     </div>
 
     <!-- ===== SECTION 7: BOTTOM NAVIGATION ===== -->
-    <div class="intro-card-dark" id="s7-bottom-nav">
-        <div class="intro-bottom-nav">
-            <a href="/investor-academy/lessons/chapter-1.html" class="intro-btn-gold">לפרק 1 &#8592;</a>
-            <a href="/investor-academy/lessons/" class="intro-btn-outline">חזרה לרשימת הפרקים</a>
+    <div class="course-card-dark" id="s7-bottom-nav">
+        <div class="course-bottom-nav">
+            <a href="/investor-academy/lessons/chapter-1.html" class="course-btn-gold">לפרק 1 &#8592;</a>
+            <a href="/investor-academy/lessons/" class="course-btn-outline">חזרה לרשימת הפרקים</a>
         </div>
     </div>
 
-</div><!-- end intro-container -->
+</div><!-- end course-container -->
 
 <script>
 /* ===== SIGNOUT ===== */

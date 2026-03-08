@@ -12,107 +12,17 @@
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800&family=Assistant:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/course.css">
 
     <style>
-        /* ===== RESET & BASE ===== */
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html { scroll-behavior: smooth; overflow-x: hidden; }
-        body {
-            background: linear-gradient(155deg, #0b4a64 0%, #1680a0 48%, #0d6a82 100%);
-            background-attachment: fixed;
-            font-family: 'Assistant', 'Rubik', sans-serif;
-            direction: rtl;
-            color: #394140;
-            min-height: 100vh;
-        }
-
-        /* ===== NAVBAR ===== */
-        .ch2-nav {
-            background: #0c3d52;
-            padding: 0 1.5rem;
-            height: 62px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.35);
-        }
-        .ch2-nav-brand { display: flex; align-items: center; gap: 0.7rem; }
-        .ch2-nav-logo { color: #b3e0dc; font-family: 'Rubik', sans-serif; font-weight: 700; font-size: 1.2rem; text-decoration: none; }
-        .ch2-nav-links { display: flex; align-items: center; gap: 1rem; }
-        .ch2-nav-link { color: #fefefe; text-decoration: none; font-size: 0.95rem; transition: color 0.2s; }
-        .ch2-nav-link:hover { color: #b3e0dc; }
-        .ch2-nav-signout {
-            background: transparent;
-            border: 1px solid rgba(240,248,250,0.35);
-            color: #fefefe;
-            font-family: 'Assistant', sans-serif;
-            font-size: 0.9rem;
-            padding: 0.4rem 1rem;
+        /* ch2: hero is a card inside the container */
+        .course-hero {
             border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .ch2-nav-signout:hover { border-color: #b3e0dc; color: #b3e0dc; }
-
-        /* ===== HAMBURGER NAV ===== */
-        .ch2-hbnav-btn {
-            width: 40px; height: 40px;
-            background: rgba(179,224,220,0.15);
-            border: 1px solid rgba(179,224,220,0.3);
-            border-radius: 10px; cursor: pointer;
-            display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px;
-            transition: background 0.2s, border-color 0.2s; flex-shrink: 0;
-        }
-        .ch2-hbnav-btn:hover { background: rgba(179,224,220,0.28); border-color: rgba(179,224,220,0.55); }
-        .ch2-hbnav-btn span { display: block; width: 22px; height: 2px; background: #fefefe; border-radius: 2px; transition: transform 0.3s, opacity 0.3s; }
-        .ch2-hbnav-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-        .ch2-hbnav-btn.open span:nth-child(2) { opacity: 0; }
-        .ch2-hbnav-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-        .ch2-hbnav-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 999; }
-        .ch2-hbnav-overlay.open { display: block; }
-        .ch2-hbnav-panel {
-            position: fixed; top: 62px; right: 0;
-            height: calc(100vh - 62px); width: 270px;
-            background: #0c3d52; z-index: 1000;
-            transform: translateX(100%); transition: transform 0.3s ease;
-            overflow-y: auto; padding: 1.5rem 1rem;
-            box-shadow: -4px 0 20px rgba(0,0,0,0.35);
-        }
-        .ch2-hbnav-panel.open { transform: translateX(0); }
-        .ch2-hbnav-panel-title { color: #b3e0dc; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(179,224,220,0.2); }
-        .ch2-hbnav-item { display: flex; align-items: center; gap: 0.9rem; padding: 0.75rem 0.85rem; border-radius: 10px; text-decoration: none; color: #fefefe; font-size: 0.95rem; transition: background 0.18s; margin-bottom: 4px; }
-        .ch2-hbnav-item:hover { background: rgba(179,224,220,0.12); }
-        .ch2-hbnav-item.active { background: rgba(179,224,220,0.18); font-weight: 700; }
-        .ch2-hbnav-icon { width: 34px; height: 34px; background: rgba(179,224,220,0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1rem; }
-        .ch2-hbnav-text { display: flex; flex-direction: column; }
-        .ch2-hbnav-name { font-size: 0.95rem; }
-        .ch2-hbnav-sub { font-size: 0.75rem; color: #b3e0dc; opacity: 0.7; }
-        .ch2-hbnav-site-link { display: flex; align-items: center; padding: 0.55rem 0.85rem; border-radius: 8px; text-decoration: none; color: rgba(254,254,254,0.72); font-size: 0.88rem; transition: background 0.18s; margin-bottom: 2px; }
-        .ch2-hbnav-site-link:hover { background: rgba(179,224,220,0.1); color: #fefefe; }
-        .ch2-hbnav-divider { height: 1px; background: rgba(179,224,220,0.15); margin: 0.85rem 0.5rem; }
-
-        /* ===== MAIN CONTAINER ===== */
-        .ch2-container {
-            max-width: 860px;
-            margin: 0 auto;
-            padding: 2rem 1.25rem 4rem;
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
-
-        /* ===== HERO ===== */
-        .ch2-hero {
-            background: #0c3d52;
-            border-radius: 20px;
-            padding: 2.5rem 2rem;
-            text-align: center;
             box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+            padding: 2.5rem 2rem;
         }
-        .ch2-hero-badge {
+        /* ch2-specific chapter label badge */
+        .ch2-chapter-badge {
             display: inline-block;
             background: rgba(179,224,220,0.15);
             color: #b3e0dc;
@@ -123,72 +33,10 @@
             border: 1px solid rgba(179,224,220,0.3);
             margin-bottom: 1rem;
         }
-        .ch2-hero-title {
-            font-family: 'Rubik', sans-serif;
-            font-size: 2.4rem;
-            font-weight: 800;
-            color: #fefefe;
-            margin-bottom: 1.5rem;
+        /* ch2 mobile */
+        @media (max-width: 600px) {
+            .course-hero { padding: 1.75rem 1.25rem; }
         }
-        .ch2-hero-mint-badge {
-            display: inline-block;
-            background: #b3e0dc;
-            color: #0c3d52;
-            font-family: 'Rubik', sans-serif;
-            font-size: 1rem;
-            font-weight: 700;
-            padding: 0.4rem 1.2rem;
-            border-radius: 20px;
-            margin-top: 1.25rem;
-        }
-
-        /* ===== CARDS ===== */
-        .ch2-card {
-            background: rgba(236,232,229,0.97);
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: 0 4px 18px rgba(0,0,0,0.12);
-        }
-        .ch2-card-title {
-            font-family: 'Rubik', sans-serif;
-            font-size: 1.55rem;
-            font-weight: 700;
-            color: #0c3d52;
-            margin-bottom: 1.25rem;
-            padding-bottom: 0.75rem;
-            border-bottom: 2px solid rgba(179,224,220,0.5);
-        }
-        .ch2-card-dark {
-            background: #0c3d52;
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: 0 4px 18px rgba(0,0,0,0.25);
-            text-align: center;
-        }
-        .ch2-card-dark-title { font-family: 'Rubik', sans-serif; font-size: 1.4rem; font-weight: 700; color: #fefefe; margin-bottom: 0.5rem; }
-        .ch2-card-dark-sub { color: rgba(179,224,220,0.8); font-size: 0.95rem; margin-bottom: 1.5rem; }
-        .ch2-bottom-btns { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
-
-        /* ===== BUTTONS ===== */
-        .ch2-btn { display: inline-block; font-family: 'Rubik', sans-serif; font-weight: 700; font-size: 1rem; padding: 0.75rem 1.75rem; border-radius: 30px; text-decoration: none; transition: all 0.2s; cursor: pointer; border: none; }
-        .ch2-btn-primary { background: #b3e0dc; color: #394140; box-shadow: 0 4px 14px rgba(0,0,0,0.18); }
-        .ch2-btn-primary:hover { background: #8fc9c4; transform: translateY(-2px); }
-        .ch2-btn-secondary { background: rgba(179,224,220,0.15); color: #b3e0dc; border: 1.5px solid rgba(179,224,220,0.4); }
-        .ch2-btn-secondary:hover { background: rgba(179,224,220,0.25); border-color: #b3e0dc; }
-        .ch2-btn-outline { background: transparent; color: rgba(254,254,254,0.75); border: 1.5px solid rgba(254,254,254,0.25); }
-        .ch2-btn-outline:hover { border-color: rgba(254,254,254,0.55); color: #fefefe; }
-
-        /* ===== YOUTUBE WRAP ===== */
-        .ch2-yt-wrap {
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-            margin-bottom: 1.25rem;
-        }
-        .ch2-yt-wrap iframe { width: 100%; height: 100%; border: 0; }
-        .ch2-yt-wrap:last-child { margin-bottom: 0; }
 
         /* ===== TOC WIDGET ===== */
         .toc-widget {
@@ -399,78 +247,65 @@
         .game-widget .play-full-game .game-btn { font-size: 1rem; padding: 12px 28px; text-decoration: none; display: inline-block; }
         @media (max-width: 768px) { .game-widget .top { flex-direction: column; align-items: stretch; } .game-widget .features { flex-direction: column; } .game-widget .hero { width: 100%; height: 80px; } .game-widget .company { flex-direction: column; } }
 
-        /* ===== MOBILE ===== */
-        @media (max-width: 600px) {
-            .ch2-container { padding: 1rem 0.75rem 3rem; gap: 1.5rem; }
-            .ch2-hero { padding: 1.75rem 1.25rem; }
-            .ch2-hero-title { font-size: 1.8rem; }
-            .ch2-card { padding: 1.5rem 1.25rem; }
-            .ch2-nav { padding: 0 0.75rem; }
-            .ch2-nav-logo { font-size: 1rem; }
-        }
     </style>
 </head>
 <body>
 
 <!-- NAVBAR -->
-<nav class="ch2-nav">
-    <div class="ch2-nav-brand">
-        <button class="ch2-hbnav-btn" id="ch2-hbnav-toggle" aria-label="תפריט פרקים" aria-expanded="false">
+<nav class="course-nav">
+    <div class="course-nav-brand">
+        <button class="hbnav-btn" id="hbnav-toggle" aria-label="תפריט פרקים" aria-expanded="false">
             <span></span><span></span><span></span>
         </button>
-        <a href="/" class="ch2-nav-logo">NewGen Finance</a>
+        <a href="/" class="course-nav-logo">NewGen Finance</a>
     </div>
-    <div class="ch2-nav-links">
-        <a href="/members/" class="ch2-nav-link">אזור החברים</a>
-        <button class="ch2-nav-signout" id="ch2-signout-btn">התנתקות</button>
+    <div class="course-nav-links">
+        <a href="/members/" class="course-nav-link">אזור החברים</a>
+        <button class="course-nav-signout" id="ch2-signout-btn">התנתקות</button>
     </div>
 </nav>
 
-<div class="ch2-hbnav-overlay" id="ch2-hbnav-overlay"></div>
-<nav class="ch2-hbnav-panel" id="ch2-hbnav-panel" aria-label="ניווט פרקים">
-    <div class="ch2-hbnav-panel-title">אתר</div>
-    <a href="/" class="ch2-hbnav-site-link">ראשי</a>
-    <a href="/#tools" class="ch2-hbnav-site-link">כלים</a>
-    <a href="/#course" class="ch2-hbnav-site-link">קורסים</a>
-    <a href="/members/" class="ch2-hbnav-site-link">אזור החברים</a>
-    <div class="ch2-hbnav-divider"></div>
-    <div class="ch2-hbnav-panel-title">הקורס — פרקים</div>
-    <a href="/investor-academy/lessons/intro.html" class="ch2-hbnav-item">
-        <div class="ch2-hbnav-icon">🚀</div>
-        <div class="ch2-hbnav-text"><span class="ch2-hbnav-name">הקדמה</span><span class="ch2-hbnav-sub">למסע שלך</span></div>
+<div class="hbnav-overlay" id="hbnav-overlay"></div>
+<nav class="hbnav-panel" id="hbnav-panel" aria-label="ניווט פרקים">
+    <div class="hbnav-panel-title">אתר</div>
+    <a href="/" class="hbnav-site-link">ראשי</a>
+    <a href="/#tools" class="hbnav-site-link">כלים</a>
+    <a href="/#course" class="hbnav-site-link">קורסים</a>
+    <a href="/members/" class="hbnav-site-link">אזור החברים</a>
+    <div class="hbnav-divider"></div>
+    <div class="hbnav-panel-title">הקורס — פרקים</div>
+    <a href="/investor-academy/lessons/intro.html" class="hbnav-item">
+        <div class="hbnav-icon">&#128640;</div>
+        <div class="hbnav-text"><span class="hbnav-name">הקדמה</span><span class="hbnav-sub">למסע שלך</span></div>
     </a>
-    <a href="/investor-academy/lessons/chapter-1.html" class="ch2-hbnav-item">
-        <div class="ch2-hbnav-icon">🔑</div>
-        <div class="ch2-hbnav-text"><span class="ch2-hbnav-name">פרק 1</span><span class="ch2-hbnav-sub">שלב הכניסה</span></div>
+    <a href="/investor-academy/lessons/chapter-1.html" class="hbnav-item">
+        <div class="hbnav-icon">&#128273;</div>
+        <div class="hbnav-text"><span class="hbnav-name">פרק 1</span><span class="hbnav-sub">שלב הכניסה</span></div>
     </a>
-    <a href="/investor-academy/lessons/chapter-2.html" class="ch2-hbnav-item active">
-        <div class="ch2-hbnav-icon">🧭</div>
-        <div class="ch2-hbnav-text"><span class="ch2-hbnav-name">פרק 2</span><span class="ch2-hbnav-sub">שלב האסטרטגיה</span></div>
+    <a href="/investor-academy/lessons/chapter-2.html" class="hbnav-item active">
+        <div class="hbnav-icon">&#129517;</div>
+        <div class="hbnav-text"><span class="hbnav-name">פרק 2</span><span class="hbnav-sub">שלב האסטרטגיה</span></div>
     </a>
-    <span class="ch2-hbnav-item" style="opacity:0.4;pointer-events:none;cursor:default;">
-        <div class="ch2-hbnav-icon">🛠️</div>
-        <div class="ch2-hbnav-text"><span class="ch2-hbnav-name">פרק 3</span><span class="ch2-hbnav-sub">בקרוב</span></div>
-    </span>
-    <span class="ch2-hbnav-item" style="opacity:0.4;pointer-events:none;cursor:default;">
-        <div class="ch2-hbnav-icon">📊</div>
-        <div class="ch2-hbnav-text"><span class="ch2-hbnav-name">פרקים 4–5</span><span class="ch2-hbnav-sub">בקרוב</span></div>
-    </span>
+    <a href="#" class="hbnav-item disabled">
+        <div class="hbnav-icon">&#128295;</div>
+        <div class="hbnav-text"><span class="hbnav-name">פרקים 3–5</span><span class="hbnav-sub">בקרוב</span></div>
+    </a>
 </nav>
 
-<main class="ch2-container">
+<main class="course-container">
 
     <!-- SECTION 1: HERO -->
-    <section class="ch2-hero">
-        <div class="ch2-hero-badge">פרק 2</div>
-        <h1 class="ch2-hero-title">פרק 2 — שלב האסטרטגיה</h1>
-        <div class="ch2-yt-wrap">
+    <section class="course-hero">
+        <div class="ch2-chapter-badge">פרק 2</div>
+        <h1 class="course-hero-title">פרק 2 — שלב האסטרטגיה</h1>
+        <div class="course-yt-main">
             <iframe src="https://www.youtube.com/embed/7d_4GJeipTE" title="פרק 2 — שלב האסטרטגיה" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
         </div>
-        <div class="ch2-hero-mint-badge">!בהצלחה</div>
+        <div class="course-hero-badge">!בהצלחה</div>
     </section>
 
     <!-- SECTION 2: TOC -->
-    <div class="ch2-card">
+    <div class="course-card">
         <div class="toc-widget">
             <h2 class="main-title">תוכן העניינים לפרק 2</h2>
             <div class="sections-container">
@@ -565,17 +400,17 @@
     </div>
 
     <!-- SECTION 4: שיעור 0 -->
-    <div class="ch2-card" id="s4-lesson0">
-        <h2 class="ch2-card-title">פרק 2 שיעור 0: עקרונות השקעה כלליים</h2>
-        <div class="ch2-yt-wrap">
+    <div class="course-card" id="s4-lesson0">
+        <h2 class="course-section-title">פרק 2 שיעור 0: עקרונות השקעה כלליים</h2>
+        <div class="course-yt-main">
             <iframe src="https://www.youtube.com/embed/NZm8Eklm9ME" title="פרק 2 שיעור 0" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
         </div>
     </div>
 
     <!-- SECTION 5: שיעור 1 -->
-    <div class="ch2-card" id="s5-lesson1">
-        <h2 class="ch2-card-title">פרק 2 שיעור 1: באפט והסיפור של השקעות ערך</h2>
-        <div class="ch2-yt-wrap">
+    <div class="course-card" id="s5-lesson1">
+        <h2 class="course-section-title">פרק 2 שיעור 1: באפט והסיפור של השקעות ערך</h2>
+        <div class="course-yt-main">
             <iframe src="https://www.youtube.com/embed/dxZ5HTxRQ_A" title="פרק 2 שיעור 1 — חלק א" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
         </div>
         <div class="warren-buffett-quote-widget-container">
@@ -584,18 +419,18 @@
                 <div class="warren-buffett-quote-widget__author">– בנג'מין גרהאם</div>
             </div>
         </div>
-        <div class="ch2-yt-wrap">
+        <div class="course-yt-main">
             <iframe src="https://www.youtube.com/embed/R7Cr-7qcLo8" title="פרק 2 שיעור 1 — חלק ב" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
         </div>
     </div>
 
     <!-- SECTION 6: שיעור 2 -->
-    <div class="ch2-card" id="s6-lesson2">
-        <h2 class="ch2-card-title">פרק 2 שיעור 2: איך מודדים ערך?</h2>
-        <div class="ch2-yt-wrap">
+    <div class="course-card" id="s6-lesson2">
+        <h2 class="course-section-title">פרק 2 שיעור 2: איך מודדים ערך?</h2>
+        <div class="course-yt-main">
             <iframe src="https://www.youtube.com/embed/prU9RG1Q3og" title="פרק 2 שיעור 2 — חלק א" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
         </div>
-        <div class="ch2-yt-wrap">
+        <div class="course-yt-main">
             <iframe src="https://www.youtube.com/embed/hYYduQixJag" title="פרק 2 שיעור 2 — חלק ב" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
         </div>
 
@@ -644,8 +479,8 @@
     </div>
 
     <!-- SECTION 7: שיעור 3 -->
-    <div class="ch2-card" id="s7-lesson3">
-        <h2 class="ch2-card-title">פרק 2 שיעור 3: איך מתמחרים מניות?</h2>
+    <div class="course-card" id="s7-lesson3">
+        <h2 class="course-section-title">פרק 2 שיעור 3: איך מתמחרים מניות?</h2>
 
         <!-- Quote 4 -->
         <div class="warren-buffett-quote-widget-container">
@@ -655,7 +490,7 @@
             </div>
         </div>
 
-        <div class="ch2-yt-wrap">
+        <div class="course-yt-main">
             <iframe src="https://www.youtube.com/embed/YbqBCSx3e20" title="פרק 2 שיעור 3" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
         </div>
 
@@ -696,9 +531,9 @@
     </div>
 
     <!-- SECTION 8: שיעור 4 -->
-    <div class="ch2-card" id="s8-lesson4">
-        <h2 class="ch2-card-title">פרק 2 שיעור 4: מכפילים ויחסי מניות-חברה</h2>
-        <div class="ch2-yt-wrap">
+    <div class="course-card" id="s8-lesson4">
+        <h2 class="course-section-title">פרק 2 שיעור 4: מכפילים ויחסי מניות-חברה</h2>
+        <div class="course-yt-main">
             <iframe src="https://www.youtube.com/embed/4kkQe-_EtW8" title="פרק 2 שיעור 4" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
         </div>
 
@@ -749,9 +584,9 @@
     </div>
 
     <!-- SECTION 9: שיעור 5 -->
-    <div class="ch2-card" id="s9-lesson5">
-        <h2 class="ch2-card-title">פרק 2 שיעור 5: מה עלול להפוך חברה למעניינת?</h2>
-        <div class="ch2-yt-wrap">
+    <div class="course-card" id="s9-lesson5">
+        <h2 class="course-section-title">פרק 2 שיעור 5: מה עלול להפוך חברה למעניינת?</h2>
+        <div class="course-yt-main">
             <iframe src="https://www.youtube.com/embed/d5InJt7gyg8" title="פרק 2 שיעור 5" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
         </div>
 
@@ -770,9 +605,9 @@
     </div>
 
     <!-- SECTION 10: שיעור 6 -->
-    <div class="ch2-card" id="s10-lesson6">
-        <h2 class="ch2-card-title">פרק 2 שיעור 6: לפעמים גם באפט טועה</h2>
-        <div class="ch2-yt-wrap">
+    <div class="course-card" id="s10-lesson6">
+        <h2 class="course-section-title">פרק 2 שיעור 6: לפעמים גם באפט טועה</h2>
+        <div class="course-yt-main">
             <iframe src="https://www.youtube.com/embed/_iZXuc5j-Ec" title="פרק 2 שיעור 6 — חלק א" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
         </div>
 
@@ -784,7 +619,7 @@
             </div>
         </div>
 
-        <div class="ch2-yt-wrap">
+        <div class="course-yt-main">
             <iframe src="https://www.youtube.com/embed/VNFXfrTIkfc" title="פרק 2 שיעור 6 — חלק ב" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
         </div>
 
@@ -849,13 +684,13 @@
     </div>
 
     <!-- SECTION 11: BOTTOM NAV -->
-    <div class="ch2-card-dark">
-        <h2 class="ch2-card-dark-title">מוכנים להמשיך?</h2>
-        <p class="ch2-card-dark-sub">סיימתם את פרק 2 — שלב האסטרטגיה. בחרו את הדרך הבאה שלכם.</p>
-        <div class="ch2-bottom-btns">
-            <a href="/investor-academy/lessons/chapter-3.html" class="ch2-btn ch2-btn-primary">לפרק 3 ←</a>
-            <a href="/investor-academy/lessons/chapter-1.html" class="ch2-btn ch2-btn-secondary">חזרה לפרק 1</a>
-            <a href="/investor-academy/lessons/" class="ch2-btn ch2-btn-outline">חזרה לרשימת הפרקים</a>
+    <div class="course-card-dark">
+        <h2 class="course-card-dark-title">מוכנים להמשיך?</h2>
+        <p class="course-card-dark-sub">סיימתם את פרק 2 — שלב האסטרטגיה. בחרו את הדרך הבאה שלכם.</p>
+        <div class="course-bottom-nav">
+            <a href="/investor-academy/lessons/chapter-3.html" class="course-btn course-btn-gold">לפרק 3 ←</a>
+            <a href="/investor-academy/lessons/chapter-1.html" class="course-btn course-btn-secondary">חזרה לפרק 1</a>
+            <a href="/investor-academy/lessons/" class="course-btn course-btn-outline">חזרה לרשימת הפרקים</a>
         </div>
     </div>
 
@@ -873,9 +708,9 @@ document.getElementById('ch2-signout-btn').addEventListener('click', async funct
 
 // ===== HAMBURGER NAV =====
 (function () {
-    var btn = document.getElementById('ch2-hbnav-toggle');
-    var panel = document.getElementById('ch2-hbnav-panel');
-    var overlay = document.getElementById('ch2-hbnav-overlay');
+    var btn = document.getElementById('hbnav-toggle');
+    var panel = document.getElementById('hbnav-panel');
+    var overlay = document.getElementById('hbnav-overlay');
     function open()  { btn.classList.add('open'); panel.classList.add('open'); overlay.classList.add('open'); btn.setAttribute('aria-expanded','true'); }
     function close() { btn.classList.remove('open'); panel.classList.remove('open'); overlay.classList.remove('open'); btn.setAttribute('aria-expanded','false'); }
     btn.addEventListener('click', function () { panel.classList.contains('open') ? close() : open(); });

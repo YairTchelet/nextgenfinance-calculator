@@ -12,240 +12,9 @@
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/course.css">
 
     <style>
-        /* ===== RESET & BASE ===== */
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html { scroll-behavior: smooth; overflow-x: hidden; }
-        body {
-            background: linear-gradient(155deg, #0b4a64 0%, #1680a0 48%, #0d6a82 100%);
-            background-attachment: fixed;
-            font-family: 'Assistant', 'Rubik', sans-serif;
-            direction: rtl;
-            color: #394140;
-            min-height: 100vh;
-        }
-        img { max-width: 100%; height: auto; }
-
-        /* ===== NAVBAR ===== */
-        .ch1-nav {
-            background: #0c3d52;
-            padding: 0 1.5rem;
-            height: 62px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.35);
-        }
-        .ch1-nav-logo {
-            color: #b3e0dc;
-            font-family: 'Rubik', sans-serif;
-            font-weight: 700;
-            font-size: 1.2rem;
-            text-decoration: none;
-        }
-        .ch1-nav-links {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        .ch1-nav-link {
-            color: #fefefe;
-            text-decoration: none;
-            font-family: 'Assistant', sans-serif;
-            font-size: 0.95rem;
-            transition: color 0.2s;
-        }
-        .ch1-nav-link:hover { color: #b3e0dc; }
-        .ch1-nav-signout {
-            background: transparent;
-            border: 1px solid rgba(240,248,250,0.35);
-            color: #fefefe;
-            font-family: 'Assistant', sans-serif;
-            font-size: 0.9rem;
-            padding: 0.4rem 1rem;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .ch1-nav-signout:hover {
-            border-color: #b3e0dc;
-            color: #b3e0dc;
-        }
-
-        /* ===== HERO ===== */
-        .ch1-hero {
-            background: #0c3d52;
-            padding: 3rem 1rem 2.5rem;
-            text-align: center;
-        }
-        .ch1-hero-title {
-            font-family: 'Rubik', sans-serif;
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: #fefefe;
-            margin-bottom: 1.5rem;
-        }
-        .ch1-hero-yt-wrap {
-            width: 100%;
-            max-width: 700px;
-            margin: 0 auto;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.4);
-            aspect-ratio: 16/9;
-        }
-        .ch1-hero-yt-wrap iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            display: block;
-        }
-        .ch1-hero-badge {
-            display: inline-block;
-            margin-top: 1.5rem;
-            background: #b3e0dc;
-            color: #394140;
-            font-family: 'Rubik', sans-serif;
-            font-size: 1.15rem;
-            font-weight: 700;
-            padding: 0.5rem 2rem;
-            border-radius: 30px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        }
-
-        /* ===== CONTAINER ===== */
-        .ch1-container {
-            max-width: 700px;
-            margin: 0 auto;
-            padding: 2rem 1rem 4rem;
-        }
-
-        /* ===== CARDS ===== */
-        .ch1-card {
-            background: rgba(236, 232, 229, 0.97);
-            border-radius: 16px;
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
-            padding: 2rem;
-            margin-bottom: 2rem;
-            overflow: hidden;
-        }
-        .ch1-card-dark {
-            background: #0c3d52;
-            border-radius: 16px;
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
-            padding: 2rem;
-            margin-bottom: 2rem;
-            overflow: hidden;
-        }
-        .ch1-card-title {
-            font-family: 'Rubik', sans-serif;
-            font-size: 1.55rem;
-            font-weight: 700;
-            color: #394140;
-            text-align: center;
-            margin-bottom: 1.25rem;
-        }
-        .ch1-card-title-white {
-            font-family: 'Rubik', sans-serif;
-            font-size: 1.55rem;
-            font-weight: 700;
-            color: #ffffff;
-            text-align: center;
-            margin-bottom: 1.25rem;
-        }
-        .ch1-card-text {
-            font-family: 'Assistant', sans-serif;
-            font-size: 1.05rem;
-            line-height: 1.75;
-            color: #6b7d7c;
-            margin-bottom: 1.25rem;
-            text-align: center;
-        }
-        .ch1-caption-white {
-            font-family: 'Assistant', sans-serif;
-            font-size: 0.95rem;
-            color: rgba(240,248,250,0.85);
-            text-align: center;
-            margin-top: 1rem;
-            line-height: 1.65;
-        }
-
-        /* ===== MAIN YOUTUBE EMBEDS ===== */
-        .ch1-yt-main-wrap {
-            width: 100%;
-            aspect-ratio: 16/9;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-            margin-bottom: 1.25rem;
-        }
-        .ch1-yt-main-wrap iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            display: block;
-        }
-
-        /* ===== SIDE BY SIDE ===== */
-        .ch1-sidebyside {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1.25rem;
-        }
-        .ch1-sidebyside > * { flex: 1; min-width: 0; }
-        @media (max-width: 560px) {
-            .ch1-sidebyside { flex-direction: column; }
-        }
-
-        /* ===== EXPANSION VIDEO WIDGET ===== */
-        .ch1-expvid {
-            position: relative;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.28);
-        }
-        .ch1-expvid iframe {
-            width: 100%;
-            aspect-ratio: 16/9;
-            border: none;
-            display: block;
-        }
-        .ch1-expvid-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.76);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 1rem;
-            color: #fff;
-            font-family: 'Assistant', sans-serif;
-            font-size: 0.9rem;
-            font-weight: 600;
-            line-height: 1.5;
-            z-index: 10;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .ch1-expvid-overlay:hover { background: rgba(0,0,0,0.88); }
-        .ch1-expvid-tag {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            background: #b3e0dc;
-            color: #000;
-            font-size: 0.7rem;
-            font-weight: 700;
-            padding: 3px 9px;
-            border-radius: 20px;
-            z-index: 20;
-            pointer-events: none;
-        }
 
         /* ===== הידעת WIDGET ===== */
         .did-you-know-widget {
@@ -299,57 +68,7 @@
         .did-you-know-widget.is-expanded { cursor: default; }
         .did-you-know-widget.is-expanded .card-teaser { opacity: 0; pointer-events: none; }
         .did-you-know-widget.is-expanded .card-content { position: relative; top: auto; left: auto; right: auto; opacity: 1; transform: translateY(0); }
-        .ch1-sidebyside .did-you-know-widget { max-width: none; margin: 0; }
-
-        /* ===== QUOTE SECTION ===== */
-        .ch1-quote-section {
-            margin-bottom: 2rem;
-        }
-
-        /* ===== BOOKS SECTION ===== */
-        .ch1-books-section { margin-bottom: 2rem; }
-
-        /* ===== BOTTOM NAV ===== */
-        .ch1-bottom-nav {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
-        }
-        .ch1-btn-gold {
-            display: inline-block;
-            background: #b3e0dc;
-            color: #394140;
-            font-family: 'Rubik', sans-serif;
-            font-weight: 700;
-            font-size: 1.1rem;
-            padding: 0.8rem 2.5rem;
-            border-radius: 30px;
-            text-decoration: none;
-            box-shadow: 0 4px 14px rgba(179,224,220,0.45);
-            transition: all 0.2s;
-        }
-        .ch1-btn-gold:hover {
-            background: #8fc9c4;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(179,224,220,0.55);
-        }
-        .ch1-btn-outline {
-            display: inline-block;
-            background: transparent;
-            border: 2px solid rgba(240,248,250,0.45);
-            color: #fefefe;
-            font-family: 'Assistant', sans-serif;
-            font-size: 1rem;
-            padding: 0.65rem 2rem;
-            border-radius: 30px;
-            text-decoration: none;
-            transition: all 0.2s;
-        }
-        .ch1-btn-outline:hover {
-            border-color: #b3e0dc;
-            color: #b3e0dc;
-        }
+        .course-sidebyside .did-you-know-widget { max-width: none; margin: 0; }
 
         /* ===== TOC WIDGET ===== */
         .toc-widget {
@@ -512,7 +231,7 @@
         }
 
         /* ===== TRADINGVIEW ===== */
-        .ch1-tv-wrap {
+        .course-tv-wrap {
             border-radius: 10px;
             overflow: hidden;
             margin: 1rem 0;
@@ -624,137 +343,21 @@
         }
         .bookshelf-item img { display: block; width: 70px; height: auto; border-radius: 6px; }
 
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 480px) {
-            .ch1-hero-title  { font-size: 1.75rem; }
-            .ch1-card        { padding: 1.25rem; }
-            .ch1-card-dark   { padding: 1.25rem; }
-            .ch1-card-title  { font-size: 1.3rem; }
-            .ch1-card-title-white { font-size: 1.3rem; }
-            .ch1-nav         { padding: 0 0.75rem; }
-            .ch1-nav-logo    { font-size: 1rem; }
-            .ch1-nav-link    { display: none; }
-        }
-
-        /* ===== HAMBURGER CHAPTER NAV ===== */
-        .ch1-nav-brand {
-            display: flex;
-            align-items: center;
-            gap: 0.7rem;
-        }
-        .hbnav-btn {
-            width: 40px;
-            height: 40px;
-            background: rgba(179,224,220,0.15);
-            border: 1px solid rgba(179,224,220,0.3);
-            border-radius: 10px;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 5px;
-            transition: background 0.2s, border-color 0.2s;
-            flex-shrink: 0;
-        }
-        .hbnav-btn:hover { background: rgba(179,224,220,0.28); border-color: rgba(179,224,220,0.55); }
-        .hbnav-btn span {
-            display: block;
-            width: 22px;
-            height: 2px;
-            background: #fefefe;
-            border-radius: 2px;
-            transition: transform 0.3s, opacity 0.3s;
-        }
-        .hbnav-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-        .hbnav-btn.open span:nth-child(2) { opacity: 0; }
-        .hbnav-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-        .hbnav-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.45);
-            z-index: 999;
-        }
-        .hbnav-overlay.open { display: block; }
-
-        .hbnav-panel {
-            position: fixed;
-            top: 62px;
-            right: 0;
-            height: calc(100vh - 62px);
-            width: 270px;
-            background: #0c3d52;
-            z-index: 1000;
-            transform: translateX(100%);
-            transition: transform 0.3s ease;
-            overflow-y: auto;
-            padding: 1.5rem 1rem;
-            box-shadow: -4px 0 20px rgba(0,0,0,0.35);
-        }
-        .hbnav-panel.open { transform: translateX(0); }
-
-        .hbnav-panel-title {
-            color: #b3e0dc;
-            font-family: 'Rubik', sans-serif;
-            font-size: 0.75rem;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            margin-bottom: 1rem;
-            padding-bottom: 0.75rem;
-            border-bottom: 1px solid rgba(179,224,220,0.2);
-        }
-        .hbnav-item {
-            display: flex;
-            align-items: center;
-            gap: 0.9rem;
-            padding: 0.75rem 0.85rem;
-            border-radius: 10px;
-            text-decoration: none;
-            color: #fefefe;
-            font-family: 'Assistant', sans-serif;
-            font-size: 0.95rem;
-            transition: background 0.18s;
-            margin-bottom: 4px;
-        }
-        .hbnav-item:hover { background: rgba(179,224,220,0.12); }
-        .hbnav-item.active { background: rgba(179,224,220,0.18); font-weight: 700; }
-        .hbnav-item.disabled { opacity: 0.45; pointer-events: none; }
-        .hbnav-icon {
-            width: 34px;
-            height: 34px;
-            background: rgba(179,224,220,0.15);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            font-size: 1rem;
-        }
-        .hbnav-text { display: flex; flex-direction: column; }
-        .hbnav-name { font-size: 0.95rem; }
-        .hbnav-sub  { font-size: 0.75rem; color: #b3e0dc; opacity: 0.7; }
-        .hbnav-site-link { display: flex; align-items: center; padding: 0.55rem 0.85rem; border-radius: 8px; text-decoration: none; color: rgba(254,254,254,0.72); font-size: 0.88rem; font-family: 'Assistant', sans-serif; transition: background 0.18s; margin-bottom: 2px; }
-        .hbnav-site-link:hover { background: rgba(179,224,220,0.1); color: #fefefe; }
-        .hbnav-divider { height: 1px; background: rgba(179,224,220,0.15); margin: 0.85rem 0.5rem; }
-
     </style>
 </head>
 <body>
 
 <!-- ===== NAVBAR ===== -->
-<nav class="ch1-nav">
-    <div class="ch1-nav-brand">
+<nav class="course-nav">
+    <div class="course-nav-brand">
         <button class="hbnav-btn" id="hbnav-toggle" aria-label="תפריט פרקים" aria-expanded="false">
             <span></span><span></span><span></span>
         </button>
-        <a href="/" class="ch1-nav-logo">NewGen Finance</a>
+        <a href="/" class="course-nav-logo">NewGen Finance</a>
     </div>
-    <div class="ch1-nav-links">
-        <a href="/members/" class="ch1-nav-link">אזור החברים</a>
-        <button class="ch1-nav-signout" id="ch1-signout-btn">התנתקות</button>
+    <div class="course-nav-links">
+        <a href="/members/" class="course-nav-link">אזור החברים</a>
+        <button class="course-nav-signout" id="ch1-signout-btn">התנתקות</button>
     </div>
 </nav>
 
@@ -769,31 +372,27 @@
     <div class="hbnav-divider"></div>
     <div class="hbnav-panel-title">הקורס — פרקים</div>
     <a href="/investor-academy/lessons/intro.html" class="hbnav-item">
-        <div class="hbnav-icon">🚀</div>
+        <div class="hbnav-icon">&#128640;</div>
         <div class="hbnav-text"><span class="hbnav-name">הקדמה</span><span class="hbnav-sub">למסע שלך</span></div>
     </a>
     <a href="/investor-academy/lessons/chapter-1.html" class="hbnav-item active">
-        <div class="hbnav-icon">🔑</div>
+        <div class="hbnav-icon">&#128273;</div>
         <div class="hbnav-text"><span class="hbnav-name">פרק 1</span><span class="hbnav-sub">שלב הכניסה</span></div>
     </a>
     <a href="/investor-academy/lessons/chapter-2.html" class="hbnav-item">
-        <div class="hbnav-icon">🧭</div>
+        <div class="hbnav-icon">&#129517;</div>
         <div class="hbnav-text"><span class="hbnav-name">פרק 2</span><span class="hbnav-sub">שלב האסטרטגיה</span></div>
     </a>
-    <a href="/investor-academy/lessons/chapter-3.html" class="hbnav-item">
-        <div class="hbnav-icon">🛠️</div>
-        <div class="hbnav-text"><span class="hbnav-name">פרק 3</span><span class="hbnav-sub">שלב הכלים</span></div>
-    </a>
-    <a href="/investor-academy/lessons/chapter-4.html" class="hbnav-item">
-        <div class="hbnav-icon">📊</div>
-        <div class="hbnav-text"><span class="hbnav-name">פרק 4</span><span class="hbnav-sub">שלב הניהול</span></div>
+    <a href="#" class="hbnav-item disabled">
+        <div class="hbnav-icon">&#128295;</div>
+        <div class="hbnav-text"><span class="hbnav-name">פרקים 3–5</span><span class="hbnav-sub">בקרוב</span></div>
     </a>
 </nav>
 
 <!-- ===== SECTION 1: HERO ===== -->
-<section class="ch1-hero">
-    <h1 class="ch1-hero-title">פרק 1 - שלב הכלים</h1>
-    <div class="ch1-hero-yt-wrap">
+<section class="course-hero">
+    <h1 class="course-hero-title">פרק 1 - שלב הכלים</h1>
+    <div class="course-yt-hero">
         <iframe
             src="https://www.youtube-nocookie.com/embed/FwMUFh7x1mw?autoplay=0"
             title="פרק 1 - שלב הכלים"
@@ -801,14 +400,14 @@
             allowfullscreen>
         </iframe>
     </div>
-    <div class="ch1-hero-badge">!בהצלחה</div>
+    <div class="course-hero-badge">!בהצלחה</div>
 </section>
 
 <!-- ===== MAIN CONTAINER ===== -->
-<div class="ch1-container">
+<div class="course-container">
 
     <!-- ===== SECTION 2: TABLE OF CONTENTS ===== -->
-    <div class="ch1-card" id="s2-toc">
+    <div class="course-card" id="s2-toc">
         <div class="toc-widget">
             <h1 class="main-title">תוכן העניינים לפרק 1</h1>
             <div class="sections-container">
@@ -863,7 +462,7 @@
     </div>
 
     <!-- ===== SECTION 3: QUOTE ===== -->
-    <div class="ch1-quote-section" id="s3-quote">
+    <div id="s3-quote">
         <div class="ch1-quote-wrap">
             <div class="ch1-quote-container" id="ch1-quote-container">
                 <div class="ch1-quote-text">"עדיף בהרבה לקנות חברה נפלאה במחיר הוגן מאשר חברה הוגנת במחיר נפלא."</div>
@@ -873,9 +472,9 @@
     </div>
 
     <!-- ===== SECTION 4: שיעור 1 ===== -->
-    <div class="ch1-card" id="s4-lesson1">
-        <h2 class="ch1-card-title">פרק 1 שיעור 1</h2>
-        <div class="ch1-yt-main-wrap">
+    <div class="course-card" id="s4-lesson1">
+        <h2 class="course-section-title">פרק 1 שיעור 1</h2>
+        <div class="course-yt-main">
             <iframe
                 src="https://www.youtube-nocookie.com/embed/3sfE6uvzh9Q?autoplay=0"
                 title="פרק 1 שיעור 1"
@@ -883,14 +482,14 @@
                 allowfullscreen>
             </iframe>
         </div>
-        <p class="ch1-card-text">
+        <p class="course-card-text">
             איך אי הקוקוסים מבטיח לנו שהשוק תמיד מסוגל לעלות יותר? אי הקוקוסים הוא בעצם משל נפלא לאיך כסף נוצר בעולם — הרחבה בפודקאסט כאן
         </p>
-        <div class="ch1-sidebyside">
+        <div class="course-sidebyside">
             <!-- Expansion Video 1 -->
-            <div class="ch1-expvid" id="s4-expvid-1">
-                <span class="ch1-expvid-tag">סרטון הרחבה</span>
-                <div class="ch1-expvid-overlay" onclick="ch1PlayVideo('s4-expvid-1')">לחץ להרחבה על מבנה שוק ההון בעידן המודרני</div>
+            <div class="course-expvid" id="s4-expvid-1">
+                <span class="course-expvid-tag">סרטון הרחבה</span>
+                <div class="course-expvid-overlay" onclick="ch1PlayVideo('s4-expvid-1')">לחץ להרחבה על מבנה שוק ההון בעידן המודרני</div>
                 <iframe
                     id="s4-expvid-1-iframe"
                     src="https://www.youtube-nocookie.com/embed/F3QpgXBtDeo?autoplay=0"
@@ -900,9 +499,9 @@
                 </iframe>
             </div>
             <!-- Expansion Video 2 -->
-            <div class="ch1-expvid" id="s4-expvid-2">
-                <span class="ch1-expvid-tag">סרטון הרחבה</span>
-                <div class="ch1-expvid-overlay" onclick="ch1PlayVideo('s4-expvid-2')">לחץ להרחבה על התפתחות שוק ההון</div>
+            <div class="course-expvid" id="s4-expvid-2">
+                <span class="course-expvid-tag">סרטון הרחבה</span>
+                <div class="course-expvid-overlay" onclick="ch1PlayVideo('s4-expvid-2')">לחץ להרחבה על התפתחות שוק ההון</div>
                 <iframe
                     id="s4-expvid-2-iframe"
                     src="https://www.youtube-nocookie.com/embed/p7HKvqRI_Bo?autoplay=0"
@@ -915,9 +514,9 @@
     </div>
 
     <!-- ===== SECTION 5: שיעור 2 ===== -->
-    <div class="ch1-card" id="s5-lesson2">
-        <h2 class="ch1-card-title">פרק 1 שיעור 2</h2>
-        <div class="ch1-yt-main-wrap">
+    <div class="course-card" id="s5-lesson2">
+        <h2 class="course-section-title">פרק 1 שיעור 2</h2>
+        <div class="course-yt-main">
             <iframe
                 src="https://www.youtube-nocookie.com/embed/os8rLHPxnkE?autoplay=0"
                 title="פרק 1 שיעור 2"
@@ -925,9 +524,9 @@
                 allowfullscreen>
             </iframe>
         </div>
-        <div class="ch1-expvid" id="s5-expvid-1" style="margin-top:1rem;">
-            <span class="ch1-expvid-tag">סרטון הרחבה</span>
-            <div class="ch1-expvid-overlay" onclick="ch1PlayVideo('s5-expvid-1')">לחץ להרחבה על הנפקת חברות</div>
+        <div class="course-expvid" id="s5-expvid-1" style="margin-top:1rem;">
+            <span class="course-expvid-tag">סרטון הרחבה</span>
+            <div class="course-expvid-overlay" onclick="ch1PlayVideo('s5-expvid-1')">לחץ להרחבה על הנפקת חברות</div>
             <iframe
                 id="s5-expvid-1-iframe"
                 src="https://www.youtube-nocookie.com/embed/SV7v5WRDtLE?autoplay=0"
@@ -939,9 +538,9 @@
     </div>
 
     <!-- ===== SECTION 6: לי-מונדה ===== -->
-    <div class="ch1-card" id="s6-lemonade">
-        <h2 class="ch1-card-title">דוגמא - לי-מונדה בע״מ</h2>
-        <div class="ch1-yt-main-wrap">
+    <div class="course-card" id="s6-lemonade">
+        <h2 class="course-section-title">דוגמא - לי-מונדה בע״מ</h2>
+        <div class="course-yt-main">
             <iframe
                 src="https://www.youtube-nocookie.com/embed/YzAYK22mX7o?autoplay=0"
                 title="לי-מונדה בע״מ"
@@ -949,9 +548,9 @@
                 allowfullscreen>
             </iframe>
         </div>
-        <div class="ch1-expvid" id="s6-expvid-1" style="margin-top:1rem;">
-            <span class="ch1-expvid-tag">סרטון הרחבה</span>
-            <div class="ch1-expvid-overlay" onclick="ch1PlayVideo('s6-expvid-1')">לחץ למקור המורחב של סיפור הלימונדה</div>
+        <div class="course-expvid" id="s6-expvid-1" style="margin-top:1rem;">
+            <span class="course-expvid-tag">סרטון הרחבה</span>
+            <div class="course-expvid-overlay" onclick="ch1PlayVideo('s6-expvid-1')">לחץ למקור המורחב של סיפור הלימונדה</div>
             <iframe
                 id="s6-expvid-1-iframe"
                 src="https://www.youtube-nocookie.com/embed/WEDIj9JBTC8?autoplay=0"
@@ -963,9 +562,9 @@
     </div>
 
     <!-- ===== SECTION 7: אירועי מניות נוספים ===== -->
-    <div class="ch1-card" id="s7-stock-events">
-        <h2 class="ch1-card-title">אירועי מניות נוספים</h2>
-        <div class="ch1-yt-main-wrap">
+    <div class="course-card" id="s7-stock-events">
+        <h2 class="course-section-title">אירועי מניות נוספים</h2>
+        <div class="course-yt-main">
             <iframe
                 src="https://www.youtube-nocookie.com/embed/a8RjOdmQXNg?autoplay=0"
                 title="אירועי מניות נוספים"
@@ -975,7 +574,7 @@
         </div>
 
         <!-- 2 הידעת widgets side by side -->
-        <div class="ch1-sidebyside" style="margin-top:1.5rem;">
+        <div class="course-sidebyside" style="margin-top:1.5rem;">
 
             <!-- הידעת 1: ספליט -->
             <div class="did-you-know-widget" id="s7-dyk-split">
@@ -1013,10 +612,10 @@
     </div>
 
     <!-- ===== SECTION 8: TRADINGVIEW GRAPH ===== -->
-    <div class="ch1-card-dark" id="s8-tv-graph">
-        <h2 class="ch1-card-title-white">גרף מחירים של מדדי ה-S&amp;P500, NASDAQ100 ו-TA125</h2>
+    <div class="course-card-dark" id="s8-tv-graph">
+        <h2 class="course-section-title-white">גרף מחירים של מדדי ה-S&amp;P500, NASDAQ100 ו-TA125</h2>
 
-        <div class="ch1-tv-wrap">
+        <div class="course-tv-wrap">
             <!-- TradingView Symbol Overview Widget -->
             <div class="tradingview-widget-container" id="s8-tv-container">
                 <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js" async>
@@ -1056,13 +655,13 @@
             </div>
         </div>
 
-        <p class="ch1-caption-white">נסו לזהות ימי משבר בשוק (כמו משבר הקורונה, מלחמת חרבות ברזל וכו') ולראות את ההשפעה שלהם על השוק</p>
+        <p class="course-caption-white">נסו לזהות ימי משבר בשוק (כמו משבר הקורונה, מלחמת חרבות ברזל וכו') ולראות את ההשפעה שלהם על השוק</p>
     </div>
 
     <!-- ===== SECTION 9: מניות הבורסה לאורך ולרוחב ===== -->
-    <div class="ch1-card" id="s9-stocks-wide">
-        <h2 class="ch1-card-title">מניות הבורסה לאורך ולרוחב</h2>
-        <div class="ch1-yt-main-wrap">
+    <div class="course-card" id="s9-stocks-wide">
+        <h2 class="course-section-title">מניות הבורסה לאורך ולרוחב</h2>
+        <div class="course-yt-main">
             <iframe
                 src="https://www.youtube-nocookie.com/embed/a8RjOdmQXNg?autoplay=0"
                 title="מניות הבורסה לאורך ולרוחב"
@@ -1072,7 +671,7 @@
         </div>
 
         <!-- TradingView Heatmap -->
-        <div class="ch1-tv-wrap">
+        <div class="course-tv-wrap">
             <div class="tradingview-widget-container" id="s9-heatmap-container">
                 <div class="tradingview-widget-container__widget"></div>
                 <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-stock-heatmap.js" async>
@@ -1098,10 +697,10 @@
         </div>
 
         <!-- 2 Expansion Videos side by side -->
-        <div class="ch1-sidebyside">
-            <div class="ch1-expvid" id="s9-expvid-1">
-                <span class="ch1-expvid-tag">סרטון הרחבה</span>
-                <div class="ch1-expvid-overlay" onclick="ch1PlayVideo('s9-expvid-1')">לחץ להרחבה על אינפלציה</div>
+        <div class="course-sidebyside">
+            <div class="course-expvid" id="s9-expvid-1">
+                <span class="course-expvid-tag">סרטון הרחבה</span>
+                <div class="course-expvid-overlay" onclick="ch1PlayVideo('s9-expvid-1')">לחץ להרחבה על אינפלציה</div>
                 <iframe
                     id="s9-expvid-1-iframe"
                     src="https://www.youtube-nocookie.com/embed/iPTYwvkXCOs?autoplay=0"
@@ -1110,9 +709,9 @@
                     allowfullscreen>
                 </iframe>
             </div>
-            <div class="ch1-expvid" id="s9-expvid-2">
-                <span class="ch1-expvid-tag">סרטון הרחבה</span>
-                <div class="ch1-expvid-overlay" onclick="ch1PlayVideo('s9-expvid-2')">לחץ להרחבה על מינוף עסקי</div>
+            <div class="course-expvid" id="s9-expvid-2">
+                <span class="course-expvid-tag">סרטון הרחבה</span>
+                <div class="course-expvid-overlay" onclick="ch1PlayVideo('s9-expvid-2')">לחץ להרחבה על מינוף עסקי</div>
                 <iframe
                     id="s9-expvid-2-iframe"
                     src="https://www.youtube-nocookie.com/embed/pXZQBKZCWfc?autoplay=0"
@@ -1125,7 +724,7 @@
     </div>
 
     <!-- ===== SECTION 10: ספרי השקעות מומלצים ===== -->
-    <div class="ch1-books-section" id="s10-books">
+    <div id="s10-books">
         <div class="book-dossier-widget" id="book-dossier">
             <div class="dossier-header">
                 <h1 class="main-title">ספרי השקעות מומלצים</h1>
@@ -1138,14 +737,14 @@
     </div>
 
     <!-- ===== SECTION 11: BOTTOM NAVIGATION ===== -->
-    <div class="ch1-card-dark" id="s11-bottom-nav">
-        <div class="ch1-bottom-nav">
-            <a href="/investor-academy/lessons/chapter-2.html" class="ch1-btn-gold">לפרק הבא ←</a>
-            <a href="/investor-academy/lessons/intro.html" class="ch1-btn-outline">→ הקדמה</a>
+    <div class="course-card-dark" id="s11-bottom-nav">
+        <div class="course-bottom-nav">
+            <a href="/investor-academy/lessons/chapter-2.html" class="course-btn-gold">לפרק הבא ←</a>
+            <a href="/investor-academy/lessons/intro.html" class="course-btn-outline">→ הקדמה</a>
         </div>
     </div>
 
-</div><!-- end ch1-container -->
+</div><!-- end course-container -->
 
 <script>
 /* ===== SIGNOUT ===== */
@@ -1178,7 +777,7 @@ document.getElementById('ch1-signout-btn').addEventListener('click', async funct
 function ch1PlayVideo(wrapperId) {
     var wrapper = document.getElementById(wrapperId);
     if (!wrapper) return;
-    var overlay = wrapper.querySelector('.ch1-expvid-overlay');
+    var overlay = wrapper.querySelector('.course-expvid-overlay');
     var iframe  = wrapper.querySelector('iframe');
     if (overlay) overlay.style.display = 'none';
     if (iframe) {
