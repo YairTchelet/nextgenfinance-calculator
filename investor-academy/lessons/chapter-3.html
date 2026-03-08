@@ -8,72 +8,146 @@
     <!-- Auth protection -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
     <script src="/assets/js/supabase-config.js"></script>
-    <script src="/assets/js/auth-guard.js"></script>
+    <script src="/assets/js/course-guard.js"></script>
 
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800&family=Assistant:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/investor-academy/assets/css/course.css">
 
     <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html { overflow-x: hidden; }
-        body { background: linear-gradient(155deg, #0b4a64 0%, #1680a0 48%, #0d6a82 100%); background-attachment: fixed; font-family: 'Assistant', 'Rubik', sans-serif; direction: rtl; color: #394140; min-height: 100vh; }
-        .nav { background: #0c3d52; padding: 0 1.5rem; height: 62px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,0.35); }
-        .nav-logo { color: #b3e0dc; font-family: 'Rubik', sans-serif; font-weight: 700; font-size: 1.2rem; text-decoration: none; }
-        .nav-links { display: flex; align-items: center; gap: 1rem; }
-        .nav-link { color: #fefefe; text-decoration: none; font-size: 0.95rem; transition: color 0.2s; }
-        .nav-link:hover { color: #b3e0dc; }
-        .nav-signout { background: transparent; border: 1px solid rgba(240,248,250,0.35); color: #fefefe; font-family: 'Assistant', sans-serif; font-size: 0.9rem; padding: 0.4rem 1rem; border-radius: 20px; cursor: pointer; transition: all 0.2s; }
-        .nav-signout:hover { border-color: #b3e0dc; color: #b3e0dc; }
-        .nav-brand { display: flex; align-items: center; gap: 0.7rem; }
-        .hbnav-btn { width: 40px; height: 40px; background: rgba(179,224,220,0.15); border: 1px solid rgba(179,224,220,0.3); border-radius: 10px; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px; transition: background 0.2s, border-color 0.2s; flex-shrink: 0; }
-        .hbnav-btn:hover { background: rgba(179,224,220,0.28); border-color: rgba(179,224,220,0.55); }
-        .hbnav-btn span { display: block; width: 22px; height: 2px; background: #fefefe; border-radius: 2px; transition: transform 0.3s, opacity 0.3s; }
-        .hbnav-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-        .hbnav-btn.open span:nth-child(2) { opacity: 0; }
-        .hbnav-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-        .hbnav-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 999; }
-        .hbnav-overlay.open { display: block; }
-        .hbnav-panel { position: fixed; top: 62px; right: 0; height: calc(100vh - 62px); width: 270px; background: #0c3d52; z-index: 1000; transform: translateX(100%); transition: transform 0.3s ease; overflow-y: auto; padding: 1.5rem 1rem; box-shadow: -4px 0 20px rgba(0,0,0,0.35); }
-        .hbnav-panel.open { transform: translateX(0); }
-        .hbnav-panel-title { color: #b3e0dc; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(179,224,220,0.2); }
-        .hbnav-item { display: flex; align-items: center; gap: 0.9rem; padding: 0.75rem 0.85rem; border-radius: 10px; text-decoration: none; color: #fefefe; font-size: 0.95rem; transition: background 0.18s; margin-bottom: 4px; }
-        .hbnav-item:hover { background: rgba(179,224,220,0.12); }
-        .hbnav-item.active { background: rgba(179,224,220,0.18); font-weight: 700; }
-        .hbnav-icon { width: 34px; height: 34px; background: rgba(179,224,220,0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1rem; }
-        .hbnav-text { display: flex; flex-direction: column; }
-        .hbnav-name { font-size: 0.95rem; }
-        .hbnav-sub  { font-size: 0.75rem; color: #b3e0dc; opacity: 0.7; }
-        .hbnav-site-link { display: flex; align-items: center; padding: 0.55rem 0.85rem; border-radius: 8px; text-decoration: none; color: rgba(254,254,254,0.72); font-size: 0.88rem; transition: background 0.18s; margin-bottom: 2px; }
-        .hbnav-site-link:hover { background: rgba(179,224,220,0.1); color: #fefefe; }
-        .hbnav-divider { height: 1px; background: rgba(179,224,220,0.15); margin: 0.85rem 0.5rem; }
-        .coming-soon { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: calc(100vh - 62px); padding: 3rem 1rem; text-align: center; }
-        .cs-icon { font-size: 4rem; margin-bottom: 1.5rem; }
-        .cs-label { display: inline-block; background: rgba(179,224,220,0.15); color: #b3e0dc; font-size: 0.82rem; font-weight: 700; padding: 0.35rem 1rem; border-radius: 20px; border: 1px solid rgba(179,224,220,0.3); margin-bottom: 1.2rem; }
-        .cs-title { font-family: 'Rubik', sans-serif; font-size: 2.2rem; font-weight: 700; color: #fefefe; margin-bottom: 0.75rem; }
-        .cs-sub { color: #b3e0dc; font-size: 1.05rem; max-width: 460px; line-height: 1.65; margin-bottom: 2.5rem; opacity: 0.85; }
-        .cs-back { display: inline-block; background: #b3e0dc; color: #394140; font-family: 'Rubik', sans-serif; font-size: 1rem; font-weight: 700; padding: 0.8rem 2.2rem; border-radius: 30px; text-decoration: none; transition: background 0.2s, transform 0.15s; box-shadow: 0 4px 14px rgba(0,0,0,0.2); margin-left: 0.75rem; }
-        .cs-back:hover { background: #8fc9c4; transform: translateY(-2px); }
-        .cs-outline { display: inline-block; background: transparent; color: #b3e0dc; font-family: 'Rubik', sans-serif; font-size: 1rem; font-weight: 600; padding: 0.8rem 2.2rem; border-radius: 30px; text-decoration: none; border: 1.5px solid rgba(179,224,220,0.5); transition: border-color 0.2s, color 0.2s; }
-        .cs-outline:hover { border-color: #b3e0dc; color: #fefefe; }
-        @media (max-width: 480px) {
-            .nav { padding: 0 0.75rem; }
-            .nav-logo { font-size: 1rem; }
-            .nav-link { display: none; }
+        /* ch3: hero is a card inside the container */
+        .course-hero { border-radius: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.25); padding: 2.5rem 2rem; }
+        .ch3-chapter-badge { display: inline-block; background: rgba(179,224,220,0.15); color: #b3e0dc; font-size: 0.82rem; font-weight: 700; padding: 0.35rem 1rem; border-radius: 20px; border: 1px solid rgba(179,224,220,0.3); margin-bottom: 1rem; }
+        @media (max-width: 600px) { .course-hero { padding: 1.75rem 1.25rem; } }
+
+        /* ===== TOC WIDGET ===== */
+        .toc-widget { --toc-accent: linear-gradient(90deg, #38b2ac, #3182ce); font-family: 'Rubik', sans-serif; width: 100%; background: transparent; box-sizing: border-box; }
+        .toc-widget .main-title { text-align: center; font-size: 2rem; font-weight: 700; margin: 0 0 1.75rem 0; background: var(--toc-accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .toc-widget .sections-container { display: flex; flex-direction: column; gap: 1.1rem; }
+        .toc-widget .section { text-align: right; border-radius: 10px; padding: 0.6rem 0.75rem; }
+        .toc-widget .section-title { display: inline-block; position: relative; text-decoration: none; font-size: 1.3rem; font-weight: 700; margin-bottom: 0.6rem; cursor: pointer; background: var(--toc-accent); background-size: 200% auto; color: #1a202c; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-position: 100%; transition: background-position 0.4s ease; }
+        .toc-widget .section:hover .section-title { background-position: 0%; }
+        .toc-widget .sub-section-title { font-size: 1.1rem; font-weight: 700; margin-top: 1rem; display: inline-block; }
+        .toc-widget .subchapter-list { list-style: none !important; margin: 0; padding-right: 18px; position: relative; }
+        .toc-widget .subchapter-list::before { content: ''; position: absolute; right: 0; top: 0.5em; bottom: 0.5em; width: 2px; background: var(--toc-accent); transform: scaleY(0); transform-origin: top; transition: transform 0.4s cubic-bezier(0.19,1,0.22,1); }
+        .toc-widget .section:hover .subchapter-list::before { transform: scaleY(1); }
+        .toc-widget .subchapter-list .subchapter-list { padding-right: 25px; margin-top: 0.5rem; }
+        .toc-widget .section:hover .subchapter-list .subchapter-list::before { top: 0.25em; bottom: 0.25em; }
+        .toc-widget .subchapter-list li { margin-bottom: 0.5rem; list-style-type: none !important; }
+        .toc-widget .subchapter-list li:last-child { margin-bottom: 0; }
+        .toc-widget .item { font-size: 0.98rem; font-weight: 500; text-decoration: none; display: inline-block; color: #1a202c; background: var(--toc-accent); background-size: 200% auto; -webkit-background-clip: text; background-position: 100%; -webkit-text-fill-color: #1a202c; transition: background-position 0.4s ease; }
+        .toc-widget .item:hover { background-position: 0%; -webkit-text-fill-color: transparent; }
+        @media (max-width: 600px) { .toc-widget .main-title { font-size: 1.6rem; } .toc-widget .section-title { font-size: 1.1rem; } .toc-widget .sub-section-title { font-size: 0.98rem; } }
+
+        /* ===== הידעת WIDGET ===== */
+        .did-you-know-widget {
+            --dyk-card-bg: rgba(255,255,255,0.8);
+            --dyk-border: rgba(0,0,0,0.08);
+            --dyk-text: #1a202c;
+            --dyk-sub: #4a5568;
+            --dyk-accent: linear-gradient(135deg,#38b2ac,#3182ce);
+            --dyk-hl: rgba(56,178,172,0.1);
+            font-family: 'Rubik', sans-serif; width: 100%;
+            background: var(--dyk-card-bg); border: 1px solid var(--dyk-border);
+            border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.1);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            padding: 2.5rem; box-sizing: border-box;
+            cursor: pointer; transition: min-height 0.6s cubic-bezier(0.19,1,0.22,1);
+            position: relative; overflow: hidden; margin-top: 1.25rem;
         }
+        .did-you-know-widget .card-teaser { text-align: center; transition: opacity 0.4s ease; }
+        .did-you-know-widget .teaser-title { font-size: 2.25rem; font-weight: 700; margin: 0; background: var(--dyk-accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .did-you-know-widget .teaser-subtitle { font-size: 1.5rem; font-weight: 700; color: var(--dyk-text); margin: 0.5rem 0; }
+        .did-you-know-widget .teaser-prompt { font-size: 1rem; font-weight: 500; color: var(--dyk-sub); margin: 0; }
+        .did-you-know-widget .card-content { position: absolute; top: 2.5rem; left: 2.5rem; right: 2.5rem; opacity: 0; transform: translateY(20px); transition: opacity 0.5s 0.2s ease, transform 0.5s 0.2s ease; text-align: center; }
+        .did-you-know-widget .content-title { font-size: 2rem; font-weight: 700; margin: 0 0 1.5rem 0; background: var(--dyk-accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .did-you-know-widget .content-text { font-size: 1.2rem; line-height: 1.8; color: var(--dyk-text); margin: 0 0 1.5rem 0; text-align: right; }
+        .did-you-know-widget .content-text .highlight { background-color: var(--dyk-hl); padding: 0.1em 0.4em; border-radius: 6px; font-weight: 700; color: var(--dyk-text); }
+        .did-you-know-widget .content-image { width: 100%; max-width: 500px; height: auto; border-radius: 12px; margin: 0 auto; box-shadow: 0 10px 20px -5px rgba(0,0,0,0.1); }
+        .did-you-know-widget.is-expanded { cursor: default; }
+        .did-you-know-widget.is-expanded .card-teaser { opacity: 0; pointer-events: none; }
+        .did-you-know-widget.is-expanded .card-content { position: relative; top: auto; left: auto; right: auto; opacity: 1; transform: translateY(0); }
+        .dyk-close-btn { position: absolute; top: 0.75rem; left: 0.75rem; width: 32px; height: 32px; background: rgba(0,0,0,0.05); border: none; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 24px; color: var(--dyk-sub); opacity: 0; transform: scale(0.5); transition: opacity 0.3s 0.2s ease, transform 0.3s 0.2s ease, background-color 0.2s ease; z-index: 10; }
+        .dyk-close-btn:hover { background: rgba(0,0,0,0.1); }
+        .did-you-know-widget.is-expanded .dyk-close-btn { opacity: 1; transform: scale(1); pointer-events: auto; }
+        @media (max-width: 600px) { .did-you-know-widget { padding: 2rem; } .did-you-know-widget .teaser-title { font-size: 2rem; } .did-you-know-widget .teaser-subtitle { font-size: 1.25rem; } .did-you-know-widget .content-title { font-size: 1.75rem; } .did-you-know-widget .content-text { font-size: 1.05rem; } .dyk-close-btn { top: 0.4rem; left: 0.4rem; } }
+
+        /* ===== EXPLAINER (SLIDESHOW) WIDGET ===== */
+        .explainer-widget {
+            --ew-card-bg: rgba(255,255,255,0.8);
+            --ew-border: rgba(0,0,0,0.08);
+            --ew-text: #1a202c;
+            --ew-sub: #4a5568;
+            --ew-accent: linear-gradient(135deg,#38b2ac,#3182ce);
+            --ew-curve: cubic-bezier(0.25,1,0.5,1);
+            font-family: 'Rubik', sans-serif; width: 100%;
+            background: var(--ew-card-bg); border: 1px solid var(--ew-border);
+            border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.1);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            padding: 2.5rem; box-sizing: border-box; position: relative;
+            margin-top: 1.25rem;
+        }
+        .explainer-widget .slides-container { position: relative; overflow: hidden; transition: height 0.6s var(--ew-curve); }
+        @media (min-width: 768px) { .explainer-widget .slides-container { min-height: 450px; } }
+        .explainer-widget .slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: grid; gap: 1.5rem 2.5rem; align-content: center; opacity: 0; transform: scale(0.98); transition: opacity 0.6s var(--ew-curve), transform 0.6s var(--ew-curve); pointer-events: none; }
+        .explainer-widget .slide.is-active { opacity: 1; transform: translateX(0) scale(1); pointer-events: auto; }
+        .explainer-widget .slide.is-entering-from-right { transform: translateX(50px) scale(0.98); }
+        .explainer-widget .slide.is-entering-from-left { transform: translateX(-50px) scale(0.98); }
+        .explainer-widget .slide.is-exiting-to-left { opacity: 0; transform: translateX(-50px) scale(0.98); }
+        .explainer-widget .slide.is-exiting-to-right { opacity: 0; transform: translateX(50px) scale(0.98); }
+        .explainer-widget .slide--side-by-side { grid-template-columns: 1fr; }
+        @media (min-width: 768px) { .explainer-widget .slide--side-by-side { grid-template-columns: repeat(2,1fr); align-items: center; } }
+        .explainer-widget .slide--stacked { grid-template-columns: 1fr; }
+        .explainer-widget .slide--stacked .slide-text { text-align: center; }
+        .explainer-widget .slide .slide-text > *, .explainer-widget .slide .slide-image-container { opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s ease; }
+        .explainer-widget .slide.is-active .slide-text > *, .explainer-widget .slide.is-active .slide-image-container { opacity: 1; transform: translateY(0); }
+        .explainer-widget .slide.is-active .slide-text > h2 { transition-delay: 0.1s; }
+        .explainer-widget .slide.is-active .slide-text > p { transition-delay: 0.2s; }
+        .explainer-widget .slide.is-active .slide-image-container { transition-delay: 0.3s; }
+        .explainer-widget .slide-text h2 { font-size: 2.5rem; font-weight: 700; margin: 0 0 1rem 0; background: var(--ew-accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .explainer-widget .slide-text p { font-size: 1.25rem; line-height: 1.7; color: var(--ew-sub); margin: 0; }
+        .explainer-widget .slide-image-container { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .explainer-widget .slide-image { max-width: 100%; max-height: 400px; height: auto; border-radius: 12px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); cursor: pointer; transition: transform 0.4s ease, opacity 0.4s ease; }
+        .explainer-widget .slide-image:hover { transform: scale(1.03); }
+        .explainer-widget .image-cycler-dots { display: flex; gap: 8px; justify-content: center; margin-top: 1rem; }
+        .explainer-widget .image-cycler-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(0,0,0,0.1); cursor: pointer; transition: all 0.3s ease; }
+        .explainer-widget .image-cycler-dot.active { background: var(--ew-text); transform: scale(1.2); }
+        .explainer-widget .slide-nav { position: absolute; top: 50%; left: 1rem; right: 1rem; transform: translateY(-50%); display: flex; justify-content: space-between; pointer-events: none; z-index: 10; }
+        .explainer-widget .nav-arrow { pointer-events: all; background: rgba(255,255,255,0.3); border: 1px solid var(--ew-border); color: var(--ew-text); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; }
+        .explainer-widget .nav-arrow svg { width: 24px; height: 24px; z-index: 2; transition: transform 0.3s ease; }
+        .explainer-widget .nav-arrow::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--ew-accent); opacity: 0; transition: opacity 0.3s ease; z-index: 1; }
+        .explainer-widget .nav-arrow:hover { color: #fff; border-color: transparent; }
+        .explainer-widget .nav-arrow:hover::before { opacity: 1; }
+        .explainer-widget .nav-arrow:hover svg { transform: scale(1.1); }
+        .explainer-widget .nav-arrow:active { transform: scale(0.95); }
+        .explainer-widget .slide-progress { text-align: center; padding-top: 1.5rem; position: relative; }
+        .explainer-widget .progress-icons { display: flex; gap: 1rem; justify-content: center; }
+        .explainer-widget .progress-icon { position: relative; padding: 5px; border: none; background: none; cursor: pointer; }
+        .explainer-widget .progress-icon svg { width: 24px; height: 24px; color: var(--ew-sub); opacity: 0.5; transition: all 0.3s ease; }
+        .explainer-widget .progress-icon.active svg { opacity: 1; color: var(--ew-text); }
+        .explainer-widget .progress-tooltip { position: absolute; bottom: 120%; left: 50%; transform: translateX(-50%); background: var(--ew-text); color: #fff; padding: 5px 10px; border-radius: 6px; font-size: 0.9rem; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.3s ease, transform 0.3s ease; }
+        .explainer-widget .progress-icon:hover .progress-tooltip { opacity: 1; transform: translateX(-50%) translateY(-5px); }
+        .explainer-widget .active-dot-indicator { position: absolute; top: 0; height: 100%; background: rgba(0,0,0,0.08); border-radius: 20px; transition: left 0.5s var(--ew-curve), width 0.5s var(--ew-curve); z-index: -1; }
+        .explainer-widget .lightbox { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(26,32,44,0.9); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; cursor: pointer; }
+        .explainer-widget .lightbox.is-visible { opacity: 1; pointer-events: all; }
+        .explainer-widget .lightbox img { max-width: 90vw; max-height: 90vh; transform: scale(0.9); transition: transform 0.4s cubic-bezier(0.19,1,0.22,1); cursor: default; }
+        .explainer-widget .lightbox.is-visible img { transform: scale(1); }
+        @media (max-width: 600px) { .explainer-widget { padding: 1.5rem; } .explainer-widget .slide-text h2 { font-size: 1.75rem; } .explainer-widget .slide-text p { font-size: 1.05rem; } }
     </style>
 </head>
 <body>
 
-<nav class="nav">
-    <div class="nav-brand">
+<!-- NAVBAR -->
+<nav class="course-nav">
+    <div class="course-nav-brand">
         <button class="hbnav-btn" id="hbnav-toggle" aria-label="תפריט פרקים" aria-expanded="false">
             <span></span><span></span><span></span>
         </button>
-        <a href="/" class="nav-logo">NewGen Finance</a>
+        <a href="/" class="course-nav-logo">NewGen Finance</a>
     </div>
-    <div class="nav-links">
-        <a href="/members/" class="nav-link">אזור החברים</a>
-        <button class="nav-signout" id="signout-btn">התנתקות</button>
+    <div class="course-nav-links">
+        <a href="/members/" class="course-nav-link">אזור החברים</a>
+        <button class="course-nav-signout" id="ch3-signout-btn">התנתקות</button>
     </div>
 </nav>
 
@@ -87,46 +161,262 @@
     <div class="hbnav-divider"></div>
     <div class="hbnav-panel-title">הקורס — פרקים</div>
     <a href="/investor-academy/lessons/intro.html" class="hbnav-item">
-        <div class="hbnav-icon">🚀</div>
+        <div class="hbnav-icon">&#128640;</div>
         <div class="hbnav-text"><span class="hbnav-name">הקדמה</span><span class="hbnav-sub">למסע שלך</span></div>
     </a>
     <a href="/investor-academy/lessons/chapter-1.html" class="hbnav-item">
-        <div class="hbnav-icon">🔑</div>
+        <div class="hbnav-icon">&#128273;</div>
         <div class="hbnav-text"><span class="hbnav-name">פרק 1</span><span class="hbnav-sub">שלב הכניסה</span></div>
     </a>
     <a href="/investor-academy/lessons/chapter-2.html" class="hbnav-item">
-        <div class="hbnav-icon">🧭</div>
+        <div class="hbnav-icon">&#129517;</div>
         <div class="hbnav-text"><span class="hbnav-name">פרק 2</span><span class="hbnav-sub">שלב האסטרטגיה</span></div>
     </a>
     <a href="/investor-academy/lessons/chapter-3.html" class="hbnav-item active">
-        <div class="hbnav-icon">🛠️</div>
+        <div class="hbnav-icon">&#128295;</div>
         <div class="hbnav-text"><span class="hbnav-name">פרק 3</span><span class="hbnav-sub">שלב הכלים</span></div>
     </a>
-    <a href="/investor-academy/lessons/chapter-4.html" class="hbnav-item">
-        <div class="hbnav-icon">📊</div>
-        <div class="hbnav-text"><span class="hbnav-name">פרק 4</span><span class="hbnav-sub">שלב הניהול</span></div>
+    <a href="#" class="hbnav-item disabled">
+        <div class="hbnav-icon">&#128200;</div>
+        <div class="hbnav-text"><span class="hbnav-name">פרקים 4–5</span><span class="hbnav-sub">בקרוב</span></div>
     </a>
 </nav>
 
-<div class="page-container">
-    <div class="coming-soon">
-        <div class="cs-icon">🛠️</div>
-        <div class="cs-label">פרק 3</div>
-        <h1 class="cs-title">שלב הכלים</h1>
-        <p class="cs-sub">TradingView, ניתוח טכני, כלים מקצועיים ובניית תיק — בקרוב!</p>
-        <div>
-            <a href="/investor-academy/lessons/chapter-2.html" class="cs-back">→ חזרה לפרק 2</a>
-            <a href="/investor-academy/lessons/intro.html" class="cs-outline">הקדמה</a>
+<main class="course-container">
+
+    <!-- SECTION 1: HERO -->
+    <section class="course-hero">
+        <div class="ch3-chapter-badge">פרק 3</div>
+        <h1 class="course-hero-title">פרק 3 — שלב הכלים</h1>
+        <div class="course-yt-main">
+            <iframe src="https://www.youtube.com/embed/yGP3iXDpHjQ" title="פרק 3 — שלב הכלים" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+        </div>
+        <div class="course-hero-badge">!בהצלחה</div>
+    </section>
+
+    <!-- SECTION 2: TOC -->
+    <div class="course-card">
+        <div class="toc-widget">
+            <h2 class="main-title">תוכן העניינים לפרק 3</h2>
+            <div class="sections-container">
+                <div class="section">
+                    <a href="#s1-lesson1" class="section-title">פרק 3 שיעור 1: פתיחת תיק השקעות</a>
+                    <ul class="subchapter-list">
+                        <li><a href="#s1-lesson1" class="item">1. בחירת ברוקר</a></li>
+                        <li><a href="#s1-lesson1" class="item">2. מיטב דש</a></li>
+                        <li><a href="#s1-lesson1" class="item">3. טפסים שתצטרכו לחתום</a></li>
+                    </ul>
+                </div>
+                <div class="section">
+                    <a href="#s2-lesson2" class="section-title">פרק 3 שיעור 2: גיבוש אסטרטגיית השקעות</a>
+                    <ul class="subchapter-list">
+                        <li><a href="#s2-lesson2" class="item">1. זיהוי אופי השקעות</a></li>
+                        <li><a href="#s2-lesson2" class="item">2. הצבת יעדי בחירת מניות</a></li>
+                        <li><a href="#s2-lesson2" class="item">3. "Break Even" ו-"Take Profit"</a></li>
+                        <li><a href="#s2-lesson2" class="item">4. אסטרטגיות יציאה</a></li>
+                    </ul>
+                </div>
+                <div class="section">
+                    <a href="#s3-lesson3" class="section-title">פרק 3 שיעור 3: יישום השיטה המלאה צעד אחר צעד!</a>
+                    <ul class="subchapter-list">
+                        <li>
+                            <a href="#s4-step1" class="section-title sub-section-title">צעד 1 — בחירת קייס מנצח</a>
+                            <ul class="subchapter-list">
+                                <li><a href="#s4-step1" class="item">- TheMotleyFools</a></li>
+                                <li><a href="#s4-step1" class="item">- InvestingPro</a></li>
+                                <li><a href="#s4-step1" class="item">- איך למצוא מחט בערימת שחת</a></li>
+                                <li><a href="#s4-step1" class="item">- איך מוצאים מניות ישראליות</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#s5-step2" class="section-title sub-section-title">צעד 2 — בדיקת בריאות פיננסית</a>
+                            <ul class="subchapter-list">
+                                <li><a href="#s5-step2" class="item">- Simply Wall Street</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#s6-step3" class="section-title sub-section-title">צעד 3 — מעקב אחרי התיק</a>
+                            <ul class="subchapter-list">
+                                <li><a href="#s6-step3" class="item">- GoogleFinance</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#s7-step4" class="section-title sub-section-title">צעד 4 — מציאת נקודת כניסה</a>
+                            <ul class="subchapter-list">
+                                <li><a href="#s7-step4" class="item">- StockInvest</a></li>
+                                <li><a href="#s7-step4" class="item">- Investing.com</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#s7-step4" class="section-title sub-section-title">ChatGPT — חברו הטוב של האדם המודרני</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
-</div>
+
+    <!-- SECTION 3: שיעור 1 -->
+    <div class="course-card" id="s1-lesson1">
+        <h2 class="course-section-title">פרק 3 שיעור 1: פתיחת תיק השקעות</h2>
+        <div class="course-yt-main">
+            <iframe src="https://www.youtube.com/embed/tQA-zVeBDNo" title="פתיחת תיק השקעות" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+        </div>
+        <div class="course-yt-main">
+            <iframe src="https://www.youtube.com/embed/3_otsVBu5Oc" title="פתיחת תיק השקעות - המשך" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+        </div>
+    </div>
+
+    <!-- SECTION 4: שיעור 2 -->
+    <div class="course-card" id="s2-lesson2">
+        <h2 class="course-section-title">פרק 3 שיעור 2: גיבוש אסטרטגיית השקעות</h2>
+        <div class="course-yt-main">
+            <iframe src="https://www.youtube.com/embed/OFUkjsbZE1E" title="גיבוש אסטרטגיית השקעות" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+        </div>
+        <div class="course-yt-main">
+            <iframe src="https://www.youtube.com/embed/QO2DUO8ePIQ" title="גיבוש אסטרטגיית השקעות - המשך" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+        </div>
+
+        <!-- הידעת: סוד המשקיעים המצליחים ביותר -->
+        <div class="did-you-know-widget" id="dyk-inactive-investor">
+            <div class="card-inner-wrapper">
+                <div class="card-teaser">
+                    <h2 class="teaser-title">&#128161; ?הידעת</h2>
+                    <p class="teaser-subtitle">סוד המשקיעים המצליחים ביותר</p>
+                    <p class="teaser-prompt">לחץ למידע נוסף</p>
+                </div>
+                <div class="card-content">
+                    <h3 class="content-title">כוחה של חוסר הפעולה</h3>
+                    <p class="content-text">
+                        מחקר מפורסם של חברת <span class="highlight">פידליטי</span> גילה שלאורך עשורים, תיקי ההשקעות שהניבו את התשואות הגבוהות ביותר היו שייכים ל<span class="highlight">משקיעים שנפטרו</span>. הסיבה המפתיעה היא ש<span class="highlight">היעדר מוחלט של פעילות</span> מנע מהם לבצע טעויות נפוצות, כמו מכירה בפאניקה או קנייה מתוך התלהבות. הממצא מדגיש שהאויב הגדול ביותר של המשקיע הוא לעיתים קרובות הוא עצמו.
+                    </p>
+                    <img class="content-image" src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80" alt="גרף המדגים צמיחה יציבה לאורך זמן">
+                </div>
+            </div>
+        </div>
+
+        <!-- הידעת: הסיכון שבקיפאון -->
+        <div class="did-you-know-widget" id="dyk-stagnation">
+            <div class="card-inner-wrapper">
+                <div class="card-teaser">
+                    <h2 class="teaser-title">&#128161; ?הידעת</h2>
+                    <p class="teaser-subtitle">הסיכון שבקיפאון</p>
+                    <p class="teaser-prompt">לחץ למידע נוסף</p>
+                </div>
+                <div class="card-content">
+                    <button class="dyk-close-btn" aria-label="סגור">&times;</button>
+                    <h3 class="content-title">האם "להחזיק לנצח" היא תמיד התשובה?</h3>
+                    <p class="content-text">
+                        חוששים למכור מניה "טובה" כי "אסור לתזמן את השוק"? חשבו על זה: משקיע שקנה את מניית <span class="highlight">מיקרוסופט</span> בשיא בועת הדוט-קום בסוף 1999, נאלץ לחכות כמעט <span class="highlight">16 שנים</span>, עד סוף 2015, רק כדי לחזור למחיר הקנייה המקורי שלו.
+                        <br><br>
+                        בזמן הזה, מיקרוסופט הייתה חברה פנטסטית שפיתחה את Windows XP ו-Xbox, אך מחיר המניה שלה היה כל כך מנופח, שהיא הייתה השקעה גרועה. המחיר האמיתי ששולם לא היה הזמן, אלא <span class="highlight">העלות האלטרנטיבית</span>: בזמן שהכסף ישב וחיכה, משקיע במדד S&amp;P 500 היה מכפיל את כספו ויותר.
+                        <br><br>
+                        <span class="highlight">הלקח ברור:</span> גם חברה מצוינת יכולה להיות השקעה גרועה אם המחיר שלה אינו הגיוני. לכן, כשמניה לא מייצרת תשואה לאורך זמן, זו לא טעות למכור אותה. להיפך, זו <span class="highlight">החלטה נבונה</span> שמאפשרת לכם לשחרר את הכסף ולהפנות אותו להזדמנויות שיכולות להמשיך לצמוח.
+                    </p>
+                    <img class="content-image" src="https://images.ravpages.co.il/xsite_resources/user_content/cp_new_production/d4/83/50/cb/d48350cb1a786c4790a92b5444c0e526/images/9b0647e3a3fa23ebbaa72207d21c3f4d.jpeg" alt="גרף המדגים קיפאון ארוך במחיר מניה ואז צמיחה">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 5: שיעור 3 -->
+    <div class="course-card" id="s3-lesson3">
+        <h2 class="course-section-title">פרק 3 שיעור 3: יישום השיטה המלאה צעד אחר צעד</h2>
+        <div class="course-yt-main">
+            <iframe src="https://www.youtube.com/embed/PFU6a-w5E-A" title="יישום השיטה המלאה" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+        </div>
+    </div>
+
+    <!-- SECTION 6: צעד 1 -->
+    <div class="course-card" id="s4-step1">
+        <h2 class="course-section-title">צעד 1 — בחירת קייס מנצח</h2>
+        <div class="course-yt-main">
+            <iframe src="https://www.youtube.com/embed/Ugbum4rzklQ" title="צעד 1 - בחירת קייס מנצח" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+        </div>
+        <div class="explainer-widget" id="podcasts-explainer">
+            <div class="slides-container"></div>
+            <div class="slide-nav">
+                <button class="nav-arrow prev"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg></button>
+                <button class="nav-arrow next"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/></svg></button>
+            </div>
+            <div class="slide-progress"><div class="progress-icons"><div class="active-dot-indicator"></div></div></div>
+            <div class="lightbox" id="podcasts-lightbox"><img src="" alt="Expanded view"></div>
+        </div>
+    </div>
+
+    <!-- SECTION 7: צעד 2 -->
+    <div class="course-card" id="s5-step2">
+        <h2 class="course-section-title">צעד 2 — בדיקת בריאות פיננסית</h2>
+        <div class="course-yt-main">
+            <iframe src="https://www.youtube.com/embed/OGB0nPmBbSA" title="צעד 2 - בדיקת בריאות פיננסית" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+        </div>
+        <div class="explainer-widget" id="graphin-explainer">
+            <div class="slides-container"></div>
+            <div class="slide-nav">
+                <button class="nav-arrow prev"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg></button>
+                <button class="nav-arrow next"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/></svg></button>
+            </div>
+            <div class="slide-progress"><div class="progress-icons"><div class="active-dot-indicator"></div></div></div>
+            <div class="lightbox" id="graphin-lightbox"><img src="" alt="Expanded view"></div>
+        </div>
+    </div>
+
+    <!-- SECTION 8: צעד 3 -->
+    <div class="course-card" id="s6-step3">
+        <h2 class="course-section-title">צעד 3 — מעקב אחרי התיק</h2>
+        <div class="course-yt-main">
+            <iframe src="https://www.youtube.com/embed/X81c5BHNhVo" title="צעד 3 - מעקב אחרי התיק" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+        </div>
+        <div class="explainer-widget" id="sws-explainer">
+            <div class="slides-container"></div>
+            <div class="slide-nav">
+                <button class="nav-arrow prev"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg></button>
+                <button class="nav-arrow next"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/></svg></button>
+            </div>
+            <div class="slide-progress"><div class="progress-icons"><div class="active-dot-indicator"></div></div></div>
+            <div class="lightbox" id="sws-lightbox"><img src="" alt="Expanded view"></div>
+        </div>
+    </div>
+
+    <!-- SECTION 9: צעד 4 -->
+    <div class="course-card" id="s7-step4">
+        <h2 class="course-section-title">צעד 4 — מציאת נקודת כניסה</h2>
+        <div class="course-yt-main">
+            <iframe src="https://www.youtube.com/embed/0LwylNJaW_w" title="צעד 4 - מציאת נקודת כניסה" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+        </div>
+        <div class="explainer-widget" id="more-tools-explainer">
+            <div class="slides-container"></div>
+            <div class="slide-nav">
+                <button class="nav-arrow prev"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg></button>
+                <button class="nav-arrow next"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/></svg></button>
+            </div>
+            <div class="slide-progress"><div class="progress-icons"><div class="active-dot-indicator"></div></div></div>
+            <div class="lightbox" id="more-tools-lightbox"><img src="" alt="Expanded view"></div>
+        </div>
+    </div>
+
+    <!-- SECTION 10: BOTTOM NAV -->
+    <div class="course-card-dark">
+        <h2 class="course-card-dark-title">מוכנים להמשיך?</h2>
+        <p class="course-card-dark-sub">סיימתם את פרק 3 — שלב הכלים. בחרו את הדרך הבאה שלכם.</p>
+        <div class="course-bottom-nav">
+            <a href="/investor-academy/lessons/chapter-4.html" class="course-btn course-btn-gold">לפרק 4 &#8592;</a>
+            <a href="/investor-academy/lessons/chapter-2.html" class="course-btn course-btn-secondary">חזרה לפרק 2</a>
+            <a href="/investor-academy/lessons/" class="course-btn course-btn-outline">חזרה לרשימת הפרקים</a>
+        </div>
+    </div>
+
+</main>
 
 <script>
-document.getElementById('signout-btn').addEventListener('click', async function () {
+// ===== SIGNOUT =====
+document.getElementById('ch3-signout-btn').addEventListener('click', async function () {
     const _c = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     await _c.auth.signOut();
     window.location.replace('/auth/login/');
 });
+
+// ===== HAMBURGER NAV =====
 (function () {
     var btn = document.getElementById('hbnav-toggle');
     var panel = document.getElementById('hbnav-panel');
@@ -137,6 +427,226 @@ document.getElementById('signout-btn').addEventListener('click', async function 
     overlay.addEventListener('click', close);
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
 })();
+
+// ===== הידעת: סוד המשקיעים (no close button) =====
+(function () {
+    var widget = document.getElementById('dyk-inactive-investor');
+    if (!widget) return;
+    var teaser = widget.querySelector('.card-teaser');
+    var content = widget.querySelector('.card-content');
+    content.style.display = 'none';
+    widget.addEventListener('click', function () {
+        if (widget.classList.contains('is-expanded')) return;
+        var startH = widget.offsetHeight;
+        content.style.display = 'block';
+        teaser.style.display = 'none';
+        var endH = widget.scrollHeight;
+        widget.style.minHeight = startH + 'px';
+        requestAnimationFrame(function () {
+            widget.style.minHeight = endH + 'px';
+            widget.classList.add('is-expanded');
+        });
+        widget.addEventListener('transitionend', function () { widget.style.minHeight = 'auto'; }, { once: true });
+    });
+})();
+
+// ===== הידעת: הסיכון שבקיפאון (with close button) =====
+(function () {
+    var widget = document.getElementById('dyk-stagnation');
+    if (!widget) return;
+    var teaser = widget.querySelector('.card-teaser');
+    var content = widget.querySelector('.card-content');
+    var closeBtn = widget.querySelector('.dyk-close-btn');
+    content.style.display = 'none';
+
+    function expand() {
+        var startH = widget.offsetHeight;
+        content.style.display = 'block';
+        teaser.style.display = 'none';
+        var endH = widget.scrollHeight;
+        widget.style.minHeight = startH + 'px';
+        requestAnimationFrame(function () {
+            widget.classList.add('is-expanded');
+            widget.style.minHeight = endH + 'px';
+        });
+        widget.addEventListener('transitionend', function onEnd() {
+            widget.style.minHeight = 'auto';
+            widget.removeEventListener('transitionend', onEnd);
+        });
+    }
+
+    function collapse() {
+        var endH = widget.offsetHeight;
+        content.style.display = 'none';
+        teaser.style.display = 'block';
+        var startH = widget.scrollHeight;
+        widget.style.minHeight = endH + 'px';
+        requestAnimationFrame(function () {
+            widget.classList.remove('is-expanded');
+            widget.style.minHeight = startH + 'px';
+        });
+        widget.addEventListener('transitionend', function onEnd() {
+            widget.style.minHeight = 'auto';
+            widget.removeEventListener('transitionend', onEnd);
+        });
+    }
+
+    widget.addEventListener('click', function () { if (!widget.classList.contains('is-expanded')) expand(); });
+    closeBtn.addEventListener('click', function (e) { e.stopPropagation(); collapse(); });
+})();
+
+// ===== EXPLAINER WIDGET FACTORY =====
+function initExplainerWidget(widgetId, lightboxId, slidesData) {
+    (function () {
+        var widget = document.getElementById(widgetId);
+        if (!widget) return;
+        var slidesContainer = widget.querySelector('.slides-container');
+        var progressContainer = widget.querySelector('.progress-icons');
+        var nextBtn = widget.querySelector('.nav-arrow.next');
+        var prevBtn = widget.querySelector('.nav-arrow.prev');
+        var lightbox = document.getElementById(lightboxId);
+        var lightboxImg = lightbox.querySelector('img');
+        var activeIndicator = widget.querySelector('.active-dot-indicator');
+        var currentIndex = 0;
+        var isAnimating = false;
+        var imageCycler = null;
+
+        function showSlide(index, direction) {
+            if (isAnimating || (index === currentIndex && slidesContainer.querySelector('.is-active'))) return;
+            isAnimating = true;
+            if (imageCycler) { clearInterval(imageCycler); imageCycler = null; }
+            direction = direction || 'next';
+            var currentSlide = slidesContainer.querySelector('.is-active');
+            var newSlide = slidesContainer.children[index];
+            var tempClone = newSlide.cloneNode(true);
+            tempClone.style.position = 'static';
+            tempClone.style.visibility = 'hidden';
+            tempClone.style.height = 'auto';
+            slidesContainer.appendChild(tempClone);
+            var endH = tempClone.offsetHeight;
+            slidesContainer.removeChild(tempClone);
+            if (slidesContainer.offsetHeight !== endH) slidesContainer.style.height = endH + 'px';
+            if (currentSlide) {
+                currentSlide.classList.remove('is-active');
+                currentSlide.classList.add(direction === 'next' ? 'is-exiting-to-left' : 'is-exiting-to-right');
+            }
+            newSlide.classList.remove('is-exiting-to-left', 'is-exiting-to-right');
+            newSlide.classList.add(direction === 'next' ? 'is-entering-from-right' : 'is-entering-from-left');
+            requestAnimationFrame(function () {
+                newSlide.classList.remove('is-entering-from-right', 'is-entering-from-left');
+                newSlide.classList.add('is-active');
+            });
+            if (slidesData[index].imgSrcs) startImageCycler(newSlide, slidesData[index].imgSrcs, 0);
+            updateProgress(index);
+            currentIndex = index;
+            setTimeout(function () { isAnimating = false; }, 600);
+        }
+
+        function startImageCycler(slideEl, images, startIdx) {
+            var imageEl = slideEl.querySelector('.slide-image');
+            var dots = slideEl.querySelectorAll('.image-cycler-dot');
+            var imgIdx = startIdx;
+            function updateImage() {
+                dots.forEach(function (d, i) { d.classList.toggle('active', i === imgIdx); });
+                imageEl.style.opacity = '0';
+                setTimeout(function () { imageEl.src = images[imgIdx]; imageEl.style.opacity = '1'; }, 400);
+            }
+            updateImage();
+            imageCycler = setInterval(function () { imgIdx = (imgIdx + 1) % images.length; updateImage(); }, 3000);
+            dots.forEach(function (dot, i) {
+                dot.addEventListener('click', function (e) {
+                    e.stopPropagation(); clearInterval(imageCycler); imgIdx = i; updateImage();
+                });
+            });
+        }
+
+        function updateProgress(index) {
+            progressContainer.querySelectorAll('.progress-icon').forEach(function (icon, i) {
+                icon.classList.toggle('active', i === index);
+            });
+            var activeIcon = progressContainer.children[index + 1];
+            if (activeIcon) {
+                activeIndicator.style.left = activeIcon.offsetLeft + 'px';
+                activeIndicator.style.width = activeIcon.offsetWidth + 'px';
+            }
+        }
+
+        slidesData.forEach(function (slideData, i) {
+            var layoutClass = (slideData.aspect === 'wide' || slideData.aspect === 'stacked') ? 'slide--stacked' : 'slide--side-by-side';
+            var slide = document.createElement('div');
+            slide.className = 'slide ' + layoutClass;
+            var imgSrc = slideData.imgSrcs ? slideData.imgSrcs[0] : slideData.imgSrc;
+            var imgHtml = '<img class="slide-image" src="' + imgSrc + '" alt="' + slideData.title + '">';
+            if (slideData.imgSrcs) {
+                imgHtml += '<div class="image-cycler-dots">' + slideData.imgSrcs.map(function (_, idx) {
+                    return '<span class="image-cycler-dot ' + (idx === 0 ? 'active' : '') + '" data-index="' + idx + '"></span>';
+                }).join('') + '</div>';
+            }
+            slide.innerHTML = '<div class="slide-text"><h2>' + slideData.title + '</h2><p>' + slideData.text + '</p></div><div class="slide-image-container">' + imgHtml + '</div>';
+            slidesContainer.appendChild(slide);
+            slide.querySelector('.slide-image').addEventListener('click', function () {
+                lightboxImg.src = slide.querySelector('.slide-image').src;
+                lightbox.classList.add('is-visible');
+            });
+            var iconBtn = document.createElement('button');
+            iconBtn.className = 'progress-icon';
+            iconBtn.innerHTML = slideData.icon + '<span class="progress-tooltip">' + slideData.title + '</span>';
+            iconBtn.addEventListener('click', function () { showSlide(i, i > currentIndex ? 'next' : 'prev'); });
+            progressContainer.appendChild(iconBtn);
+        });
+
+        nextBtn.addEventListener('click', function () { showSlide((currentIndex + 1) % slidesData.length, 'next'); });
+        prevBtn.addEventListener('click', function () { showSlide((currentIndex - 1 + slidesData.length) % slidesData.length, 'prev'); });
+        lightbox.addEventListener('click', function () { lightbox.classList.remove('is-visible'); });
+
+        var firstSlide = slidesContainer.children[0];
+        if (!firstSlide) return;
+        var firstImg = firstSlide.querySelector('.slide-image');
+        function setInitialState() {
+            slidesContainer.style.height = firstSlide.offsetHeight + 'px';
+            firstSlide.classList.add('is-active');
+            if (slidesData[0].imgSrcs) startImageCycler(firstSlide, slidesData[0].imgSrcs, 0);
+            activeIndicator.style.transition = 'none';
+            updateProgress(0);
+            setTimeout(function () { activeIndicator.style.transition = ''; }, 50);
+        }
+        if (firstImg.complete) { setInitialState(); }
+        else { firstImg.addEventListener('load', setInitialState, { once: true }); }
+    })();
+}
+
+// ===== PODCASTS / MOTLEY FOOLS =====
+initExplainerWidget('podcasts-explainer', 'podcasts-lightbox', [
+    { icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z"/></svg>', aspect: 'square', title: 'The Motley Fools', text: 'כך תקבלו את המלצות של המניות הכי חמות!', imgSrc: 'https://images.ravpages.co.il/xsite_resources/user_content/cp_new_production/d4/83/50/cb/d48350cb1a786c4790a92b5444c0e526/images/f257156a2ea6119691a00b19d3b577f4.jpg?cc=8&convert=webp&maxWidth=400' },
+    { icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-3.75-.625m3.75.625l-6.25 3.75M21 18a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>', aspect: 'wide', title: 'מה זה The Motley Fools?', text: 'חברה המספקת ניתוח פיננסי והמלצות השקעה. שירות הדגל שלהם, Stock Advisor, מציג תשואה היסטורית מרשימה.', imgSrc: 'https://images.ravpages.co.il/xsite_resources/user_content/cp_new_production/d4/83/50/cb/d48350cb1a786c4790a92b5444c0e526/images/e1dc3d04449784ea96076f130cb7eb45.PNG' },
+    { icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>', aspect: 'wide', title: 'שימוש בגרסה החינמית', text: 'אתר חדשות פיננסי: תמצאו כאן מידע כללי על מניות, מדדים ופיננסים.', imgSrc: 'https://images.ravpages.co.il/xsite_resources/user_content/cp_new_production/d4/83/50/cb/d48350cb1a786c4790a92b5444c0e526/images/dbb03074e49aeaba22c7952195d8584f.PNG' },
+    { icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0l.879-.659M7.5 14.25l-2.489-1.867a1.125 1.125 0 010-1.766l2.489-1.867M16.5 14.25l2.489-1.867a1.125 1.125 0 000-1.766l-2.489-1.867"/></svg>', aspect: 'square', title: 'שימוש בגרסה בתשלום', text: 'כל חודש מקבלים המלצה חדשה על מניה עם ערך עתידי גבוה, עדכונים שוטפים וניתוחי עומק.', imgSrc: 'https://images.ravpages.co.il/xsite_resources/user_content/cp_new_production/d4/83/50/cb/d48350cb1a786c4790a92b5444c0e526/images/fdccf8aa6d63212a702ed2511675ecc0.PNG' }
+]);
+
+// ===== GRAPHIN =====
+initExplainerWidget('graphin-explainer', 'graphin-lightbox', [
+    { icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12.75 3.03v.568c0 .334.148.65.405.864l1.068.89c.442.369.535 1.01.216 1.49l-.51.766a2.25 2.25 0 01-1.161.886l-.143.048a1.109 1.109 0 00-.57 1.664l.143.258a1.109 1.109 0 001.664.57l.143-.048a2.25 2.25 0 011.161-.886l.51-.766c.319-.48.126-1.121-.216-1.49l-1.068-.89a1.125 1.125 0 01-.405-.864v-.568a1.125 1.125 0 01.708-1.044l3.453-1.217a1.125 1.125 0 00.708-1.044V3.03a1.125 1.125 0 00-1.044-.708l-3.453 1.217a1.125 1.125 0 00-1.044.708z"/></svg>', aspect: 'wide', title: 'Graphin', text: 'כלי פיננסי מהפכני למשקיעים', imgSrc: 'https://images.ravpages.co.il/xsite_resources/user_content/cp_new_production/d4/83/50/cb/d48350cb1a786c4790a92b5444c0e526/images/006ddd49d042ed7ac4f98028534c4524.PNG?cc=8&convert=webp&maxWidth=500' },
+    { icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h12A2.25 2.25 0 0020.25 14.25V3M3.75 21h16.5M12 3v18"/></svg>', aspect: 'wide', title: 'מה זה Graphin?', text: 'פלטפורמה מתקדמת המשלבת דוחות פיננסיים, ניתוח נתונים, ובינה מלאכותית כדי לספק תובנות עומק על כל מניה.', imgSrc: 'https://images.ravpages.co.il/xsite_resources/user_content/cp_new_production/d4/83/50/cb/d48350cb1a786c4790a92b5444c0e526/images/c4868ea24a2c7d44b20cf748b15d8501.PNG?cc=8&convert=webp&maxWidth=1100' },
+    { icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/></svg>', aspect: 'stacked', title: 'שימוש בגרסה החינמית', text: 'הגרסה החינמית מספקת גישה לדוחות הכספיים המלאים, נתוני מפתח, ומאפשרת מעקב בסיסי אחר מניות.', imgSrcs: ['https://images.ravpages.co.il/xsite_resources/user_content/cp_new_production/d4/83/50/cb/d48350cb1a786c4790a92b5444c0e526/images/9d95d76a3ad8d3337560405c42839be5.PNG?cc=8&convert=webp&maxWidth=500','https://images.ravpages.co.il/xsite_resources/user_content/cp_new_production/d4/83/50/cb/d48350cb1a786c4790a92b5444c0e526/images/511d9fd72af6490606fa3c48e7156b96.PNG?cc=8&convert=webp&maxWidth=600','https://images.ravpages.co.il/xsite_resources/user_content/cp_new_production/d4/83/50/cb/d48350cb1a786c4790a92b5444c0e526/images/01845a77ca41807ad115cc7facb21f41.PNG?cc=8&convert=webp&maxWidth=500','https://images.ravpages.co.il/xsite_resources/user_content/cp_new_production/d4/83/50/cb/d48350cb1a786c4790a92b5444c0e526/images/a05cde2da790c74bc98bdd9a7e8d2191.PNG?cc=8&convert=webp&maxWidth=600'] },
+    { icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M18.75 21a6.375 6.375 0 11-12.75 0 6.375 6.375 0 0112.75 0z"/></svg>', aspect: 'wide', title: 'שימוש בגרסה בתשלום', text: 'הגרסה המלאה פותחת גישה לניתוחי AI, תמחור מניות לפי מודלים מובילים, וכלים בלעדיים למציאת ההשקעה הבאה שלך.', imgSrc: 'https://images.ravpages.co.il/xsite_resources/user_content/cp_new_production/d4/83/50/cb/d48350cb1a786c4790a92b5444c0e526/images/a05cde2da790c74bc98bdd9a7e8d2191.PNG?cc=8&convert=webp&maxWidth=1100' }
+]);
+
+// ===== SIMPLY WALL ST =====
+initExplainerWidget('sws-explainer', 'sws-lightbox', [
+    { icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.954a.75.75 0 011.06 0l8.954 8.954M2.25 12l8.954 8.954a.75.75 0 001.06 0l8.954-8.954"/></svg>', aspect: 'stacked', title: 'Simply Wall St', text: 'הופכים נתונים פיננסיים מסובכים לתובנות ויזואליות וקלות להבנה.', imgSrc: 'https://images.ravpages.co.il/xsite_resources/user_content/cp_new_production/d4/83/50/cb/d48350cb1a786c4790a92b5444c0e526/images/778fe2171a64e5c6facba244568c2dbe.png' },
+    { icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75l3 3m0 0l3-3m-3 3v-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>', aspect: 'stacked', title: 'מה זה Simply Wall St?', text: 'פלטפורמה המנתחת חברות בורסאיות ומציגה אותן כאינפוגרפיקה מפורטת, כולל הערכת שווי, בריאות פיננסית, דיבידנדים ועוד.', imgSrc: 'https://images.ravpages.co.il/xsite_resources/user_content/cp_new_production/d4/83/50/cb/d48350cb1a786c4790a92b5444c0e526/images/b19d3452a3c6196fe46b2b9bb7c5be6a.PNG' },
+    { icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/></svg>', aspect: 'stacked', title: 'שימוש בגרסה החינמית', text: 'הגרסה החינמית מאפשרת ניתוח של מספר מוגבל של חברות בחודש ומעקב אחר רשימת המעקב האישית שלך.', imgSrc: 'https://images.ravpages.co.il/xsite_resources/user_content/cp_new_production/d4/83/50/cb/d48350cb1a786c4790a92b5444c0e526/images/9c81481f4b53b40d7f95f6fd38fdff69.PNG' },
+    { icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M18.75 21a6.375 6.375 0 11-12.75 0 6.375 6.375 0 0112.75 0z"/></svg>', aspect: 'stacked', title: 'שימוש בגרסה בתשלום', text: 'הגרסה המלאה מסירה את כל המגבלות ומעניקה גישה מלאה לכלי סינון מתקדמים, נתוני עומק, וייצוא נתונים.', imgSrc: 'https://images.ravpages.co.il/xsite_resources/user_content/cp_new_production/d4/83/50/cb/d48350cb1a786c4790a92b5444c0e526/images/dcde314dd3fbc4af76fba250e20686a5.PNG' }
+]);
+
+// ===== MORE TOOLS =====
+initExplainerWidget('more-tools-explainer', 'more-tools-lightbox', [
+    { icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z"/></svg>', aspect: 'stacked', title: 'Adding Value', text: 'אתר הבית של אורן ברסקי. תמצאו כאן תכנים מקיפים על עולם ההשקעות, תכנון פיננסי, שוק ההון וניהול ההון האישי והמשפחתי.', imgSrc: 'https://adding-value.co.il/wp-content/uploads/2024/02/logo-adding-value-2.png' },
+    { icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>', aspect: 'stacked', title: 'שלומי ארדן', text: 'בלוג השקעות בשוק ההון. המטרה היא לאתר חברות מצוינות להשקעות בטוחות ורווחיות.', imgSrc: 'https://scontent.ftlv18-1.fna.fbcdn.net/v/t39.30808-1/300026824_528831695912920_4893794837198221493_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=111&ccb=1-7&_nc_sid=2d3e12&_nc_ohc=n8haTNLZ14UQ7kNvwE9GnT7&_nc_oc=AdnQPuj1icprOhqeWfddOyRx9O-l3VFPyObo2kAdirxt1YC9IeO0X9mEKD-Fl_PujWU&_nc_zt=24&_nc_ht=scontent.ftlv18-1.fna&_nc_gid=zw5K5x9UNO7rFqbgQnWrtg&oh=00_Aff0wsSFWWTOedVCXSuv4bHXedy3GF9lY75v7Lh2qtF67Q&oe=68FC5307' },
+    { icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg>', aspect: 'stacked', title: 'מדופלם', text: 'בלוג פיננסי המספק תכנים על השקעות, פנסיה, וניהול כלכלת המשפחה. מטרתו היא להפוך את הקוראים למשקיעים טובים יותר.', imgSrc: 'https://substackcdn.com/image/fetch/w_256,h_256,c_fill,f_auto,q_auto:good,fl_progressive:steep,g_auto/https://bucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com/public/images/22f573be-c5e1-460d-a44f-1f32a499e36b_400x400.png' },
+    { icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/></svg>', aspect: 'stacked', title: 'ינשוף פיננסי', text: 'מגזין תוכן מוביל בתחום הפיננסים וההשקעות. מספק ידע וכלים מעשיים להתנהלות כלכלית נכונה והשקעות חכמות.', imgSrc: 'https://financeowl.co.il/wp-content/uploads/2024/06/logo.png.webp' }
+]);
 </script>
+
 </body>
 </html>
