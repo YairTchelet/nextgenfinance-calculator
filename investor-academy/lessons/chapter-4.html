@@ -8,72 +8,126 @@
     <!-- Auth protection -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
     <script src="/assets/js/supabase-config.js"></script>
-    <script src="/assets/js/auth-guard.js"></script>
+    <script src="/assets/js/course-guard.js"></script>
 
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800&family=Assistant:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/investor-academy/assets/css/course.css">
 
     <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html { overflow-x: hidden; }
-        body { background: linear-gradient(155deg, #0b4a64 0%, #1680a0 48%, #0d6a82 100%); background-attachment: fixed; font-family: 'Assistant', 'Rubik', sans-serif; direction: rtl; color: #394140; min-height: 100vh; }
-        .nav { background: #0c3d52; padding: 0 1.5rem; height: 62px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,0.35); }
-        .nav-logo { color: #b3e0dc; font-family: 'Rubik', sans-serif; font-weight: 700; font-size: 1.2rem; text-decoration: none; }
-        .nav-links { display: flex; align-items: center; gap: 1rem; }
-        .nav-link { color: #fefefe; text-decoration: none; font-size: 0.95rem; transition: color 0.2s; }
-        .nav-link:hover { color: #b3e0dc; }
-        .nav-signout { background: transparent; border: 1px solid rgba(240,248,250,0.35); color: #fefefe; font-family: 'Assistant', sans-serif; font-size: 0.9rem; padding: 0.4rem 1rem; border-radius: 20px; cursor: pointer; transition: all 0.2s; }
-        .nav-signout:hover { border-color: #b3e0dc; color: #b3e0dc; }
-        .nav-brand { display: flex; align-items: center; gap: 0.7rem; }
-        .hbnav-btn { width: 40px; height: 40px; background: rgba(179,224,220,0.15); border: 1px solid rgba(179,224,220,0.3); border-radius: 10px; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px; transition: background 0.2s, border-color 0.2s; flex-shrink: 0; }
-        .hbnav-btn:hover { background: rgba(179,224,220,0.28); border-color: rgba(179,224,220,0.55); }
-        .hbnav-btn span { display: block; width: 22px; height: 2px; background: #fefefe; border-radius: 2px; transition: transform 0.3s, opacity 0.3s; }
-        .hbnav-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-        .hbnav-btn.open span:nth-child(2) { opacity: 0; }
-        .hbnav-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-        .hbnav-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 999; }
-        .hbnav-overlay.open { display: block; }
-        .hbnav-panel { position: fixed; top: 62px; right: 0; height: calc(100vh - 62px); width: 270px; background: #0c3d52; z-index: 1000; transform: translateX(100%); transition: transform 0.3s ease; overflow-y: auto; padding: 1.5rem 1rem; box-shadow: -4px 0 20px rgba(0,0,0,0.35); }
-        .hbnav-panel.open { transform: translateX(0); }
-        .hbnav-panel-title { color: #b3e0dc; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(179,224,220,0.2); }
-        .hbnav-item { display: flex; align-items: center; gap: 0.9rem; padding: 0.75rem 0.85rem; border-radius: 10px; text-decoration: none; color: #fefefe; font-size: 0.95rem; transition: background 0.18s; margin-bottom: 4px; }
-        .hbnav-item:hover { background: rgba(179,224,220,0.12); }
-        .hbnav-item.active { background: rgba(179,224,220,0.18); font-weight: 700; }
-        .hbnav-icon { width: 34px; height: 34px; background: rgba(179,224,220,0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1rem; }
-        .hbnav-text { display: flex; flex-direction: column; }
-        .hbnav-name { font-size: 0.95rem; }
-        .hbnav-sub  { font-size: 0.75rem; color: #b3e0dc; opacity: 0.7; }
-        .hbnav-site-link { display: flex; align-items: center; padding: 0.55rem 0.85rem; border-radius: 8px; text-decoration: none; color: rgba(254,254,254,0.72); font-size: 0.88rem; transition: background 0.18s; margin-bottom: 2px; }
-        .hbnav-site-link:hover { background: rgba(179,224,220,0.1); color: #fefefe; }
-        .hbnav-divider { height: 1px; background: rgba(179,224,220,0.15); margin: 0.85rem 0.5rem; }
-        .coming-soon { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: calc(100vh - 62px); padding: 3rem 1rem; text-align: center; }
-        .cs-icon { font-size: 4rem; margin-bottom: 1.5rem; }
-        .cs-label { display: inline-block; background: rgba(179,224,220,0.15); color: #b3e0dc; font-size: 0.82rem; font-weight: 700; padding: 0.35rem 1rem; border-radius: 20px; border: 1px solid rgba(179,224,220,0.3); margin-bottom: 1.2rem; }
-        .cs-title { font-family: 'Rubik', sans-serif; font-size: 2.2rem; font-weight: 700; color: #fefefe; margin-bottom: 0.75rem; }
-        .cs-sub { color: #b3e0dc; font-size: 1.05rem; max-width: 460px; line-height: 1.65; margin-bottom: 2.5rem; opacity: 0.85; }
-        .cs-back { display: inline-block; background: #b3e0dc; color: #394140; font-family: 'Rubik', sans-serif; font-size: 1rem; font-weight: 700; padding: 0.8rem 2.2rem; border-radius: 30px; text-decoration: none; transition: background 0.2s, transform 0.15s; box-shadow: 0 4px 14px rgba(0,0,0,0.2); margin-left: 0.75rem; }
-        .cs-back:hover { background: #8fc9c4; transform: translateY(-2px); }
-        .cs-outline { display: inline-block; background: transparent; color: #b3e0dc; font-family: 'Rubik', sans-serif; font-size: 1rem; font-weight: 600; padding: 0.8rem 2.2rem; border-radius: 30px; text-decoration: none; border: 1.5px solid rgba(179,224,220,0.5); transition: border-color 0.2s, color 0.2s; }
-        .cs-outline:hover { border-color: #b3e0dc; color: #fefefe; }
-        @media (max-width: 480px) {
-            .nav { padding: 0 0.75rem; }
-            .nav-logo { font-size: 1rem; }
-            .nav-link { display: none; }
+        /* ch4: hero */
+        .course-hero { border-radius: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.25); padding: 2.5rem 2rem; }
+        .ch4-chapter-badge { display: inline-block; background: rgba(179,224,220,0.15); color: #b3e0dc; font-size: 0.82rem; font-weight: 700; padding: 0.35rem 1rem; border-radius: 20px; border: 1px solid rgba(179,224,220,0.3); margin-bottom: 1rem; }
+        @media (max-width: 600px) { .course-hero { padding: 1.75rem 1.25rem; } }
+
+        /* ===== TOC WIDGET ===== */
+        .toc-widget { --toc-accent: linear-gradient(90deg, #38b2ac, #3182ce); font-family: 'Rubik', sans-serif; width: 100%; background: transparent; box-sizing: border-box; }
+        .toc-widget .main-title { text-align: center; font-size: 2rem; font-weight: 700; margin: 0 0 1.75rem 0; background: var(--toc-accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .toc-widget .sections-container { display: flex; flex-direction: column; gap: 1.1rem; }
+        .toc-widget .section { text-align: right; border-radius: 10px; padding: 0.6rem 0.75rem; }
+        .toc-widget .section-title { display: inline-block; position: relative; text-decoration: none; font-size: 1.3rem; font-weight: 700; margin-bottom: 0.6rem; cursor: pointer; background: var(--toc-accent); background-size: 200% auto; color: #1a202c; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-position: 100%; transition: background-position 0.4s ease; }
+        .toc-widget .section:hover .section-title { background-position: 0%; }
+        @media (max-width: 600px) { .toc-widget .main-title { font-size: 1.6rem; } .toc-widget .section-title { font-size: 1.1rem; } }
+
+        /* ===== PERK CARD WIDGET (מיטב) ===== */
+        .perk-card-container {
+            font-family: 'Rubik', sans-serif;
+            background-color: #e9f0f1;
+            padding: 1.25rem;
+            border-radius: 22px;
+            width: 100%;
+            max-width: 820px;
+            margin: 1.5rem auto;
+            direction: rtl;
+            box-sizing: border-box;
+        }
+        .perk-card {
+            background-color: #ffffff;
+            border-radius: 18px;
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.08);
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 35% 1fr;
+        }
+        .perk-image-col { background-color: #f9fafb; }
+        .perk-image-col a { display: block; height: 100%; }
+        .perk-image-col img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.25s ease; }
+        .perk-image-col a:hover img { transform: scale(1.03); }
+        .perk-content-col { padding: 2rem 2.5rem; display: flex; flex-direction: column; justify-content: center; }
+        .perk-eyebrow { background-color: #f1f5f9; color: #5f6c7b; font-size: 0.85rem; font-weight: 500; padding: 0.4rem 0.8rem; border-radius: 8px; display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 1.25rem; align-self: flex-start; }
+        .perk-header .perk-title { color: #00827a; font-size: 1.8rem; font-weight: 800; margin: 0 0 0.5rem 0; line-height: 1.2; }
+        .perk-header .perk-sub { color: #5f6c7b; font-size: 0.95rem; margin: 0; line-height: 1.6; max-width: 40ch; }
+        .perk-benefits { display: flex; gap: 0.5rem; margin-top: 1.75rem; flex-wrap: wrap; }
+        .benefit-tag { background-color: #f1f5f9; color: #5f6c7b; font-size: 0.8rem; font-weight: 500; padding: 0.4rem 0.8rem; border-radius: 8px; display: inline-flex; align-items: center; gap: 0.5rem; }
+        .perk-cta-area { margin-top: 2rem; }
+        .perk-cta-button { display: block; width: 100%; text-align: center; text-decoration: none; color: white; background: linear-gradient(90deg, #4a92a5, #58b3ac); padding: 0.8rem 1rem; border-radius: 12px; font-size: 1rem; font-weight: 700; border: none; cursor: pointer; box-shadow: 0 8px 20px -6px rgba(74,146,165,0.4); transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .perk-cta-button:hover { transform: translateY(-3px); box-shadow: 0 12px 25px -6px rgba(74,146,165,0.5); }
+        .perk-trust-line { color: #5f6c7b; font-size: 0.75rem; text-align: center; margin-top: 0.75rem; }
+        @media (max-width: 800px) {
+            .perk-card-container { padding: 0; background-color: transparent; }
+            .perk-card { grid-template-columns: 1fr; border-radius: 0; }
+            .perk-image-col { height: 250px; }
+            .perk-content-col { padding: 2rem 1.5rem; }
+            .perk-header .perk-title { font-size: 1.6rem; }
+        }
+
+        /* ===== PODCAST WIDGET ===== */
+        .podcast-frame-container {
+            font-family: 'Rubik', sans-serif;
+            background-color: #e9f0f1;
+            padding: 1.25rem;
+            border-radius: 22px;
+            width: 100%;
+            max-width: 820px;
+            margin: 1.5rem auto;
+            direction: rtl;
+            box-sizing: border-box;
+        }
+        .podcast-player-widget { background: #ffffff; border-radius: 18px; box-shadow: 0 10px 30px -10px rgba(0,0,0,0.08); overflow: hidden; display: flex; flex-direction: column; }
+        .podcast-player-widget .widget-header { padding: 2rem 1.5rem 1.5rem; text-align: center; }
+        .podcast-player-widget .main-title { margin: 0 0 0.75rem; font-size: 1.8rem; font-weight: 800; color: #00827a; }
+        .podcast-player-widget .subtitle { margin: 0; color: #5f6c7b; font-size: 0.95rem; line-height: 1.6; max-width: 86%; margin-inline: auto; }
+        .podcast-display-area { padding: 1.5rem; display: flex; gap: 1.25rem; align-items: flex-start; border-top: 1px solid #f1f5f9; }
+        .cover-art-link { flex: 0 0 110px; width: 110px; height: 110px; display: block; border-radius: 14px; overflow: hidden; box-shadow: 0 10px 22px -8px rgba(8,24,40,0.08); transition: transform .18s ease, box-shadow .18s ease; }
+        .cover-art-link:hover { transform: translateY(-4px); box-shadow: 0 18px 36px -12px rgba(8,24,40,0.12); }
+        .cover-art { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .podcast-meta { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; }
+        .podcast-title-text { margin: 0 0 0.5rem; font-weight: 700; font-size: 1.2rem; color: #1e293b; line-height: 1.3; }
+        .podcast-description-text { margin: 0 0 1rem; color: #5f6c7b; font-size: 0.9rem; line-height: 1.6; }
+        .podcast-key-details { margin: 0 0 1rem; padding: 0; list-style: none; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .podcast-key-details li { background-color: #f1f5f9; color: #5f6c7b; font-size: 0.8rem; font-weight: 500; padding: 0.4rem 0.8rem; border-radius: 8px; display: inline-flex; align-items: center; gap: 0.5rem; }
+        .listen-btn { align-self: flex-start; display: inline-flex; gap: 0.5rem; align-items: center; text-decoration: none; padding: 0.6rem 1.2rem; border-radius: 9999px; background: linear-gradient(90deg, #4a92a5, #58b3ac); color: white; font-weight: 700; font-size: 0.9rem; box-shadow: 0 8px 20px -6px rgba(74,146,165,0.4); transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .listen-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 25px -6px rgba(74,146,165,0.5); }
+        .listen-btn svg { width: 18px; height: 18px; }
+        .podcast-nav-bar { padding: 1rem; border-top: 1px solid #f1f5f9; background: #f8fafc; }
+        .nav-scroller-inner { display: flex; gap: 0.75rem; align-items: center; justify-content: center; flex-wrap: wrap; }
+        .podcast-nav-item { width: 80px; height: 80px; border-radius: 12px; padding: 0; border: 2px solid transparent; overflow: hidden; cursor: pointer; background: transparent; transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease; }
+        .podcast-nav-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .podcast-nav-item:hover { transform: translateY(-3px); }
+        .podcast-nav-item.active { transform: scale(1.05); border-color: #00827a; box-shadow: 0 6px 15px -4px rgba(0,130,122,0.2); }
+        @media (max-width: 520px) {
+            .podcast-frame-container { padding: 0; background-color: transparent; }
+            .podcast-player-widget { border-radius: 0; }
+            .podcast-display-area { flex-direction: column; }
+            .cover-art-link { flex: 0 0 100%; width: 100%; }
+            .podcast-player-widget .main-title { font-size: 1.5rem; }
+            .podcast-title-text { font-size: 1.1rem; }
         }
     </style>
 </head>
 <body>
 
-<nav class="nav">
-    <div class="nav-brand">
+<!-- NAVBAR -->
+<nav class="course-nav">
+    <div class="course-nav-brand">
         <button class="hbnav-btn" id="hbnav-toggle" aria-label="תפריט פרקים" aria-expanded="false">
             <span></span><span></span><span></span>
         </button>
-        <a href="/" class="nav-logo">NewGen Finance</a>
+        <a href="/" class="course-nav-logo">NewGen Finance</a>
     </div>
-    <div class="nav-links">
-        <a href="/members/" class="nav-link">אזור החברים</a>
-        <button class="nav-signout" id="signout-btn">התנתקות</button>
+    <div class="course-nav-links">
+        <a href="/members/" class="course-nav-link">אזור החברים</a>
+        <button class="course-nav-signout" id="ch4-signout-btn">התנתקות</button>
     </div>
 </nav>
 
@@ -87,46 +141,165 @@
     <div class="hbnav-divider"></div>
     <div class="hbnav-panel-title">הקורס — פרקים</div>
     <a href="/investor-academy/lessons/intro.html" class="hbnav-item">
-        <div class="hbnav-icon">🚀</div>
+        <div class="hbnav-icon">&#128640;</div>
         <div class="hbnav-text"><span class="hbnav-name">הקדמה</span><span class="hbnav-sub">למסע שלך</span></div>
     </a>
     <a href="/investor-academy/lessons/chapter-1.html" class="hbnav-item">
-        <div class="hbnav-icon">🔑</div>
+        <div class="hbnav-icon">&#128273;</div>
         <div class="hbnav-text"><span class="hbnav-name">פרק 1</span><span class="hbnav-sub">שלב הכניסה</span></div>
     </a>
     <a href="/investor-academy/lessons/chapter-2.html" class="hbnav-item">
-        <div class="hbnav-icon">🧭</div>
+        <div class="hbnav-icon">&#129517;</div>
         <div class="hbnav-text"><span class="hbnav-name">פרק 2</span><span class="hbnav-sub">שלב האסטרטגיה</span></div>
     </a>
     <a href="/investor-academy/lessons/chapter-3.html" class="hbnav-item">
-        <div class="hbnav-icon">🛠️</div>
+        <div class="hbnav-icon">&#128295;</div>
         <div class="hbnav-text"><span class="hbnav-name">פרק 3</span><span class="hbnav-sub">שלב הכלים</span></div>
     </a>
     <a href="/investor-academy/lessons/chapter-4.html" class="hbnav-item active">
-        <div class="hbnav-icon">📊</div>
+        <div class="hbnav-icon">&#128200;</div>
         <div class="hbnav-text"><span class="hbnav-name">פרק 4</span><span class="hbnav-sub">שלב הניהול</span></div>
+    </a>
+    <a href="#" class="hbnav-item disabled">
+        <div class="hbnav-icon">&#127919;</div>
+        <div class="hbnav-text"><span class="hbnav-name">פרק 5</span><span class="hbnav-sub">בקרוב</span></div>
     </a>
 </nav>
 
-<div class="page-container">
-    <div class="coming-soon">
-        <div class="cs-icon">📊</div>
-        <div class="cs-label">פרק 4</div>
-        <h1 class="cs-title">שלב הניהול</h1>
-        <p class="cs-sub">ניהול תיק השקעות, פסיכולוגיית המשקיע וניהול סיכונים — בקרוב!</p>
-        <div>
-            <a href="/investor-academy/lessons/chapter-3.html" class="cs-back">→ חזרה לפרק 3</a>
-            <a href="/investor-academy/lessons/intro.html" class="cs-outline">הקדמה</a>
+<main class="course-container">
+
+    <!-- SECTION 1: HERO -->
+    <section class="course-hero">
+        <div class="ch4-chapter-badge">פרק 4</div>
+        <h1 class="course-hero-title">פרק 4 — שלב הניהול</h1>
+        <div class="course-yt-main">
+            <iframe src="https://www.youtube.com/embed/yGP3iXDpHjQ" title="פרק 4 — שלב הניהול" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+        </div>
+        <div class="course-hero-badge">!בהצלחה</div>
+    </section>
+
+    <!-- SECTION 2: TOC -->
+    <div class="course-card">
+        <div class="toc-widget">
+            <h2 class="main-title">תוכן העניינים לפרק 4</h2>
+            <div class="sections-container">
+                <div class="section">
+                    <a href="#s1-lesson1" class="section-title">פרק 4 שיעור 1: פתיחת תיק השקעות</a>
+                </div>
+                <div class="section">
+                    <a href="#s2-lesson2" class="section-title">פרק 4 שיעור 2: גיבוש אסטרטגיית השקעות</a>
+                </div>
+            </div>
         </div>
     </div>
-</div>
+
+    <!-- SECTION 3: שיעור 1 -->
+    <div class="course-card" id="s1-lesson1">
+        <h2 class="course-section-title">פרק 4 שיעור 1: פתיחת תיק השקעות</h2>
+        <div class="course-yt-main">
+            <iframe src="https://www.youtube.com/embed/LHo1aKhcAU8" title="פתיחת תיק השקעות" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+        </div>
+        <div class="course-yt-main">
+            <iframe src="https://www.youtube.com/embed/-CZdSofnFAw" title="פתיחת תיק השקעות - המשך" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+        </div>
+    </div>
+
+    <!-- SECTION 4: שיעור 2 -->
+    <div class="course-card" id="s2-lesson2">
+        <h2 class="course-section-title">פרק 4 שיעור 2: גיבוש אסטרטגיית השקעות</h2>
+        <div class="course-yt-main">
+            <iframe src="https://www.youtube.com/embed/PBHKjoNMyK0" title="גיבוש אסטרטגיית השקעות" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+        </div>
+
+        <!-- מיטב: פרסומת פתיחת תיק השקעות -->
+        <div class="perk-card-container" id="meitav-perk-card">
+            <div class="perk-card" role="region" aria-label="הטבה לפתיחת חשבון השקעות">
+                <div class="perk-image-col">
+                    <a href="https://landing.meitav.co.il/he-IL/landing/trade/tradeleads?utm_source=%D7%99%D7%90%D7%99%D7%A8+%D7%AA%D7%9B%D7%9C%D7%AA&utm_medium=%D7%99%D7%90%D7%99%D7%A8+%D7%AA%D7%9B%D7%9C%D7%AA" target="_blank" rel="noopener noreferrer" aria-label="למימוש ההטבה ופתיחת חשבון">
+                        <img src="https://images.ravpages.co.il/xsite_resources/user_content/45/7b/de/e6/457bdee658ad89c7d5fdf52fd452d53c/images/b6281ddb43e225a4f6cb6556796f5365.PNG?cc=8&convert=webp" alt="אפליקציית מסחר של מיטב טרייד במכשיר נייד">
+                    </a>
+                </div>
+                <div class="perk-content-col">
+                    <div class="perk-eyebrow">
+                        <span>&#10003;</span>
+                        <span>הטבה בלעדית לתלמידי הקורס</span>
+                    </div>
+                    <header class="perk-header">
+                        <h2 class="perk-title">חשבון השקעות בתנאים מיוחדים</h2>
+                        <p class="perk-sub">עמלות מופחתות, כלים מתקדמים ותמיכה מלאה.</p>
+                    </header>
+                    <div class="perk-benefits">
+                        <div class="benefit-tag">&#9889; פתיחה מהירה</div>
+                        <div class="benefit-tag">&#128200; כלים למעקב</div>
+                        <div class="benefit-tag">&#128274; תמיכה ואבטחה</div>
+                    </div>
+                    <div class="perk-cta-area">
+                        <a href="https://landing.meitav.co.il/he-IL/landing/trade/tradeleads?utm_source=%D7%99%D7%90%D7%99%D7%A8+%D7%AA%D7%9B%D7%9C%D7%AA&utm_medium=%D7%99%D7%90%D7%99%D7%A8+%D7%AA%D7%9B%D7%9C%D7%AA" class="perk-cta-button" target="_blank" rel="noopener noreferrer">
+                            לפתיחת חשבון וקבלת ההטבה
+                        </a>
+                        <p class="perk-trust-line">פתיחת חשבון דיגיטלית &#8226; אין צורך להגיע לסניף</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 5: סיכום הקורס -->
+    <div class="course-card">
+        <h2 class="course-section-title">סיכום הקורס</h2>
+        <div class="course-yt-main">
+            <iframe src="https://www.youtube.com/embed/bgtBI6d12BU" title="סיכום הקורס" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+        </div>
+
+        <!-- פודקאסטים מומלצים -->
+        <div class="podcast-frame-container">
+            <div class="podcast-player-widget" id="podcasts-ch4-player-widget" aria-label="Podcast player widget">
+                <div class="widget-header">
+                    <h2 class="main-title">פודקאסטים מומלצים לשמיעה</h2>
+                    <p class="subtitle">עקבו אחרי עולם ההשקעות — תובנות קצרות, דוגמאות מקרים ומסקנות מהירות.</p>
+                </div>
+                <div class="podcast-display-area">
+                    <a id="podcasts-ch4-cover-link" class="cover-art-link" href="#" target="_blank" rel="noopener noreferrer">
+                        <img id="podcasts-ch4-cover-image" class="cover-art" src="" alt="קנבס/עטיפת הפודקאסט" style="transition: opacity 0.2s ease;">
+                    </a>
+                    <div class="podcast-meta">
+                        <h3 id="podcasts-ch4-title" class="podcast-title-text"></h3>
+                        <p id="podcasts-ch4-description" class="podcast-description-text"></p>
+                        <ul id="podcasts-ch4-key-details-list" class="podcast-key-details"></ul>
+                        <a id="podcasts-ch4-listen-btn" class="listen-btn" href="#" target="_blank" rel="noopener noreferrer" aria-label="האזנה בפלטפורמה חיצונית">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                            <span>האזנה</span>
+                        </a>
+                    </div>
+                </div>
+                <nav class="podcast-nav-bar" aria-label="רשימת פודקאסטים">
+                    <div id="podcasts-ch4-nav-scroller" class="nav-scroller-inner" role="toolbar" aria-label="בחר פודקאסט"></div>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 6: BOTTOM NAV -->
+    <div class="course-card-dark">
+        <h2 class="course-card-dark-title">!כל הכבוד</h2>
+        <p class="course-card-dark-sub">סיימתם את פרק 4 — שלב הניהול. חזרו על החומר או עברו לרשימת הפרקים.</p>
+        <div class="course-bottom-nav">
+            <a href="/investor-academy/lessons/chapter-3.html" class="course-btn course-btn-gold">חזרה לפרק 3</a>
+            <a href="/investor-academy/lessons/" class="course-btn course-btn-outline">חזרה לרשימת הפרקים</a>
+        </div>
+    </div>
+
+</main>
 
 <script>
-document.getElementById('signout-btn').addEventListener('click', async function () {
+// ===== SIGNOUT =====
+document.getElementById('ch4-signout-btn').addEventListener('click', async function () {
     const _c = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     await _c.auth.signOut();
     window.location.replace('/auth/login/');
 });
+
+// ===== HAMBURGER NAV =====
 (function () {
     var btn = document.getElementById('hbnav-toggle');
     var panel = document.getElementById('hbnav-panel');
@@ -137,6 +310,132 @@ document.getElementById('signout-btn').addEventListener('click', async function 
     overlay.addEventListener('click', close);
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
 })();
+
+// ===== PODCAST WIDGET =====
+(function () {
+    var widget = document.getElementById('podcasts-ch4-player-widget');
+    if (!widget) return;
+
+    var podcastData = [
+        {
+            id: 'motley-fool',
+            title: 'Motley Fool Money',
+            description: 'פודקאסט שבועי עם ניתוח כותרות, ראיון עם מנהלים, ודוגמאות להשקעות ארוכות טווח.',
+            details: [
+                { icon: '&#127970;', text: 'מניות צמיחה וערך בארה"ב' },
+                { icon: '&#128197;', text: 'שבועי' },
+                { icon: '&#127919;', text: 'איך לקרוא כותרות פיננסיות' }
+            ],
+            imgSrc: 'https://images.ravpages.co.il/xsite_resources/user_content/cp_new_production/d4/83/50/cb/d48350cb1a786c4790a92b5444c0e526/images/78ae388d8685f85ec8d90c7f7e0e563c.jpg?cc=8&convert=webp&maxWidth=400',
+            link: 'https://open.spotify.com/show/5TkLBANtQIGaQ54kmDYJx6?si=bd9a477eeb0c43e7'
+        },
+        {
+            id: 'investor-live',
+            title: 'אינווסטור לייב',
+            description: 'סקירות קצרות וממוקדות על מניות והשקעות בשוק הישראלי — דוגמאות פרקטיות.',
+            details: [
+                { icon: '&#127919;', text: 'שוק ההון הישראלי' },
+                { icon: '&#8987;', text: '15–30 דקות' },
+                { icon: '&#128204;', text: 'מעקב מניות מקומיות' }
+            ],
+            imgSrc: 'https://images.ravpages.co.il/xsite_resources/user_content/cp_new_production/d4/83/50/cb/d48350cb1a786c4790a92b5444c0e526/images/36df0aa97c003a54b91ae8395352fd49.jpg?cc=8&convert=webp&rxc=1705555703',
+            link: 'https://open.spotify.com/show/7tXRc97C1fA0epHAGQuJOE?si=a745f8060b0147dd'
+        },
+        {
+            id: 'acquired',
+            title: 'Acquired',
+            description: 'סיפורי רכישה וניתוח חברות — שיעורים אסטרטגיים וכלים להבנת ערך ארגוני.',
+            details: [
+                { icon: '&#128218;', text: 'Case Study מעמיק' },
+                { icon: '&#8987;', text: '2–3 שעות' },
+                { icon: '&#129504;', text: 'אסטרטגיה ולימוד משגיאות' }
+            ],
+            imgSrc: 'https://images.ravpages.co.il/xsite_resources/user_content/cp_new_production/d4/83/50/cb/d48350cb1a786c4790a92b5444c0e526/images/14551def434e1793a3a0ee51fb498f64.jpg?cc=8&convert=webp&rxc=1705555703',
+            link: 'https://open.spotify.com/show/7Fj0XEuUQLUqoMZQdsLXqp?si=5888025e02464705'
+        },
+        {
+            id: 'buyers-sellers',
+            title: 'קונים מוכרים',
+            description: 'פודקאסט על עסקאות, מיזוגים ורכישות בישראל — כלים פרקטיים וראיונות עם מומחים.',
+            details: [
+                { icon: '&#129309;', text: 'עסקאות, מיזוגים ונדל"ן' },
+                { icon: '&#127757;', text: 'פוקוס ישראלי' },
+                { icon: '&#10003;', text: 'בדיקות נאותות וסיכון' }
+            ],
+            imgSrc: 'https://images.ravpages.co.il/xsite_resources/user_content/cp_new_production/d4/83/50/cb/d48350cb1a786c4790a92b5444c0e526/images/5747db9a44b864e0c00ed3b4dedb05ff.jpg?cc=8&convert=webp&rxc=1705555703',
+            link: 'https://open.spotify.com/show/2oVJzQvNQQFPU6Ll5Fi6hc?si=21306f47cb334fc9'
+        }
+    ];
+
+    var els = {
+        coverLink:   document.getElementById('podcasts-ch4-cover-link'),
+        coverImage:  document.getElementById('podcasts-ch4-cover-image'),
+        title:       document.getElementById('podcasts-ch4-title'),
+        description: document.getElementById('podcasts-ch4-description'),
+        detailsList: document.getElementById('podcasts-ch4-key-details-list'),
+        listenBtn:   document.getElementById('podcasts-ch4-listen-btn'),
+        navScroller: document.getElementById('podcasts-ch4-nav-scroller')
+    };
+
+    var currentPodcastId = null;
+
+    function renderNav() {
+        els.navScroller.innerHTML = '';
+        podcastData.forEach(function (p) {
+            var btn = document.createElement('button');
+            btn.className = 'podcast-nav-item';
+            btn.type = 'button';
+            btn.dataset.id = p.id;
+            btn.title = p.title;
+            btn.setAttribute('aria-pressed', 'false');
+            var img = document.createElement('img');
+            img.src = p.imgSrc;
+            img.alt = p.title;
+            img.loading = 'lazy';
+            btn.appendChild(img);
+            btn.addEventListener('click', function () { showPodcast(p.id); });
+            btn.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); btn.click(); }
+            });
+            els.navScroller.appendChild(btn);
+        });
+    }
+
+    function showPodcast(podcastId) {
+        if (podcastId === currentPodcastId) return;
+        var p = podcastData.find(function (x) { return x.id === podcastId; });
+        if (!p) return;
+        currentPodcastId = podcastId;
+
+        els.coverImage.style.opacity = '0';
+        setTimeout(function () {
+            els.coverImage.src = p.imgSrc;
+            els.coverImage.alt = p.title + ' — עטיפה';
+            els.coverLink.href = p.link;
+            els.title.textContent = p.title;
+            els.description.textContent = p.description;
+            els.listenBtn.href = p.link;
+
+            els.detailsList.innerHTML = '';
+            p.details.forEach(function (d) {
+                var li = document.createElement('li');
+                li.innerHTML = '<span aria-hidden="true">' + d.icon + '</span><span>' + d.text + '</span>';
+                els.detailsList.appendChild(li);
+            });
+
+            els.navScroller.querySelectorAll('.podcast-nav-item').forEach(function (n) {
+                var isActive = n.dataset.id === podcastId;
+                n.classList.toggle('active', isActive);
+                n.setAttribute('aria-pressed', String(isActive));
+            });
+            els.coverImage.style.opacity = '1';
+        }, 150);
+    }
+
+    renderNav();
+    if (podcastData.length) showPodcast(podcastData[0].id);
+})();
 </script>
+
 </body>
 </html>
