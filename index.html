@@ -1,875 +1,677 @@
 <!DOCTYPE html>
-<html dir="rtl" lang="he">
+<html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NewGen Finance — בנה את העתיד הפיננסי שלך</title>
-  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <style>
-    /* ─── TOKENS ─────────────────────────────────────── */
-    :root {
-      --font: 'Heebo', sans-serif;
-      --bg: linear-gradient(155deg, #0b4a64 0%, #1680a0 48%, #0d6a82 100%);
-      --card-bg: #ece8e5;
-      --teal: #5e817d;
-      --teal-dark: #4a6b67;
-      --teal-dim: rgba(94, 129, 125, 0.15);
-      --gold: #b3e0dc;
-      --gold-dark: #8fc9c4;
-      --text-dark: #394140;
-      --text-mid: #6b7d7c;
-      --text-light: #fefefe;
-      --text-sub: rgba(254, 254, 254, 0.75);
-      --shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-      --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.22);
-      --radius: 16px;
-      --transition: 0.22s ease;
-    }
+  <title>NewGen Finance — הבית של משקיע הערך המתחיל</title>
+  <meta name="description" content="כלים, קורס ומשחק להשקעות ערך בעברית. התחל בחינם.">
 
-    /* ─── RESET ──────────────────────────────────────── */
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800;900&family=Assistant:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Shared styles -->
+  <link rel="stylesheet" href="/assets/css/course.css">
+
+  <!-- Vercel Analytics -->
+  <script defer src="/_vercel/insights/script.js"></script>
+
+  <style>
+    /* ── Reset & base ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
-      font-family: var(--font);
-      background: var(--bg);
+      font-family: 'Rubik', sans-serif;
+      background: linear-gradient(155deg, #0b4a64 0%, #1680a0 48%, #0d6a82 100%) fixed;
       background-attachment: fixed;
-      color: var(--text-light);
+      color: #f0f8fa;
       direction: rtl;
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
     }
     a { text-decoration: none; color: inherit; }
-    ul { list-style: none; }
 
-    /* ─── NAVBAR ─────────────────────────────────────── */
-    .navbar {
+    /* ── NAVBAR ── */
+    .hp-nav {
       position: sticky;
       top: 0;
       z-index: 100;
+      height: 62px;
+      background: #0c3d52;
+      border-bottom: 1px solid rgba(179, 224, 220, 0.12);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 clamp(20px, 5vw, 80px);
-      height: 68px;
-      background: rgba(12, 61, 82, 0.97);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 0 clamp(1rem, 5vw, 3.5rem);
     }
 
-    .logo {
-      font-size: 1.25rem;
+    .hp-nav-logo {
+      font-size: 1.2rem;
       font-weight: 800;
+      color: #f0f8fa;
       letter-spacing: -0.3px;
-      color: var(--text-light);
-      /* Logo stays LTR */
       direction: ltr;
       unicode-bidi: embed;
     }
+    .hp-nav-logo span { color: #b3e0dc; }
 
-    .logo span { color: var(--teal); }
-
-    .nav-links {
+    .hp-nav-auth {
       display: flex;
       align-items: center;
-      gap: clamp(16px, 3vw, 36px);
+      gap: 0.75rem;
     }
 
-    .nav-links a {
-      font-size: 0.95rem;
+    .hp-nav-link {
+      font-size: 0.9rem;
       font-weight: 500;
-      color: var(--text-sub);
-      transition: color var(--transition);
+      color: rgba(240, 248, 250, 0.75);
+      transition: color 0.18s;
     }
+    .hp-nav-link:hover { color: #f0f8fa; }
 
-    .nav-links a:hover { color: var(--text-light); }
+    .hp-nav-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.42rem 1.1rem;
+      border-radius: 20px;
+      font-size: 0.875rem;
+      font-weight: 700;
+      font-family: 'Rubik', sans-serif;
+      cursor: pointer;
+      border: 1.5px solid transparent;
+      transition: transform 0.15s, box-shadow 0.15s, background 0.15s, border-color 0.15s;
+    }
+    .hp-nav-pill:hover { transform: translateY(-1px); }
 
-    /* ─── HERO ───────────────────────────────────────── */
-    .hero {
+    .hp-nav-pill-mint { background: #b3e0dc; color: #0c3d52; }
+    .hp-nav-pill-mint:hover { background: #8fc9c4; box-shadow: 0 4px 14px rgba(179,224,220,0.4); }
+
+    .hp-nav-pill-outline { background: transparent; color: rgba(240,248,250,0.8); border-color: rgba(240,248,250,0.35); }
+    .hp-nav-pill-outline:hover { border-color: rgba(240,248,250,0.7); color: #f0f8fa; background: rgba(255,255,255,0.06); }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      background: #0c3d52;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: clamp(4rem, 10vw, 6rem) clamp(1.25rem, 6vw, 4rem);
       position: relative;
-      padding: clamp(72px, 11vw, 130px) clamp(20px, 5vw, 80px) clamp(64px, 10vw, 120px);
       overflow: hidden;
     }
 
-    .hero-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      gap: 60px;
+    #hero::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 700px; height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(42, 157, 143, 0.11) 0%, transparent 68%);
+      pointer-events: none;
     }
 
-    .hero-content { flex: 1; min-width: 0; }
+    .hero-badge {
+      display: inline-block;
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.9px;
+      text-transform: uppercase;
+      color: #7dd8d2;
+      background: rgba(42, 157, 143, 0.15);
+      border: 1px solid rgba(42, 157, 143, 0.3);
+      border-radius: 20px;
+      padding: 0.35rem 1rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
 
-    .hero h1 {
-      font-size: clamp(2.2rem, 5.5vw, 3.8rem);
+    .hero-title {
+      font-size: clamp(2rem, 6.5vw, 4rem);
       font-weight: 900;
-      line-height: 1.15;
-      letter-spacing: -1px;
-      margin-bottom: 20px;
+      line-height: 1.13;
+      letter-spacing: -1.5px;
+      color: #f0f8fa;
+      margin-bottom: 1.25rem;
+      max-width: 760px;
+      position: relative;
     }
 
     .hero-sub {
-      font-size: clamp(1rem, 2vw, 1.2rem);
-      font-weight: 400;
-      color: var(--text-sub);
-      line-height: 1.8;
-      max-width: 520px;
-      margin-bottom: 40px;
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      font-family: 'Assistant', sans-serif;
+      color: rgba(240, 248, 250, 0.68);
+      line-height: 1.75;
+      max-width: 500px;
+      margin-bottom: 2.5rem;
+      position: relative;
     }
 
     .hero-ctas {
       display: flex;
-      gap: 16px;
+      gap: 1rem;
       flex-wrap: wrap;
+      justify-content: center;
+      position: relative;
     }
 
-    /* ─── BUTTONS ─────────────────────────────────────── */
-    .btn {
+    .btn-hero-primary {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 14px 30px;
-      border-radius: 10px;
-      font-family: var(--font);
+      padding: 0.9rem 2.2rem;
+      border-radius: 12px;
       font-size: 1rem;
       font-weight: 700;
+      font-family: 'Rubik', sans-serif;
+      background: #b3e0dc;
+      color: #0c3d52;
+      border: none;
       cursor: pointer;
-      border: 2px solid transparent;
-      transition: transform var(--transition), box-shadow var(--transition), background var(--transition), color var(--transition), border-color var(--transition);
-      white-space: nowrap;
+      transition: background 0.18s, transform 0.18s, box-shadow 0.18s;
     }
+    .btn-hero-primary:hover { background: #8fc9c4; transform: translateY(-2px); box-shadow: 0 10px 28px rgba(179,224,220,0.4); }
 
-    .btn:hover { transform: translateY(-2px); }
-
-    .btn-gold {
-      background: var(--gold);
-      color: #394140;
-      border-color: var(--gold);
-    }
-
-    .btn-gold:hover {
-      background: var(--gold-dark);
-      border-color: var(--gold-dark);
-      box-shadow: 0 8px 24px rgba(179, 224, 220, 0.4);
-    }
-
-    .btn-outline {
-      background: transparent;
-      color: var(--text-light);
-      border-color: rgba(255, 255, 255, 0.4);
-    }
-
-    .btn-outline:hover {
-      border-color: rgba(255, 255, 255, 0.8);
-      background: rgba(255, 255, 255, 0.06);
-    }
-
-    .btn-teal {
-      background: var(--teal);
-      color: #ffffff;
-      border-color: var(--teal);
-    }
-
-    .btn-teal:hover {
-      background: var(--teal-dark);
-      border-color: var(--teal-dark);
-      box-shadow: 0 8px 24px rgba(94, 129, 125, 0.4);
-    }
-
-    .btn-outline-dark {
-      background: transparent;
-      color: var(--text-dark);
-      border-color: rgba(42, 157, 143, 0.5);
-    }
-
-    .btn-outline-dark:hover {
-      border-color: var(--teal);
-      background: var(--teal-dim);
-    }
-
-    /* ─── HERO GRAPHIC ────────────────────────────────── */
-    .hero-graphic {
-      flex-shrink: 0;
-      width: clamp(180px, 28vw, 340px);
-      display: flex;
+    .btn-hero-outline {
+      display: inline-flex;
       align-items: center;
-      justify-content: center;
+      padding: 0.9rem 2.2rem;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: 'Rubik', sans-serif;
+      background: transparent;
+      color: #f0f8fa;
+      border: 2px solid rgba(240, 248, 250, 0.38);
+      cursor: pointer;
+      transition: border-color 0.18s, background 0.18s, transform 0.18s;
     }
+    .btn-hero-outline:hover { border-color: rgba(240,248,250,0.78); background: rgba(255,255,255,0.06); transform: translateY(-2px); }
 
-    .graphic-ring {
-      position: relative;
-      width: 280px;
-      height: 280px;
-    }
-
-    .graphic-ring svg {
-      width: 100%;
-      height: 100%;
-      animation: spin-slow 22s linear infinite;
-    }
-
-    @keyframes spin-slow {
-      from { transform: rotate(0deg); }
-      to   { transform: rotate(360deg); }
-    }
-
-    .graphic-center {
+    .scroll-arrow {
       position: absolute;
-      inset: 0;
+      bottom: 2.2rem;
+      left: 50%;
+      transform: translateX(-50%);
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      gap: 4px;
+      gap: 5px;
+      animation: bounce 2.2s ease-in-out infinite;
+    }
+    .scroll-arrow span {
+      display: block;
+      width: 11px; height: 11px;
+      border-right: 2px solid rgba(179,224,220,0.6);
+      border-bottom: 2px solid rgba(179,224,220,0.6);
+      transform: rotate(45deg);
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.5; }
+      50%       { transform: translateX(-50%) translateY(9px); opacity: 1; }
     }
 
-    .graphic-icon {
-      font-size: 2.6rem;
-      line-height: 1;
+    /* ── SHARED SECTION ── */
+    .hp-section {
+      padding: clamp(3.5rem, 8vw, 6rem) clamp(1.25rem, 6vw, 4rem);
     }
+    .hp-section-inner { max-width: 1060px; margin: 0 auto; }
 
-    .graphic-label {
-      font-size: 0.78rem;
+    .hp-section-label {
+      font-size: 0.74rem;
       font-weight: 700;
-      letter-spacing: 0.5px;
-      color: var(--teal);
+      letter-spacing: 0.9px;
       text-transform: uppercase;
+      color: #7dd8d2;
+      margin-bottom: 0.5rem;
     }
 
-    /* ─── SECTION ────────────────────────────────────── */
-    .section {
-      padding: clamp(60px, 8vw, 100px) clamp(20px, 5vw, 80px);
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .section-title {
-      font-size: clamp(1.6rem, 3vw, 2.2rem);
+    .hp-section-title {
+      font-size: clamp(1.65rem, 3.5vw, 2.5rem);
       font-weight: 800;
       letter-spacing: -0.5px;
-      margin-bottom: 40px;
-      color: var(--text-light);
+      line-height: 1.2;
+      margin-bottom: 2.75rem;
+      color: #f0f8fa;
     }
 
-    /* ─── TOOLS GRID ─────────────────────────────────── */
-    .tools-grid {
+    /* ── SECTION 2 — Products ── */
+    #products { background: rgba(255,255,255,0.03); }
+    #products .hp-section-title { color: #f0f8fa; }
+
+    .products-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 24px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
     }
 
-    /* ─── TOOL CARD ──────────────────────────────────── */
-    .tool-card {
-      background: var(--card-bg);
-      border-radius: var(--radius);
-      padding: 32px 28px;
-      box-shadow: var(--shadow);
+    .product-card {
+      background: rgba(236, 232, 229, 0.97);
+      border-radius: 16px;
+      padding: 1.75rem 1.5rem;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.18);
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      transition: transform var(--transition), box-shadow var(--transition);
-      color: var(--text-dark);
-      overflow: hidden;
+      gap: 0.65rem;
+      color: #1a2e38;
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
     }
+    .product-card:hover { transform: translateY(-4px); box-shadow: 0 18px 44px rgba(0,0,0,0.28); }
 
-    .tool-card:hover {
-      transform: translateY(-5px);
-      box-shadow: var(--shadow-hover);
-    }
-
-    .card-icon {
-      font-size: 2rem;
-      line-height: 1;
-      margin-bottom: 4px;
-    }
-
-    .card-title {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: var(--text-dark);
-      line-height: 1.3;
-    }
-
-    .card-desc {
-      font-size: 0.9rem;
-      color: var(--text-mid);
+    .product-card-icon { font-size: 2.2rem; line-height: 1; }
+    .product-card-title { font-size: 1.1rem; font-weight: 800; color: #1a2e38; }
+    .product-card-desc {
+      font-size: 0.875rem;
+      font-family: 'Assistant', sans-serif;
+      color: #4a6472;
       line-height: 1.65;
       flex: 1;
     }
 
-    .card-btn {
-      align-self: flex-start;
-      margin-top: 8px;
-    }
-
-    /* ─── COURSE SECTION ─────────────────────────────── */
-    .course-section {
-      padding: 0 clamp(20px, 5vw, 80px) clamp(60px, 8vw, 100px);
-    }
-
-    .course-section .section-title {
-      max-width: 1200px;
-      margin: 0 auto 40px;
-    }
-
-    .course-card {
-      max-width: 1200px;
-      margin: 0 auto;
-      background: #0c3d52;
-      border-radius: var(--radius);
-      padding: clamp(36px, 5vw, 64px) clamp(28px, 5vw, 64px);
-      border: 1px solid rgba(94, 129, 125, 0.25);
-      box-shadow: var(--shadow);
-      display: flex;
-      gap: 48px;
-      align-items: flex-start;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* Subtle teal glow top-right */
-    .course-card::before {
-      content: '';
-      position: absolute;
-      top: -60px;
-      left: -60px;
-      width: 260px;
-      height: 260px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(94, 129, 125, 0.18) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    .course-content { flex: 1; min-width: 0; }
-
-    .course-badge {
+    .product-badge {
       display: inline-block;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 700;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      color: var(--teal);
-      background: rgba(94, 129, 125, 0.15);
-      border: 1px solid rgba(94, 129, 125, 0.3);
+      padding: 0.25rem 0.75rem;
       border-radius: 20px;
-      padding: 5px 14px;
-      margin-bottom: 18px;
+      width: fit-content;
     }
+    .badge-green { background: #d1fae5; color: #065f46; }
+    .badge-mint  { background: #cffafe; color: #155e75; }
 
-    .course-name {
-      font-size: clamp(1.5rem, 3vw, 2rem);
-      font-weight: 900;
-      letter-spacing: -0.5px;
-      margin-bottom: 14px;
-      line-height: 1.2;
-    }
-
-    .course-desc {
-      font-size: 1rem;
-      color: var(--text-sub);
-      line-height: 1.75;
-      margin-bottom: 28px;
-      max-width: 480px;
-    }
-
-    .course-bullets {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-bottom: 36px;
-    }
-
-    .course-bullets li {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 0.95rem;
-      color: var(--text-light);
-      font-weight: 500;
-    }
-
-    .bullet-check {
-      display: flex;
+    .product-card-btn {
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: rgba(94, 129, 125, 0.2);
-      color: var(--teal);
-      font-size: 0.8rem;
+      padding: 0.7rem 1.1rem;
+      border-radius: 10px;
+      font-size: 0.9rem;
       font-weight: 700;
-      flex-shrink: 0;
+      font-family: 'Rubik', sans-serif;
+      background: #2a9d8f;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      transition: background 0.18s, transform 0.15s, box-shadow 0.15s;
+      margin-top: 0.25rem;
     }
+    .product-card-btn:hover { background: #21867a; transform: translateY(-2px); box-shadow: 0 6px 18px rgba(42,157,143,0.35); }
 
-    .course-ctas {
+    /* ── SECTION 3 — Why ── */
+    #why { background: #0c3d52; }
+    #why .hp-section-label { color: rgba(179,224,220,0.55); }
+
+    .features-list { display: flex; flex-direction: column; gap: 2.25rem; }
+
+    .feature-row {
       display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
+      align-items: flex-start;
+      gap: 1.5rem;
     }
 
-    .course-visual {
+    .feature-icon {
+      font-size: 1.9rem;
       flex-shrink: 0;
-      width: clamp(140px, 22vw, 220px);
+      width: 58px; height: 58px;
       display: flex;
       align-items: center;
       justify-content: center;
+      background: rgba(42, 157, 143, 0.13);
+      border-radius: 14px;
+      border: 1px solid rgba(42, 157, 143, 0.2);
     }
 
-    .course-emblem {
-      width: 160px;
-      height: 160px;
-      border-radius: 50%;
-      border: 3px solid rgba(94, 129, 125, 0.35);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      background: rgba(94, 129, 125, 0.08);
-    }
-
-    .emblem-icon { font-size: 3rem; line-height: 1; }
-
-    .emblem-text {
-      font-size: 0.7rem;
+    .feature-title {
+      font-size: 1.15rem;
       font-weight: 700;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: var(--teal);
+      color: #f0f8fa;
+      margin-bottom: 0.35rem;
+    }
+
+    .feature-desc {
+      font-size: 0.92rem;
+      font-family: 'Assistant', sans-serif;
+      color: rgba(240, 248, 250, 0.6);
+      line-height: 1.65;
+    }
+
+    /* ── SECTION 4 — Quote ── */
+    #quote {
+      padding: clamp(4rem, 10vw, 7rem) clamp(1.25rem, 6vw, 4rem);
       text-align: center;
     }
 
-    /* ─── FOOTER ─────────────────────────────────────── */
+    .quote-block {
+      max-width: 660px;
+      margin: 0 auto;
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+    .quote-block.visible { opacity: 1; transform: translateY(0); }
+
+    .quote-mark {
+      display: block;
+      font-size: 5rem;
+      line-height: 0.65;
+      color: rgba(179, 224, 220, 0.28);
+      font-family: Georgia, serif;
+      margin-bottom: 1.1rem;
+    }
+
+    .quote-text {
+      font-size: clamp(1.1rem, 3vw, 1.65rem);
+      font-weight: 700;
+      line-height: 1.55;
+      color: #f0f8fa;
+      letter-spacing: 0;
+      transition: letter-spacing 1.4s ease;
+    }
+    .quote-block.visible .quote-text { letter-spacing: 0.012em; }
+
+    .quote-author {
+      margin-top: 1.25rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #7dd8d2;
+    }
+
+    /* ── SECTION 5 — CTA Banner ── */
+    #cta-banner {
+      background: #b3e0dc;
+      padding: clamp(3.5rem, 8vw, 5.5rem) clamp(1.25rem, 6vw, 4rem);
+      text-align: center;
+    }
+
+    .cta-title {
+      font-size: clamp(1.65rem, 3.5vw, 2.5rem);
+      font-weight: 800;
+      color: #0c3d52;
+      margin-bottom: 0.75rem;
+    }
+
+    .cta-sub {
+      font-size: 1rem;
+      font-family: 'Assistant', sans-serif;
+      color: rgba(12, 61, 82, 0.68);
+      margin-bottom: 2rem;
+      line-height: 1.65;
+    }
+
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 1rem 2.75rem;
+      border-radius: 14px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      font-family: 'Rubik', sans-serif;
+      background: #0c3d52;
+      color: #b3e0dc;
+      border: none;
+      cursor: pointer;
+      transition: background 0.18s, transform 0.18s, box-shadow 0.18s;
+    }
+    .cta-btn:hover { background: #0a3346; transform: translateY(-2px); box-shadow: 0 10px 32px rgba(12,61,82,0.3); }
+
+    /* ── FOOTER ── */
     footer {
-      background: rgba(0, 0, 0, 0.25);
-      border-top: 1px solid rgba(255, 255, 255, 0.07);
-      padding: 28px clamp(20px, 5vw, 80px);
+      background: #0c3d52;
+      border-top: 1px solid rgba(179, 224, 220, 0.1);
+      padding: 2.5rem clamp(1.25rem, 6vw, 4rem);
     }
 
     .footer-inner {
-      max-width: 1200px;
+      max-width: 1060px;
       margin: 0 auto;
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
       align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 16px;
+      gap: 2rem;
     }
 
     .footer-logo {
       font-size: 1rem;
       font-weight: 800;
-      color: var(--text-light);
+      color: #f0f8fa;
       direction: ltr;
       unicode-bidi: embed;
+      margin-bottom: 0.3rem;
     }
+    .footer-logo span { color: #b3e0dc; }
 
-    .footer-logo span { color: var(--teal); }
-
-    .footer-right {
-      display: flex;
-      align-items: center;
-      gap: 24px;
-      flex-wrap: wrap;
-    }
-
-    .footer-copy {
-      font-size: 0.82rem;
-      color: var(--text-sub);
+    .footer-tagline {
+      font-size: 0.78rem;
+      font-family: 'Assistant', sans-serif;
+      color: rgba(240, 248, 250, 0.42);
     }
 
     .footer-links {
       display: flex;
-      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.2rem 1.25rem;
     }
-
     .footer-links a {
       font-size: 0.82rem;
-      color: var(--text-sub);
-      transition: color var(--transition);
+      color: rgba(240, 248, 250, 0.52);
+      transition: color 0.18s;
+    }
+    .footer-links a:hover { color: #f0f8fa; }
+
+    .footer-credit {
+      text-align: left;
+      font-size: 0.78rem;
+      font-family: 'Assistant', sans-serif;
+      color: rgba(240, 248, 250, 0.38);
     }
 
-    .footer-links a:hover { color: var(--text-light); }
-
-    /* ─── NAVBAR BRAND & AUTH ────────────────────────── */
-    .navbar-brand {
-      display: flex;
-      align-items: center;
-      gap: 20px;
+    /* ── SCROLL ANIMATIONS ── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
     }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+    .fade-up:nth-child(2) { transition-delay: 0.1s; }
+    .fade-up:nth-child(3) { transition-delay: 0.2s; }
 
-    .nav-auth {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+    /* ── RESPONSIVE ── */
+    @media (max-width: 860px) {
+      .products-grid { grid-template-columns: 1fr 1fr; }
+      .footer-inner { grid-template-columns: 1fr; text-align: center; }
+      .footer-credit { text-align: center; }
+      .footer-links { gap: 0.25rem 1rem; }
     }
-
-    .btn-nav {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 6px 16px;
-      border-radius: 8px;
-      font-family: var(--font);
-      font-size: 0.875rem;
-      font-weight: 600;
-      cursor: pointer;
-      border: 1.5px solid transparent;
-      transition: background var(--transition), color var(--transition), border-color var(--transition), transform var(--transition);
-      white-space: nowrap;
-      text-decoration: none;
-      line-height: 1.5;
-    }
-
-    .btn-nav:hover { transform: translateY(-1px); }
-
-    .btn-nav-outline {
-      background: transparent;
-      color: var(--text-light);
-      border-color: rgba(255, 255, 255, 0.4);
-    }
-
-    .btn-nav-outline:hover {
-      border-color: rgba(255, 255, 255, 0.75);
-      background: rgba(255, 255, 255, 0.07);
-    }
-
-    .btn-nav-gold {
-      background: var(--gold);
-      color: #394140;
-      border-color: var(--gold);
-    }
-
-    .btn-nav-gold:hover {
-      background: var(--gold-dark);
-      border-color: var(--gold-dark);
-    }
-
-    .nav-greeting {
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: var(--text-sub);
-      white-space: nowrap;
-    }
-
-    .nav-user-link {
-      font-size: 0.875rem;
-      font-weight: 600;
-      color: var(--teal);
-      transition: color var(--transition);
-      white-space: nowrap;
-    }
-
-    .nav-user-link:hover { color: var(--text-light); }
-
-    .nav-signout {
-      background: none;
-      border: none;
-      font-family: var(--font);
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: var(--text-sub);
-      cursor: pointer;
-      padding: 0;
-      transition: color var(--transition);
-      white-space: nowrap;
-    }
-
-    .nav-signout:hover { color: var(--text-light); }
-
-    /* ─── MOBILE NAV ─────────────────────────────────── */
-    .mobile-menu-btn {
-      display: none;
-      width: 38px; height: 38px;
-      background: rgba(179,224,220,0.12);
-      border: 1px solid rgba(179,224,220,0.25);
-      border-radius: 8px;
-      cursor: pointer;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 5px;
-      transition: background 0.2s;
-      flex-shrink: 0;
-    }
-    .mobile-menu-btn:hover { background: rgba(179,224,220,0.22); }
-    .mobile-menu-btn span { display: block; width: 20px; height: 2px; background: #fefefe; border-radius: 2px; transition: transform 0.3s, opacity 0.3s; }
-    .mobile-menu-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-    .mobile-menu-btn.open span:nth-child(2) { opacity: 0; }
-    .mobile-menu-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-    .mobile-nav-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 999; }
-    .mobile-nav-overlay.open { display: block; }
-    .mobile-nav-panel {
-      position: fixed;
-      top: 68px; right: 0;
-      height: calc(100vh - 68px); width: 260px;
-      background: #0c3d52;
-      z-index: 1000;
-      transform: translateX(100%);
-      transition: transform 0.3s ease;
-      overflow-y: auto;
-      padding: 1.25rem 1rem;
-      box-shadow: -4px 0 20px rgba(0,0,0,0.35);
-    }
-    .mobile-nav-panel.open { transform: translateX(0); }
-    .mobile-nav-panel-title {
-      color: rgba(179,224,220,0.6);
-      font-size: 0.72rem; font-weight: 700;
-      letter-spacing: 0.08em; text-transform: uppercase;
-      margin-bottom: 0.75rem; padding-bottom: 0.6rem;
-      border-bottom: 1px solid rgba(179,224,220,0.15);
-    }
-    .mobile-nav-item {
-      display: flex; align-items: center;
-      padding: 0.75rem 0.85rem;
-      border-radius: 10px;
-      text-decoration: none;
-      color: #fefefe;
-      font-size: 0.95rem;
-      transition: background 0.18s;
-      margin-bottom: 4px;
-    }
-    .mobile-nav-item:hover { background: rgba(179,224,220,0.12); }
-    .mobile-nav-item.highlighted { color: #b3e0dc; font-weight: 600; }
-    .mobile-nav-divider { height: 1px; background: rgba(179,224,220,0.15); margin: 0.85rem 0; }
-
-    /* ─── RESPONSIVE ─────────────────────────────────── */
-    @media (max-width: 900px) {
-      .hero-graphic { display: none; }
-      .course-visual { display: none; }
-      .course-card { flex-direction: column; }
-    }
-
-    @media (max-width: 640px) {
-      .tools-grid { grid-template-columns: 1fr; }
-      .footer-inner { flex-direction: column; align-items: flex-start; }
-      .nav-links { display: none; }
-      .nav-greeting { display: none; }
-      .nav-user-link { display: none; }
-      .mobile-menu-btn { display: flex; }
+    @media (max-width: 560px) {
+      .products-grid { grid-template-columns: 1fr; }
+      .hero-ctas { flex-direction: column; align-items: center; }
+      .hp-nav-link { display: none; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ─── NAVBAR ──────────────────────────────────────── -->
-  <nav class="navbar">
-    <div class="navbar-brand">
-      <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="תפריט" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-      <div class="logo">NewGen <span>Finance</span></div>
-      <div id="nav-auth" class="nav-auth"></div>
-    </div>
-    <ul class="nav-links">
-      <li><a href="#">ראשי</a></li>
-      <li><a href="#tools">כלים</a></li>
-      <li><a href="#course">קורסים</a></li>
-      <li><a href="#">אודות</a></li>
-    </ul>
-  </nav>
-  <div class="mobile-nav-overlay" id="mobile-nav-overlay"></div>
-  <nav class="mobile-nav-panel" id="mobile-nav-panel" aria-label="תפריט ניווט">
-    <div class="mobile-nav-panel-title">ניווט</div>
-    <a href="/" class="mobile-nav-item">ראשי</a>
-    <a href="#tools" class="mobile-nav-item">כלים</a>
-    <a href="#course" class="mobile-nav-item">קורסים</a>
-    <a href="/members/" class="mobile-nav-item highlighted" id="mobile-nav-members" style="display:none">אזור החברים</a>
-    <div class="mobile-nav-divider"></div>
-    <div class="mobile-nav-panel-title">הקורס</div>
-    <a href="/#course" class="mobile-nav-item" id="mobile-course-teaser">הקורס שלי ←</a>
-    <div id="mobile-course-episodes" style="display:none">
-      <a href="/investor-academy/lessons/intro.html" class="mobile-nav-item">🚀 הקדמה</a>
-      <a href="/investor-academy/lessons/chapter-1.html" class="mobile-nav-item">🔑 פרק 1</a>
-      <a href="/investor-academy/lessons/chapter-2.html" class="mobile-nav-item">🧭 פרק 2</a>
-      <a href="/investor-academy/lessons/chapter-3.html" class="mobile-nav-item">🛠️ פרק 3</a>
-      <a href="/investor-academy/lessons/chapter-4.html" class="mobile-nav-item">📊 פרק 4</a>
-    </div>
-  </nav>
+<!-- ── NAVBAR ── -->
+<nav class="hp-nav">
+  <a href="/" class="hp-nav-logo">NewGen <span>Finance</span></a>
+  <div class="hp-nav-auth" id="nav-auth">
+    <!-- Filled dynamically by JS -->
+  </div>
+</nav>
 
-  <!-- ─── HERO ─────────────────────────────────────────── -->
-  <section class="hero">
-    <div class="hero-inner">
-      <div class="hero-content">
-        <h1>בנה את העתיד הפיננסי שלך</h1>
-        <p class="hero-sub">כלים חינמיים, קורסים מעשיים, וידע שמשנה תוצאות.</p>
-        <div class="hero-ctas">
-          <a href="#tools" class="btn btn-gold">לכלים החינמיים</a>
-          <a href="#course" class="btn btn-outline">לקורס ההשקעות</a>
-        </div>
+<!-- ── SECTION 1 — Hero ── -->
+<section id="hero">
+  <div class="hero-badge">השקעות ערך בעברית</div>
+  <h1 class="hero-title">השקעות ערך —<br>פשוטות, מהנות ומשתלמות</h1>
+  <p class="hero-sub">הבית של המשקיע המתחיל. כלים, ידע וחוויה — הכל במקום אחד.</p>
+  <div class="hero-ctas">
+    <a href="/auth/register/" class="btn-hero-primary">התחל בחינם</a>
+    <a href="/investor-academy/" class="btn-hero-outline">גלה את הקורס</a>
+  </div>
+  <div class="scroll-arrow" aria-hidden="true">
+    <span></span>
+    <span></span>
+  </div>
+</section>
+
+<!-- ── SECTION 2 — Products ── -->
+<section class="hp-section" id="products">
+  <div class="hp-section-inner">
+    <div class="hp-section-label">מה תמצאו כאן</div>
+    <h2 class="hp-section-title fade-up">כל מה שצריך כדי להתחיל</h2>
+    <div class="products-grid">
+
+      <div class="product-card fade-up">
+        <div class="product-card-icon">🎮</div>
+        <div class="product-card-title">משחק ההשקעות</div>
+        <p class="product-card-desc">תרגלו ניתוח חברות בסגנון וורן באפט — 10 סיבובים, נתונים אמיתיים, ומשוב מיידי</p>
+        <span class="product-badge badge-green">חינמי לחלוטין</span>
+        <a href="/investor-academy/game/" class="product-card-btn">לשחק עכשיו</a>
       </div>
 
-      <div class="hero-graphic" aria-hidden="true">
-        <div class="graphic-ring">
-          <!-- Rotating dashed ring with dots -->
-          <svg viewBox="0 0 280 280" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Outer dashed circle -->
-            <circle cx="140" cy="140" r="128" stroke="rgba(94,129,125,0.35)" stroke-width="1.5" stroke-dasharray="8 10"/>
-            <!-- Inner solid ring -->
-            <circle cx="140" cy="140" r="100" stroke="rgba(94,129,125,0.2)" stroke-width="1"/>
-            <!-- Orbit dots -->
-            <circle cx="140" cy="12" r="6" fill="#5e817d"/>
-            <circle cx="258" cy="195" r="4" fill="#b3e0dc"/>
-            <circle cx="44"  cy="222" r="5" fill="#5e817d" opacity="0.6"/>
-            <!-- Arc highlight -->
-            <path d="M 140 12 A 128 128 0 0 1 250 195" stroke="#5e817d" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
-          </svg>
-          <div class="graphic-center">
-            <div class="graphic-icon">📈</div>
-            <div class="graphic-label">Finance</div>
-          </div>
-        </div>
+      <div class="product-card fade-up">
+        <div class="product-card-icon">🧮</div>
+        <div class="product-card-title">מחשבון פיננסי</div>
+        <p class="product-card-desc">נתחו את הבריאות הפיננסית של כל חברה ב-13 מדדים מרכזיים</p>
+        <span class="product-badge badge-green">חינמי לחלוטין</span>
+        <a href="/calculator/" class="product-card-btn">לפתוח המחשבון</a>
       </div>
-    </div>
-  </section>
 
-  <!-- ─── FREE TOOLS SECTION ───────────────────────────── -->
-  <section class="section" id="tools">
-    <h2 class="section-title">כלים חינמיים</h2>
-    <div class="tools-grid">
-
-      <!-- Card 1 -->
-      <a href="/calculator/" class="tool-card">
-        <div class="card-icon">🩺</div>
-        <div class="card-title">מחשבון בריאות פיננסית</div>
-        <p class="card-desc">גלה את הציון הפיננסי שלך ב-5 דקות</p>
-        <span class="btn btn-teal card-btn">התחל עכשיו</span>
-      </a>
-
-      <!-- Card 2 -->
-      <a href="#" class="tool-card">
-        <div class="card-icon">🎮</div>
-        <div class="card-title">משחק השקעות</div>
-        <p class="card-desc">תרגל השקעות בסביבה בטוחה</p>
-        <span class="btn btn-teal card-btn">שחק עכשיו</span>
-      </a>
-
-      <!-- Card 3 -->
-      <a href="#" class="tool-card">
-        <div class="card-icon">🧮</div>
-        <div class="card-title">מחשבון השקעות</div>
-        <p class="card-desc">חשב תשואות, ריבית דריבית ועוד</p>
-        <span class="btn btn-teal card-btn">פתח מחשבון</span>
-      </a>
-
-      <!-- Card 4 -->
-      <a href="#" class="tool-card">
-        <div class="card-icon">📊</div>
-        <div class="card-title">מעקב תיק השקעות</div>
-        <p class="card-desc">עקוב אחרי הביצועים של התיק שלך</p>
-        <span class="btn btn-teal card-btn">פתח מעקב</span>
-      </a>
-
-    </div>
-  </section>
-
-  <!-- ─── COURSE SECTION ────────────────────────────────── -->
-  <div class="course-section" id="course">
-    <h2 class="section-title">קורס ההשקעות</h2>
-    <div class="course-card">
-      <div class="course-content">
-        <div class="course-badge">קורס מקיף</div>
-        <div class="course-name">Investor Academy</div>
-        <p class="course-desc">
-          הקורס המקיף ביותר להשקעות בשוק ההון בעברית — מהבסיס ועד ניתוח מתקדם
-        </p>
-        <ul class="course-bullets">
-          <li><span class="bullet-check">✓</span> 5 פרקים עם עשרות שיעורים</li>
-          <li><span class="bullet-check">✓</span> כלים ומחשבונים ייחודיים</li>
-          <li><span class="bullet-check">✓</span> קהילה תומכת</li>
-          <li><span class="bullet-check">✓</span> עדכונים שוטפים</li>
-        </ul>
-        <div class="course-ctas">
-          <a href="/investor-academy/lessons/intro.html" class="btn btn-gold">לדף הקורס</a>
-          <a href="/investor-academy/lessons/intro.html" class="btn btn-outline">כניסה לתלמידים</a>
-        </div>
+      <div class="product-card fade-up">
+        <div class="product-card-icon">📚</div>
+        <div class="product-card-title">קורס Investor Academy</div>
+        <p class="product-card-desc">השיטה המלאה להשקעות ערך — מהבסיס ועד ניתוח חברות אמיתיות. 4 פרקים מלאים</p>
+        <span class="product-badge badge-mint">הקורס המלא</span>
+        <a href="/investor-academy/" class="product-card-btn">לפרטים נוספים</a>
       </div>
-      <div class="course-visual" aria-hidden="true">
-        <div class="course-emblem">
-          <div class="emblem-icon">🎓</div>
-          <div class="emblem-text">Investor<br>Academy</div>
-        </div>
-      </div>
+
     </div>
   </div>
+</section>
 
-  <!-- ─── FOOTER ─────────────────────────────────────────── -->
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-logo">NewGen <span>Finance</span></div>
-      <div class="footer-right">
-        <div class="footer-links">
-          <a href="#">פרטיות</a>
-          <a href="#">תנאי שימוש</a>
+<!-- ── SECTION 3 — Why NewGen Finance ── -->
+<section class="hp-section" id="why">
+  <div class="hp-section-inner">
+    <div class="hp-section-label">למה NewGen Finance</div>
+    <h2 class="hp-section-title fade-up">למה NewGen Finance?</h2>
+    <div class="features-list">
+
+      <div class="feature-row fade-up">
+        <div class="feature-icon">🎯</div>
+        <div class="feature-body">
+          <div class="feature-title">גישה פרקטית</div>
+          <p class="feature-desc">לא תיאוריה יבשה. כל מושג מוסבר עם דוגמאות אמיתיות מהשוק</p>
         </div>
-        <span class="footer-copy">© 2025 NewGen Finance — כל הזכויות שמורות</span>
       </div>
+
+      <div class="feature-row fade-up">
+        <div class="feature-icon">🧠</div>
+        <div class="feature-body">
+          <div class="feature-title">ללמוד תוך כדי משחק</div>
+          <p class="feature-desc">המשחק, המחשבון והקורס בנויים יחד — כל אחד מחזק את השני</p>
+        </div>
+      </div>
+
+      <div class="feature-row fade-up">
+        <div class="feature-icon">🚀</div>
+        <div class="feature-body">
+          <div class="feature-title">צעד ראשון בטוח</div>
+          <p class="feature-desc">לא צריך ניסיון קודם. בניתי את זה עבור מי שרוצה להתחיל נכון</p>
+        </div>
+      </div>
+
     </div>
-  </footer>
+  </div>
+</section>
 
-  <!-- Supabase -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-  <script src="/assets/js/supabase-config.js"></script>
-  <script>
-    (async () => {
-      const _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      const { data: { session } } = await _sb.auth.getSession();
-      const navAuth = document.getElementById('nav-auth');
+<!-- ── SECTION 4 — Quote ── -->
+<section id="quote">
+  <div class="quote-block" id="quote-block">
+    <span class="quote-mark">"</span>
+    <p class="quote-text">אם אתה לא מוכן להחזיק מניה במשך 10 שנים, אל תחזיק בה אפילו 10 דקות</p>
+    <div class="quote-author">— וורן באפט</div>
+  </div>
+</section>
 
-      if (!session) {
-        navAuth.innerHTML =
-          '<a href="/auth/login/" class="btn-nav btn-nav-outline">התחברות</a>' +
-          '<a href="/auth/register/" class="btn-nav btn-nav-gold">הרשמה חינם</a>';
-      } else {
-        const user = session.user;
-        const { data: profile } = await _sb
-          .from('profiles')
-          .select('full_name')
-          .eq('id', user.id)
-          .single();
+<!-- ── SECTION 5 — CTA Banner ── -->
+<section id="cta-banner">
+  <h2 class="cta-title">מוכן להתחיל?</h2>
+  <p class="cta-sub">ההרשמה חינמית ומיידית — קבל גישה למשחק ולמחשבון עכשיו</p>
+  <a href="/auth/register/" class="cta-btn">הצטרף עכשיו בחינם</a>
+</section>
 
-        const rawName = profile?.full_name || user.email;
-        const safeName = rawName
-          .replace(/&/g, '&amp;')
-          .replace(/</g, '&lt;')
-          .replace(/>/g, '&gt;')
-          .replace(/"/g, '&quot;');
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
 
-        navAuth.innerHTML =
-          '<span class="nav-greeting">שלום, ' + safeName + '</span>' +
-          '<a href="/members/" class="nav-user-link">אזור החברים</a>' +
-          '<button class="nav-signout" id="nav-signout-btn">יציאה</button>';
+    <div>
+      <div class="footer-logo">NewGen <span>Finance</span></div>
+      <div class="footer-tagline">הבית של משקיע הערך המתחיל</div>
+    </div>
 
-        document.getElementById('nav-signout-btn').addEventListener('click', async () => {
-          await _sb.auth.signOut();
-          window.location.reload();
-        });
+    <nav class="footer-links" aria-label="קישורים">
+      <a href="/">דף הבית</a>
+      <a href="/investor-academy/">הקורס</a>
+      <a href="/calculator/">המחשבון</a>
+      <a href="/investor-academy/game/">המשחק</a>
+      <a href="/auth/login/">התחברות</a>
+    </nav>
 
-        const mobileMembers = document.getElementById('mobile-nav-members');
-        if (mobileMembers) mobileMembers.style.display = '';
-        const mobileEpisodes = document.getElementById('mobile-course-episodes');
-        const mobileTeaser = document.getElementById('mobile-course-teaser');
-        if (mobileEpisodes) mobileEpisodes.style.display = '';
-        if (mobileTeaser) mobileTeaser.style.display = 'none';
-      }
-    })();
+    <div class="footer-credit">נבנה עם ❤️ על ידי יאיר תכלת</div>
 
-    // Mobile nav toggle
-    (function () {
-      var btn = document.getElementById('mobile-menu-btn');
-      var panel = document.getElementById('mobile-nav-panel');
-      var overlay = document.getElementById('mobile-nav-overlay');
-      function open()  { btn.classList.add('open'); panel.classList.add('open'); overlay.classList.add('open'); btn.setAttribute('aria-expanded','true'); }
-      function close() { btn.classList.remove('open'); panel.classList.remove('open'); overlay.classList.remove('open'); btn.setAttribute('aria-expanded','false'); }
-      btn.addEventListener('click', function () { panel.classList.contains('open') ? close() : open(); });
-      overlay.addEventListener('click', close);
-      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
-    })();
-  </script>
+  </div>
+</footer>
+
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="/assets/js/supabase-config.js"></script>
+<script>
+// ── Auth state → navbar ──
+(async () => {
+  const _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const { data: { session } } = await _sb.auth.getSession();
+  const navAuth = document.getElementById('nav-auth');
+
+  if (!session) {
+    navAuth.innerHTML =
+      '<a href="/auth/login/" class="hp-nav-link">התחברות</a>' +
+      '<a href="/auth/register/" class="hp-nav-pill hp-nav-pill-mint">הרשמה חינם</a>';
+  } else {
+    navAuth.innerHTML =
+      '<a href="/members/" class="hp-nav-link">אזור החברים</a>' +
+      '<button class="hp-nav-pill hp-nav-pill-outline" id="hp-signout">יציאה</button>';
+    document.getElementById('hp-signout').addEventListener('click', async () => {
+      await _sb.auth.signOut();
+      window.location.reload();
+    });
+  }
+})();
+
+// ── IntersectionObserver — .fade-up ──
+(function () {
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.14 });
+  document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+})();
+
+// ── IntersectionObserver — quote ──
+(function () {
+  const block = document.getElementById('quote-block');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { block.classList.add('visible'); obs.unobserve(block); }
+    });
+  }, { threshold: 0.3 });
+  obs.observe(block);
+})();
+</script>
 
 </body>
 </html>
