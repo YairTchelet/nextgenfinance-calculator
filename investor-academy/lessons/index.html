@@ -1,138 +1,384 @@
 <!DOCTYPE html>
-<html dir="rtl" lang="he">
+<html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>שיעורים — Investor Academy</title>
-  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>Investor Academy — רשימת הפרקים</title>
+
+  <!-- Auth protection -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="/assets/js/supabase-config.js"></script>
+  <script src="/assets/js/auth-guard.js"></script>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800&family=Assistant:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/investor-academy/assets/css/course.css">
+
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: 'Heebo', sans-serif;
-      background: #1e3a4a;
-      color: #f0f8fa;
-      direction: rtl;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      -webkit-font-smoothing: antialiased;
+    /* ── Hero ── */
+    .ia-hero {
+      background: linear-gradient(135deg, #0c3d52 0%, #0f5068 100%);
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      margin-bottom: 2rem;
+      border: 1px solid rgba(179, 224, 220, 0.15);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+      position: relative;
+      overflow: hidden;
     }
 
-    a { text-decoration: none; color: inherit; }
-
-    /* ── Navbar ── */
-    .navbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 clamp(20px, 5vw, 60px);
-      height: 64px;
-      background: rgba(30, 58, 74, 0.95);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      position: sticky;
-      top: 0;
-      z-index: 10;
+    .ia-hero::before {
+      content: '';
+      position: absolute;
+      top: -60px; left: -60px;
+      width: 260px; height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(42, 157, 143, 0.15) 0%, transparent 70%);
+      pointer-events: none;
     }
 
-    .logo {
-      font-size: 1.15rem;
-      font-weight: 800;
-      direction: ltr;
-      unicode-bidi: embed;
-    }
-
-    .logo span { color: #2a9d8f; }
-
-    .btn-logout {
-      padding: 9px 20px;
-      background: transparent;
-      border: 1.5px solid rgba(255, 255, 255, 0.35);
-      border-radius: 8px;
-      color: rgba(240, 248, 250, 0.8);
-      font-family: 'Heebo', sans-serif;
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: border-color 0.18s ease, color 0.18s ease, background 0.18s ease;
-    }
-
-    .btn-logout:hover {
-      border-color: rgba(255, 255, 255, 0.7);
-      color: #f0f8fa;
-      background: rgba(255, 255, 255, 0.06);
-    }
-
-    /* ── Main content ── */
-    main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: clamp(48px, 8vw, 80px) clamp(20px, 5vw, 60px);
-      text-align: center;
-    }
-
-    .badge {
+    .ia-hero-badge {
       display: inline-block;
       font-size: 0.75rem;
       font-weight: 700;
       letter-spacing: 0.8px;
       text-transform: uppercase;
-      color: #2a9d8f;
-      background: rgba(42, 157, 143, 0.12);
+      color: #7dd8d2;
+      background: rgba(42, 157, 143, 0.15);
       border: 1px solid rgba(42, 157, 143, 0.3);
       border-radius: 20px;
-      padding: 5px 14px;
-      margin-bottom: 24px;
+      padding: 0.3rem 0.9rem;
+      margin-bottom: 1rem;
     }
 
-    .welcome-icon {
-      font-size: 4rem;
-      margin-bottom: 20px;
-      line-height: 1;
-    }
-
-    h1 {
+    .ia-hero h1 {
       font-size: clamp(1.6rem, 4vw, 2.4rem);
       font-weight: 800;
-      letter-spacing: -0.5px;
-      line-height: 1.3;
-      max-width: 560px;
       color: #f0f8fa;
+      margin: 0 0 0.5rem;
+      letter-spacing: -0.5px;
+    }
+
+    .ia-hero p {
+      font-size: 1rem;
+      color: rgba(240, 248, 250, 0.72);
+      margin: 0 0 1.5rem;
+      max-width: 520px;
+      line-height: 1.65;
+    }
+
+    .ia-stats {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .ia-stat {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: rgba(240, 248, 250, 0.65);
+    }
+
+    .ia-stat-icon { font-size: 1rem; }
+
+    /* ── Section heading ── */
+    .ia-section-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: rgba(240, 248, 250, 0.5);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      margin-bottom: 0.85rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid rgba(179, 224, 220, 0.12);
+    }
+
+    /* ── Chapter cards ── */
+    .chapter-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .chapter-card {
+      display: flex;
+      align-items: center;
+      gap: 1.1rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(179, 224, 220, 0.1);
+      border-radius: 14px;
+      padding: 1.1rem 1.25rem;
+      text-decoration: none;
+      color: #f0f8fa;
+      transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+    }
+
+    .chapter-card:hover {
+      background: rgba(255, 255, 255, 0.09);
+      border-color: rgba(179, 224, 220, 0.28);
+      transform: translateX(-3px);
+    }
+
+    .chapter-card-icon {
+      font-size: 1.75rem;
+      flex-shrink: 0;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(42, 157, 143, 0.12);
+      border-radius: 12px;
+    }
+
+    .chapter-card-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .chapter-card-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #7dd8d2;
+      margin-bottom: 0.2rem;
+    }
+
+    .chapter-card-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #f0f8fa;
+      margin-bottom: 0.2rem;
+    }
+
+    .chapter-card-desc {
+      font-size: 0.835rem;
+      color: rgba(240, 248, 250, 0.55);
+      line-height: 1.45;
+    }
+
+    .chapter-card-arrow {
+      font-size: 1.1rem;
+      color: rgba(240, 248, 250, 0.3);
+      flex-shrink: 0;
+      transition: color 0.18s ease, transform 0.18s ease;
+    }
+
+    .chapter-card:hover .chapter-card-arrow {
+      color: #7dd8d2;
+      transform: translateX(-3px);
+    }
+
+    /* ── Game card (highlighted) ── */
+    .game-card {
+      display: flex;
+      align-items: center;
+      gap: 1.1rem;
+      background: linear-gradient(135deg, rgba(42, 157, 143, 0.12), rgba(49, 130, 206, 0.1));
+      border: 1px solid rgba(42, 157, 143, 0.28);
+      border-radius: 14px;
+      padding: 1.25rem 1.25rem;
+      text-decoration: none;
+      color: #f0f8fa;
+      transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+    }
+
+    .game-card:hover {
+      background: linear-gradient(135deg, rgba(42, 157, 143, 0.2), rgba(49, 130, 206, 0.15));
+      border-color: rgba(42, 157, 143, 0.5);
+      transform: translateX(-3px);
+    }
+
+    .game-card .chapter-card-label { color: #b3e0dc; }
+    .game-card .chapter-card-desc  { color: rgba(240, 248, 250, 0.65); }
+
+    @media (max-width: 500px) {
+      .ia-hero { padding: 1.75rem 1.25rem; }
+      .ia-stats { gap: 1rem; }
+      .chapter-card-desc { display: none; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ── Navbar ── -->
-  <nav class="navbar">
-    <a href="/" class="logo">NewGen <span>Finance</span></a>
-    <button class="btn-logout" id="logout-btn">התנתק</button>
-  </nav>
+<!-- NAVBAR -->
+<nav class="course-nav">
+  <div class="course-nav-brand">
+    <button class="hbnav-btn" id="hbnav-toggle" aria-label="תפריט פרקים" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <a href="/" class="course-nav-logo">NewGen Finance</a>
+  </div>
+  <div class="course-nav-links">
+    <a href="/members/" class="course-nav-link">אזור החברים</a>
+    <button class="course-nav-signout" id="lessons-signout-btn">התנתקות</button>
+  </div>
+</nav>
 
-  <!-- ── Protected content ── -->
-  <main>
-    <div class="badge">Investor Academy</div>
-    <div class="welcome-icon">🎓</div>
-    <h1>ברוך הבא לקורס — תוכן השיעורים יתווסף בקרוב</h1>
-  </main>
+<div class="hbnav-overlay" id="hbnav-overlay"></div>
+<nav class="hbnav-panel" id="hbnav-panel" aria-label="ניווט פרקים">
+  <div class="hbnav-panel-title">אתר</div>
+  <a href="/" class="hbnav-site-link">ראשי</a>
+  <a href="/#tools" class="hbnav-site-link">כלים</a>
+  <a href="/#course" class="hbnav-site-link">קורסים</a>
+  <a href="/members/" class="hbnav-site-link">אזור החברים</a>
+  <div class="hbnav-divider"></div>
+  <div class="hbnav-panel-title">הקורס — פרקים</div>
+  <a href="/investor-academy/lessons/" class="hbnav-item active">
+    <div class="hbnav-icon">&#127891;</div>
+    <div class="hbnav-text"><span class="hbnav-name">דף הקורס</span><span class="hbnav-sub">כל הפרקים</span></div>
+  </a>
+  <a href="/investor-academy/lessons/intro.html" class="hbnav-item">
+    <div class="hbnav-icon">&#128640;</div>
+    <div class="hbnav-text"><span class="hbnav-name">הקדמה</span><span class="hbnav-sub">למסע שלך</span></div>
+  </a>
+  <a href="/investor-academy/lessons/chapter-1.html" class="hbnav-item">
+    <div class="hbnav-icon">&#128273;</div>
+    <div class="hbnav-text"><span class="hbnav-name">פרק 1</span><span class="hbnav-sub">שלב הכניסה</span></div>
+  </a>
+  <a href="/investor-academy/lessons/chapter-2.html" class="hbnav-item">
+    <div class="hbnav-icon">&#129517;</div>
+    <div class="hbnav-text"><span class="hbnav-name">פרק 2</span><span class="hbnav-sub">שלב האסטרטגיה</span></div>
+  </a>
+  <a href="/investor-academy/lessons/chapter-3.html" class="hbnav-item">
+    <div class="hbnav-icon">&#128295;</div>
+    <div class="hbnav-text"><span class="hbnav-name">פרק 3</span><span class="hbnav-sub">שלב הכלים</span></div>
+  </a>
+  <a href="/investor-academy/lessons/chapter-4.html" class="hbnav-item">
+    <div class="hbnav-icon">&#128200;</div>
+    <div class="hbnav-text"><span class="hbnav-name">פרק 4</span><span class="hbnav-sub">שלב הניהול</span></div>
+  </a>
+  <a href="/investor-academy/game/" class="hbnav-item">
+    <div class="hbnav-icon">&#127918;</div>
+    <div class="hbnav-text"><span class="hbnav-name">משחק השקעות 🎮</span><span class="hbnav-sub">בחן את עצמך</span></div>
+  </a>
+</nav>
 
-  <!-- Supabase CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-  <!-- Config must load before auth-guard -->
-  <script src="/assets/js/supabase-config.js"></script>
-  <!-- Redirects to /auth/login/ if not logged in -->
-  <script src="/assets/js/auth-guard.js"></script>
-  <script>
-    // Logout button
-    const _client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    document.getElementById('logout-btn').addEventListener('click', async () => {
-      await _client.auth.signOut();
-      window.location.replace('/');
-    });
-  </script>
+<main class="course-container">
+
+  <!-- HERO -->
+  <div class="ia-hero">
+    <div class="ia-hero-badge">Investor Academy</div>
+    <h1>קורס ההשקעות המלא</h1>
+    <p>מהבסיס ועד ניהול תיק השקעות עצמאי — 4 פרקים, כלים מעשיים, ומשחק לתרגול.</p>
+    <div class="ia-stats">
+      <span class="ia-stat"><span class="ia-stat-icon">📖</span> 4 פרקים</span>
+      <span class="ia-stat"><span class="ia-stat-icon">🎬</span> עשרות שיעורי וידאו</span>
+      <span class="ia-stat"><span class="ia-stat-icon">🎮</span> משחק תרגול</span>
+      <span class="ia-stat"><span class="ia-stat-icon">🛠️</span> כלים פיננסיים</span>
+    </div>
+  </div>
+
+  <!-- CHAPTERS -->
+  <div class="course-card">
+    <div class="ia-section-title">תוכנית הקורס</div>
+
+    <div class="chapter-list">
+
+      <a href="/investor-academy/lessons/intro.html" class="chapter-card">
+        <div class="chapter-card-icon">🚀</div>
+        <div class="chapter-card-body">
+          <div class="chapter-card-label">הקדמה</div>
+          <div class="chapter-card-title">למסע שלך</div>
+          <div class="chapter-card-desc">המסגרת המנטלית, למה להשקיע, ואיך הקורס בנוי</div>
+        </div>
+        <span class="chapter-card-arrow">←</span>
+      </a>
+
+      <a href="/investor-academy/lessons/chapter-1.html" class="chapter-card">
+        <div class="chapter-card-icon">🔑</div>
+        <div class="chapter-card-body">
+          <div class="chapter-card-label">פרק 1</div>
+          <div class="chapter-card-title">שלב הכניסה</div>
+          <div class="chapter-card-desc">יסודות שוק ההון, מושגי בסיס ועקרונות השקעת ערך</div>
+        </div>
+        <span class="chapter-card-arrow">←</span>
+      </a>
+
+      <a href="/investor-academy/lessons/chapter-2.html" class="chapter-card">
+        <div class="chapter-card-icon">🧭</div>
+        <div class="chapter-card-body">
+          <div class="chapter-card-label">פרק 2</div>
+          <div class="chapter-card-title">שלב האסטרטגיה</div>
+          <div class="chapter-card-desc">בניית אסטרטגיית השקעות אישית וניתוח ערך מעמיק</div>
+        </div>
+        <span class="chapter-card-arrow">←</span>
+      </a>
+
+      <a href="/investor-academy/lessons/chapter-3.html" class="chapter-card">
+        <div class="chapter-card-icon">🛠️</div>
+        <div class="chapter-card-body">
+          <div class="chapter-card-label">פרק 3</div>
+          <div class="chapter-card-title">שלב הכלים</div>
+          <div class="chapter-card-desc">כלים פיננסיים לניתוח חברות: P/E, FCF, ROIC ועוד</div>
+        </div>
+        <span class="chapter-card-arrow">←</span>
+      </a>
+
+      <a href="/investor-academy/lessons/chapter-4.html" class="chapter-card">
+        <div class="chapter-card-icon">📈</div>
+        <div class="chapter-card-body">
+          <div class="chapter-card-label">פרק 4</div>
+          <div class="chapter-card-title">שלב הניהול</div>
+          <div class="chapter-card-desc">פתיחת תיק השקעות, גיבוש אסטרטגיה וניהול שוטף</div>
+        </div>
+        <span class="chapter-card-arrow">←</span>
+      </a>
+
+    </div>
+
+    <div class="ia-section-title" style="margin-top: 0.5rem;">בונוס</div>
+
+    <a href="/investor-academy/game/" class="game-card">
+      <div class="chapter-card-icon">🎮</div>
+      <div class="chapter-card-body">
+        <div class="chapter-card-label">משחק השקעות</div>
+        <div class="chapter-card-title">בחן את עצמך בסגנון וורן באפט</div>
+        <div class="chapter-card-desc">קבלת החלטות השקעה על חברות אמיתיות — האם תדעו לזהות את ההזדמנות?</div>
+      </div>
+      <span class="chapter-card-arrow">←</span>
+    </a>
+
+  </div>
+
+  <!-- BOTTOM CTA -->
+  <div class="course-card-dark">
+    <h2 class="course-card-dark-title">מוכנים להתחיל?</h2>
+    <p class="course-card-dark-sub">התחילו מההקדמה וצעדו לפי הסדר — כל פרק בנוי על הקודם.</p>
+    <div class="course-bottom-nav">
+      <a href="/investor-academy/lessons/intro.html" class="course-btn course-btn-gold">התחל מההקדמה</a>
+      <a href="/members/" class="course-btn course-btn-outline">אזור החברים</a>
+    </div>
+  </div>
+
+</main>
+
+<script>
+// ===== SIGNOUT =====
+document.getElementById('lessons-signout-btn').addEventListener('click', async function () {
+  const _c = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  await _c.auth.signOut();
+  window.location.replace('/auth/login/');
+});
+
+// ===== HAMBURGER NAV =====
+(function () {
+  var btn     = document.getElementById('hbnav-toggle');
+  var panel   = document.getElementById('hbnav-panel');
+  var overlay = document.getElementById('hbnav-overlay');
+  function open()  { btn.classList.add('open'); panel.classList.add('open'); overlay.classList.add('open'); btn.setAttribute('aria-expanded', 'true'); }
+  function close() { btn.classList.remove('open'); panel.classList.remove('open'); overlay.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }
+  btn.addEventListener('click', function () { panel.classList.contains('open') ? close() : open(); });
+  overlay.addEventListener('click', close);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+})();
+</script>
 
 </body>
 </html>
