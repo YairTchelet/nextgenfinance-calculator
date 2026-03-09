@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /members/
+Disallow: /profile/
+Disallow: /auth/
+Disallow: /investor-academy/lessons/
+Disallow: /investor-academy/game/
+Sitemap: https://www.newgenfinance.co.il/sitemap.xml
