@@ -1,595 +1,313 @@
 <!DOCTYPE html>
-<html dir="rtl" lang="he">
+<html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>אזור החברים — NewGen Finance</title>
-  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Auth protection (login only) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="/assets/js/supabase-config.js"></script>
+  <script src="/assets/js/auth-guard.js"></script>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800&family=Assistant:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Shared nav styles -->
+  <link rel="stylesheet" href="/assets/css/course.css">
+
   <style>
-    /* ─── TOKENS ─────────────────────────────────────── */
-    :root {
-      --font: 'Heebo', sans-serif;
-      --bg: linear-gradient(155deg, #0b4a64 0%, #1680a0 48%, #0d6a82 100%);
-      --card-bg: #ece8e5;
-      --teal: #5e817d;
-      --teal-dark: #4a6b67;
-      --teal-dim: rgba(94, 129, 125, 0.15);
-      --gold: #b3e0dc;
-      --gold-dark: #8fc9c4;
-      --text-dark: #394140;
-      --text-mid: #6b7d7c;
-      --text-light: #fefefe;
-      --text-sub: rgba(254, 254, 254, 0.75);
-      --shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-      --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.22);
-      --radius: 16px;
-      --transition: 0.22s ease;
-    }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-
+    /* ── Page background ── */
     body {
-      font-family: var(--font);
-      background: var(--bg);
+      background: linear-gradient(155deg, #0b4a64 0%, #1680a0 48%, #0d6a82 100%) fixed;
       background-attachment: fixed;
-      color: var(--text-light);
-      direction: rtl;
       min-height: 100vh;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    a { text-decoration: none; color: inherit; }
-    ul { list-style: none; }
-
-    /* ─── NAVBAR ─────────────────────────────────────── */
-    .navbar {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 clamp(20px, 5vw, 80px);
-      height: 68px;
-      background: rgba(12, 61, 82, 0.97);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .logo {
-      font-size: 1.25rem;
-      font-weight: 800;
-      letter-spacing: -0.3px;
-      color: var(--text-light);
-      direction: ltr;
-      unicode-bidi: embed;
-    }
-
-    .logo span { color: var(--teal); }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: clamp(16px, 3vw, 36px);
-    }
-
-    .nav-links a {
-      font-size: 0.95rem;
-      font-weight: 500;
-      color: var(--text-sub);
-      transition: color var(--transition);
-    }
-
-    .nav-links a:hover { color: var(--text-light); }
-
-    .navbar-brand {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-
-    .nav-auth {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .btn-nav {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 6px 16px;
-      border-radius: 8px;
-      font-family: var(--font);
-      font-size: 0.875rem;
-      font-weight: 600;
-      cursor: pointer;
-      border: 1.5px solid transparent;
-      transition: background var(--transition), color var(--transition), border-color var(--transition), transform var(--transition);
-      white-space: nowrap;
-      line-height: 1.5;
-    }
-
-    .btn-nav:hover { transform: translateY(-1px); }
-
-    .btn-nav-outline {
-      background: transparent;
-      color: var(--text-light);
-      border-color: rgba(255, 255, 255, 0.4);
-    }
-
-    .btn-nav-outline:hover {
-      border-color: rgba(255, 255, 255, 0.75);
-      background: rgba(255, 255, 255, 0.07);
-    }
-
-    .btn-nav-gold {
-      background: var(--gold);
-      color: #394140;
-      border-color: var(--gold);
-    }
-
-    .btn-nav-gold:hover {
-      background: var(--gold-dark);
-      border-color: var(--gold-dark);
-    }
-
-    .nav-greeting {
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: var(--text-sub);
-      white-space: nowrap;
-    }
-
-    .nav-user-link {
-      font-size: 0.875rem;
-      font-weight: 600;
-      color: var(--teal);
-      transition: color var(--transition);
-      white-space: nowrap;
-    }
-
-    .nav-user-link:hover { color: var(--text-light); }
-
-    .nav-signout {
-      background: none;
-      border: none;
-      font-family: var(--font);
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: var(--text-sub);
-      cursor: pointer;
+      font-family: 'Rubik', sans-serif;
+      direction: rtl;
+      color: #f0f8fa;
+      margin: 0;
       padding: 0;
-      transition: color var(--transition);
-      white-space: nowrap;
     }
 
-    .nav-signout:hover { color: var(--text-light); }
-
-    /* ─── PAGE HEADER ────────────────────────────────── */
-    .page-header {
-      padding: clamp(48px, 7vw, 80px) clamp(20px, 5vw, 80px) 0;
-      max-width: 1200px;
+    /* ── Layout ── */
+    .dashboard-wrapper {
+      max-width: 800px;
       margin: 0 auto;
+      padding: 2rem 1rem 3rem;
     }
 
-    .page-header h1 {
-      font-size: clamp(1.8rem, 4vw, 2.8rem);
-      font-weight: 900;
-      letter-spacing: -0.5px;
-      color: var(--text-light);
-      margin-bottom: 8px;
+    /* ── Hero card ── */
+    .hero-card {
+      background: #0c3d52;
+      border-radius: 20px;
+      padding: 2rem 1.75rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid rgba(179, 224, 220, 0.15);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
     }
 
-    .welcome-msg {
-      font-size: 1.05rem;
-      color: var(--text-sub);
-      font-weight: 400;
-    }
-
-    .welcome-msg strong {
-      color: var(--teal);
-      font-weight: 700;
-    }
-
-    /* ─── MEMBERS GRID ───────────────────────────────── */
-    .members-section {
-      padding: clamp(36px, 5vw, 56px) clamp(20px, 5vw, 80px) clamp(60px, 8vw, 100px);
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .members-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-    }
-
-    /* ─── MEMBER CARD ────────────────────────────────── */
-    .member-card {
-      background: var(--card-bg);
-      border-radius: var(--radius);
-      padding: 36px 28px;
-      box-shadow: var(--shadow);
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      transition: transform var(--transition), box-shadow var(--transition);
-      color: var(--text-dark);
-    }
-
-    .member-card:hover {
-      transform: translateY(-5px);
-      box-shadow: var(--shadow-hover);
-    }
-
-    .card-icon {
-      font-size: 2.2rem;
-      line-height: 1;
-      margin-bottom: 4px;
-    }
-
-    .card-title {
-      font-size: 1.2rem;
+    .hero-greeting {
+      font-size: 1.75rem;
       font-weight: 800;
-      color: var(--text-dark);
+      color: #f0f8fa;
+      margin: 0 0 0.35rem;
     }
 
-    .card-desc {
-      font-size: 0.9rem;
-      color: var(--text-mid);
-      line-height: 1.65;
-      flex: 1;
+    .hero-subtitle {
+      font-size: 0.95rem;
+      color: rgba(240, 248, 250, 0.7);
+      margin: 0 0 1rem;
     }
 
-    .card-actions {
+    .join-badge {
+      display: inline-block;
+      background: rgba(42, 157, 143, 0.2);
+      color: #7dd8d2;
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 0.3rem 0.85rem;
+      border-radius: 20px;
+      border: 1px solid rgba(42, 157, 143, 0.35);
+    }
+
+    /* ── Products grid ── */
+    .products-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .product-card {
+      background: rgba(236, 232, 229, 0.97);
+      border-radius: 16px;
+      padding: 1.5rem 1.25rem;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      margin-top: 8px;
+      gap: 0.6rem;
+      color: #1a2e38;
     }
 
-    /* ─── BUTTONS ─────────────────────────────────────── */
-    .btn {
+    .product-icon {
+      font-size: 2rem;
+      line-height: 1;
+    }
+
+    .product-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #1a2e38;
+      margin: 0;
+    }
+
+    .product-desc {
+      font-size: 0.875rem;
+      color: #4a6472;
+      line-height: 1.55;
+      flex: 1;
+      margin: 0;
+    }
+
+    /* ── Badges ── */
+    .badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.25rem 0.7rem;
+      border-radius: 20px;
+      width: fit-content;
+    }
+
+    .badge-green  { background: #d1fae5; color: #065f46; }
+    .badge-orange { background: #fed7aa; color: #9a3412; }
+    .badge-gray   { background: #e5e7eb; color: #6b7280; }
+
+    /* ── Product buttons ── */
+    .product-btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      padding: 12px 24px;
+      padding: 0.65rem 1rem;
       border-radius: 10px;
-      font-family: var(--font);
-      font-size: 0.95rem;
+      font-family: 'Rubik', sans-serif;
+      font-size: 0.9rem;
       font-weight: 700;
       cursor: pointer;
-      border: 2px solid transparent;
-      transition: transform var(--transition), box-shadow var(--transition), background var(--transition), color var(--transition), border-color var(--transition);
-      white-space: nowrap;
+      border: none;
+      text-decoration: none;
       text-align: center;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+      margin-top: 0.25rem;
     }
 
-    .btn:hover { transform: translateY(-2px); }
+    .product-btn:hover { transform: translateY(-2px); }
 
-    .btn-gold {
-      background: var(--gold);
-      color: #394140;
-      border-color: var(--gold);
+    .btn-teal   { background: #2a9d8f; color: #fff; }
+    .btn-teal:hover { background: #21867a; box-shadow: 0 6px 18px rgba(42, 157, 143, 0.35); }
+
+    .btn-orange { background: #e76f51; color: #fff; }
+    .btn-orange:hover { background: #cf6348; box-shadow: 0 6px 18px rgba(231, 111, 81, 0.35); }
+
+    .btn-disabled {
+      background: #e5e7eb;
+      color: #9ca3af;
+      cursor: not-allowed;
     }
+    .btn-disabled:hover { transform: none; box-shadow: none; }
 
-    .btn-gold:hover {
-      background: var(--gold-dark);
-      border-color: var(--gold-dark);
-      box-shadow: 0 8px 24px rgba(179, 224, 220, 0.4);
-    }
-
-    .btn-teal {
-      background: var(--teal);
-      color: #ffffff;
-      border-color: var(--teal);
-    }
-
-    .btn-teal:hover {
-      background: var(--teal-dark);
-      border-color: var(--teal-dark);
-      box-shadow: 0 8px 24px rgba(94, 129, 125, 0.4);
-    }
-
-    .btn-outline-dark {
-      background: transparent;
-      color: var(--text-dark);
-      border-color: rgba(94, 129, 125, 0.5);
-      padding: 10px 20px;
-      font-size: 0.9rem;
-    }
-
-    .btn-outline-dark:hover {
-      border-color: var(--teal);
-      background: var(--teal-dim);
-    }
-
-    /* Tools link list */
-    .tool-links {
+    /* ── Quick links row ── */
+    .quick-links {
       display: flex;
-      flex-direction: column;
-      gap: 8px;
+      gap: 0.75rem;
+      flex-wrap: wrap;
     }
 
-    .tool-link {
-      display: flex;
+    .quick-link {
+      display: inline-flex;
       align-items: center;
-      gap: 10px;
-      padding: 10px 14px;
+      gap: 0.4rem;
+      padding: 0.6rem 1.1rem;
       border-radius: 10px;
-      border: 1.5px solid rgba(94, 129, 125, 0.35);
-      color: var(--text-dark);
-      font-size: 0.9rem;
+      background: rgba(255, 255, 255, 0.1);
+      color: #f0f8fa;
+      font-size: 0.875rem;
       font-weight: 600;
-      transition: background var(--transition), border-color var(--transition), transform var(--transition);
+      text-decoration: none;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: background 0.15s ease;
     }
 
-    .tool-link:hover {
-      background: var(--teal-dim);
-      border-color: var(--teal);
-      transform: translateX(-3px);
-    }
+    .quick-link:hover { background: rgba(255, 255, 255, 0.18); }
 
-    .tool-link-icon { font-size: 1.1rem; }
-
-    /* ─── FOOTER ─────────────────────────────────────── */
-    footer {
-      background: rgba(0, 0, 0, 0.25);
-      border-top: 1px solid rgba(255, 255, 255, 0.07);
-      padding: 28px clamp(20px, 5vw, 80px);
-    }
-
-    .footer-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-
-    .footer-logo {
-      font-size: 1rem;
-      font-weight: 800;
-      color: var(--text-light);
-      direction: ltr;
-      unicode-bidi: embed;
-    }
-
-    .footer-logo span { color: var(--teal); }
-
-    .footer-right {
-      display: flex;
-      align-items: center;
-      gap: 24px;
-      flex-wrap: wrap;
-    }
-
-    .footer-copy {
-      font-size: 0.82rem;
-      color: var(--text-sub);
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 16px;
-    }
-
-    .footer-links a {
-      font-size: 0.82rem;
-      color: var(--text-sub);
-      transition: color var(--transition);
-    }
-
-    .footer-links a:hover { color: var(--text-light); }
-
-    /* ─── MOBILE NAV ─────────────────────────────────── */
-    .mobile-menu-btn {
-      display: none;
-      width: 38px; height: 38px;
-      background: rgba(179,224,220,0.12);
-      border: 1px solid rgba(179,224,220,0.25);
-      border-radius: 8px; cursor: pointer;
-      flex-direction: column; justify-content: center; align-items: center; gap: 5px;
-      transition: background 0.2s; flex-shrink: 0;
-    }
-    .mobile-menu-btn:hover { background: rgba(179,224,220,0.22); }
-    .mobile-menu-btn span { display: block; width: 20px; height: 2px; background: #fefefe; border-radius: 2px; transition: transform 0.3s, opacity 0.3s; }
-    .mobile-menu-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-    .mobile-menu-btn.open span:nth-child(2) { opacity: 0; }
-    .mobile-menu-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-    .mobile-nav-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 999; }
-    .mobile-nav-overlay.open { display: block; }
-    .mobile-nav-panel {
-      position: fixed; top: 68px; right: 0;
-      height: calc(100vh - 68px); width: 260px;
-      background: #0c3d52; z-index: 1000;
-      transform: translateX(100%); transition: transform 0.3s ease;
-      overflow-y: auto; padding: 1.25rem 1rem;
-      box-shadow: -4px 0 20px rgba(0,0,0,0.35);
-    }
-    .mobile-nav-panel.open { transform: translateX(0); }
-    .mobile-nav-panel-title { color: rgba(179,224,220,0.6); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.75rem; padding-bottom: 0.6rem; border-bottom: 1px solid rgba(179,224,220,0.15); }
-    .mobile-nav-item { display: flex; align-items: center; padding: 0.75rem 0.85rem; border-radius: 10px; text-decoration: none; color: #fefefe; font-size: 0.95rem; transition: background 0.18s; margin-bottom: 4px; }
-    .mobile-nav-item:hover { background: rgba(179,224,220,0.12); }
-    .mobile-nav-item.highlighted { color: #b3e0dc; font-weight: 600; }
-    .mobile-nav-divider { height: 1px; background: rgba(179,224,220,0.15); margin: 0.85rem 0; }
-
-    /* ─── RESPONSIVE ─────────────────────────────────── */
-    @media (max-width: 860px) {
-      .members-grid { grid-template-columns: 1fr 1fr; }
-    }
-
+    /* ── Responsive ── */
     @media (max-width: 560px) {
-      .members-grid { grid-template-columns: 1fr; }
-      .nav-links { display: none; }
-      .nav-greeting { display: none; }
-      .nav-user-link { display: none; }
-      .mobile-menu-btn { display: flex; }
+      .products-grid { grid-template-columns: 1fr; }
+      .hero-greeting { font-size: 1.4rem; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ─── NAVBAR ──────────────────────────────────────── -->
-  <nav class="navbar">
-    <div class="navbar-brand">
-      <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="תפריט" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-      <a href="/" class="logo">NewGen <span>Finance</span></a>
-      <div id="nav-auth" class="nav-auth"></div>
-    </div>
-    <ul class="nav-links">
-      <li><a href="/">ראשי</a></li>
-      <li><a href="/#tools">כלים</a></li>
-      <li><a href="/#course">קורסים</a></li>
-    </ul>
-  </nav>
-  <div class="mobile-nav-overlay" id="mobile-nav-overlay"></div>
-  <nav class="mobile-nav-panel" id="mobile-nav-panel" aria-label="תפריט ניווט">
-    <div class="mobile-nav-panel-title">ניווט</div>
-    <a href="/" class="mobile-nav-item">ראשי</a>
-    <a href="/#tools" class="mobile-nav-item">כלים</a>
-    <a href="/#course" class="mobile-nav-item">קורסים</a>
-    <a href="/members/" class="mobile-nav-item highlighted">אזור החברים</a>
-    <div class="mobile-nav-divider"></div>
-    <div class="mobile-nav-panel-title">הקורס</div>
-    <a href="/investor-academy/lessons/intro.html" class="mobile-nav-item">🚀 הקדמה</a>
-    <a href="/investor-academy/lessons/chapter-1.html" class="mobile-nav-item">🔑 פרק 1</a>
-    <a href="/investor-academy/lessons/chapter-2.html" class="mobile-nav-item">🧭 פרק 2</a>
-    <a href="/investor-academy/lessons/chapter-3.html" class="mobile-nav-item">🛠️ פרק 3</a>
-    <a href="/investor-academy/lessons/chapter-4.html" class="mobile-nav-item">📊 פרק 4</a>
-  </nav>
+<!-- NAVBAR -->
+<nav class="course-nav">
+  <div class="course-nav-brand">
+    <a href="/" class="course-nav-logo">NewGen Finance</a>
+  </div>
+  <div class="course-nav-links">
+    <a href="/profile/" class="course-nav-link">פרופיל</a>
+    <button class="course-nav-signout" id="members-signout-btn">התנתקות</button>
+  </div>
+</nav>
 
-  <!-- ─── PAGE HEADER ──────────────────────────────────── -->
-  <div class="page-header">
-    <h1>אזור החברים</h1>
-    <p class="welcome-msg">שלום <strong id="user-display-name">...</strong>, ברוך הבא לאזור החברים</p>
+<div class="dashboard-wrapper">
+
+  <!-- HERO -->
+  <div class="hero-card">
+    <p class="hero-greeting" id="hero-greeting">שלום 👋</p>
+    <p class="hero-subtitle">ברוך הבא לבית של משקיע הערך המתחיל</p>
+    <span class="join-badge" id="join-badge">טוען...</span>
   </div>
 
-  <!-- ─── MEMBERS GRID ──────────────────────────────────── -->
-  <div class="members-section">
-    <div class="members-grid">
+  <!-- PRODUCTS GRID -->
+  <div class="products-grid">
 
-      <!-- Card 1: My Course -->
-      <div class="member-card">
-        <div class="card-icon">🎓</div>
-        <div class="card-title">הקורס שלי</div>
-        <p class="card-desc">פרק 1: שלב הכלים — לחץ להתחיל</p>
-        <div class="card-actions">
-          <a href="/investor-academy/lessons/intro.html" class="btn btn-gold">כניסה לשיעורים</a>
-        </div>
-      </div>
-
-      <!-- Card 2: My Tools -->
-      <div class="member-card">
-        <div class="card-icon">🛠️</div>
-        <div class="card-title">הכלים שלי</div>
-        <p class="card-desc">כלים פיננסיים חכמים שיעזרו לך לנהל ולעקוב אחר ההשקעות שלך.</p>
-        <div class="card-actions">
-          <div class="tool-links">
-            <a href="/calculator/" class="tool-link">
-              <span class="tool-link-icon">🩺</span>
-              מחשבון בריאות פיננסית
-            </a>
-            <a href="/portfolio-tracker/" class="tool-link">
-              <span class="tool-link-icon">📊</span>
-              מעקב תיק השקעות
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 3: My Profile -->
-      <div class="member-card">
-        <div class="card-icon">👤</div>
-        <div class="card-title">הפרופיל שלי</div>
-        <p class="card-desc">ערוך את פרטיך האישיים, שנה סיסמה, וצפה בסטטוס הגישה לקורס.</p>
-        <div class="card-actions">
-          <a href="/profile/" class="btn btn-teal">עריכת פרופיל</a>
-        </div>
-      </div>
-
+    <!-- Card 1: Investment Game -->
+    <div class="product-card">
+      <div class="product-icon">🎮</div>
+      <p class="product-title">משחק השקעות</p>
+      <p class="product-desc">תרגלו ניתוח חברות בסגנון וורן באפט</p>
+      <span class="badge badge-green">גישה חופשית</span>
+      <a href="/investor-academy/game/" class="product-btn btn-teal">לשחק עכשיו</a>
     </div>
+
+    <!-- Card 2: Calculator -->
+    <div class="product-card">
+      <div class="product-icon">🧮</div>
+      <p class="product-title">מחשבון פיננסי</p>
+      <p class="product-desc">נתחו בריאות פיננסית של כל חברה ב-13 מדדים</p>
+      <span class="badge badge-green">גישה חופשית</span>
+      <a href="/calculator/" class="product-btn btn-teal">לפתוח המחשבון</a>
+    </div>
+
+    <!-- Card 3: Course (access-gated) -->
+    <div class="product-card">
+      <div class="product-icon">📚</div>
+      <p class="product-title">קורס Investor Academy</p>
+      <p class="product-desc">השיטה המלאה להשקעות ערך — 4 פרקים</p>
+      <span class="badge" id="course-badge">בודק גישה...</span>
+      <a href="#" class="product-btn btn-teal" id="course-btn" style="visibility:hidden">טוען</a>
+    </div>
+
+    <!-- Card 4: Portfolio Tracker (coming soon) -->
+    <div class="product-card">
+      <div class="product-icon">📊</div>
+      <p class="product-title">מעקב תיק השקעות</p>
+      <p class="product-desc">עקבו אחרי הביצועים של התיק שלכם</p>
+      <span class="badge badge-gray">בקרוב</span>
+      <button class="product-btn btn-disabled" disabled>בקרוב...</button>
+    </div>
+
   </div>
 
-  <!-- ─── FOOTER ─────────────────────────────────────────── -->
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-logo">NewGen <span>Finance</span></div>
-      <div class="footer-right">
-        <div class="footer-links">
-          <a href="#">פרטיות</a>
-          <a href="#">תנאי שימוש</a>
-        </div>
-        <span class="footer-copy">© 2025 NewGen Finance — כל הזכויות שמורות</span>
-      </div>
-    </div>
-  </footer>
+  <!-- QUICK LINKS -->
+  <div class="quick-links">
+    <a href="/profile/" class="quick-link">👤 הפרופיל שלי</a>
+    <a href="mailto:yair@newgenfinance.co.il" class="quick-link">✉️ צור קשר</a>
+  </div>
 
-  <!-- Supabase CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-  <!-- Config (must come before auth-guard) -->
-  <script src="/assets/js/supabase-config.js"></script>
-  <!-- Auth guard: redirects to /auth/login/ if not logged in -->
-  <script src="/assets/js/auth-guard.js"></script>
-  <script>
-    (async () => {
-      const _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      const { data: { session } } = await _sb.auth.getSession();
+</div>
 
-      if (!session) return; // auth-guard.js handles the redirect
+<script>
+(async () => {
+  const _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const { data: { session } } = await _sb.auth.getSession();
+  if (!session) return; // auth-guard.js handles redirect
 
-      const user = session.user;
+  const user = session.user;
 
-      // Fetch profile
-      const { data: profile } = await _sb
-        .from('profiles')
-        .select('full_name')
-        .eq('id', user.id)
-        .single();
+  // Fetch profile
+  const { data: profile } = await _sb
+    .from('profiles')
+    .select('full_name, has_access')
+    .eq('id', user.id)
+    .single();
 
-      // Set welcome name
-      const displayName = profile?.full_name || user.email;
-      document.getElementById('user-display-name').textContent = displayName;
+  // Greeting
+  const displayName = profile?.full_name || user.email;
+  document.getElementById('hero-greeting').textContent = 'שלום, ' + displayName + ' 👋';
 
-      // Navbar auth
-      const navAuth = document.getElementById('nav-auth');
-      const safeName = displayName
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
+  // Join date
+  const joined = new Date(user.created_at);
+  const joinStr = joined.toLocaleDateString('he-IL', { year: 'numeric', month: 'long', day: 'numeric' });
+  document.getElementById('join-badge').textContent = 'חבר מאז ' + joinStr;
 
-      navAuth.innerHTML =
-        '<span class="nav-greeting">שלום, ' + safeName + '</span>' +
-        '<a href="/members/" class="nav-user-link">אזור החברים</a>' +
-        '<button class="nav-signout" id="nav-signout-btn">התנתק</button>';
+  // Course access
+  const hasAccess = profile?.has_access === true;
+  const courseBadge = document.getElementById('course-badge');
+  const courseBtn   = document.getElementById('course-btn');
+  if (hasAccess) {
+    courseBadge.className = 'badge badge-green';
+    courseBadge.textContent = 'יש גישה';
+    courseBtn.className = 'product-btn btn-teal';
+    courseBtn.textContent = 'להמשיך ללמוד';
+    courseBtn.href = '/investor-academy/lessons/intro.html';
+  } else {
+    courseBadge.className = 'badge badge-orange';
+    courseBadge.textContent = 'נדרשת גישה';
+    courseBtn.className = 'product-btn btn-orange';
+    courseBtn.textContent = 'בקש גישה';
+    courseBtn.href = '/profile/?request=true';
+  }
+  courseBtn.style.visibility = '';
 
-      document.getElementById('nav-signout-btn').addEventListener('click', async () => {
-        await _sb.auth.signOut();
-        window.location.replace('/');
-      });
-    })();
-
-    // Mobile nav toggle
-    (function () {
-      var btn = document.getElementById('mobile-menu-btn');
-      var panel = document.getElementById('mobile-nav-panel');
-      var overlay = document.getElementById('mobile-nav-overlay');
-      function open()  { btn.classList.add('open'); panel.classList.add('open'); overlay.classList.add('open'); btn.setAttribute('aria-expanded','true'); }
-      function close() { btn.classList.remove('open'); panel.classList.remove('open'); overlay.classList.remove('open'); btn.setAttribute('aria-expanded','false'); }
-      btn.addEventListener('click', function () { panel.classList.contains('open') ? close() : open(); });
-      overlay.addEventListener('click', close);
-      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
-    })();
-  </script>
+  // Sign out
+  document.getElementById('members-signout-btn').addEventListener('click', async () => {
+    await _sb.auth.signOut();
+    window.location.replace('/auth/login/');
+  });
+})();
+</script>
 
 </body>
 </html>

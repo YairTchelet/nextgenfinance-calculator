@@ -822,8 +822,8 @@
 
       if (!session) {
         navAuth.innerHTML =
-          '<a href="/auth/login/" class="btn-nav btn-nav-outline">כניסה</a>' +
-          '<a href="/auth/register/" class="btn-nav btn-nav-gold">הרשמה</a>';
+          '<a href="/auth/login/" class="btn-nav btn-nav-outline">התחברות</a>' +
+          '<a href="/auth/register/" class="btn-nav btn-nav-gold">הרשמה חינם</a>';
       } else {
         const user = session.user;
         const { data: profile } = await _sb
@@ -842,7 +842,7 @@
         navAuth.innerHTML =
           '<span class="nav-greeting">שלום, ' + safeName + '</span>' +
           '<a href="/members/" class="nav-user-link">אזור החברים</a>' +
-          '<button class="nav-signout" id="nav-signout-btn">התנתק</button>';
+          '<button class="nav-signout" id="nav-signout-btn">יציאה</button>';
 
         document.getElementById('nav-signout-btn').addEventListener('click', async () => {
           await _sb.auth.signOut();
