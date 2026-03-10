@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>מי אני | NewGen Finance</title>
+  <meta name="description" content="הסיפור מאחורי New Gen Finance. איך הפכתי את יוקר המחיה בישראל למנוע צמיחה, למה בניתי קורס השקעות אינטראקטיבי, ואיך אני משלב AI, פיתוח ופיננסים.">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="מי אני | NewGen Finance">
+  <meta property="og:description" content="הסיפור מאחורי New Gen Finance. איך הפכתי את יוקר המחיה בישראל למנוע צמיחה, למה בניתי קורס השקעות אינטראקטיבי, ואיך אני משלב AI, פיתוח ופיננסים.">
+  <meta property="og:url" content="https://www.newgenfinance.co.il/about/">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://www.newgenfinance.co.il/assets/og-image.jpg">
+  <meta property="og:locale" content="he_IL">
+  <link rel="canonical" href="https://www.newgenfinance.co.il/about/">
+
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800;900&family=Assistant:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/investor-academy/assets/css/course.css">
+  <script defer src="/_vercel/insights/script.js"></script>
+
+  <style>
+    /* ── Page layout ── */
+    body { overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; }
+
+    /* ── Navbar auth styles ── */
+    .nav-link-plain {
+      color: rgba(240,248,250,0.8);
+      font-family: 'Assistant', sans-serif;
+      font-size: 0.9rem;
+      transition: color 0.18s;
+    }
+    .nav-link-plain:hover { color: #f0f8fa; }
+    .nav-pill {
+      background: transparent;
+      border: 1px solid rgba(179,224,220,0.45);
+      color: #b3e0dc;
+      font-family: 'Assistant', sans-serif;
+      font-size: 0.88rem;
+      padding: 0.38rem 1.1rem;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+    .nav-pill:hover { background: rgba(179,224,220,0.12); border-color: #b3e0dc; }
+    .nav-pill-mint { background: #b3e0dc; border-color: #b3e0dc; color: #394140; }
+    .nav-pill-mint:hover { background: #8fc9c4; border-color: #8fc9c4; }
+    #nav-auth { display: flex; align-items: center; gap: 0.65rem; }
+
+    /* ── Hero ── */
+    .about-hero {
+      background: #0c3d52;
+      padding: 4rem clamp(1.25rem, 6vw, 4rem) 3.5rem;
+      text-align: center;
+      border-bottom: 1px solid rgba(179,224,220,0.1);
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(179,224,220,0.15);
+      border: 1px solid rgba(179,224,220,0.3);
+      color: #b3e0dc;
+      font-family: 'Assistant', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      margin-bottom: 1.25rem;
+    }
+    .about-hero h1 {
+      font-family: 'Rubik', sans-serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800;
+      color: #fefefe;
+      margin-bottom: 0.75rem;
+      line-height: 1.2;
+    }
+    .about-hero-subtitle {
+      font-family: 'Assistant', sans-serif;
+      font-size: 1.15rem;
+      color: rgba(240,248,250,0.72);
+      margin-bottom: 2rem;
+    }
+    .about-profile {
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(179,224,220,0.18);
+      border-radius: 50px;
+      padding: 0.6rem 1.25rem 0.6rem 0.6rem;
+    }
+    .about-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: #0c3d52;
+      border: 2.5px solid #b3e0dc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Rubik', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #b3e0dc;
+      flex-shrink: 0;
+    }
+    .about-profile-name {
+      font-family: 'Assistant', sans-serif;
+      font-size: 0.95rem;
+      color: rgba(240,248,250,0.85);
+      white-space: nowrap;
+    }
+
+    /* ── Main content ── */
+    .about-container {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 2.5rem 1.25rem 4rem;
+    }
+
+    /* ── Story text ── */
+    .story-text {
+      font-family: 'Assistant', sans-serif;
+      font-size: 1.1rem;
+      line-height: 1.9;
+      color: #394140;
+    }
+
+    /* ── Section h2 ── */
+    .card-title-gradient {
+      font-family: 'Rubik', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, #0c3d52, #1680a0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+    }
+    .card-title-mint {
+      font-family: 'Rubik', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #b3e0dc;
+      margin-bottom: 1rem;
+    }
+
+    /* ── Dark card text ── */
+    .dark-text {
+      font-family: 'Assistant', sans-serif;
+      font-size: 1.05rem;
+      line-height: 1.85;
+      color: rgba(254,254,254,0.85);
+    }
+
+    /* ── 2x2 Built cards ── */
+    .built-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.85rem;
+      margin-top: 1.5rem;
+    }
+    .built-card {
+      background: rgba(179,224,220,0.1);
+      border: 1px solid rgba(179,224,220,0.2);
+      border-radius: 12px;
+      padding: 1rem;
+    }
+    .built-card-icon { font-size: 1.5rem; margin-bottom: 0.4rem; }
+    .built-card-title {
+      font-family: 'Rubik', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #fefefe;
+      margin-bottom: 0.2rem;
+    }
+    .built-card-desc {
+      font-family: 'Assistant', sans-serif;
+      font-size: 0.85rem;
+      color: rgba(179,224,220,0.75);
+    }
+
+    /* ── CTA section ── */
+    .cta-section {
+      background: #b3e0dc;
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .cta-section h2 {
+      font-family: 'Rubik', sans-serif;
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: #0c3d52;
+      margin-bottom: 0.75rem;
+    }
+    .cta-section p {
+      font-family: 'Assistant', sans-serif;
+      font-size: 1.05rem;
+      color: #394140;
+      line-height: 1.7;
+      margin-bottom: 1.75rem;
+    }
+    .cta-btns { display: flex; gap: 0.85rem; justify-content: center; flex-wrap: wrap; }
+    .btn-dark {
+      background: #0c3d52;
+      color: #fefefe;
+      font-family: 'Rubik', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 0.75rem 1.75rem;
+      border-radius: 30px;
+      border: 2px solid #0c3d52;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .btn-dark:hover { background: #0a2f3f; }
+    .btn-dark-outline {
+      background: transparent;
+      color: #0c3d52;
+      font-family: 'Rubik', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 0.75rem 1.75rem;
+      border-radius: 30px;
+      border: 2px solid #0c3d52;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-dark-outline:hover { background: rgba(12,61,82,0.08); }
+
+    /* ── Footer ── */
+    footer {
+      background: #0c3d52;
+      border-top: 1px solid rgba(179,224,220,0.1);
+      padding: 2.5rem clamp(1.25rem, 6vw, 4rem);
+    }
+    .footer-inner {
+      max-width: 1060px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 2rem;
+    }
+    .footer-logo { font-size: 1rem; font-weight: 800; color: #f0f8fa; direction: ltr; unicode-bidi: embed; margin-bottom: 0.3rem; }
+    .footer-logo span { color: #b3e0dc; }
+    .footer-tagline { font-size: 0.78rem; font-family: 'Assistant', sans-serif; color: rgba(240,248,250,0.42); }
+    .footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.2rem 1.25rem; }
+    .footer-links a { font-size: 0.82rem; color: rgba(240,248,250,0.52); transition: color 0.18s; text-decoration: none; }
+    .footer-links a:hover { color: #f0f8fa; }
+    .footer-credit { text-align: left; font-size: 0.78rem; font-family: 'Assistant', sans-serif; color: rgba(240,248,250,0.38); }
+
+    @media (max-width: 640px) {
+      .footer-inner { grid-template-columns: 1fr; text-align: center; }
+      .footer-credit { text-align: center; }
+      .footer-links { gap: 0.25rem 1rem; }
+      .built-grid { grid-template-columns: 1fr; }
+      .about-profile { flex-direction: column; text-align: center; border-radius: 20px; padding: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<nav class="course-nav">
+  <a href="/" class="course-nav-logo">
+    <img src="/assets/images/logo.png" alt="NewGen Finance לוגו">
+    <span>NewGen Finance</span>
+  </a>
+  <div id="nav-auth"></div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="about-hero">
+  <div class="hero-badge">👋 קצת עליי</div>
+  <h1>בונה, מלמד ומשקיע.</h1>
+  <p class="about-hero-subtitle">היי, ברוכים הבאים ל-New Gen Finance</p>
+  <div class="about-profile">
+    <div class="about-avatar">י.ת</div>
+    <span class="about-profile-name">יאיר תכלת — יזם, בונה כלים פיננסיים ומשקיע ערך</span>
+  </div>
+</section>
+
+<!-- ── MAIN CONTENT ── -->
+<main class="about-container">
+
+  <!-- SECTION 2 — Personal story -->
+  <div class="course-card">
+    <p class="story-text">כמו הרבה חבר'ה צעירים בישראל, מצאתי את עצמי מתמודד עם יוקר המחיה ושואל את עצמי – איך אפשר גם לחיות בנוחות היום, וגם לבנות משהו גדול למחר? תמיד הייתה לי תשוקה להיות חלק מצוותים שעושים דברים משמעותיים, בין אם זה בסטארטאפים, פילנתרופיה או פרויקטים שיכולים לשפר את המדינה והעולם. אבל הבנתי מהר מאוד שכדי להגיע לשם, אני חייב להבין לעומק איך כסף עובד ואיך חברות פועלות.</p>
+  </div>
+
+  <!-- SECTION 3 — From mistakes to value investing -->
+  <div class="course-card-dark">
+    <h2 class="card-title-mint">מטעויות של מתחילים – להשקעות ערך</h2>
+    <p class="dark-text">כשהתחלתי להשקיע, עשיתי לא מעט טעויות. חוויתי על בשרי מה קורה כשפועלים מתוך תאוות בצע, עצלנות מחקרית או הטיות פסיכולוגיות. אבל למזלי, נצמדתי לעקרונות של השקעות ערך. העקרונות האלה עזרו לי לקום מכל טעות, ללמוד ממנה, ולהבין שהשקעות זה לא קזינו – זו מערכת שאפשר וצריך להבין. היום, בזכות מהפכת ה-AI, כל המידע שפעם היה נעול מאחורי תארים מפוצצים ומוסדות פיננסיים, זמין לכולנו. רק צריך לדעת איך להשתמש בו.</p>
+  </div>
+
+  <!-- SECTION 4 — Why I built this course -->
+  <div class="course-card">
+    <h2 class="card-title-gradient">למה בניתי את הקורס הזה?</h2>
+    <p class="story-text">הבנתי שללמוד להשקיע לא חייב להיות משעמם או כרוך בקריאת ספרים עבי כרס. יש אנשים שצריכים למידה אינטראקטיבית, חווייתית ואינטואיטיבית. בניתי את New Gen Finance לא כדי להתעשר ממכירת קורסים, אלא כדי לבנות קהילה. רציתי ליצור אקוסיסטם של משקיעים שצומחים ביחד. שילבתי כלים מבוססי AI כדי לאפשר לכל אחד לעשות מחקר שוק מעמיק, לנהל סיכונים, ולהבין השקעות בצורה פשוטה ומהנה.</p>
+  </div>
+
+  <!-- SECTION 5 — Builder -->
+  <div class="course-card-dark">
+    <h2 class="card-title-mint">אני לא רק משקיע – אני בונה.</h2>
+    <p class="dark-text">אין לי תארים רשמיים, אבל יש לי משהו שחשוב לא פחות בעולם של היום: סקרנות, יכולת למידה עצמית ורעב ליצור. אני מגדיר את עצמי קודם כל כבונה (Builder) וכמורה.</p>
+    <div class="built-grid">
+      <div class="built-card">
+        <div class="built-card-icon">🌐</div>
+        <div class="built-card-title">האתר הזה</div>
+        <div class="built-card-desc">פלטפורמת חינוך פיננסי מלאה</div>
+      </div>
+      <div class="built-card">
+        <div class="built-card-icon">🎮</div>
+        <div class="built-card-title">משחק ההשקעות</div>
+        <div class="built-card-desc">סימולציה אינטראקטיבית</div>
+      </div>
+      <div class="built-card">
+        <div class="built-card-icon">🧮</div>
+        <div class="built-card-title">מחשבון הבריאות הפיננסית</div>
+        <div class="built-card-desc">ניתוח 13 מדדים</div>
+      </div>
+      <div class="built-card">
+        <div class="built-card-icon">📊</div>
+        <div class="built-card-title">מעקב תיקים חכם</div>
+        <div class="built-card-desc">Spreadsheet מבוסס AI</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 6 — CTA -->
+  <div class="cta-section">
+    <h2>בואו נדבר!</h2>
+    <p>בין אם אתם רוצים לקחת את הצעד הראשון בעולם ההשקעות, או שאתם מחפשים פרילנסר יצירתי וטכנולוגי לפרויקט הבא שלכם – אני כאן.</p>
+    <div class="cta-btns">
+      <a href="/investor-academy/" class="btn-dark">הכירו את הקורס והכלים</a>
+      <a href="/contact/" class="btn-dark-outline">דברו איתי</a>
+    </div>
+  </div>
+
+</main>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">NewGen <span>Finance</span></div>
+      <div class="footer-tagline">הבית של משקיע הערך המתחיל</div>
+    </div>
+    <nav class="footer-links" aria-label="קישורים">
+      <a href="/">דף הבית</a>
+      <a href="/investor-academy/">הקורס</a>
+      <a href="/calculator/">המחשבון</a>
+      <a href="/investor-academy/game/">המשחק</a>
+      <a href="/about/">אודות</a>
+      <a href="/contact/">יצירת קשר</a>
+      <a href="/terms/">תנאי שימוש</a>
+    </nav>
+    <div class="footer-credit">נבנה עם ❤️ על ידי יאיר תכלת</div>
+  </div>
+</footer>
+
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="/assets/js/supabase-config.js"></script>
+<script>
+(async () => {
+  const _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const { data: { session } } = await _sb.auth.getSession();
+  const navAuth = document.getElementById('nav-auth');
+  if (!session) {
+    navAuth.innerHTML =
+      '<a href="/auth/login/" class="nav-link-plain">התחברות</a>' +
+      '<a href="/auth/register/" class="nav-pill nav-pill-mint">הרשמה חינם</a>';
+  } else {
+    navAuth.innerHTML =
+      '<a href="/members/" class="nav-link-plain">אזור החברים</a>' +
+      '<button class="nav-pill" id="about-signout">יציאה</button>';
+    document.getElementById('about-signout').addEventListener('click', async () => {
+      await _sb.auth.signOut();
+      window.location.reload();
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
