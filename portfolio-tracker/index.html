@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>מעקב תיק השקעות חכם | NewGen Finance</title>
+  <meta name="description" content="מערכת ניהול ההשקעות החכמה ביותר ב-Google Sheets. מעקב אוטומטי, דאשבורד אינטראקטיבי, דוחות PDF וסימולטור עסקאות – בלי לשתף את הנתונים שלך עם אף אחד.">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="מעקב תיק השקעות חכם | NewGen Finance">
+  <meta property="og:description" content="מערכת ניהול ההשקעות החכמה ביותר ב-Google Sheets. מעקב אוטומטי, דאשבורד אינטראקטיבי, דוחות PDF וסימולטור עסקאות.">
+  <meta property="og:url" content="https://www.newgenfinance.co.il/portfolio-tracker/">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://www.newgenfinance.co.il/assets/og-image.jpg">
+  <meta property="og:locale" content="he_IL">
+  <link rel="canonical" href="https://www.newgenfinance.co.il/portfolio-tracker/">
+
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800;900&family=Assistant:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/investor-academy/assets/css/course.css">
+  <script defer src="/_vercel/insights/script.js"></script>
+
+  <style>
+    body { overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; }
+
+    /* ── Navbar auth ── */
+    .nav-link-plain { color: rgba(240,248,250,0.8); font-family: 'Assistant', sans-serif; font-size: 0.9rem; transition: color 0.18s; }
+    .nav-link-plain:hover { color: #f0f8fa; }
+    .nav-pill { background: transparent; border: 1px solid rgba(179,224,220,0.45); color: #b3e0dc; font-family: 'Assistant', sans-serif; font-size: 0.88rem; padding: 0.38rem 1.1rem; border-radius: 20px; cursor: pointer; transition: all 0.18s; }
+    .nav-pill:hover { background: rgba(179,224,220,0.12); border-color: #b3e0dc; }
+    .nav-pill-mint { background: #b3e0dc; border-color: #b3e0dc; color: #394140; }
+    .nav-pill-mint:hover { background: #8fc9c4; border-color: #8fc9c4; }
+    #nav-auth { display: flex; align-items: center; gap: 0.65rem; }
+
+    /* ── FADE UP ── */
+    .fade-up { opacity: 0; transform: translateY(22px); transition: opacity 0.55s ease, transform 0.55s ease; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* ══════════════════════════════════════
+       SECTION 1 — HERO
+    ══════════════════════════════════════ */
+    .pt-hero {
+      background: #0c3d52;
+      padding: 5rem clamp(1.25rem, 7vw, 5rem) 4.5rem;
+      text-align: center;
+      border-bottom: 1px solid rgba(179,224,220,0.1);
+    }
+    .pt-eyebrow {
+      display: inline-block;
+      background: rgba(179,224,220,0.15);
+      border: 1px solid rgba(179,224,220,0.35);
+      color: #b3e0dc;
+      font-family: 'Assistant', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 0.35rem 1.1rem;
+      border-radius: 20px;
+      margin-bottom: 1.5rem;
+    }
+    .pt-hero h1 {
+      font-family: 'Rubik', sans-serif;
+      font-size: clamp(1.85rem, 4.5vw, 3rem);
+      font-weight: 900;
+      color: #fefefe;
+      line-height: 1.22;
+      margin-bottom: 1.25rem;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .pt-hero-sub {
+      font-family: 'Assistant', sans-serif;
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: rgba(240,248,250,0.72);
+      line-height: 1.7;
+      max-width: 660px;
+      margin: 0 auto 2.5rem;
+    }
+
+    /* Waitlist form */
+    .waitlist-wrap {
+      max-width: 480px;
+      margin: 0 auto 1rem;
+    }
+    .waitlist-form {
+      display: flex;
+      gap: 0.6rem;
+      background: rgba(255,255,255,0.08);
+      border: 1.5px solid rgba(179,224,220,0.25);
+      border-radius: 50px;
+      padding: 0.35rem 0.35rem 0.35rem 1rem;
+    }
+    .waitlist-form input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-family: 'Assistant', sans-serif;
+      font-size: 1rem;
+      color: #fefefe;
+      direction: rtl;
+      min-width: 0;
+    }
+    .waitlist-form input::placeholder { color: rgba(240,248,250,0.45); }
+    .waitlist-form button {
+      background: #b3e0dc;
+      color: #0c3d52;
+      font-family: 'Rubik', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 0.65rem 1.25rem;
+      border: none;
+      border-radius: 40px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.18s, transform 0.15s;
+      flex-shrink: 0;
+    }
+    .waitlist-form button:hover { background: #8fc9c4; transform: scale(1.02); }
+    .waitlist-form button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .waitlist-note {
+      font-family: 'Assistant', sans-serif;
+      font-size: 0.82rem;
+      color: rgba(240,248,250,0.42);
+      text-align: center;
+      margin-top: 0.6rem;
+    }
+    .waitlist-success {
+      display: none;
+      background: rgba(179,224,220,0.18);
+      border: 1px solid rgba(179,224,220,0.4);
+      border-radius: 12px;
+      padding: 0.85rem 1.25rem;
+      font-family: 'Assistant', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #b3e0dc;
+      text-align: center;
+      margin-bottom: 0.75rem;
+    }
+    .waitlist-error {
+      display: none;
+      background: rgba(220,80,80,0.12);
+      border-radius: 12px;
+      padding: 0.6rem 1rem;
+      font-family: 'Assistant', sans-serif;
+      font-size: 0.9rem;
+      color: #ffb3b3;
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+    .waitlist-counter {
+      font-family: 'Assistant', sans-serif;
+      font-size: 0.92rem;
+      color: rgba(240,248,250,0.55);
+      text-align: center;
+      margin-top: 1.25rem;
+    }
+
+    /* ══════════════════════════════════════
+       SECTION 2 — PROBLEMS
+    ══════════════════════════════════════ */
+    .pt-problems {
+      background: linear-gradient(155deg, #0b3d50 0%, #0f5f7a 60%, #0b3d50 100%);
+      padding: 4rem clamp(1.25rem, 7vw, 5rem);
+      text-align: center;
+    }
+    .pt-section-label {
+      font-family: 'Assistant', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: rgba(179,224,220,0.7);
+      margin-bottom: 0.6rem;
+    }
+    .pt-section-title {
+      font-family: 'Rubik', sans-serif;
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 800;
+      color: #fefefe;
+      margin-bottom: 2.5rem;
+    }
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    .problem-card {
+      background: #0c3d52;
+      border: 1px solid rgba(179,224,220,0.12);
+      border-radius: 16px;
+      padding: 1.5rem;
+      text-align: right;
+    }
+    .problem-card-icon { font-size: 1.75rem; margin-bottom: 0.75rem; }
+    .problem-card-title {
+      font-family: 'Rubik', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fefefe;
+      margin-bottom: 0.5rem;
+    }
+    .problem-card-desc {
+      font-family: 'Assistant', sans-serif;
+      font-size: 0.9rem;
+      color: rgba(240,248,250,0.62);
+      line-height: 1.65;
+    }
+
+    /* ══════════════════════════════════════
+       SECTION 3 — FEATURES
+    ══════════════════════════════════════ */
+    .pt-features {
+      background: rgba(236,232,229,0.15);
+      padding: 4.5rem clamp(1.25rem, 7vw, 5rem);
+      text-align: center;
+    }
+    .pt-features-title {
+      font-family: 'Rubik', sans-serif;
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 800;
+      background: linear-gradient(90deg, #b3e0dc, #fefefe);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 2.5rem;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+    .feature-card {
+      background: rgba(236,232,229,0.97);
+      border-radius: 16px;
+      padding: 1.5rem;
+      text-align: right;
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: default;
+    }
+    .feature-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.25); }
+    .feature-card-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+    .feature-card-title {
+      font-family: 'Rubik', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #0c3d52;
+      margin-bottom: 0.4rem;
+    }
+    .feature-card-desc {
+      font-family: 'Assistant', sans-serif;
+      font-size: 0.92rem;
+      color: #4a6472;
+      line-height: 1.65;
+    }
+
+    /* ══════════════════════════════════════
+       SECTION 4 — HOW IT WORKS
+    ══════════════════════════════════════ */
+    .pt-how {
+      background: #0c3d52;
+      padding: 4.5rem clamp(1.25rem, 7vw, 5rem);
+      text-align: center;
+      border-top: 1px solid rgba(179,224,220,0.1);
+      border-bottom: 1px solid rgba(179,224,220,0.1);
+    }
+    .pt-how-title {
+      font-family: 'Rubik', sans-serif;
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 800;
+      color: #fefefe;
+      margin-bottom: 3rem;
+    }
+    .steps-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      max-width: 860px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .steps-row::before {
+      content: '';
+      position: absolute;
+      top: 2.2rem;
+      right: 16.5%;
+      left: 16.5%;
+      height: 2px;
+      background: rgba(179,224,220,0.2);
+    }
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      position: relative;
+    }
+    .step-num {
+      font-family: 'Rubik', sans-serif;
+      font-size: 3rem;
+      font-weight: 900;
+      color: #b3e0dc;
+      line-height: 1;
+      width: 72px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(179,224,220,0.12);
+      border: 2px solid rgba(179,224,220,0.3);
+      border-radius: 50%;
+    }
+    .step-title {
+      font-family: 'Rubik', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fefefe;
+    }
+    .step-desc {
+      font-family: 'Assistant', sans-serif;
+      font-size: 0.9rem;
+      color: rgba(240,248,250,0.65);
+      line-height: 1.6;
+    }
+
+    /* ══════════════════════════════════════
+       SECTION 5 — CREATOR
+    ══════════════════════════════════════ */
+    .pt-creator {
+      padding: 4.5rem clamp(1.25rem, 7vw, 5rem);
+    }
+    .creator-card {
+      background: rgba(236,232,229,0.97);
+      border-radius: 20px;
+      box-shadow: 0 4px 28px rgba(0,0,0,0.2);
+      padding: 2.5rem 2rem;
+      max-width: 700px;
+      margin: 0 auto;
+      display: flex;
+      align-items: flex-start;
+      gap: 2rem;
+    }
+    .creator-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: #0c3d52;
+      border: 3px solid #b3e0dc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Rubik', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #b3e0dc;
+      flex-shrink: 0;
+    }
+    .creator-body { flex: 1; }
+    .creator-title {
+      font-family: 'Rubik', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #0c3d52;
+      margin-bottom: 0.75rem;
+    }
+    .creator-text {
+      font-family: 'Assistant', sans-serif;
+      font-size: 1rem;
+      color: #394140;
+      line-height: 1.8;
+      margin-bottom: 1.1rem;
+    }
+    .creator-link {
+      font-family: 'Assistant', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #1680a0;
+      text-decoration: none;
+      transition: color 0.18s;
+    }
+    .creator-link:hover { color: #0c3d52; }
+
+    /* ══════════════════════════════════════
+       SECTION 6 — PRICING
+    ══════════════════════════════════════ */
+    .pt-pricing {
+      background: #0c3d52;
+      padding: 4.5rem clamp(1.25rem, 7vw, 5rem);
+      text-align: center;
+      border-top: 1px solid rgba(179,224,220,0.1);
+    }
+    .pt-pricing-title {
+      font-family: 'Rubik', sans-serif;
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 800;
+      color: #fefefe;
+      margin-bottom: 2.75rem;
+    }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .pricing-card {
+      background: rgba(255,255,255,0.06);
+      border: 1.5px solid rgba(179,224,220,0.15);
+      border-radius: 20px;
+      padding: 2rem 1.75rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .pricing-card.featured {
+      border-color: #b3e0dc;
+      background: rgba(179,224,220,0.08);
+    }
+    .pricing-badge {
+      display: inline-block;
+      background: rgba(179,224,220,0.15);
+      color: #b3e0dc;
+      font-family: 'Assistant', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 0.25rem 0.85rem;
+      border-radius: 20px;
+      border: 1px solid rgba(179,224,220,0.3);
+    }
+    .pricing-badge.featured { background: #b3e0dc; color: #0c3d52; border-color: #b3e0dc; }
+    .pricing-name {
+      font-family: 'Rubik', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fefefe;
+    }
+    .pricing-price {
+      font-family: 'Rubik', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: #b3e0dc;
+      line-height: 1.1;
+    }
+    .pricing-price-sub {
+      font-family: 'Assistant', sans-serif;
+      font-size: 0.85rem;
+      color: rgba(240,248,250,0.5);
+      margin-top: -0.4rem;
+    }
+    .pricing-list {
+      list-style: none;
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      flex: 1;
+      margin: 0.5rem 0;
+    }
+    .pricing-list li {
+      font-family: 'Assistant', sans-serif;
+      font-size: 0.92rem;
+      color: rgba(240,248,250,0.78);
+    }
+    .pricing-btn-disabled {
+      background: rgba(255,255,255,0.1);
+      color: rgba(240,248,250,0.35);
+      font-family: 'Rubik', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: 30px;
+      border: 1.5px solid rgba(255,255,255,0.1);
+      cursor: not-allowed;
+      margin-top: auto;
+    }
+
+    /* ══════════════════════════════════════
+       SECTION 7 — FAQ
+    ══════════════════════════════════════ */
+    .pt-faq {
+      padding: 4.5rem clamp(1.25rem, 7vw, 5rem);
+      text-align: center;
+    }
+    .pt-faq-title {
+      font-family: 'Rubik', sans-serif;
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 800;
+      background: linear-gradient(90deg, #b3e0dc, #fefefe);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 2rem;
+    }
+    .faq-list {
+      max-width: 720px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .faq-item {
+      background: rgba(236,232,229,0.97);
+      border-radius: 14px;
+      overflow: hidden;
+      text-align: right;
+    }
+    .faq-question {
+      width: 100%;
+      background: none;
+      border: none;
+      padding: 1.1rem 1.5rem;
+      font-family: 'Rubik', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #0c3d52;
+      cursor: pointer;
+      text-align: right;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      transition: background 0.18s;
+    }
+    .faq-question:hover { background: rgba(12,61,82,0.05); }
+    .faq-chevron {
+      color: #1680a0;
+      font-size: 1.1rem;
+      transition: transform 0.28s ease;
+      flex-shrink: 0;
+    }
+    .faq-item.open .faq-chevron { transform: rotate(180deg); }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.32s ease, padding 0.28s;
+      padding: 0 1.5rem;
+    }
+    .faq-item.open .faq-answer { max-height: 200px; padding: 0 1.5rem 1.1rem; }
+    .faq-answer p {
+      font-family: 'Assistant', sans-serif;
+      font-size: 0.97rem;
+      color: #394140;
+      line-height: 1.75;
+    }
+
+    /* ══════════════════════════════════════
+       SECTION 8 — FINAL CTA
+    ══════════════════════════════════════ */
+    .pt-cta {
+      background: #b3e0dc;
+      padding: 4.5rem clamp(1.25rem, 7vw, 5rem);
+      text-align: center;
+    }
+    .pt-cta h2 {
+      font-family: 'Rubik', sans-serif;
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      font-weight: 900;
+      color: #0c3d52;
+      margin-bottom: 0.75rem;
+    }
+    .pt-cta-sub {
+      font-family: 'Assistant', sans-serif;
+      font-size: 1.1rem;
+      color: #394140;
+      margin-bottom: 2.25rem;
+    }
+    .pt-cta .waitlist-form {
+      background: rgba(12,61,82,0.08);
+      border-color: rgba(12,61,82,0.25);
+    }
+    .pt-cta .waitlist-form input { color: #0c3d52; }
+    .pt-cta .waitlist-form input::placeholder { color: rgba(12,61,82,0.45); }
+    .pt-cta .waitlist-note { color: rgba(12,61,82,0.5); }
+    .pt-cta .waitlist-counter { color: rgba(12,61,82,0.55); }
+    .pt-cta .waitlist-success { color: #0c3d52; background: rgba(12,61,82,0.1); border-color: rgba(12,61,82,0.25); }
+    .pt-cta .waitlist-error { color: #7b1a1a; background: rgba(180,30,30,0.1); }
+
+    /* ── FOOTER ── */
+    footer { background: #0c3d52; border-top: 1px solid rgba(179,224,220,0.1); padding: 2.5rem clamp(1.25rem, 6vw, 4rem); }
+    .footer-inner { max-width: 1060px; margin: 0 auto; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 2rem; }
+    .footer-logo { font-size: 1rem; font-weight: 800; color: #f0f8fa; direction: ltr; unicode-bidi: embed; margin-bottom: 0.3rem; }
+    .footer-logo span { color: #b3e0dc; }
+    .footer-tagline { font-size: 0.78rem; font-family: 'Assistant', sans-serif; color: rgba(240,248,250,0.42); }
+    .footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.2rem 1.25rem; }
+    .footer-links a { font-size: 0.82rem; color: rgba(240,248,250,0.52); transition: color 0.18s; text-decoration: none; }
+    .footer-links a:hover { color: #f0f8fa; }
+    .footer-credit { text-align: left; font-size: 0.78rem; font-family: 'Assistant', sans-serif; color: rgba(240,248,250,0.38); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 780px) {
+      .problem-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .steps-row { grid-template-columns: 1fr; }
+      .steps-row::before { display: none; }
+      .pricing-grid { grid-template-columns: 1fr; }
+      .creator-card { flex-direction: column; align-items: center; text-align: center; }
+      .pricing-list { text-align: center; }
+      .footer-inner { grid-template-columns: 1fr; text-align: center; }
+      .footer-credit { text-align: center; }
+      .footer-links { gap: 0.25rem 1rem; }
+    }
+    @media (max-width: 520px) {
+      .waitlist-form { flex-direction: column; border-radius: 16px; padding: 0.75rem; }
+      .waitlist-form button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<nav class="course-nav">
+  <a href="/" class="course-nav-logo">
+    <img src="/assets/images/logo.png" alt="NewGen Finance לוגו">
+    <span>NewGen Finance</span>
+  </a>
+  <div id="nav-auth"></div>
+</nav>
+
+<!-- ══════════════════════════════════════
+     SECTION 1 — HERO
+══════════════════════════════════════ -->
+<section class="pt-hero">
+  <div class="pt-eyebrow">🚀 בקרוב</div>
+  <h1>לקחת שליטה על התיק שלך. בלי דמי מנוי, בלי לשתף מידע.</h1>
+  <p class="pt-hero-sub">מערכת ניהול ההשקעות החכמה ביותר שנבנתה על גבי Google Sheets. מעקב אוטומטי, דאשבורד אינטראקטיבי, דוחות PDF וסימולטור עסקאות – הכל בדרייב הפרטי שלך.</p>
+
+  <div class="waitlist-wrap">
+    <div class="waitlist-success" id="hero-success"></div>
+    <div class="waitlist-error" id="hero-error"></div>
+    <form class="waitlist-form" id="hero-form">
+      <input type="email" name="email" required placeholder="הכניסו את האימייל שלכם">
+      <button type="submit" id="hero-btn">הצטרפו לרשימת ההמתנה</button>
+    </form>
+    <p class="waitlist-note">🔒 לא נשלח ספאם. תקבלו עדכון אחד כשהמוצר יוצא.</p>
+  </div>
+  <p class="waitlist-counter">👥 כבר 0 אנשים ברשימת ההמתנה</p>
+</section>
+
+<!-- ══════════════════════════════════════
+     SECTION 2 — PROBLEMS
+══════════════════════════════════════ -->
+<section class="pt-problems">
+  <div class="pt-section-label">האתגר</div>
+  <h2 class="pt-section-title fade-up">למה להסתפק פחות</h2>
+  <div class="problem-grid">
+    <div class="problem-card fade-up">
+      <div class="problem-card-icon">❌</div>
+      <div class="problem-card-title">אפליקציות צד שלישי</div>
+      <p class="problem-card-desc">דורשות גישה לסיסמאות שלכם ועולות עשרות דולרים בחודש</p>
+    </div>
+    <div class="problem-card fade-up">
+      <div class="problem-card-icon">❌</div>
+      <div class="problem-card-title">מערכות הברוקרים</div>
+      <p class="problem-card-desc">מיושנות, לא מראות תשואה אמיתית (TWR) ומתעלמות מהשפעת המט"ח</p>
+    </div>
+    <div class="problem-card fade-up">
+      <div class="problem-card-icon">❌</div>
+      <div class="problem-card-title">אקסל רגיל</div>
+      <p class="problem-card-desc">דורש הזנה ידנית מתישה ונוטה להישבר מכל טעות קטנה</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     SECTION 3 — FEATURES
+══════════════════════════════════════ -->
+<section class="pt-features">
+  <h2 class="pt-features-title fade-up">כל מה שמשקיע חכם צריך, במקום אחד</h2>
+  <div class="features-grid">
+    <div class="feature-card fade-up">
+      <div class="feature-card-icon">🤖</div>
+      <div class="feature-card-title">ייבוא חכם מכל ברוקר</div>
+      <p class="feature-card-desc">העלו קובץ CSV או השתמשו בפרומפט ה-AI המובנה כדי לייבא עסקאות מ-IBKR, מיטב או הבנקים בשניות</p>
+    </div>
+    <div class="feature-card fade-up">
+      <div class="feature-card-icon">🔮</div>
+      <div class="feature-card-title">סימולטור עסקאות</div>
+      <p class="feature-card-desc">המערכת מחשבת עמלות אוטומטית ומראה איך כל עסקה תשפיע על התיק לפני שאתם לוחצים קנה</p>
+    </div>
+    <div class="feature-card fade-up">
+      <div class="feature-card-icon">📊</div>
+      <div class="feature-card-title">נטרול מט"ח ותשואה אמיתית</div>
+      <p class="feature-card-desc">הפרדה בין רווחי מניות לרווחי מטבע, וחישוב TWR להשוואה מול S&P 500, ת״א 125 ועוד</p>
+    </div>
+    <div class="feature-card fade-up">
+      <div class="feature-card-icon">📩</div>
+      <div class="feature-card-title">דוחות PDF שבועיים אוטומטיים</div>
+      <p class="feature-card-desc">בכל שבוע דוח מעוצב במייל עם סיכום התיק, המנצחות, המפסידות ותובנות שוק</p>
+    </div>
+    <div class="feature-card fade-up">
+      <div class="feature-card-icon">⚠️</div>
+      <div class="feature-card-title">התראות חכמות וזיהוי ספליטים</div>
+      <p class="feature-card-desc">התראות מחיר אוטומטיות ואזהרות לירידות חריגות שעשויות להעיד על ספליט</p>
+    </div>
+    <div class="feature-card fade-up">
+      <div class="feature-card-icon">🔒</div>
+      <div class="feature-card-title">פרטיות מוחלטת</div>
+      <p class="feature-card-desc">המידע שלכם נשאר רק אצלכם. המערכת יושבת בחשבון ה-Google Drive הפרטי שלכם בלבד</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     SECTION 4 — HOW IT WORKS
+══════════════════════════════════════ -->
+<section class="pt-how">
+  <h2 class="pt-how-title fade-up">מתחילים לעבוד ב-3 צעדים פשוטים</h2>
+  <div class="steps-row">
+    <div class="step fade-up">
+      <div class="step-num">1</div>
+      <div class="step-title">מעתיקים 📄</div>
+      <p class="step-desc">לוחצים על כפתור ויוצרים עותק פרטי ב-Google Drive שלכם</p>
+    </div>
+    <div class="step fade-up">
+      <div class="step-num">2</div>
+      <div class="step-title">מייבאים 📥</div>
+      <p class="step-desc">מזינים עסקאות קודמות בעזרת ייבוא ה-CSV החכם או הטופס החכם</p>
+    </div>
+    <div class="step fade-up">
+      <div class="step-num">3</div>
+      <div class="step-title">מפעילים אוטומציה ⚙️</div>
+      <p class="step-desc">מגדירים טריגר יומי בעזרת סרטון הדרכה קצר ותנו למערכת לעבוד בשבילכם</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     SECTION 5 — CREATOR
+══════════════════════════════════════ -->
+<section class="pt-creator">
+  <div class="creator-card fade-up">
+    <div class="creator-avatar">י.ת</div>
+    <div class="creator-body">
+      <div class="creator-title">בניתי את הכלי שחיפשתי בעצמי.</div>
+      <p class="creator-text">היי, אני יאיר תכלת. כמשקיע צעיר בישראל, חיפשתי דרך לנהל את הכסף שלי בצורה חכמה, בלי לשלם עמלות חודשיות מיותרות. בגלל שלא מצאתי כלי שעונה על כל הצרכים של השוק הישראלי והאמריקאי יחד – החלטתי לתכנת אותו בעצמי.</p>
+      <a href="/investor-academy/" class="creator-link">רוצים ללמוד איך להשקיע מאפס? ← קורס ההשקעות שלי</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     SECTION 6 — PRICING
+══════════════════════════════════════ -->
+<section class="pt-pricing">
+  <h2 class="pt-pricing-title fade-up">בחרו את המסלול שלכם. בלי דמי מנוי חודשיים.</h2>
+  <div class="pricing-grid">
+
+    <div class="pricing-card fade-up">
+      <div class="pricing-badge">תשלום חד פעמי</div>
+      <div class="pricing-name">המערכת בלבד</div>
+      <div class="pricing-price">149 ₪</div>
+      <ul class="pricing-list">
+        <li>✅ המערכת המלאה</li>
+        <li>✅ דוחות PDF</li>
+        <li>✅ עדכונים עתידיים</li>
+      </ul>
+      <div class="pricing-btn-disabled">בקרוב...</div>
+    </div>
+
+    <div class="pricing-card featured fade-up">
+      <div class="pricing-badge featured">הכי פופולרי</div>
+      <div class="pricing-name">חבילה מלאה</div>
+      <div class="pricing-price">499 ₪</div>
+      <div class="pricing-price-sub">קורס + מערכת</div>
+      <ul class="pricing-list">
+        <li>✅ קורס Investor Academy המלא</li>
+        <li>✅ מערכת מעקב התיק</li>
+        <li>✅ גישה לקהילה</li>
+        <li>✅ עדכונים עתידיים</li>
+      </ul>
+      <div class="pricing-btn-disabled">בקרוב...</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     SECTION 7 — FAQ
+══════════════════════════════════════ -->
+<section class="pt-faq">
+  <h2 class="pt-faq-title fade-up">שאלות נפוצות</h2>
+  <div class="faq-list">
+
+    <div class="faq-item">
+      <button class="faq-question">
+        <span>האם אני צריך לדעת לתכנת?</span>
+        <span class="faq-chevron">▾</span>
+      </button>
+      <div class="faq-answer"><p>ממש לא. המערכת מגיעה עם ממשק כפתורים בדיוק כמו אפליקציה רגילה, כולל מדריך וידאו לכל פעולה.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">
+        <span>מאילו בורסות המערכת שואבת נתונים?</span>
+        <span class="faq-chevron">▾</span>
+      </button>
+      <div class="faq-answer"><p>המערכת תומכת במניות ארה"ב (NASDAQ, NYSE), בורסת תל אביב, מדדים עולמיים ומטבעות.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">
+        <span>האם המידע שלי מאובטח?</span>
+        <span class="faq-chevron">▾</span>
+      </button>
+      <div class="faq-answer"><p>כן לחלוטין. המערכת יושבת בחשבון ה-Google Drive הפרטי שלכם. אף שרת חיצוני לא נוגע בנתונים שלכם.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">
+        <span>איך מחושבות העמלות?</span>
+        <span class="faq-chevron">▾</span>
+      </button>
+      <div class="faq-answer"><p>יש מסך הגדרות ייעודי להזנת מבנה העמלות של הברוקר שלכם והמערכת מחשבת הכל אוטומטית.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">
+        <span>האם זה עובד על מובייל?</span>
+        <span class="faq-chevron">▾</span>
+      </button>
+      <div class="faq-answer"><p>הדאשבורד האינטראקטיבי רספונסיבי ועובד על כל מכשיר.</p></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     SECTION 8 — FINAL CTA
+══════════════════════════════════════ -->
+<section class="pt-cta">
+  <h2>מוכנים לקחת את התיק שלכם לשלב הבא?</h2>
+  <p class="pt-cta-sub">הצטרפו לרשימת ההמתנה וקבלו גישה ראשונים כשהמוצר יוצא</p>
+
+  <div class="waitlist-wrap">
+    <div class="waitlist-success" id="cta-success"></div>
+    <div class="waitlist-error" id="cta-error"></div>
+    <form class="waitlist-form" id="cta-form">
+      <input type="email" name="email" required placeholder="הכניסו את האימייל שלכם">
+      <button type="submit" id="cta-btn">הצטרפו לרשימת ההמתנה</button>
+    </form>
+    <p class="waitlist-note">🔒 לא נשלח ספאם. תקבלו עדכון אחד כשהמוצר יוצא.</p>
+  </div>
+  <p class="waitlist-counter">👥 כבר 0 אנשים ברשימת ההמתנה</p>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">NewGen <span>Finance</span></div>
+      <div class="footer-tagline">הבית של משקיע הערך המתחיל</div>
+    </div>
+    <nav class="footer-links" aria-label="קישורים">
+      <a href="/">דף הבית</a>
+      <a href="/investor-academy/">הקורס</a>
+      <a href="/calculator/">המחשבון</a>
+      <a href="/investor-academy/game/">המשחק</a>
+      <a href="/portfolio-tracker/">מעקב תיק</a>
+      <a href="/about/">אודות</a>
+      <a href="/contact/">יצירת קשר</a>
+      <a href="/terms/">תנאי שימוש</a>
+    </nav>
+    <div class="footer-credit">נבנה עם ❤️ על ידי יאיר תכלת</div>
+  </div>
+</footer>
+
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="/assets/js/supabase-config.js"></script>
+<script>
+// ── Auth navbar ──
+(async () => {
+  const _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const { data: { session } } = await _sb.auth.getSession();
+  const navAuth = document.getElementById('nav-auth');
+  if (!session) {
+    navAuth.innerHTML =
+      '<a href="/auth/login/" class="nav-link-plain">התחברות</a>' +
+      '<a href="/auth/register/" class="nav-pill nav-pill-mint">הרשמה חינם</a>';
+  } else {
+    navAuth.innerHTML =
+      '<a href="/members/" class="nav-link-plain">אזור החברים</a>' +
+      '<button class="nav-pill" id="pt-signout">יציאה</button>';
+    document.getElementById('pt-signout').addEventListener('click', async () => {
+      await _sb.auth.signOut();
+      window.location.reload();
+    });
+  }
+})();
+
+// ── Fade-up observer ──
+(function () {
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+})();
+
+// ── FAQ accordion ──
+document.querySelectorAll('.faq-question').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  });
+});
+
+// ── Waitlist form handler ──
+async function submitWaitlist(formId, btnId, successId, errorId) {
+  const form = document.getElementById(formId);
+  const btn = document.getElementById(btnId);
+  const successEl = document.getElementById(successId);
+  const errorEl = document.getElementById(errorId);
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    btn.disabled = true;
+    btn.textContent = 'שולח...';
+    successEl.style.display = 'none';
+    errorEl.style.display = 'none';
+
+    const email = form.querySelector('input[type="email"]').value;
+
+    try {
+      const res = await fetch('https://formspree.io/f/xgonakzy', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ email, subject: 'Portfolio Tracker Waitlist', _subject: 'Portfolio Tracker Waitlist' })
+      });
+      if (res.ok) {
+        successEl.textContent = '!נרשמתם בהצלחה 🎉 נעדכן אתכם כשהמערכת תהיה מוכנה';
+        successEl.style.display = 'block';
+        form.reset();
+      } else { throw new Error(); }
+    } catch {
+      errorEl.textContent = 'שגיאה בשליחה. נסו שוב.';
+      errorEl.style.display = 'block';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'הצטרפו לרשימת ההמתנה';
+    }
+  });
+}
+
+submitWaitlist('hero-form', 'hero-btn', 'hero-success', 'hero-error');
+submitWaitlist('cta-form', 'cta-btn', 'cta-success', 'cta-error');
+</script>
+
+</body>
+</html>
