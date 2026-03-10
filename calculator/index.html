@@ -127,6 +127,16 @@ body.scrolled .topbar { box-shadow: var(--shadow-sm); }
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     max-width: 200px;
 }
+.course-nav-logo {
+    display: flex; align-items: center; gap: 0.6rem;
+    text-decoration: none; color: #b3e0dc;
+    font-family: 'Rubik', sans-serif; font-weight: 700; font-size: 1.1rem;
+}
+.course-nav-logo img {
+    height: 38px; width: 38px; object-fit: contain;
+    border-radius: 10px; background: rgba(179,224,220,0.12);
+    padding: 4px; flex-shrink: 0;
+}
 .topbar-center {
     display: flex; align-items: center; gap: 12px;
     opacity: 0; transform: translateY(-4px);
@@ -3239,7 +3249,8 @@ body.scrolled .topbar-center { opacity: 1; transform: translateY(0); pointer-eve
         <div class="topbar-right">
             <div class="topbar-brand">
                 <a href="/" class="course-nav-logo">
-                    <img src="/assets/images/logo.png" alt="NewGen Finance" style="height: 36px; width: auto;">
+                    <img src="/assets/images/logo.png" alt="NewGen Finance לוגו">
+                    <span>NewGen Finance</span>
                 </a>
             </div>
             <div class="topbar-sep"></div>

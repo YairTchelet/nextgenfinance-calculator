@@ -103,8 +103,8 @@
       border-bottom: 1px solid rgba(255,255,255,0.08);
     }
     .navbar-brand { display: flex; align-items: center; gap: 20px; }
-    .logo { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.3px; color: var(--text-light); direction: ltr; unicode-bidi: embed; }
-    .logo span { color: var(--teal); }
+    .logo { display: flex; align-items: center; gap: 0.6rem; text-decoration: none; color: #b3e0dc; font-weight: 700; font-size: 1.1rem; }
+    .logo img { height: 38px; width: 38px; object-fit: contain; border-radius: 10px; background: rgba(179,224,220,0.12); padding: 4px; flex-shrink: 0; }
     .nav-links { display: flex; align-items: center; gap: clamp(16px, 3vw, 36px); list-style: none; }
     .nav-links a { font-size: 0.95rem; font-weight: 500; color: var(--text-sub); transition: color var(--transition); }
     .nav-links a:hover { color: var(--text-light); }
@@ -583,7 +583,8 @@
         <span></span><span></span><span></span>
       </button>
       <a href="/" class="logo">
-        <img src="/assets/images/logo.png" alt="NewGen Finance" style="height: 36px; width: auto;">
+        <img src="/assets/images/logo.png" alt="NewGen Finance לוגו">
+        <span>NewGen Finance</span>
       </a>
       <div id="nav-auth" class="nav-auth"></div>
     </div>

@@ -54,14 +54,23 @@
     }
 
     .hp-nav-logo {
-      font-size: 1.2rem;
-      font-weight: 800;
-      color: #f0f8fa;
-      letter-spacing: -0.3px;
-      direction: ltr;
-      unicode-bidi: embed;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+      color: #b3e0dc;
+      font-weight: 700;
+      font-size: 1.1rem;
     }
-    .hp-nav-logo span { color: #b3e0dc; }
+    .hp-nav-logo img {
+      height: 38px;
+      width: 38px;
+      object-fit: contain;
+      border-radius: 10px;
+      background: rgba(179,224,220,0.12);
+      padding: 4px;
+      flex-shrink: 0;
+    }
 
     .hp-nav-auth {
       display: flex;
@@ -525,7 +534,8 @@
 <!-- ── NAVBAR ── -->
 <nav class="hp-nav">
   <a href="/" class="hp-nav-logo">
-    <img src="/assets/images/logo.png" alt="NewGen Finance" style="height: 36px; width: auto;">
+    <img src="/assets/images/logo.png" alt="NewGen Finance לוגו">
+    <span>NewGen Finance</span>
   </a>
   <div class="hp-nav-auth" id="nav-auth">
     <!-- Filled dynamically by JS -->
