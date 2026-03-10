@@ -1,0 +1,1566 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>מדריך ETF המלא 2026: מה זה, איך קונים ואיך ממוסים בישראל | NewGen Finance</title>
+  <meta name="description" content="המדריך המקיף ביותר על ETF בעברית. מה זה קרן סל, השוואת עמלות, מיסוי בישראל, ברוקרים ישראליים, ה-ETF הגדולים בעולם ולמה אפילו משקיעי ערך משתמשים בהם.">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="מדריך ETF המלא 2026 | NewGen Finance">
+  <meta property="og:description" content="המדריך המקיף ביותר על ETF בעברית — עם כלים אינטראקטיביים, מחשבון דמי ניהול וסימולטור צמיחה">
+  <meta property="og:url" content="https://www.newgenfinance.co.il/blog/etf-guide/">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://www.newgenfinance.co.il/assets/og-image.jpg">
+  <meta property="og:locale" content="he_IL">
+  <link rel="canonical" href="https://www.newgenfinance.co.il/blog/etf-guide/">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "מדריך ETF המלא 2026",
+    "description": "המדריך המקיף על ETF בעברית עם כלים אינטראקטיביים",
+    "author": {"@type": "Person", "name": "יאיר תכלת"},
+    "publisher": {"@type": "Organization", "name": "NewGen Finance"},
+    "datePublished": "2026-03-10",
+    "inLanguage": "he",
+    "url": "https://www.newgenfinance.co.il/blog/etf-guide/"
+  }
+  </script>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800;900&family=Assistant:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Shared styles -->
+  <link rel="stylesheet" href="/assets/css/course.css">
+
+  <!-- Vercel Analytics -->
+  <script defer src="/_vercel/insights/script.js"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Rubik', sans-serif;
+      background: linear-gradient(155deg, #0b4a64 0%, #1680a0 48%, #0d6a82 100%) fixed;
+      background-attachment: fixed;
+      color: #f0f8fa;
+      direction: rtl;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* ── NAVBAR ── */
+    .hp-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: 62px;
+      background: #0c3d52;
+      border-bottom: 1px solid rgba(179,224,220,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(1rem, 5vw, 3.5rem);
+    }
+    .hp-nav-logo {
+      display: flex; align-items: center; gap: 0.6rem;
+      text-decoration: none; color: #b3e0dc; font-weight: 700; font-size: 1.1rem;
+    }
+    .hp-nav-logo img {
+      height: 38px; width: 38px; object-fit: contain;
+      border-radius: 10px; background: rgba(179,224,220,0.12); padding: 4px; flex-shrink: 0;
+    }
+    .hp-nav-center { display: flex; align-items: center; gap: 1.5rem; flex: 1; justify-content: center; }
+    .hp-nav-link { font-size: 0.9rem; font-weight: 500; color: rgba(240,248,250,0.75); transition: color 0.18s; }
+    .hp-nav-link:hover { color: #f0f8fa; }
+    .hp-nav-auth { display: flex; align-items: center; gap: 0.75rem; }
+    .hp-nav-pill {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 0.42rem 1.1rem; border-radius: 20px; font-size: 0.875rem; font-weight: 700;
+      font-family: 'Rubik', sans-serif; cursor: pointer; border: 1.5px solid transparent;
+      transition: transform 0.15s, box-shadow 0.15s, background 0.15s, border-color 0.15s;
+    }
+    .hp-nav-pill:hover { transform: translateY(-1px); }
+    .hp-nav-pill-mint { background: #b3e0dc; color: #0c3d52; }
+    .hp-nav-pill-mint:hover { background: #8fc9c4; box-shadow: 0 4px 14px rgba(179,224,220,0.4); }
+    .hp-nav-pill-outline { background: transparent; color: rgba(240,248,250,0.8); border-color: rgba(240,248,250,0.35); }
+    .hp-nav-pill-outline:hover { border-color: rgba(240,248,250,0.7); color: #f0f8fa; background: rgba(255,255,255,0.06); }
+
+    /* ── PROGRESS BAR ── */
+    #reading-progress {
+      position: sticky;
+      top: 62px;
+      z-index: 99;
+      height: 4px;
+      background: rgba(255,255,255,0.08);
+    }
+    #reading-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: #b3e0dc;
+      transition: width 0.1s linear;
+    }
+
+    /* ── ARTICLE HEADER ── */
+    .article-header {
+      background: #0c3d52;
+      padding: clamp(2.5rem, 6vw, 4.5rem) clamp(1.25rem, 6vw, 4rem);
+      text-align: center;
+      border-bottom: 1px solid rgba(179,224,220,0.1);
+    }
+    .article-meta-top {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+    }
+    .article-category {
+      display: inline-block;
+      font-size: 0.72rem; font-weight: 700;
+      padding: 0.25rem 0.75rem; border-radius: 20px;
+      background: rgba(42,157,143,0.2); color: #7dd8d2;
+      border: 1px solid rgba(42,157,143,0.35);
+    }
+    .article-reading-time {
+      font-size: 0.8rem;
+      color: rgba(240,248,250,0.5);
+      font-family: 'Assistant', sans-serif;
+    }
+    .article-header h1 {
+      font-size: clamp(1.6rem, 4vw, 2.5rem);
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      color: #f0f8fa;
+      margin-bottom: 0.9rem;
+      line-height: 1.25;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .article-header .subtitle {
+      font-size: 1rem;
+      font-family: 'Assistant', sans-serif;
+      color: rgba(240,248,250,0.65);
+      max-width: 520px;
+      margin: 0 auto 1.5rem;
+      line-height: 1.7;
+    }
+    .article-tags {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .article-tag {
+      font-size: 0.75rem;
+      padding: 0.2rem 0.65rem;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.08);
+      color: rgba(240,248,250,0.6);
+      border: 1px solid rgba(255,255,255,0.12);
+      font-family: 'Assistant', sans-serif;
+    }
+
+    /* ── PAGE LAYOUT ── */
+    .article-layout {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2.5rem 1.25rem 4rem;
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 2.5rem;
+      align-items: start;
+    }
+
+    /* ── TOC SIDEBAR ── */
+    .toc-sidebar {
+      position: sticky;
+      top: 80px;
+    }
+    .toc-card {
+      background: rgba(236,232,229,0.97);
+      border-radius: 16px;
+      padding: 1.4rem 1.25rem;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+      color: #1a2e38;
+    }
+    .toc-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      color: #4a6472;
+      margin-bottom: 1rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 0.15rem; }
+    .toc-list li a {
+      display: block;
+      font-size: 0.85rem;
+      color: #4a6472;
+      padding: 0.35rem 0.5rem;
+      border-radius: 6px;
+      transition: background 0.15s, color 0.15s;
+      font-family: 'Assistant', sans-serif;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+    .toc-list li a:hover { background: rgba(42,157,143,0.1); color: #2a9d8f; }
+    .toc-list li a.toc-active { background: rgba(42,157,143,0.12); color: #21867a; font-weight: 700; }
+
+    /* ── ARTICLE BODY ── */
+    .article-body { min-width: 0; }
+
+    /* ── CARDS ── */
+    .card-light {
+      background: rgba(236,232,229,0.97);
+      border-radius: 18px;
+      padding: 2rem 1.75rem;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+      color: #1a2e38;
+      margin-bottom: 1.75rem;
+    }
+    .card-dark {
+      background: #0c3d52;
+      border-radius: 18px;
+      padding: 2rem 1.75rem;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.25);
+      color: #f0f8fa;
+      border: 1px solid rgba(179,224,220,0.12);
+      margin-bottom: 1.75rem;
+    }
+
+    .section-h2 {
+      font-size: 1.45rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      letter-spacing: -0.3px;
+    }
+    .section-h2-gradient {
+      background: linear-gradient(135deg, #2a9d8f, #0c3d52);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .section-h2-mint { color: #b3e0dc; }
+
+    .section-h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #1a2e38;
+      margin: 1.25rem 0 0.6rem;
+    }
+
+    .article-p {
+      font-size: 0.95rem;
+      font-family: 'Assistant', sans-serif;
+      color: #4a6472;
+      line-height: 1.8;
+      margin-bottom: 0.85rem;
+    }
+    .card-dark .article-p { color: rgba(240,248,250,0.75); }
+
+    .hook-p {
+      font-size: 1.05rem;
+      font-family: 'Assistant', sans-serif;
+      color: #1a2e38;
+      line-height: 1.8;
+      margin-bottom: 1.25rem;
+      font-weight: 500;
+      border-right: 3px solid #2a9d8f;
+      padding-right: 1rem;
+    }
+
+    /* ── ETF DIAGRAM ── */
+    .etf-diagram {
+      background: #0c3d52;
+      border-radius: 14px;
+      padding: 1.75rem;
+      margin: 1.25rem 0;
+      direction: ltr;
+    }
+    .diagram-inner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .diagram-stocks {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .diagram-stock-box {
+      background: rgba(179,224,220,0.1);
+      border: 1px solid rgba(179,224,220,0.3);
+      border-radius: 8px;
+      padding: 0.4rem 0.9rem;
+      font-size: 0.8rem;
+      color: #f0f8fa;
+      font-weight: 600;
+      text-align: center;
+    }
+    .diagram-dots {
+      font-size: 0.75rem;
+      color: rgba(179,224,220,0.5);
+      text-align: center;
+      padding: 0.25rem 0;
+    }
+    .diagram-arrow {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      color: #b3e0dc;
+    }
+    .diagram-arrow-line {
+      width: 40px;
+      height: 2px;
+      background: #b3e0dc;
+      position: relative;
+      transform-origin: right center;
+      transform: scaleX(0);
+      transition: transform 0.6s ease;
+    }
+    .diagram-arrow-line.animated { transform: scaleX(1); }
+    .diagram-arrow-head {
+      width: 0; height: 0;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-right: 8px solid #b3e0dc;
+      flex-shrink: 0;
+    }
+    .diagram-etf-box {
+      background: #2a9d8f;
+      border-radius: 12px;
+      padding: 0.75rem 1.25rem;
+      text-align: center;
+      font-weight: 800;
+      font-size: 0.9rem;
+      color: #fff;
+    }
+    .diagram-investor-box {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 12px;
+      padding: 0.75rem 1.25rem;
+      text-align: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: #f0f8fa;
+    }
+    .diagram-caption {
+      text-align: center;
+      font-size: 0.8rem;
+      color: rgba(240,248,250,0.55);
+      margin-top: 1rem;
+      font-family: 'Assistant', sans-serif;
+      direction: rtl;
+    }
+
+    /* ── COMPARISON TABLE ── */
+    .comparison-table-wrap { overflow-x: auto; margin-top: 1rem; }
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'Assistant', sans-serif;
+      font-size: 0.875rem;
+    }
+    .comparison-table th {
+      background: #0c3d52;
+      color: #f0f8fa;
+      padding: 0.75rem 1rem;
+      font-weight: 700;
+      text-align: center;
+      white-space: nowrap;
+    }
+    .comparison-table td {
+      padding: 0.65rem 1rem;
+      text-align: center;
+      color: #1a2e38;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+    .comparison-table tr:nth-child(even) td { background: rgba(0,0,0,0.03); }
+    .comparison-table td:first-child { text-align: right; font-weight: 600; }
+    .check { color: #2a9d8f; font-weight: 700; }
+    .cross { color: #e57373; font-weight: 700; }
+
+    /* ── ETF CARDS GRID ── */
+    .etf-cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.85rem;
+      margin-top: 1.25rem;
+    }
+    .etf-mini-card {
+      background: rgba(179,224,220,0.1);
+      border: 1px solid rgba(179,224,220,0.25);
+      border-radius: 12px;
+      padding: 1rem 1.1rem;
+    }
+    .etf-ticker {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #b3e0dc;
+      margin-bottom: 0.35rem;
+    }
+    .etf-desc {
+      font-size: 0.82rem;
+      color: rgba(240,248,250,0.7);
+      line-height: 1.55;
+      font-family: 'Assistant', sans-serif;
+    }
+
+    .note-box {
+      background: rgba(179,224,220,0.08);
+      border: 1px solid rgba(179,224,220,0.2);
+      border-radius: 10px;
+      padding: 0.9rem 1.1rem;
+      font-size: 0.875rem;
+      color: rgba(240,248,250,0.75);
+      font-family: 'Assistant', sans-serif;
+      line-height: 1.6;
+      margin-top: 1rem;
+    }
+
+    /* ── TAX COLUMNS ── */
+    .tax-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin-top: 1.25rem;
+    }
+    .tax-col {
+      background: rgba(0,0,0,0.03);
+      border-radius: 12px;
+      padding: 1.25rem;
+      border: 1px solid rgba(0,0,0,0.08);
+    }
+    .tax-col-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #1a2e38;
+      margin-bottom: 0.85rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #2a9d8f;
+    }
+    .tax-item {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 0.55rem;
+      font-size: 0.85rem;
+      font-family: 'Assistant', sans-serif;
+      color: #4a6472;
+      line-height: 1.5;
+    }
+    .tax-item-label { font-weight: 700; color: #1a2e38; flex-shrink: 0; }
+    .warning-box {
+      background: rgba(255,193,7,0.12);
+      border: 1px solid rgba(255,193,7,0.4);
+      border-radius: 10px;
+      padding: 0.9rem 1.1rem;
+      font-size: 0.875rem;
+      color: #5c4a00;
+      font-family: 'Assistant', sans-serif;
+      line-height: 1.6;
+      margin-top: 1.25rem;
+    }
+
+    /* ── ACCORDION STEPS ── */
+    .steps-list { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1.25rem; }
+    .step-item {
+      border: 1px solid rgba(0,0,0,0.09);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.25rem;
+      cursor: pointer;
+      background: rgba(0,0,0,0.02);
+      transition: background 0.18s;
+      user-select: none;
+    }
+    .step-header:hover { background: rgba(42,157,143,0.06); }
+    .step-number {
+      width: 36px; height: 36px;
+      background: #2a9d8f;
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.95rem;
+      flex-shrink: 0;
+    }
+    .step-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #1a2e38;
+      flex: 1;
+    }
+    .step-arrow {
+      color: #4a6472;
+      font-size: 0.85rem;
+      transition: transform 0.25s;
+    }
+    .step-item.open .step-arrow { transform: rotate(180deg); }
+    .step-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    .step-item.open .step-body { max-height: 200px; }
+    .step-content {
+      padding: 0.85rem 1.25rem 1.1rem 1.25rem;
+      font-size: 0.875rem;
+      font-family: 'Assistant', sans-serif;
+      color: #4a6472;
+      line-height: 1.7;
+      border-top: 1px solid rgba(0,0,0,0.06);
+    }
+
+    /* ── FEE CALCULATOR ── */
+    .calc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1.25rem;
+    }
+    .calc-field { display: flex; flex-direction: column; gap: 0.4rem; }
+    .calc-label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: rgba(240,248,250,0.7);
+      font-family: 'Assistant', sans-serif;
+    }
+    .calc-input {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(179,224,220,0.25);
+      border-radius: 8px;
+      padding: 0.6rem 0.85rem;
+      color: #f0f8fa;
+      font-size: 0.95rem;
+      font-family: 'Rubik', sans-serif;
+      outline: none;
+      transition: border-color 0.18s;
+      width: 100%;
+    }
+    .calc-input:focus { border-color: #b3e0dc; }
+    .calc-slider-row { display: flex; align-items: center; gap: 0.75rem; }
+    .calc-slider {
+      flex: 1;
+      accent-color: #b3e0dc;
+      cursor: pointer;
+    }
+    .calc-slider-val {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #b3e0dc;
+      min-width: 45px;
+      text-align: left;
+    }
+    .calc-results {
+      margin-top: 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .calc-result-box {
+      background: rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 1rem 1.1rem;
+      text-align: center;
+    }
+    .calc-result-label {
+      font-size: 0.78rem;
+      color: rgba(240,248,250,0.55);
+      font-family: 'Assistant', sans-serif;
+      margin-bottom: 0.35rem;
+    }
+    .calc-result-val {
+      font-size: 1.4rem;
+      font-weight: 800;
+    }
+    .val-mint { color: #b3e0dc; }
+    .val-red { color: #f08080; }
+    .calc-diff {
+      background: rgba(179,224,220,0.08);
+      border: 1px solid rgba(179,224,220,0.2);
+      border-radius: 10px;
+      padding: 0.85rem 1.1rem;
+      text-align: center;
+      margin-top: 0.85rem;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #f0f8fa;
+    }
+    .calc-diff span { color: #b3e0dc; }
+    .bar-chart {
+      margin-top: 1.25rem;
+      display: flex;
+      gap: 1.25rem;
+      align-items: flex-end;
+      height: 100px;
+    }
+    .bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.4rem; }
+    .bar {
+      width: 100%;
+      border-radius: 6px 6px 0 0;
+      transition: height 0.4s ease;
+      min-height: 4px;
+    }
+    .bar-a { background: #b3e0dc; }
+    .bar-b { background: #f08080; }
+    .bar-label { font-size: 0.75rem; color: rgba(240,248,250,0.6); font-family: 'Assistant', sans-serif; }
+
+    /* ── GROWTH SIMULATOR ── */
+    .sim-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1.25rem;
+    }
+    .sim-field { display: flex; flex-direction: column; gap: 0.4rem; }
+    .sim-label { font-size: 0.82rem; font-weight: 600; color: #4a6472; font-family: 'Assistant', sans-serif; }
+    .sim-input {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.12);
+      border-radius: 8px;
+      padding: 0.6rem 0.85rem;
+      color: #1a2e38;
+      font-size: 0.95rem;
+      font-family: 'Rubik', sans-serif;
+      outline: none;
+      transition: border-color 0.18s;
+      width: 100%;
+    }
+    .sim-input:focus { border-color: #2a9d8f; }
+    .sim-slider-row { display: flex; align-items: center; gap: 0.75rem; }
+    .sim-slider { flex: 1; accent-color: #2a9d8f; cursor: pointer; }
+    .sim-slider-val { font-size: 0.9rem; font-weight: 700; color: #2a9d8f; min-width: 45px; text-align: left; }
+    .sim-results {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.85rem;
+      margin-top: 1.5rem;
+    }
+    .sim-result-box { border-radius: 12px; padding: 1rem; text-align: center; border: 1px solid rgba(0,0,0,0.08); }
+    .sim-result-label { font-size: 0.75rem; color: #6b7280; font-family: 'Assistant', sans-serif; margin-bottom: 0.35rem; }
+    .sim-result-val { font-size: 1.25rem; font-weight: 800; }
+    .sim-val-gray { color: #6b7280; }
+    .sim-val-mint { color: #2a9d8f; font-size: 1.5rem; }
+    .sim-val-green { color: #059669; }
+    .svg-wrap {
+      margin-top: 1.25rem;
+      background: #0c3d52;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    #growth-svg { width: 100%; display: block; }
+    .svg-tooltip {
+      position: fixed;
+      background: #0c3d52;
+      color: #f0f8fa;
+      padding: 0.45rem 0.8rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-family: 'Assistant', sans-serif;
+      pointer-events: none;
+      border: 1px solid rgba(179,224,220,0.3);
+      z-index: 50;
+      display: none;
+    }
+
+    /* ── VALUE INVESTOR CARDS ── */
+    .vi-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1.25rem;
+    }
+    .vi-card {
+      background: rgba(179,224,220,0.1);
+      border: 1px solid rgba(179,224,220,0.2);
+      border-radius: 12px;
+      padding: 1.1rem 1.15rem;
+    }
+    .vi-card-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+    .vi-card-title { font-size: 0.9rem; font-weight: 700; color: #b3e0dc; margin-bottom: 0.4rem; }
+    .vi-card-desc { font-size: 0.82rem; color: rgba(240,248,250,0.7); font-family: 'Assistant', sans-serif; line-height: 1.6; }
+
+    /* ── ARTICLE QUOTE ── */
+    .article-quote {
+      margin: 1.5rem 0;
+      padding: 1.5rem;
+      border-right: 4px solid #b3e0dc;
+      background: rgba(179,224,220,0.07);
+      border-radius: 0 12px 12px 0;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .article-quote.visible { opacity: 1; transform: translateY(0); }
+    .article-quote blockquote {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #f0f8fa;
+      line-height: 1.6;
+      margin-bottom: 0.5rem;
+    }
+    .article-quote cite { font-size: 0.85rem; color: #b3e0dc; font-style: normal; }
+
+    /* ── AUTHOR CARD ── */
+    .author-card {
+      background: rgba(236,232,229,0.97);
+      border-radius: 16px;
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1.1rem;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+      margin-bottom: 1.25rem;
+      color: #1a2e38;
+    }
+    .author-avatar {
+      width: 56px; height: 56px;
+      background: #2a9d8f;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: 800;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .author-name { font-size: 1rem; font-weight: 700; color: #1a2e38; margin-bottom: 0.2rem; }
+    .author-bio { font-size: 0.85rem; color: #4a6472; font-family: 'Assistant', sans-serif; line-height: 1.55; }
+    .author-link {
+      font-size: 0.82rem;
+      color: #2a9d8f;
+      font-weight: 600;
+      margin-top: 0.35rem;
+      display: inline-block;
+    }
+    .author-link:hover { text-decoration: underline; }
+
+    /* ── SHARE ── */
+    .share-section {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 14px;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+    }
+    .share-label { font-size: 0.9rem; font-weight: 700; color: rgba(240,248,250,0.8); }
+    .share-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      background: rgba(179,224,220,0.12);
+      border: 1px solid rgba(179,224,220,0.25);
+      color: #b3e0dc;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'Rubik', sans-serif;
+      transition: background 0.18s;
+    }
+    .share-btn:hover { background: rgba(179,224,220,0.2); }
+
+    /* ── NEXT ARTICLE ── */
+    .next-article {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.25rem;
+      opacity: 0.65;
+    }
+    .next-label { font-size: 0.75rem; color: rgba(240,248,250,0.45); font-family: 'Assistant', sans-serif; margin-bottom: 0.35rem; }
+    .next-title { font-size: 0.95rem; font-weight: 700; color: rgba(240,248,250,0.6); }
+
+    /* ── BACK BTN ── */
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.65rem 1.25rem;
+      border-radius: 10px;
+      background: rgba(179,224,220,0.12);
+      border: 1px solid rgba(179,224,220,0.25);
+      color: #b3e0dc;
+      font-size: 0.9rem;
+      font-weight: 600;
+      font-family: 'Rubik', sans-serif;
+      transition: background 0.18s;
+    }
+    .back-btn:hover { background: rgba(179,224,220,0.2); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #0c3d52;
+      border-top: 1px solid rgba(179,224,220,0.1);
+      padding: 2.5rem clamp(1.25rem, 6vw, 4rem);
+    }
+    .footer-inner {
+      max-width: 1060px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr auto 1fr;
+      align-items: center; gap: 2rem;
+    }
+    .footer-logo { font-size: 1rem; font-weight: 800; color: #f0f8fa; direction: ltr; unicode-bidi: embed; margin-bottom: 0.3rem; }
+    .footer-logo span { color: #b3e0dc; }
+    .footer-tagline { font-size: 0.78rem; font-family: 'Assistant', sans-serif; color: rgba(240,248,250,0.42); }
+    .footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.2rem 1.25rem; }
+    .footer-links a { font-size: 0.82rem; color: rgba(240,248,250,0.52); transition: color 0.18s; }
+    .footer-links a:hover { color: #f0f8fa; }
+    .footer-credit { text-align: left; font-size: 0.78rem; font-family: 'Assistant', sans-serif; color: rgba(240,248,250,0.38); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 860px) {
+      .article-layout { grid-template-columns: 1fr; }
+      .toc-sidebar { position: static; }
+      .toc-card { margin-bottom: 1.5rem; }
+      .calc-grid { grid-template-columns: 1fr; }
+      .calc-results { grid-template-columns: 1fr; }
+      .sim-grid { grid-template-columns: 1fr; }
+      .sim-results { grid-template-columns: 1fr; }
+      .tax-columns { grid-template-columns: 1fr; }
+      .etf-cards-grid { grid-template-columns: 1fr; }
+      .vi-grid { grid-template-columns: 1fr; }
+      .footer-inner { grid-template-columns: 1fr; text-align: center; }
+      .footer-credit { text-align: center; }
+      .hp-nav-link { display: none; }
+    }
+    @media (max-width: 540px) {
+      .card-light, .card-dark { padding: 1.35rem 1.1rem; }
+      .diagram-inner { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="hp-nav">
+  <a href="/" class="hp-nav-logo">
+    <img src="/assets/images/logo.png" alt="NewGen Finance לוגו">
+    <span>NewGen Finance</span>
+  </a>
+  <div class="hp-nav-center">
+    <a href="/about/" class="hp-nav-link">אודות</a>
+    <a href="/blog/" class="hp-nav-link">בלוג</a>
+  </div>
+  <div class="hp-nav-auth" id="nav-auth"></div>
+</nav>
+
+<!-- PROGRESS BAR -->
+<div id="reading-progress"><div id="reading-progress-bar"></div></div>
+
+<!-- ARTICLE HEADER -->
+<div class="article-header">
+  <div class="article-meta-top">
+    <span class="article-category">יסודות</span>
+    <span class="article-reading-time">⏱ 12 דקות קריאה · מרץ 2026</span>
+  </div>
+  <h1>מדריך ETF המלא 2026: מה זה, איך קונים ואיך ממוסים בישראל</h1>
+  <p class="subtitle">המדריך המקיף ביותר על ETF בעברית — עם כלים אינטראקטיביים, מחשבון דמי ניהול וסימולטור צמיחה</p>
+  <div class="article-tags">
+    <span class="article-tag">ETF</span>
+    <span class="article-tag">קרנות סל</span>
+    <span class="article-tag">מיסוי</span>
+    <span class="article-tag">ברוקרים ישראליים</span>
+    <span class="article-tag">מתחילים</span>
+  </div>
+</div>
+
+<!-- LAYOUT -->
+<div class="article-layout">
+
+  <!-- TOC -->
+  <aside class="toc-sidebar" id="toc-sidebar">
+    <div class="toc-card">
+      <div class="toc-title">תוכן עניינים</div>
+      <ul class="toc-list">
+        <li><a href="#what-is-etf" class="toc-link">מה זה ETF בכלל?</a></li>
+        <li><a href="#etf-vs" class="toc-link">ETF vs קרן נאמנות vs מניה</a></li>
+        <li><a href="#big-etfs" class="toc-link">ה-ETF הגדולים בעולם</a></li>
+        <li><a href="#tax" class="toc-link">מיסוי ETF בישראל</a></li>
+        <li><a href="#how-to-buy" class="toc-link">איך קונים ETF?</a></li>
+        <li><a href="#fee-calculator" class="toc-link">מחשבון דמי ניהול</a></li>
+        <li><a href="#growth-simulator" class="toc-link">סימולטור צמיחה</a></li>
+        <li><a href="#value-investors" class="toc-link">למה משקיעי ערך קונים ETF?</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <!-- ARTICLE BODY -->
+  <main class="article-body">
+
+    <!-- SECTION 1 -->
+    <div class="card-light" id="what-is-etf">
+      <h2 class="section-h2 section-h2-gradient">מה זה ETF בכלל?</h2>
+      <p class="hook-p">דמיינו שאתם רוצים להשקיע ב-500 החברות הגדולות בארה"ב בבת אחת. לא 500 עסקאות נפרדות — עסקה אחת, עמלה אחת, ניהול אפס. זה בדיוק מה ש-ETF מאפשר.</p>
+      <h3 class="section-h3">ההגדרה הפשוטה</h3>
+      <p class="article-p">ETF = Exchange Traded Fund = קרן סל. מדובר בסל של ניירות ערך שנסחר בבורסה כמו מניה רגילה. ETF עוקב אחרי מדד (index), סקטור, סחורה או אסטרטגיה — ומאפשר לכם לקבל חשיפה לעשרות, מאות ואפילו אלפי נכסים בעסקה אחת פשוטה.</p>
+
+      <!-- Animated Diagram -->
+      <div class="etf-diagram">
+        <div class="diagram-inner" id="etf-diagram">
+          <div style="direction:rtl;">
+            <div class="diagram-stocks">
+              <div class="diagram-stock-box">מניה 1 — Apple</div>
+              <div class="diagram-stock-box">מניה 2 — Microsoft</div>
+              <div class="diagram-stock-box">מניה 3 — Amazon</div>
+              <div class="diagram-dots">... מניה 500</div>
+            </div>
+          </div>
+          <div class="diagram-arrow" style="transform:scaleX(-1);">
+            <div class="diagram-arrow-line" id="arrow-1"></div>
+            <div class="diagram-arrow-head"></div>
+          </div>
+          <div class="diagram-etf-box">ETF<br>S&amp;P 500</div>
+          <div class="diagram-arrow" style="transform:scaleX(-1);">
+            <div class="diagram-arrow-line" id="arrow-2"></div>
+            <div class="diagram-arrow-head"></div>
+          </div>
+          <div class="diagram-investor-box">המשקיע שלך 💼</div>
+        </div>
+        <div class="diagram-caption">במקום לקנות 500 מניות בנפרד, קונים יחידה אחת של ETF שמחזיקה את כולן</div>
+      </div>
+    </div>
+
+    <!-- SECTION 2 -->
+    <div class="card-light" id="etf-vs">
+      <h2 class="section-h2 section-h2-gradient">ETF vs קרן נאמנות vs מניה בודדת</h2>
+      <div class="comparison-table-wrap">
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>מאפיין</th>
+              <th>ETF</th>
+              <th>קרן נאמנות</th>
+              <th>מניה בודדת</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>נסחר בבורסה בזמן אמת</td>
+              <td class="check">✅</td>
+              <td class="cross">❌</td>
+              <td class="check">✅</td>
+            </tr>
+            <tr>
+              <td>פיזור אוטומטי</td>
+              <td class="check">✅</td>
+              <td class="check">✅</td>
+              <td class="cross">❌</td>
+            </tr>
+            <tr>
+              <td>דמי ניהול</td>
+              <td>נמוכים מאוד<br><small style="color:#6b7280;">(0.03%–0.5%)</small></td>
+              <td>בינוניים–גבוהים<br><small style="color:#6b7280;">(0.5%–2%)</small></td>
+              <td>אין</td>
+            </tr>
+            <tr>
+              <td>שקיפות מלאה</td>
+              <td class="check">✅</td>
+              <td>חלקית</td>
+              <td class="check">✅</td>
+            </tr>
+            <tr>
+              <td>ניהול פסיבי</td>
+              <td class="check">✅ (רוב)</td>
+              <td>לרוב אקטיבי</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td>מינימום השקעה</td>
+              <td>מחיר יחידה אחת</td>
+              <td>לרוב 1,000₪+</td>
+              <td>מחיר מניה אחת</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SECTION 3 -->
+    <div class="card-dark" id="big-etfs">
+      <h2 class="section-h2 section-h2-mint">ה-ETF הגדולים בעולם</h2>
+      <p class="article-p">אלו ה-ETF שכדאי להכיר — הם מנהלים טריליוני דולרים ומהווים את עמוד השדרה של תיקי השקעות פסיביים ברחבי העולם.</p>
+      <div class="etf-cards-grid">
+        <div class="etf-mini-card">
+          <div class="etf-ticker">SPY / VOO</div>
+          <div class="etf-desc">עוקב אחרי S&amp;P 500 — 500 החברות הגדולות בארה"ב. דמי ניהול: 0.03%–0.09%</div>
+        </div>
+        <div class="etf-mini-card">
+          <div class="etf-ticker">QQQ</div>
+          <div class="etf-desc">עוקב אחרי NASDAQ 100 — 100 חברות הטכנולוגיה הגדולות. דמי ניהול: 0.2%</div>
+        </div>
+        <div class="etf-mini-card">
+          <div class="etf-ticker">VTI</div>
+          <div class="etf-desc">כל שוק המניות האמריקאי — מעל 4,000 חברות. דמי ניהול: 0.03%</div>
+        </div>
+        <div class="etf-mini-card">
+          <div class="etf-ticker">VT</div>
+          <div class="etf-desc">כל שוק המניות העולמי — מעל 9,000 חברות מ-50 מדינות. דמי ניהול: 0.07%</div>
+        </div>
+        <div class="etf-mini-card">
+          <div class="etf-ticker">תכלית S&P 500</div>
+          <div class="etf-desc">ETF ישראלי העוקב אחרי S&amp;P 500 — נוח לרכישה בברוקרים ישראליים. דמי ניהול: ~0.5%</div>
+        </div>
+        <div class="etf-mini-card">
+          <div class="etf-ticker">מגדל S&P 500</div>
+          <div class="etf-desc">ETF ישראלי נוסף על S&amp;P 500. זמין בכל הברוקרים הישראליים. דמי ניהול: ~0.5%</div>
+        </div>
+      </div>
+      <div class="note-box">💡 ETF ישראליים (תכלית, מגדל, קסם) נוחים יותר לרכישה בברוקרים ישראליים ויש להם יתרון מיסויי מסוים</div>
+    </div>
+
+    <!-- SECTION 4 -->
+    <div class="card-light" id="tax">
+      <h2 class="section-h2 section-h2-gradient">מיסוי ETF בישראל</h2>
+      <p class="article-p">זה החלק שרוב המדריכים מדלגים עליו — ובדיוק בגלל זה כדאי להבין אותו.</p>
+      <div class="tax-columns">
+        <div class="tax-col">
+          <div class="tax-col-title">ETF זר (אמריקאי)</div>
+          <div class="tax-item"><span class="tax-item-label">רווח הון:</span> 25% מס</div>
+          <div class="tax-item"><span class="tax-item-label">דיבידנד:</span> 25% מס (15% נוכה במקור בארה"ב, 10% יתרה לישראל)</div>
+          <div class="tax-item"><span class="tax-item-label">מס עיזבון:</span> עשוי לחול על ישראלים מעל $60,000</div>
+          <div class="tax-item"><span class="tax-item-label">דיווח:</span> דרוש דיווח עצמי לרשות המיסים</div>
+        </div>
+        <div class="tax-col">
+          <div class="tax-col-title">ETF ישראלי (תכלית/מגדל)</div>
+          <div class="tax-item"><span class="tax-item-label">רווח הון:</span> 25% מס</div>
+          <div class="tax-item"><span class="tax-item-label">דיבידנד:</span> מחולק אוטומטית ואין כפל מס</div>
+          <div class="tax-item"><span class="tax-item-label">מס עיזבון:</span> לא חל</div>
+          <div class="tax-item"><span class="tax-item-label">דיווח:</span> הברוקר מנכה במקור — פשוט יותר</div>
+        </div>
+      </div>
+      <div class="warning-box">⚠️ המידע כאן הוא כללי ולצורכי לימוד בלבד. לייעוץ מס אישי פנו לרואה חשבון.</div>
+    </div>
+
+    <!-- SECTION 5 -->
+    <div class="card-light" id="how-to-buy">
+      <h2 class="section-h2 section-h2-gradient">איך קונים ETF דרך ברוקר ישראלי?</h2>
+      <p class="article-p">בישראל יש כמה דרכים לרכוש ETF. הנה המדריך המעשי.</p>
+      <div class="steps-list">
+
+        <div class="step-item" data-step>
+          <div class="step-header" onclick="toggleStep(this)">
+            <div class="step-number">1</div>
+            <div class="step-title">פתיחת חשבון ברוקר</div>
+            <span class="step-arrow">▼</span>
+          </div>
+          <div class="step-body">
+            <div class="step-content">הברוקרים הפופולריים בישראל: מיטב טרייד, IBI, אקסלנס, פסגות. לפתיחת חשבון תצטרכו: תעודת זהות, אסמכתא לחשבון בנק, טופס W-8BEN לרכישת ני"ע אמריקאים.</div>
+          </div>
+        </div>
+
+        <div class="step-item" data-step>
+          <div class="step-header" onclick="toggleStep(this)">
+            <div class="step-number">2</div>
+            <div class="step-title">איתור ה-ETF — Bizportal</div>
+            <span class="step-arrow">▼</span>
+          </div>
+          <div class="step-body">
+            <div class="step-content">גשו ל-bizportal.co.il → סורק ני"ע → קרנות סל. ניתן לסנן לפי: מדד עוקב, דמי ניהול, היקף נכסים. לחיפוש ETF אמריקאי — חפשו לפי ticker (SPY, VOO, QQQ) בממשק הברוקר ישירות.</div>
+          </div>
+        </div>
+
+        <div class="step-item" data-step>
+          <div class="step-header" onclick="toggleStep(this)">
+            <div class="step-number">3</div>
+            <div class="step-title">ביצוע עסקה</div>
+            <span class="step-arrow">▼</span>
+          </div>
+          <div class="step-body">
+            <div class="step-content">בחרו "קנייה", הזינו את מספר היחידות או הסכום, בחרו "מחיר שוק" (Market Order) לביצוע מיידי או "מחיר מוגבל" (Limit Order) למחיר ספציפי. בדקו עמלות לפני אישור.</div>
+          </div>
+        </div>
+
+        <div class="step-item" data-step>
+          <div class="step-header" onclick="toggleStep(this)">
+            <div class="step-number">4</div>
+            <div class="step-title">מעקב ודיווח מס</div>
+            <span class="step-arrow">▼</span>
+          </div>
+          <div class="step-body">
+            <div class="step-content">עקבו אחרי הביצועים דרך הברוקר. בסוף שנה — הברוקר ישלח טופס 867 (ני"ע זרים) לדיווח לרשות המיסים. ETF ישראלי — הברוקר מנכה מס במקור.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- WIDGET 1: FEE CALCULATOR -->
+    <div class="card-dark" id="fee-calculator">
+      <h2 class="section-h2 section-h2-mint">מחשבון: כמה עולים לכם דמי הניהול לאורך זמן?</h2>
+      <p class="article-p">הפרש של 0.5% בדמי ניהול נשמע זניח — אבל לאורך שנים זה אלפי שקלים</p>
+
+      <div class="calc-grid">
+        <div class="calc-field">
+          <label class="calc-label">סכום השקעה ראשוני (₪)</label>
+          <input class="calc-input" type="number" id="fc-initial" value="50000" min="0">
+        </div>
+        <div class="calc-field">
+          <label class="calc-label">תוספת חודשית (₪)</label>
+          <input class="calc-input" type="number" id="fc-monthly" value="1000" min="0">
+        </div>
+        <div class="calc-field">
+          <label class="calc-label">תשואה שנתית צפויה — <span id="fc-return-val">7</span>%</label>
+          <div class="calc-slider-row">
+            <input class="calc-slider" type="range" id="fc-return" min="1" max="15" value="7">
+          </div>
+        </div>
+        <div class="calc-field">
+          <label class="calc-label">שנות השקעה — <span id="fc-years-val">20</span> שנה</label>
+          <div class="calc-slider-row">
+            <input class="calc-slider" type="range" id="fc-years" min="5" max="40" value="20">
+          </div>
+        </div>
+        <div class="calc-field">
+          <label class="calc-label">דמי ניהול ETF א' (%)</label>
+          <input class="calc-input" type="number" id="fc-fee-a" value="0.07" min="0" max="5" step="0.01">
+        </div>
+        <div class="calc-field">
+          <label class="calc-label">דמי ניהול ETF ב' (%)</label>
+          <input class="calc-input" type="number" id="fc-fee-b" value="0.75" min="0" max="5" step="0.01">
+        </div>
+      </div>
+
+      <div class="calc-results">
+        <div class="calc-result-box">
+          <div class="calc-result-label">שווי תיק א' (דמי ניהול נמוכים)</div>
+          <div class="calc-result-val val-mint" id="fc-val-a">—</div>
+        </div>
+        <div class="calc-result-box">
+          <div class="calc-result-label">שווי תיק ב' (דמי ניהול גבוהים)</div>
+          <div class="calc-result-val val-red" id="fc-val-b">—</div>
+        </div>
+      </div>
+      <div class="calc-diff" id="fc-diff">חסכתם — ₪ בדמי ניהול</div>
+
+      <div class="bar-chart" id="fc-bar-chart">
+        <div class="bar-wrap">
+          <div class="bar bar-a" id="bar-a" style="height:80px;"></div>
+          <div class="bar-label">תיק א'</div>
+        </div>
+        <div class="bar-wrap">
+          <div class="bar bar-b" id="bar-b" style="height:80px;"></div>
+          <div class="bar-label">תיק ב'</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WIDGET 2: GROWTH SIMULATOR -->
+    <div class="card-light" id="growth-simulator">
+      <h2 class="section-h2 section-h2-gradient">סימולטור: תראו את הכסף שלכם גדל</h2>
+
+      <div class="sim-grid">
+        <div class="sim-field">
+          <label class="sim-label">סכום התחלתי (₪)</label>
+          <input class="sim-input" type="number" id="gs-initial" value="10000" min="0">
+        </div>
+        <div class="sim-field">
+          <label class="sim-label">השקעה חודשית (₪)</label>
+          <input class="sim-input" type="number" id="gs-monthly" value="500" min="0">
+        </div>
+        <div class="sim-field">
+          <label class="sim-label">תשואה שנתית — <span id="gs-return-val">8</span>%</label>
+          <div class="sim-slider-row">
+            <input class="sim-slider" type="range" id="gs-return" min="1" max="15" value="8">
+          </div>
+        </div>
+        <div class="sim-field">
+          <label class="sim-label">תקופה — <span id="gs-years-val">25</span> שנים</label>
+          <div class="sim-slider-row">
+            <input class="sim-slider" type="range" id="gs-years" min="5" max="40" value="25">
+          </div>
+        </div>
+      </div>
+
+      <div class="sim-results">
+        <div class="sim-result-box">
+          <div class="sim-result-label">סך הכסף שהשקעתם</div>
+          <div class="sim-result-val sim-val-gray" id="gs-invested">—</div>
+        </div>
+        <div class="sim-result-box" style="border-color:rgba(42,157,143,0.3);background:rgba(42,157,143,0.05);">
+          <div class="sim-result-label">שווי התיק הצפוי</div>
+          <div class="sim-result-val sim-val-mint" id="gs-total">—</div>
+        </div>
+        <div class="sim-result-box" style="border-color:rgba(5,150,105,0.3);background:rgba(5,150,105,0.05);">
+          <div class="sim-result-label">רווח מריבית דריבית</div>
+          <div class="sim-result-val sim-val-green" id="gs-profit">—</div>
+        </div>
+      </div>
+
+      <div class="svg-wrap">
+        <svg id="growth-svg" viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="lineGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#b3e0dc" stop-opacity="0.4"/>
+              <stop offset="100%" stop-color="#b3e0dc" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <!-- Grid and content rendered by JS -->
+        </svg>
+      </div>
+      <div id="svg-tooltip" class="svg-tooltip"></div>
+    </div>
+
+    <!-- SECTION 6 -->
+    <div class="card-dark" id="value-investors">
+      <h2 class="section-h2 section-h2-mint">למה אפילו משקיעי ערך קונים ETF?</h2>
+      <p class="article-p">וורן באפט עצמו אמר שלאחר מותו, 90% מהכסף שישאיר לאשתו יושקע ב-S&amp;P 500 index fund. איך זה מסתדר עם השקעות ערך?</p>
+      <div class="vi-grid">
+        <div class="vi-card">
+          <div class="vi-card-icon">🛡️</div>
+          <div class="vi-card-title">בסיס יציב לתיק</div>
+          <div class="vi-card-desc">ETF על המדד הוא ה"בסיס" של התיק — מספק פיזור ויציבות בזמן שאתם מחפשים השקעות ערך ספציפיות</div>
+        </div>
+        <div class="vi-card">
+          <div class="vi-card-icon">📊</div>
+          <div class="vi-card-title">benchmark להשוואה</div>
+          <div class="vi-card-desc">אם התיק שלכם לא מכה את ה-S&amp;P 500 לאורך זמן — אולי כדאי פשוט להשקיע ב-ETF</div>
+        </div>
+        <div class="vi-card">
+          <div class="vi-card-icon">🚀</div>
+          <div class="vi-card-title">מתאים למתחילים</div>
+          <div class="vi-card-desc">לפני שמתחילים לבחור מניות בודדות, ETF מלמד אתכם להיות בשוק, לספוג תנודות ולחשוב לטווח ארוך</div>
+        </div>
+        <div class="vi-card">
+          <div class="vi-card-icon">⏰</div>
+          <div class="vi-card-title">חוסך זמן</div>
+          <div class="vi-card-desc">לא תמיד יש זמן לנתח חברות. ETF מאפשר לשמור על חשיפה לשוק בלי ניהול אקטיבי</div>
+        </div>
+      </div>
+
+      <div class="article-quote" id="buffett-quote">
+        <blockquote>"עבור רוב המשקיעים — לא המקצועיים — S&amp;P 500 index fund בעלויות נמוכות הוא ההשקעה ההגיונית ביותר"</blockquote>
+        <cite>— וורן באפט</cite>
+      </div>
+    </div>
+
+    <!-- AUTHOR CARD -->
+    <div class="author-card">
+      <div class="author-avatar">י.ת</div>
+      <div>
+        <div class="author-name">נכתב על ידי יאיר תכלת</div>
+        <div class="author-bio">מייסד NewGen Finance. משקיע ערך, מחנך פיננסי, ובונה כלים שעוזרים למשקיעים מתחילים להתחיל נכון.</div>
+        <a href="/about/" class="author-link">קרא עוד אודות יאיר ←</a>
+      </div>
+    </div>
+
+    <!-- SHARE -->
+    <div class="share-section">
+      <span class="share-label">אהבתם? שתפו:</span>
+      <button class="share-btn" onclick="copyLink()">🔗 העתק קישור</button>
+    </div>
+
+    <!-- NEXT ARTICLE -->
+    <div class="next-article">
+      <div class="next-label">המאמר הבא</div>
+      <div class="next-title">מניות vs ETF — מתי כל אחד מתאים? ← בקרוב</div>
+    </div>
+
+    <!-- BACK TO BLOG -->
+    <a href="/blog/" class="back-btn">← חזרה לבלוג</a>
+
+  </main>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">NewGen <span>Finance</span></div>
+      <div class="footer-tagline">הבית של משקיע הערך המתחיל</div>
+    </div>
+    <nav class="footer-links" aria-label="קישורים">
+      <a href="/">דף הבית</a>
+      <a href="/investor-academy/">הקורס</a>
+      <a href="/calculator/">המחשבון</a>
+      <a href="/investor-academy/game/">המשחק</a>
+      <a href="/portfolio-tracker/">מעקב תיק</a>
+      <a href="/blog/">בלוג</a>
+      <a href="/about/">אודות</a>
+      <a href="/contact/">יצירת קשר</a>
+      <a href="/terms/">תנאי שימוש</a>
+    </nav>
+    <div class="footer-credit">נבנה עם ❤️ על ידי יאיר תכלת</div>
+  </div>
+</footer>
+
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="/assets/js/supabase-config.js"></script>
+<script>
+// ── Auth ──
+(async () => {
+  const _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const { data: { session } } = await _sb.auth.getSession();
+  const navAuth = document.getElementById('nav-auth');
+  if (!session) {
+    navAuth.innerHTML =
+      '<a href="/auth/login/" class="hp-nav-link">התחברות</a>' +
+      '<a href="/auth/register/" class="hp-nav-pill hp-nav-pill-mint">הרשמה חינם</a>';
+  } else {
+    navAuth.innerHTML =
+      '<a href="/members/" class="hp-nav-link">אזור החברים</a>' +
+      '<button class="hp-nav-pill hp-nav-pill-outline" id="hp-signout">יציאה</button>';
+    document.getElementById('hp-signout').addEventListener('click', async () => {
+      await _sb.auth.signOut(); window.location.reload();
+    });
+  }
+})();
+
+// ── Reading progress bar ──
+window.addEventListener('scroll', () => {
+  const scrolled = document.documentElement.scrollTop || document.body.scrollTop;
+  const total = document.body.scrollHeight - window.innerHeight;
+  const pct = total > 0 ? Math.min(100, (scrolled / total) * 100) : 0;
+  document.getElementById('reading-progress-bar').style.width = pct + '%';
+});
+
+// ── TOC active link ──
+(function () {
+  const sections = document.querySelectorAll('[id]');
+  const links = document.querySelectorAll('.toc-link');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('toc-active'));
+        const active = document.querySelector('.toc-link[href="#' + e.target.id + '"]');
+        if (active) active.classList.add('toc-active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -75% 0px' });
+  sections.forEach(s => { if (document.querySelector('.toc-link[href="#' + s.id + '"]')) obs.observe(s); });
+})();
+
+// ── Diagram animation on scroll ──
+(function () {
+  const diagram = document.getElementById('etf-diagram');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        setTimeout(() => document.getElementById('arrow-1').classList.add('animated'), 200);
+        setTimeout(() => document.getElementById('arrow-2').classList.add('animated'), 500);
+        obs.unobserve(diagram);
+      }
+    });
+  }, { threshold: 0.4 });
+  obs.observe(diagram);
+})();
+
+// ── Accordion steps ──
+function toggleStep(header) {
+  const item = header.parentElement;
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.step-item').forEach(s => s.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+
+// ── Fee calculator ──
+function calcPortfolio(initial, monthly, annualReturn, years, annualFee) {
+  const monthlyRate = (annualReturn - annualFee) / 100 / 12;
+  let value = initial;
+  for (let m = 0; m < years * 12; m++) {
+    value = value * (1 + monthlyRate) + monthly;
+  }
+  return value;
+}
+function formatILS(n) {
+  return '₪' + Math.round(n).toLocaleString('he-IL');
+}
+function runFeeCalc() {
+  const initial = parseFloat(document.getElementById('fc-initial').value) || 0;
+  const monthly = parseFloat(document.getElementById('fc-monthly').value) || 0;
+  const ret     = parseFloat(document.getElementById('fc-return').value) || 7;
+  const years   = parseInt(document.getElementById('fc-years').value) || 20;
+  const feeA    = parseFloat(document.getElementById('fc-fee-a').value) || 0;
+  const feeB    = parseFloat(document.getElementById('fc-fee-b').value) || 0;
+
+  document.getElementById('fc-return-val').textContent = ret;
+  document.getElementById('fc-years-val').textContent = years;
+
+  const valA = calcPortfolio(initial, monthly, ret, years, feeA);
+  const valB = calcPortfolio(initial, monthly, ret, years, feeB);
+  const diff = valA - valB;
+
+  document.getElementById('fc-val-a').textContent = formatILS(valA);
+  document.getElementById('fc-val-b').textContent = formatILS(valB);
+  document.getElementById('fc-diff').innerHTML = 'חסכתם <span>' + formatILS(Math.max(0, diff)) + '</span> בדמי ניהול';
+
+  const max = Math.max(valA, valB, 1);
+  const chartH = 90;
+  document.getElementById('bar-a').style.height = (valA / max * chartH) + 'px';
+  document.getElementById('bar-b').style.height = (valB / max * chartH) + 'px';
+}
+['fc-initial','fc-monthly','fc-return','fc-years','fc-fee-a','fc-fee-b'].forEach(id => {
+  document.getElementById(id).addEventListener('input', runFeeCalc);
+});
+runFeeCalc();
+
+// ── Growth simulator + SVG chart ──
+let svgFirstRender = true;
+function runGrowthSim() {
+  const initial = parseFloat(document.getElementById('gs-initial').value) || 0;
+  const monthly = parseFloat(document.getElementById('gs-monthly').value) || 0;
+  const ret     = parseFloat(document.getElementById('gs-return').value) || 8;
+  const years   = parseInt(document.getElementById('gs-years').value) || 25;
+
+  document.getElementById('gs-return-val').textContent = ret;
+  document.getElementById('gs-years-val').textContent = years;
+
+  const monthlyRate = ret / 100 / 12;
+  const data = []; // year-by-year values
+  let val = initial;
+  for (let y = 0; y <= years; y++) {
+    data.push(val);
+    for (let m = 0; m < 12; m++) val = val * (1 + monthlyRate) + monthly;
+  }
+
+  const totalInvested = initial + monthly * 12 * years;
+  const finalVal = data[data.length - 1];
+  const profit = finalVal - totalInvested;
+
+  document.getElementById('gs-invested').textContent = formatILS(totalInvested);
+  document.getElementById('gs-total').textContent = formatILS(finalVal);
+  document.getElementById('gs-profit').textContent = formatILS(Math.max(0, profit));
+
+  drawSVGChart(data, years, svgFirstRender);
+  svgFirstRender = false;
+}
+
+function drawSVGChart(data, years, animate) {
+  const svg = document.getElementById('growth-svg');
+  const W = 600, H = 300;
+  const padL = 70, padR = 30, padT = 30, padB = 40;
+  const chartW = W - padL - padR;
+  const chartH = H - padT - padB;
+
+  const maxVal = Math.max(...data, 1);
+  const minVal = 0;
+
+  function xPos(i) { return padL + (i / years) * chartW; }
+  function yPos(v) { return padT + (1 - (v - minVal) / (maxVal - minVal)) * chartH; }
+
+  const points = data.map((v, i) => xPos(i) + ',' + yPos(v)).join(' ');
+  const areaPoints = (padL + ',') + (padT + chartH) + ' ' + points + ' ' + (xPos(years) + ',' + (padT + chartH));
+
+  // Build SVG HTML
+  let html = '<defs><linearGradient id="lineGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#b3e0dc" stop-opacity="0.35"/><stop offset="100%" stop-color="#b3e0dc" stop-opacity="0"/></linearGradient></defs>';
+
+  // Grid lines (5 horizontal)
+  for (let i = 0; i <= 4; i++) {
+    const y = padT + (i / 4) * chartH;
+    const val = maxVal * (1 - i / 4);
+    html += '<line x1="' + padL + '" y1="' + y + '" x2="' + (W - padR) + '" y2="' + y + '" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>';
+    html += '<text x="' + (padL - 6) + '" y="' + (y + 4) + '" text-anchor="end" fill="rgba(255,255,255,0.45)" font-size="10" font-family="Assistant,sans-serif">₪' + formatK(val) + '</text>';
+  }
+
+  // X axis labels
+  const step = Math.ceil(years / 6);
+  for (let i = 0; i <= years; i += step) {
+    const x = xPos(i);
+    html += '<text x="' + x + '" y="' + (padT + chartH + 18) + '" text-anchor="middle" fill="rgba(255,255,255,0.45)" font-size="10" font-family="Assistant,sans-serif">' + i + 'y</text>';
+  }
+
+  // Area fill
+  html += '<polygon points="' + areaPoints + '" fill="url(#lineGrad)"/>';
+
+  // Line
+  const lineId = 'growth-line';
+  html += '<polyline id="' + lineId + '" points="' + points + '" fill="none" stroke="#b3e0dc" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>';
+
+  // Dots (every few years to avoid clutter)
+  const dotStep = Math.max(1, Math.ceil(years / 12));
+  data.forEach((v, i) => {
+    if (i % dotStep !== 0 && i !== years) return;
+    html += '<circle cx="' + xPos(i) + '" cy="' + yPos(v) + '" r="4" fill="#b3e0dc" class="svg-dot" data-year="' + i + '" data-val="' + Math.round(v) + '"/>';
+  });
+
+  svg.innerHTML = html;
+
+  // Animate line
+  if (animate) {
+    const line = svg.querySelector('#' + lineId);
+    if (line) {
+      const len = line.getTotalLength ? line.getTotalLength() : 1200;
+      line.style.strokeDasharray = len;
+      line.style.strokeDashoffset = len;
+      line.style.transition = 'stroke-dashoffset 1.4s ease';
+      requestAnimationFrame(() => { line.style.strokeDashoffset = 0; });
+    }
+  }
+
+  // Tooltip
+  svg.querySelectorAll('.svg-dot').forEach(dot => {
+    dot.addEventListener('mouseenter', (e) => {
+      const tip = document.getElementById('svg-tooltip');
+      tip.style.display = 'block';
+      tip.textContent = 'שנה ' + dot.dataset.year + ': ' + formatILS(parseFloat(dot.dataset.val));
+    });
+    dot.addEventListener('mousemove', (e) => {
+      const tip = document.getElementById('svg-tooltip');
+      tip.style.left = (e.clientX + 14) + 'px';
+      tip.style.top  = (e.clientY - 28) + 'px';
+    });
+    dot.addEventListener('mouseleave', () => {
+      document.getElementById('svg-tooltip').style.display = 'none';
+    });
+  });
+}
+
+function formatK(n) {
+  if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+  if (n >= 1000)    return (n / 1000).toFixed(0) + 'K';
+  return Math.round(n).toString();
+}
+
+['gs-initial','gs-monthly','gs-return','gs-years'].forEach(id => {
+  document.getElementById(id).addEventListener('input', runGrowthSim);
+});
+runGrowthSim();
+
+// ── Quote animation ──
+(function () {
+  const q = document.getElementById('buffett-quote');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { q.classList.add('visible'); obs.unobserve(q); } });
+  }, { threshold: 0.4 });
+  obs.observe(q);
+})();
+
+// ── Copy link ──
+function copyLink() {
+  navigator.clipboard.writeText(window.location.href).then(() => {
+    const btn = document.querySelector('.share-btn');
+    btn.textContent = '✅ הקישור הועתק!';
+    setTimeout(() => { btn.textContent = '🔗 העתק קישור'; }, 2500);
+  });
+}
+</script>
+
+</body>
+</html>
