@@ -5,854 +5,195 @@
   <link rel="icon" type="image/png" href="/favicon.png">
   <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>מדריך ETF המלא 2026: מה זה, איך קונים ואיך ממוסים בישראל | NewGen Finance</title>
-  <meta name="description" content="המדריך המקיף ביותר על ETF בעברית. מה זה קרן סל, השוואת עמלות, מיסוי בישראל, ברוקרים ישראליים, ה-ETF הגדולים בעולם ולמה אפילו משקיעי ערך משתמשים בהם.">
+  <title>המדריך להשקעה במדדים: קרנות מחקות וקרנות סל | NewGen Finance</title>
+  <meta name="description" content="המדריך המקיף להשקעה פסיבית בישראל. הכל על מדדי ה-S&amp;P 500, נאסד״ק ותל אביב, איך קונים קרן מחקה (KRN) בביזפורטל, וההבדל בין קרן סל לקרן מחקה פתוחה.">
   <meta name="robots" content="index, follow">
-  <meta property="og:title" content="מדריך ETF המלא 2026 | NewGen Finance">
-  <meta property="og:description" content="המדריך המקיף ביותר על ETF בעברית — עם כלים אינטראקטיביים, מחשבון דמי ניהול וסימולטור צמיחה">
-  <meta property="og:url" content="https://www.newgenfinance.co.il/blog/etf-guide/">
-  <meta property="og:type" content="article">
-  <meta property="og:image" content="https://www.newgenfinance.co.il/assets/og-image.jpg">
-  <meta property="og:locale" content="he_IL">
-  <link rel="canonical" href="https://www.newgenfinance.co.il/blog/etf-guide/">
-
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "headline": "מדריך ETF המלא 2026",
-    "description": "המדריך המקיף על ETF בעברית עם כלים אינטראקטיביים",
-    "author": {"@type": "Person", "name": "יאיר תכלת"},
-    "publisher": {"@type": "Organization", "name": "NewGen Finance"},
-    "datePublished": "2026-03-10",
-    "inLanguage": "he",
-    "url": "https://www.newgenfinance.co.il/blog/etf-guide/"
-  }
-  </script>
-
+  
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800;900&family=Assistant:wght@300;400;600;700&display=swap" rel="stylesheet">
-
-  <!-- Shared styles -->
-  <link rel="stylesheet" href="/assets/css/course.css">
-
-  <!-- Vercel Analytics -->
-  <script defer src="/_vercel/insights/script.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800;900&family=Assistant:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
   <style>
+    :root {
+      --bg-gradient-start: #0b4a64;
+      --bg-gradient-mid: #1680a0;
+      --bg-gradient-end: #0d6a82;
+      --card-light: #f7f9fa;
+      --card-dark: #0c3d52;
+      --text-main: #22333b;
+      --text-light: #4a6472;
+      --text-white: #f0f8fa;
+      --accent-mint: #2a9d8f;
+      --accent-light: #b3e0dc;
+    }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
       font-family: 'Rubik', sans-serif;
-      background: linear-gradient(155deg, #0b4a64 0%, #1680a0 48%, #0d6a82 100%) fixed;
-      background-attachment: fixed;
-      color: #f0f8fa;
+      background: linear-gradient(155deg, var(--bg-gradient-start) 0%, var(--bg-gradient-mid) 48%, var(--bg-gradient-end) 100%) fixed;
+      color: var(--text-white);
       direction: rtl;
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
     }
     a { text-decoration: none; color: inherit; }
+    strong { font-weight: 700; color: var(--text-main); }
+    .card-dark strong { color: var(--accent-light); }
 
     /* ── NAVBAR ── */
-    .hp-nav {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      height: 62px;
-      background: #0c3d52;
-      border-bottom: 1px solid rgba(179,224,220,0.12);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 clamp(1rem, 5vw, 3.5rem);
-    }
-    .hp-nav-logo {
-      display: flex; align-items: center; gap: 0.6rem;
-      text-decoration: none; color: #b3e0dc; font-weight: 700; font-size: 1.1rem;
-    }
-    .hp-nav-logo img {
-      height: 38px; width: 38px; object-fit: contain;
-      border-radius: 10px; background: rgba(179,224,220,0.12); padding: 4px; flex-shrink: 0;
-    }
+    .hp-nav { position: sticky; top: 0; z-index: 100; height: 62px; background: var(--card-dark); border-bottom: 1px solid rgba(179,224,220,0.12); display: flex; align-items: center; justify-content: space-between; padding: 0 clamp(1rem, 5vw, 3.5rem); }
+    .hp-nav-logo { display: flex; align-items: center; gap: 0.6rem; font-weight: 700; font-size: 1.1rem; color: var(--accent-light); }
+    .hp-nav-logo img { height: 38px; width: 38px; border-radius: 10px; background: rgba(179,224,220,0.12); padding: 4px; }
     .hp-nav-center { display: flex; align-items: center; gap: 1.5rem; flex: 1; justify-content: center; }
     .hp-nav-link { font-size: 0.9rem; font-weight: 500; color: rgba(240,248,250,0.75); transition: color 0.18s; }
-    .hp-nav-link:hover { color: #f0f8fa; }
-    .hp-nav-auth { display: flex; align-items: center; gap: 0.75rem; }
-    .hp-nav-pill {
-      display: inline-flex; align-items: center; justify-content: center;
-      padding: 0.42rem 1.1rem; border-radius: 20px; font-size: 0.875rem; font-weight: 700;
-      font-family: 'Rubik', sans-serif; cursor: pointer; border: 1.5px solid transparent;
-      transition: transform 0.15s, box-shadow 0.15s, background 0.15s, border-color 0.15s;
-    }
-    .hp-nav-pill:hover { transform: translateY(-1px); }
-    .hp-nav-pill-mint { background: #b3e0dc; color: #0c3d52; }
-    .hp-nav-pill-mint:hover { background: #8fc9c4; box-shadow: 0 4px 14px rgba(179,224,220,0.4); }
-    .hp-nav-pill-outline { background: transparent; color: rgba(240,248,250,0.8); border-color: rgba(240,248,250,0.35); }
-    .hp-nav-pill-outline:hover { border-color: rgba(240,248,250,0.7); color: #f0f8fa; background: rgba(255,255,255,0.06); }
+    .hp-nav-link:hover { color: var(--text-white); }
 
     /* ── PROGRESS BAR ── */
-    #reading-progress {
-      position: sticky;
-      top: 62px;
-      z-index: 99;
-      height: 4px;
-      background: rgba(255,255,255,0.08);
-    }
-    #reading-progress-bar {
-      height: 100%;
-      width: 0%;
-      background: #b3e0dc;
-      transition: width 0.1s linear;
-    }
+    #reading-progress { position: sticky; top: 62px; z-index: 99; height: 4px; background: rgba(255,255,255,0.08); }
+    #reading-progress-bar { height: 100%; width: 0%; background: var(--accent-light); transition: width 0.1s linear; }
 
     /* ── ARTICLE HEADER ── */
-    .article-header {
-      background: #0c3d52;
-      padding: clamp(2.5rem, 6vw, 4.5rem) clamp(1.25rem, 6vw, 4rem);
-      text-align: center;
-      border-bottom: 1px solid rgba(179,224,220,0.1);
-    }
-    .article-meta-top {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.75rem;
-      margin-bottom: 1.25rem;
-      flex-wrap: wrap;
-    }
-    .article-category {
-      display: inline-block;
-      font-size: 0.72rem; font-weight: 700;
-      padding: 0.25rem 0.75rem; border-radius: 20px;
-      background: rgba(42,157,143,0.2); color: #7dd8d2;
-      border: 1px solid rgba(42,157,143,0.35);
-    }
-    .article-reading-time {
-      font-size: 0.8rem;
-      color: rgba(240,248,250,0.5);
-      font-family: 'Assistant', sans-serif;
-    }
-    .article-header h1 {
-      font-size: clamp(1.6rem, 4vw, 2.5rem);
-      font-weight: 900;
-      letter-spacing: -0.5px;
-      color: #f0f8fa;
-      margin-bottom: 0.9rem;
-      line-height: 1.25;
-      max-width: 700px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .article-header .subtitle {
-      font-size: 1rem;
-      font-family: 'Assistant', sans-serif;
-      color: rgba(240,248,250,0.65);
-      max-width: 520px;
-      margin: 0 auto 1.5rem;
-      line-height: 1.7;
-    }
-    .article-tags {
-      display: flex;
-      justify-content: center;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-    .article-tag {
-      font-size: 0.75rem;
-      padding: 0.2rem 0.65rem;
-      border-radius: 12px;
-      background: rgba(255,255,255,0.08);
-      color: rgba(240,248,250,0.6);
-      border: 1px solid rgba(255,255,255,0.12);
-      font-family: 'Assistant', sans-serif;
-    }
+    .article-header { background: var(--card-dark); padding: clamp(3rem, 6vw, 5rem) clamp(1.25rem, 6vw, 4rem); text-align: center; border-bottom: 1px solid rgba(179,224,220,0.1); }
+    .article-meta-top { display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
+    .article-category { font-size: 0.75rem; font-weight: 700; padding: 0.3rem 0.8rem; border-radius: 20px; background: rgba(42,157,143,0.2); color: #7dd8d2; border: 1px solid rgba(42,157,143,0.35); }
+    .article-reading-time { font-size: 0.85rem; color: rgba(240,248,250,0.6); font-family: 'Assistant', sans-serif; }
+    .article-header h1 { font-size: clamp(1.8rem, 4vw, 3.2rem); font-weight: 900; letter-spacing: -0.5px; color: var(--text-white); margin-bottom: 1.2rem; line-height: 1.2; max-width: 900px; margin-inline: auto; }
+    .article-header .subtitle { font-size: 1.2rem; font-family: 'Assistant', sans-serif; color: rgba(240,248,250,0.8); max-width: 700px; margin: 0 auto; line-height: 1.7; }
 
     /* ── PAGE LAYOUT ── */
-    .article-layout {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 2.5rem 1.25rem 4rem;
-      display: grid;
-      grid-template-columns: 1fr 300px;
-      gap: 2.5rem;
-      align-items: start;
+    .article-layout { 
+      max-width: 1320px; 
+      margin: 0 auto; 
+      padding: 3rem 1.25rem 5rem; 
+      display: grid; 
+      grid-template-columns: 240px minmax(0, 1fr); 
+      gap: 2.5rem; 
+      align-items: start; 
     }
 
     /* ── TOC SIDEBAR ── */
-    .toc-sidebar {
-      position: sticky;
-      top: 80px;
-    }
-    .toc-card {
-      background: rgba(236,232,229,0.97);
-      border-radius: 16px;
-      padding: 1.4rem 1.25rem;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.18);
-      color: #1a2e38;
-    }
-    .toc-title {
-      font-size: 0.8rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.7px;
-      color: #4a6472;
-      margin-bottom: 1rem;
-      padding-bottom: 0.6rem;
-      border-bottom: 1px solid rgba(0,0,0,0.08);
-    }
+    .toc-sidebar { position: sticky; top: 90px; }
+    .toc-card { background: var(--card-light); border-radius: 14px; padding: 1.2rem; box-shadow: 0 4px 24px rgba(0,0,0,0.15); color: var(--text-main); }
+    .toc-title { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-light); margin-bottom: 1rem; padding-bottom: 0.6rem; border-bottom: 2px solid rgba(0,0,0,0.06); }
     .toc-list { list-style: none; display: flex; flex-direction: column; gap: 0.15rem; }
-    .toc-list li a {
-      display: block;
-      font-size: 0.85rem;
-      color: #4a6472;
-      padding: 0.35rem 0.5rem;
-      border-radius: 6px;
-      transition: background 0.15s, color 0.15s;
-      font-family: 'Assistant', sans-serif;
-      font-weight: 600;
-      line-height: 1.4;
-    }
-    .toc-list li a:hover { background: rgba(42,157,143,0.1); color: #2a9d8f; }
-    .toc-list li a.toc-active { background: rgba(42,157,143,0.12); color: #21867a; font-weight: 700; }
+    .toc-list li a { display: block; font-size: 0.82rem; color: var(--text-light); padding: 0.4rem 0.5rem; border-radius: 5px; transition: all 0.2s; font-family: 'Assistant', sans-serif; font-weight: 600; line-height: 1.35; }
+    .toc-list li a:hover { background: rgba(42,157,143,0.08); color: var(--accent-mint); padding-right: 0.8rem; }
+    .toc-list li a.toc-active { background: rgba(42,157,143,0.12); color: #1c6b61; font-weight: 800; border-right: 3px solid var(--accent-mint); }
 
-    /* ── ARTICLE BODY ── */
+    /* ── CARDS & TYPOGRAPHY ── */
     .article-body { min-width: 0; }
+    .card-light { background: var(--card-light); border-radius: 18px; padding: 3rem 2.5rem; box-shadow: 0 8px 32px rgba(0,0,0,0.15); color: var(--text-main); margin-bottom: 2.5rem; }
+    .card-dark { background: var(--card-dark); border-radius: 18px; padding: 3rem 2.5rem; box-shadow: 0 8px 32px rgba(0,0,0,0.25); color: var(--text-white); border: 1px solid rgba(179,224,220,0.12); margin-bottom: 2.5rem; }
+    
+    .section-h2 { font-size: 1.8rem; font-weight: 800; margin-bottom: 1.5rem; letter-spacing: -0.3px; line-height: 1.3; }
+    .section-h2-gradient { background: linear-gradient(135deg, #1c6b61, #0c3d52); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .section-h2-mint { color: var(--accent-light); }
+    
+    .section-h3 { font-size: 1.35rem; font-weight: 700; color: var(--text-main); margin: 2.5rem 0 1rem; border-bottom: 2px solid rgba(42,157,143,0.15); padding-bottom: 0.5rem; display: inline-block;}
+    .card-dark .section-h3 { color: var(--accent-light); border-bottom-color: rgba(179,224,220,0.2); }
 
-    /* ── CARDS ── */
-    .card-light {
-      background: rgba(236,232,229,0.97);
-      border-radius: 18px;
-      padding: 2rem 1.75rem;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.18);
-      color: #1a2e38;
-      margin-bottom: 1.75rem;
-    }
-    .card-dark {
-      background: #0c3d52;
-      border-radius: 18px;
-      padding: 2rem 1.75rem;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.25);
-      color: #f0f8fa;
-      border: 1px solid rgba(179,224,220,0.12);
-      margin-bottom: 1.75rem;
-    }
+    .article-p { font-size: 1.15rem; font-family: 'Assistant', sans-serif; color: #3a4f5c; line-height: 1.85; margin-bottom: 1.5rem; }
+    .card-dark .article-p { color: rgba(240,248,250,0.85); }
+    
+    .article-ul { margin-bottom: 1.5rem; padding-right: 1.5rem; font-family: 'Assistant', sans-serif; font-size: 1.15rem; line-height: 1.85; color: #3a4f5c; }
+    .article-ul li { margin-bottom: 0.75rem; }
+    .article-ul li::marker { color: var(--accent-mint); font-weight: bold; }
+    .card-dark .article-ul { color: rgba(240,248,250,0.85); }
 
-    .section-h2 {
-      font-size: 1.45rem;
-      font-weight: 800;
-      margin-bottom: 1rem;
-      letter-spacing: -0.3px;
-    }
-    .section-h2-gradient {
-      background: linear-gradient(135deg, #2a9d8f, #0c3d52);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .section-h2-mint { color: #b3e0dc; }
+    .hook-p { font-size: 1.25rem; font-family: 'Assistant', sans-serif; color: var(--text-main); line-height: 1.8; margin-bottom: 2rem; font-weight: 600; border-right: 4px solid var(--accent-mint); padding-right: 1.25rem; background: linear-gradient(to left, rgba(42,157,143,0.05), transparent); padding-block: 0.75rem; }
 
-    .section-h3 {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: #1a2e38;
-      margin: 1.25rem 0 0.6rem;
-    }
+    /* ── BOXES ── */
+    .note-box-light { background: rgba(42,157,143,0.06); border: 1px solid rgba(42,157,143,0.2); border-radius: 12px; padding: 1.5rem; font-size: 1.1rem; color: var(--text-main); font-family: 'Assistant', sans-serif; line-height: 1.7; margin: 2rem 0; border-right: 5px solid var(--accent-mint); }
+    .note-box-dark { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; padding: 1.5rem; font-size: 1.1rem; color: #f0f8fa; font-family: 'Assistant', sans-serif; line-height: 1.7; margin: 2rem 0; border-right: 5px solid var(--accent-light); }
+    .info-quote { font-style: italic; font-size: 1.15rem; color: var(--text-light); text-align: center; margin: 2rem 0; padding: 1.5rem; border-top: 1px solid rgba(0,0,0,0.05); border-bottom: 1px solid rgba(0,0,0,0.05); }
 
-    .article-p {
-      font-size: 0.95rem;
-      font-family: 'Assistant', sans-serif;
-      color: #4a6472;
-      line-height: 1.8;
-      margin-bottom: 0.85rem;
-    }
-    .card-dark .article-p { color: rgba(240,248,250,0.75); }
+    /* ── INFOGRAPHIC ── */
+    .infographic-wrap { margin: 2rem 0; background: #fff; border-radius: 16px; border: 1px solid rgba(0,0,0,0.08); padding: 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .info-side { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 1.5rem; border-radius: 12px; }
+    .info-side-stock { background: rgba(229, 115, 115, 0.05); border: 1px solid rgba(229, 115, 115, 0.2); }
+    .info-side-index { background: rgba(42, 157, 143, 0.05); border: 1px solid rgba(42, 157, 143, 0.2); }
+    .info-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .info-h { font-weight: 800; font-size: 1.15rem; margin-bottom: 0.5rem; color: var(--text-main); }
+    .info-p { font-family: 'Assistant', sans-serif; font-size: 1rem; color: var(--text-light); line-height: 1.55; }
+    
+    .risk-meter { width: 100%; height: 8px; background: #eee; border-radius: 4px; margin-top: 1.5rem; position: relative; overflow: hidden; }
+    .risk-fill-high { position: absolute; top: 0; right: 0; height: 100%; width: 90%; background: #e57373; }
+    .risk-fill-low { position: absolute; top: 0; right: 0; height: 100%; width: 30%; background: #2a9d8f; }
+    .risk-label { font-size: 0.8rem; font-weight: 700; margin-top: 0.5rem; color: #666; }
 
-    .hook-p {
-      font-size: 1.05rem;
-      font-family: 'Assistant', sans-serif;
-      color: #1a2e38;
-      line-height: 1.8;
-      margin-bottom: 1.25rem;
-      font-weight: 500;
-      border-right: 3px solid #2a9d8f;
-      padding-right: 1rem;
-    }
-
-    /* ── ETF DIAGRAM ── */
-    .etf-diagram {
-      background: #0c3d52;
-      border-radius: 14px;
-      padding: 1.75rem;
-      margin: 1.25rem 0;
-      direction: ltr;
-    }
-    .diagram-inner {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-    .diagram-stocks {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-    .diagram-stock-box {
-      background: rgba(179,224,220,0.1);
-      border: 1px solid rgba(179,224,220,0.3);
-      border-radius: 8px;
-      padding: 0.4rem 0.9rem;
-      font-size: 0.8rem;
-      color: #f0f8fa;
-      font-weight: 600;
-      text-align: center;
-    }
-    .diagram-dots {
-      font-size: 0.75rem;
-      color: rgba(179,224,220,0.5);
-      text-align: center;
-      padding: 0.25rem 0;
-    }
-    .diagram-arrow {
-      display: flex;
-      align-items: center;
-      gap: 0.25rem;
-      color: #b3e0dc;
-    }
-    .diagram-arrow-line {
-      width: 40px;
-      height: 2px;
-      background: #b3e0dc;
-      position: relative;
-      transform-origin: right center;
-      transform: scaleX(0);
-      transition: transform 0.6s ease;
-    }
-    .diagram-arrow-line.animated { transform: scaleX(1); }
-    .diagram-arrow-head {
-      width: 0; height: 0;
-      border-top: 5px solid transparent;
-      border-bottom: 5px solid transparent;
-      border-right: 8px solid #b3e0dc;
-      flex-shrink: 0;
-    }
-    .diagram-etf-box {
-      background: #2a9d8f;
-      border-radius: 12px;
-      padding: 0.75rem 1.25rem;
-      text-align: center;
-      font-weight: 800;
-      font-size: 0.9rem;
-      color: #fff;
-    }
-    .diagram-investor-box {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 12px;
-      padding: 0.75rem 1.25rem;
-      text-align: center;
-      font-weight: 700;
-      font-size: 0.9rem;
-      color: #f0f8fa;
-    }
-    .diagram-caption {
-      text-align: center;
-      font-size: 0.8rem;
-      color: rgba(240,248,250,0.55);
-      margin-top: 1rem;
-      font-family: 'Assistant', sans-serif;
-      direction: rtl;
-    }
+    /* ── INDEX DETAIL CARDS ── */
+    .index-detail-card { background: #fff; border: 1px solid rgba(0,0,0,0.08); border-radius: 16px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+    .index-detail-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.2rem; }
+    .index-detail-flag { font-size: 2.2rem; }
+    .index-detail-title { font-size: 1.5rem; font-weight: 900; color: var(--card-dark); }
+    .index-detail-subtitle { font-size: 0.95rem; color: var(--accent-mint); font-weight: 700; font-family: 'Assistant', sans-serif; }
+    .index-stat-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1.2rem; }
+    .index-stat { background: rgba(42,157,143,0.06); border: 1px solid rgba(42,157,143,0.15); border-radius: 10px; padding: 0.8rem 1.2rem; text-align: center; flex: 1; min-width: 120px; }
+    .index-stat-val { font-size: 1.3rem; font-weight: 900; color: var(--card-dark); }
+    .index-stat-label { font-size: 0.8rem; color: var(--text-light); font-family: 'Assistant', sans-serif; margin-top: 0.2rem; }
 
     /* ── COMPARISON TABLE ── */
-    .comparison-table-wrap { overflow-x: auto; margin-top: 1rem; }
-    .comparison-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-family: 'Assistant', sans-serif;
-      font-size: 0.875rem;
-    }
-    .comparison-table th {
-      background: #0c3d52;
-      color: #f0f8fa;
-      padding: 0.75rem 1rem;
-      font-weight: 700;
-      text-align: center;
-      white-space: nowrap;
-    }
-    .comparison-table td {
-      padding: 0.65rem 1rem;
-      text-align: center;
-      color: #1a2e38;
-      border-bottom: 1px solid rgba(0,0,0,0.06);
-    }
-    .comparison-table tr:nth-child(even) td { background: rgba(0,0,0,0.03); }
-    .comparison-table td:first-child { text-align: right; font-weight: 600; }
-    .check { color: #2a9d8f; font-weight: 700; }
-    .cross { color: #e57373; font-weight: 700; }
-
-    /* ── ETF CARDS GRID ── */
-    .etf-cards-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.85rem;
-      margin-top: 1.25rem;
-    }
-    .etf-mini-card {
-      background: rgba(179,224,220,0.1);
-      border: 1px solid rgba(179,224,220,0.25);
-      border-radius: 12px;
-      padding: 1rem 1.1rem;
-    }
-    .etf-ticker {
-      font-size: 1rem;
-      font-weight: 800;
-      color: #b3e0dc;
-      margin-bottom: 0.35rem;
-    }
-    .etf-desc {
-      font-size: 0.82rem;
-      color: rgba(240,248,250,0.7);
-      line-height: 1.55;
-      font-family: 'Assistant', sans-serif;
-    }
-
-    .note-box {
-      background: rgba(179,224,220,0.08);
-      border: 1px solid rgba(179,224,220,0.2);
-      border-radius: 10px;
-      padding: 0.9rem 1.1rem;
-      font-size: 0.875rem;
-      color: rgba(240,248,250,0.75);
-      font-family: 'Assistant', sans-serif;
-      line-height: 1.6;
-      margin-top: 1rem;
-    }
-
-    /* ── TAX COLUMNS ── */
-    .tax-columns {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.25rem;
-      margin-top: 1.25rem;
-    }
-    .tax-col {
-      background: rgba(0,0,0,0.03);
-      border-radius: 12px;
-      padding: 1.25rem;
-      border: 1px solid rgba(0,0,0,0.08);
-    }
-    .tax-col-title {
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: #1a2e38;
-      margin-bottom: 0.85rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 2px solid #2a9d8f;
-    }
-    .tax-item {
-      display: flex;
-      gap: 0.5rem;
-      margin-bottom: 0.55rem;
-      font-size: 0.85rem;
-      font-family: 'Assistant', sans-serif;
-      color: #4a6472;
-      line-height: 1.5;
-    }
-    .tax-item-label { font-weight: 700; color: #1a2e38; flex-shrink: 0; }
-    .warning-box {
-      background: rgba(255,193,7,0.12);
-      border: 1px solid rgba(255,193,7,0.4);
-      border-radius: 10px;
-      padding: 0.9rem 1.1rem;
-      font-size: 0.875rem;
-      color: #5c4a00;
-      font-family: 'Assistant', sans-serif;
-      line-height: 1.6;
-      margin-top: 1.25rem;
-    }
+    .comparison-table-wrap { overflow-x: auto; margin: 2rem 0; border-radius: 12px; border: 1px solid rgba(0,0,0,0.08); box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+    .comparison-table { width: 100%; border-collapse: collapse; font-family: 'Assistant', sans-serif; font-size: 1.05rem; }
+    .comparison-table th { background: var(--card-dark); color: var(--text-white); padding: 1.2rem; font-weight: 700; text-align: center; white-space: nowrap; border-left: 1px solid rgba(255,255,255,0.1); }
+    .comparison-table td { padding: 1.2rem; text-align: center; color: var(--text-main); border-bottom: 1px solid rgba(0,0,0,0.06); border-left: 1px solid rgba(0,0,0,0.06); background: #fff; }
+    .comparison-table tr:nth-child(even) td { background: #fafafa; }
+    .comparison-table td:first-child { text-align: right; font-weight: 700; background: #f0f4f5; width: 30%; }
 
     /* ── ACCORDION STEPS ── */
-    .steps-list { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1.25rem; }
-    .step-item {
-      border: 1px solid rgba(0,0,0,0.09);
-      border-radius: 12px;
-      overflow: hidden;
-    }
-    .step-header {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 1rem 1.25rem;
-      cursor: pointer;
-      background: rgba(0,0,0,0.02);
-      transition: background 0.18s;
-      user-select: none;
-    }
-    .step-header:hover { background: rgba(42,157,143,0.06); }
-    .step-number {
-      width: 36px; height: 36px;
-      background: #2a9d8f;
-      color: #fff;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      font-size: 0.95rem;
-      flex-shrink: 0;
-    }
-    .step-title {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: #1a2e38;
-      flex: 1;
-    }
-    .step-arrow {
-      color: #4a6472;
-      font-size: 0.85rem;
-      transition: transform 0.25s;
-    }
+    .steps-list { display: flex; flex-direction: column; gap: 1.2rem; margin-top: 2rem; }
+    .step-item { border: 1px solid rgba(0,0,0,0.1); border-radius: 14px; background: #fff; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+    .step-header { display: flex; align-items: center; gap: 1rem; padding: 1.5rem; cursor: pointer; transition: background 0.2s; user-select: none; }
+    .step-header:hover { background: #f8fcfb; }
+    .step-number { width: 42px; height: 42px; background: var(--accent-mint); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.2rem; flex-shrink: 0; box-shadow: 0 2px 6px rgba(42,157,143,0.3); }
+    .step-title { font-size: 1.15rem; font-weight: 800; color: var(--text-main); flex: 1; }
+    .step-arrow { color: var(--accent-mint); font-size: 1.1rem; transition: transform 0.3s; font-weight: bold; }
     .step-item.open .step-arrow { transform: rotate(180deg); }
-    .step-body {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease;
-    }
-    .step-item.open .step-body { max-height: 200px; }
-    .step-content {
-      padding: 0.85rem 1.25rem 1.1rem 1.25rem;
-      font-size: 0.875rem;
-      font-family: 'Assistant', sans-serif;
-      color: #4a6472;
-      line-height: 1.7;
-      border-top: 1px solid rgba(0,0,0,0.06);
-    }
+    .step-body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; background: #fafafa; }
+    .step-item.open .step-body { max-height: 1500px; }
+    .step-content { padding: 1.5rem 2rem 2rem 2rem; font-size: 1.1rem; font-family: 'Assistant', sans-serif; color: var(--text-light); line-height: 1.8; border-top: 1px solid rgba(0,0,0,0.05); }
+    .code-block { background: var(--card-dark); color: var(--accent-light); padding: 0.2rem 0.6rem; border-radius: 4px; font-family: monospace; font-size: 1.1rem; font-weight: bold; letter-spacing: 1px; }
 
-    /* ── FEE CALCULATOR ── */
-    .calc-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin-top: 1.25rem;
-    }
-    .calc-field { display: flex; flex-direction: column; gap: 0.4rem; }
-    .calc-label {
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: rgba(240,248,250,0.7);
-      font-family: 'Assistant', sans-serif;
-    }
-    .calc-input {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(179,224,220,0.25);
-      border-radius: 8px;
-      padding: 0.6rem 0.85rem;
-      color: #f0f8fa;
-      font-size: 0.95rem;
-      font-family: 'Rubik', sans-serif;
-      outline: none;
-      transition: border-color 0.18s;
-      width: 100%;
-    }
-    .calc-input:focus { border-color: #b3e0dc; }
-    .calc-slider-row { display: flex; align-items: center; gap: 0.75rem; }
-    .calc-slider {
-      flex: 1;
-      accent-color: #b3e0dc;
-      cursor: pointer;
-    }
-    .calc-slider-val {
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: #b3e0dc;
-      min-width: 45px;
-      text-align: left;
-    }
-    .calc-results {
-      margin-top: 1.5rem;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-    }
-    .calc-result-box {
-      background: rgba(255,255,255,0.06);
-      border-radius: 12px;
-      padding: 1rem 1.1rem;
-      text-align: center;
-    }
-    .calc-result-label {
-      font-size: 0.78rem;
-      color: rgba(240,248,250,0.55);
-      font-family: 'Assistant', sans-serif;
-      margin-bottom: 0.35rem;
-    }
-    .calc-result-val {
-      font-size: 1.4rem;
-      font-weight: 800;
-    }
-    .val-mint { color: #b3e0dc; }
-    .val-red { color: #f08080; }
-    .calc-diff {
-      background: rgba(179,224,220,0.08);
-      border: 1px solid rgba(179,224,220,0.2);
-      border-radius: 10px;
-      padding: 0.85rem 1.1rem;
-      text-align: center;
-      margin-top: 0.85rem;
-      font-size: 1rem;
-      font-weight: 700;
-      color: #f0f8fa;
-    }
-    .calc-diff span { color: #b3e0dc; }
-    .bar-chart {
-      margin-top: 1.25rem;
-      display: flex;
-      gap: 1.25rem;
-      align-items: flex-end;
-      height: 100px;
-    }
-    .bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.4rem; }
-    .bar {
-      width: 100%;
-      border-radius: 6px 6px 0 0;
-      transition: height 0.4s ease;
-      min-height: 4px;
-    }
-    .bar-a { background: #b3e0dc; }
-    .bar-b { background: #f08080; }
-    .bar-label { font-size: 0.75rem; color: rgba(240,248,250,0.6); font-family: 'Assistant', sans-serif; }
+    /* ── CALCULATOR ── */
+    .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2rem; }
+    .calc-field { display: flex; flex-direction: column; gap: 0.6rem; }
+    .calc-label { font-size: 1rem; font-weight: 700; color: rgba(240,248,250,0.9); font-family: 'Assistant', sans-serif; }
+    .calc-input { background: rgba(255,255,255,0.08); border: 1px solid rgba(179,224,220,0.3); border-radius: 8px; padding: 0.8rem 1rem; color: var(--text-white); font-size: 1.1rem; font-family: 'Rubik', sans-serif; outline: none; transition: border-color 0.2s; width: 100%; }
+    .calc-input:focus { border-color: var(--accent-light); background: rgba(255,255,255,0.12); }
+    .calc-slider-row { display: flex; align-items: center; gap: 1rem; }
+    .calc-slider { flex: 1; accent-color: var(--accent-light); cursor: pointer; height: 6px; }
+    
+    .calc-results { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2.5rem; }
+    .calc-result-box { background: rgba(0,0,0,0.25); border-radius: 12px; padding: 2rem; text-align: center; border: 1px solid rgba(255,255,255,0.08); }
+    .calc-result-label { font-size: 1rem; color: rgba(240,248,250,0.7); font-family: 'Assistant', sans-serif; margin-bottom: 0.8rem; }
+    .calc-result-val { font-size: 2rem; font-weight: 900; }
+    
+    .val-mint { color: var(--accent-light); }
+    .val-red { color: #ff8a80; }
+    
+    .calc-diff { background: rgba(179,224,220,0.1); border: 1px solid rgba(179,224,220,0.3); border-radius: 12px; padding: 1.2rem; text-align: center; margin-top: 1.5rem; font-size: 1.2rem; font-weight: 800; color: var(--text-white); }
+    .calc-diff span { color: var(--accent-light); font-size: 1.4rem; }
 
-    /* ── GROWTH SIMULATOR ── */
-    .sim-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin-top: 1.25rem;
-    }
-    .sim-field { display: flex; flex-direction: column; gap: 0.4rem; }
-    .sim-label { font-size: 0.82rem; font-weight: 600; color: #4a6472; font-family: 'Assistant', sans-serif; }
-    .sim-input {
-      background: #fff;
-      border: 1px solid rgba(0,0,0,0.12);
-      border-radius: 8px;
-      padding: 0.6rem 0.85rem;
-      color: #1a2e38;
-      font-size: 0.95rem;
-      font-family: 'Rubik', sans-serif;
-      outline: none;
-      transition: border-color 0.18s;
-      width: 100%;
-    }
-    .sim-input:focus { border-color: #2a9d8f; }
-    .sim-slider-row { display: flex; align-items: center; gap: 0.75rem; }
-    .sim-slider { flex: 1; accent-color: #2a9d8f; cursor: pointer; }
-    .sim-slider-val { font-size: 0.9rem; font-weight: 700; color: #2a9d8f; min-width: 45px; text-align: left; }
-    .sim-results {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 0.85rem;
-      margin-top: 1.5rem;
-    }
-    .sim-result-box { border-radius: 12px; padding: 1rem; text-align: center; border: 1px solid rgba(0,0,0,0.08); }
-    .sim-result-label { font-size: 0.75rem; color: #6b7280; font-family: 'Assistant', sans-serif; margin-bottom: 0.35rem; }
-    .sim-result-val { font-size: 1.25rem; font-weight: 800; }
-    .sim-val-gray { color: #6b7280; }
-    .sim-val-mint { color: #2a9d8f; font-size: 1.5rem; }
-    .sim-val-green { color: #059669; }
-    .svg-wrap {
-      margin-top: 1.25rem;
-      background: #0c3d52;
-      border-radius: 12px;
-      overflow: hidden;
-    }
-    #growth-svg { width: 100%; display: block; }
-    .svg-tooltip {
-      position: fixed;
-      background: #0c3d52;
-      color: #f0f8fa;
-      padding: 0.45rem 0.8rem;
-      border-radius: 8px;
-      font-size: 0.8rem;
-      font-family: 'Assistant', sans-serif;
-      pointer-events: none;
-      border: 1px solid rgba(179,224,220,0.3);
-      z-index: 50;
-      display: none;
-    }
-
-    /* ── VALUE INVESTOR CARDS ── */
-    .vi-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin-top: 1.25rem;
-    }
-    .vi-card {
-      background: rgba(179,224,220,0.1);
-      border: 1px solid rgba(179,224,220,0.2);
-      border-radius: 12px;
-      padding: 1.1rem 1.15rem;
-    }
-    .vi-card-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
-    .vi-card-title { font-size: 0.9rem; font-weight: 700; color: #b3e0dc; margin-bottom: 0.4rem; }
-    .vi-card-desc { font-size: 0.82rem; color: rgba(240,248,250,0.7); font-family: 'Assistant', sans-serif; line-height: 1.6; }
-
-    /* ── ARTICLE QUOTE ── */
-    .article-quote {
-      margin: 1.5rem 0;
-      padding: 1.5rem;
-      border-right: 4px solid #b3e0dc;
-      background: rgba(179,224,220,0.07);
-      border-radius: 0 12px 12px 0;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.8s ease, transform 0.8s ease;
-    }
-    .article-quote.visible { opacity: 1; transform: translateY(0); }
-    .article-quote blockquote {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: #f0f8fa;
-      line-height: 1.6;
-      margin-bottom: 0.5rem;
-    }
-    .article-quote cite { font-size: 0.85rem; color: #b3e0dc; font-style: normal; }
-
-    /* ── AUTHOR CARD ── */
-    .author-card {
-      background: rgba(236,232,229,0.97);
-      border-radius: 16px;
-      padding: 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 1.1rem;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.18);
-      margin-bottom: 1.25rem;
-      color: #1a2e38;
-    }
-    .author-avatar {
-      width: 56px; height: 56px;
-      background: #2a9d8f;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-      font-weight: 800;
-      color: #fff;
-      flex-shrink: 0;
-    }
-    .author-name { font-size: 1rem; font-weight: 700; color: #1a2e38; margin-bottom: 0.2rem; }
-    .author-bio { font-size: 0.85rem; color: #4a6472; font-family: 'Assistant', sans-serif; line-height: 1.55; }
-    .author-link {
-      font-size: 0.82rem;
-      color: #2a9d8f;
-      font-weight: 600;
-      margin-top: 0.35rem;
-      display: inline-block;
-    }
-    .author-link:hover { text-decoration: underline; }
-
-    /* ── SHARE ── */
-    .share-section {
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 14px;
-      padding: 1.25rem 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 1.25rem;
-      flex-wrap: wrap;
-    }
-    .share-label { font-size: 0.9rem; font-weight: 700; color: rgba(240,248,250,0.8); }
-    .share-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      background: rgba(179,224,220,0.12);
-      border: 1px solid rgba(179,224,220,0.25);
-      color: #b3e0dc;
-      font-size: 0.85rem;
-      font-weight: 600;
-      cursor: pointer;
-      font-family: 'Rubik', sans-serif;
-      transition: background 0.18s;
-    }
-    .share-btn:hover { background: rgba(179,224,220,0.2); }
-
-    /* ── NEXT ARTICLE ── */
-    .next-article {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 14px;
-      padding: 1.25rem 1.5rem;
-      margin-bottom: 1.25rem;
-      opacity: 0.65;
-    }
-    .next-label { font-size: 0.75rem; color: rgba(240,248,250,0.45); font-family: 'Assistant', sans-serif; margin-bottom: 0.35rem; }
-    .next-title { font-size: 0.95rem; font-weight: 700; color: rgba(240,248,250,0.6); }
-
-    /* ── BACK BTN ── */
-    .back-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      padding: 0.65rem 1.25rem;
-      border-radius: 10px;
-      background: rgba(179,224,220,0.12);
-      border: 1px solid rgba(179,224,220,0.25);
-      color: #b3e0dc;
-      font-size: 0.9rem;
-      font-weight: 600;
-      font-family: 'Rubik', sans-serif;
-      transition: background 0.18s;
-    }
-    .back-btn:hover { background: rgba(179,224,220,0.2); }
-
-    /* ── FOOTER ── */
-    footer {
-      background: #0c3d52;
-      border-top: 1px solid rgba(179,224,220,0.1);
-      padding: 2.5rem clamp(1.25rem, 6vw, 4rem);
-    }
-    .footer-inner {
-      max-width: 1060px; margin: 0 auto;
-      display: grid; grid-template-columns: 1fr auto 1fr;
-      align-items: center; gap: 2rem;
-    }
-    .footer-logo { font-size: 1rem; font-weight: 800; color: #f0f8fa; direction: ltr; unicode-bidi: embed; margin-bottom: 0.3rem; }
-    .footer-logo span { color: #b3e0dc; }
-    .footer-tagline { font-size: 0.78rem; font-family: 'Assistant', sans-serif; color: rgba(240,248,250,0.42); }
-    .footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.2rem 1.25rem; }
-    .footer-links a { font-size: 0.82rem; color: rgba(240,248,250,0.52); transition: color 0.18s; }
-    .footer-links a:hover { color: #f0f8fa; }
-    .footer-credit { text-align: left; font-size: 0.78rem; font-family: 'Assistant', sans-serif; color: rgba(240,248,250,0.38); }
+    /* ── AUTHOR & SHARE ── */
+    .author-card { background: var(--card-light); border-radius: 16px; padding: 2rem; display: flex; align-items: center; gap: 1.5rem; box-shadow: 0 4px 24px rgba(0,0,0,0.12); margin-bottom: 1.5rem; color: var(--text-main); }
+    .author-avatar { width: 70px; height: 70px; background: var(--accent-mint); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: 900; color: #fff; flex-shrink: 0; box-shadow: 0 4px 10px rgba(42,157,143,0.3); }
+    .author-name { font-size: 1.2rem; font-weight: 800; margin-bottom: 0.4rem; }
+    .author-bio { font-size: 1.05rem; color: var(--text-light); font-family: 'Assistant', sans-serif; line-height: 1.6; }
+    
+    .share-section { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 1.5rem 2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
+    .share-btn { padding: 0.8rem 1.5rem; border-radius: 8px; background: rgba(179,224,220,0.15); border: 1px solid rgba(179,224,220,0.3); color: var(--accent-light); font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s; font-family: inherit; }
+    .share-btn:hover { background: rgba(179,224,220,0.25); transform: translateY(-2px); }
 
     /* ── RESPONSIVE ── */
-    @media (max-width: 860px) {
+    @media (max-width: 1024px) {
       .article-layout { grid-template-columns: 1fr; }
-      .toc-sidebar { position: static; }
-      .toc-card { margin-bottom: 1.5rem; }
-      .calc-grid { grid-template-columns: 1fr; }
-      .calc-results { grid-template-columns: 1fr; }
-      .sim-grid { grid-template-columns: 1fr; }
-      .sim-results { grid-template-columns: 1fr; }
-      .tax-columns { grid-template-columns: 1fr; }
-      .etf-cards-grid { grid-template-columns: 1fr; }
-      .vi-grid { grid-template-columns: 1fr; }
-      .footer-inner { grid-template-columns: 1fr; text-align: center; }
-      .footer-credit { text-align: center; }
-      .hp-nav-link { display: none; }
-    }
-    @media (max-width: 540px) {
-      .card-light, .card-dark { padding: 1.35rem 1.1rem; }
-      .diagram-inner { flex-direction: column; }
+      .toc-sidebar { position: static; margin-bottom: 2rem; }
+      .toc-card { display: flex; flex-direction: column; }
+      .info-grid { grid-template-columns: 1fr; }
+      .calc-grid, .calc-results { grid-template-columns: 1fr; }
+      .index-stat-row { flex-direction: column; }
     }
   </style>
 </head>
@@ -865,10 +206,8 @@
     <span>NewGen Finance</span>
   </a>
   <div class="hp-nav-center">
-    <a href="/about/" class="hp-nav-link">אודות</a>
-    <a href="/blog/" class="hp-nav-link">בלוג</a>
+    <a href="/blog/" class="hp-nav-link">חזרה לבלוג</a>
   </div>
-  <div class="hp-nav-auth" id="nav-auth"></div>
 </nav>
 
 <!-- PROGRESS BAR -->
@@ -877,36 +216,37 @@
 <!-- ARTICLE HEADER -->
 <div class="article-header">
   <div class="article-meta-top">
-    <span class="article-category">יסודות</span>
-    <span class="article-reading-time">⏱ 12 דקות קריאה · מרץ 2026</span>
+    <span class="article-category">מדריך השקעות מקיף</span>
+    <span class="article-reading-time">⏱ זמן קריאה: כ-35 דקות</span>
   </div>
-  <h1>מדריך ETF המלא 2026: מה זה, איך קונים ואיך ממוסים בישראל</h1>
-  <p class="subtitle">המדריך המקיף ביותר על ETF בעברית — עם כלים אינטראקטיביים, מחשבון דמי ניהול וסימולטור צמיחה</p>
-  <div class="article-tags">
-    <span class="article-tag">ETF</span>
-    <span class="article-tag">קרנות סל</span>
-    <span class="article-tag">מיסוי</span>
-    <span class="article-tag">ברוקרים ישראליים</span>
-    <span class="article-tag">מתחילים</span>
-  </div>
+  <h1>המדריך המלא למדדים: קרנות מחקות לעומת קרנות סל בישראל</h1>
+  <p class="subtitle">המאמר שיעשה לכם סדר אחת ולתמיד בהשקעה פסיבית. נלמד על ההיסטוריה של המדדים הגדולים בעולם ובישראל, נבין מה ההבדל הקריטי בין קרן מחקה לקרן סל, ואיך מוצאים וקונים אותם במערכות המסחר הישראליות.</p>
 </div>
 
 <!-- LAYOUT -->
 <div class="article-layout">
 
   <!-- TOC -->
-  <aside class="toc-sidebar" id="toc-sidebar">
+  <aside class="toc-sidebar">
     <div class="toc-card">
       <div class="toc-title">תוכן עניינים</div>
       <ul class="toc-list">
-        <li><a href="#what-is-etf" class="toc-link">מה זה ETF בכלל?</a></li>
-        <li><a href="#etf-vs" class="toc-link">ETF vs קרן נאמנות vs מניה</a></li>
-        <li><a href="#big-etfs" class="toc-link">ה-ETF הגדולים בעולם</a></li>
-        <li><a href="#tax" class="toc-link">מיסוי ETF בישראל</a></li>
-        <li><a href="#how-to-buy" class="toc-link">איך קונים ETF?</a></li>
-        <li><a href="#fee-calculator" class="toc-link">מחשבון דמי ניהול</a></li>
-        <li><a href="#growth-simulator" class="toc-link">סימולטור צמיחה</a></li>
-        <li><a href="#value-investors" class="toc-link">למה משקיעי ערך קונים ETF?</a></li>
+        <li><a href="#what-is-index" class="toc-link">מה זה מדד בורסאי?</a></li>
+        <li><a href="#why-passive" class="toc-link">למה השקעה פסיבית?</a></li>
+        <li><a href="#infographic" class="toc-link">אינפוגרפיקה: כוחו של הפיזור</a></li>
+        <li><a href="#sp500" class="toc-link">S&amp;P 500: ההיסטוריה המלאה</a></li>
+        <li><a href="#nasdaq" class="toc-link">NASDAQ 100: הקטר הטכנולוגי</a></li>
+        <li><a href="#ta35" class="toc-link">ת"א 35: חוד החנית</a></li>
+        <li><a href="#ta125" class="toc-link">ת"א 125: השוק הרחב</a></li>
+        <li><a href="#israel-reality" class="toc-link">סל מול מחקה בישראל</a></li>
+        <li><a href="#currency" class="toc-link">חשיפה מטבעית</a></li>
+        <li><a href="#value-and-index" class="toc-link">השקעת ערך ומדדים</a></li>
+        <li><a href="#sector-funds" class="toc-link">קרנות סקטוריאליות</a></li>
+        <li><a href="#leveraged" class="toc-link">קרנות ממונפות: אזהרה</a></li>
+        <li><a href="#taxation" class="toc-link">מיסוי בישראל</a></li>
+        <li><a href="#practical-guide" class="toc-link">המדריך המעשי</a></li>
+        <li><a href="#fee-calculator" class="toc-link">מחשבון עמלות</a></li>
+        <li><a href="#summary" class="toc-link">סיכום</a></li>
       </ul>
     </div>
   </aside>
@@ -914,349 +254,479 @@
   <!-- ARTICLE BODY -->
   <main class="article-body">
 
-    <!-- SECTION 1 -->
-    <div class="card-light" id="what-is-etf">
-      <h2 class="section-h2 section-h2-gradient">מה זה ETF בכלל?</h2>
-      <p class="hook-p">דמיינו שאתם רוצים להשקיע ב-500 החברות הגדולות בארה"ב בבת אחת. לא 500 עסקאות נפרדות — עסקה אחת, עמלה אחת, ניהול אפס. זה בדיוק מה ש-ETF מאפשר.</p>
-      <h3 class="section-h3">ההגדרה הפשוטה</h3>
-      <p class="article-p">ETF = Exchange Traded Fund = קרן סל. מדובר בסל של ניירות ערך שנסחר בבורסה כמו מניה רגילה. ETF עוקב אחרי מדד (index), סקטור, סחורה או אסטרטגיה — ומאפשר לכם לקבל חשיפה לעשרות, מאות ואפילו אלפי נכסים בעסקה אחת פשוטה.</p>
+    <!-- SECTION 1: What is an Index -->
+    <div class="card-light" id="what-is-index">
+      <h2 class="section-h2 section-h2-gradient">מה זה בעצם מדד בורסאי?</h2>
+      <p class="hook-p">דמיינו שאתם נכנסים לסופרמרקט ורוצים לקנות מצרכים לארוחת ערב, אבל במקום לעבור מדף לדף ולבחור עגבניות, פסטה וגבינה – אתם פשוט לוקחים "סל מוכן מראש" שמכיל קצת מכל דבר שיש בסופר. ככה בדיוק עובד מדד בורסאי.</p>
+      
+      <p class="article-p">מדד בורסאי הוא בסך הכל <strong>רשימה מוגדרת של חברות</strong> שמאוגדות יחד לפי כללים מסוימים. למשל: "500 החברות הציבוריות הגדולות ביותר בארה"ב" או "35 החברות בעלות שווי השוק הגבוה ביותר בבורסה של תל אביב". כל מדד נבנה לפי מתודולוגיה ברורה ושקופה, שמגדירה אילו חברות ייכנסו למדד, באיזה משקל כל חברה תיוצג, ומתי חברות מוחלפות.</p>
 
-      <!-- Animated Diagram -->
-      <div class="etf-diagram">
-        <div class="diagram-inner" id="etf-diagram">
-          <div style="direction:rtl;">
-            <div class="diagram-stocks">
-              <div class="diagram-stock-box">מניה 1 — Apple</div>
-              <div class="diagram-stock-box">מניה 2 — Microsoft</div>
-              <div class="diagram-stock-box">מניה 3 — Amazon</div>
-              <div class="diagram-dots">... מניה 500</div>
-            </div>
-          </div>
-          <div class="diagram-arrow" style="transform:scaleX(-1);">
-            <div class="diagram-arrow-line" id="arrow-1"></div>
-            <div class="diagram-arrow-head"></div>
-          </div>
-          <div class="diagram-etf-box">ETF<br>S&amp;P 500</div>
-          <div class="diagram-arrow" style="transform:scaleX(-1);">
-            <div class="diagram-arrow-line" id="arrow-2"></div>
-            <div class="diagram-arrow-head"></div>
-          </div>
-          <div class="diagram-investor-box">המשקיע שלך 💼</div>
-        </div>
-        <div class="diagram-caption">במקום לקנות 500 מניות בנפרד, קונים יחידה אחת של ETF שמחזיקה את כולן</div>
+      <p class="article-p">חשוב להבין: אי אפשר "לקנות מדד" ישירות. מדד הוא רק מספר תיאורטי, כמו מד-חום שמודד את הטמפרטורה של קבוצת חברות. כדי להשקיע בפועל כך שהכסף שלכם ייחשף לתשואות של המדד, אתם צריכים לרכוש <strong>מוצר פיננסי שעוקב אחרי המדד</strong> – בישראל, המוצרים האלה הם בעיקר קרנות מחקות וקרנות סל, ועל ההבדלים ביניהם נרחיב בהמשך המאמר.</p>
+
+      <p class="article-p">המספר שאתם רואים ליד שם המדד בחדשות (למשל "מדד ה-S&P 500 עלה היום ל-5,800 נקודות") הוא ערך מחושב שמשקף את הביצוע המשוקלל של כל החברות שנמצאות בתוך המדד. כשאומרים "המדד עלה ב-2%", הכוונה היא שהשווי הכולל של כל החברות שבתוך המדד עלה בממוצע משוקלל של 2%. חברות גדולות יותר (עם שווי שוק גבוה יותר) משפיעות על המדד יותר מחברות קטנות – ולכן למשל, ירידה חזקה במחיר המניה של אנבידיה תשפיע על ה-S&P 500 הרבה יותר מירידה דומה במחיר מניה של חברה קטנה שנמצאת בתחתית הרשימה.</p>
+
+      <h3 class="section-h3">מי מנהל את המדדים?</h3>
+      <p class="article-p">מדדים מנוהלים על ידי חברות מדדים עצמאיות. את ה-S&P 500 מנהלת חברת S&P Global, את מדדי הנאסד"ק מנהלת חברת Nasdaq Inc., ואת מדדי תל אביב מנהלת הבורסה לניירות ערך בתל אביב. חברות המדדים אחראיות לעדכן את הרכב המדד מדי תקופה – להוסיף חברות שגדלו מספיק, ולהוציא חברות שכבר לא עומדות בקריטריונים. העדכונים האלה קורים בדרך כלל אחת לרבעון או אחת לחצי שנה, ולכל מדד יש לוח זמנים קבוע משלו.</p>
+
+      <p class="article-p">בקיצור: מדד בורסאי הוא "צילום מצב" של קבוצת חברות, ואנחנו כמשקיעים יכולים לקנות מוצרים פיננסיים שעוקבים אחרי הצילום הזה, ובכך ליהנות מהביצועים של כל החברות ביחד – בלי לבחור כל מניה בנפרד.</p>
+    </div>
+
+    <!-- SECTION 2: Why Passive -->
+    <div class="card-dark" id="why-passive">
+      <h2 class="section-h2 section-h2-mint">למה בכלל להשקיע במדדים? הרעיון מאחורי השקעה פסיבית</h2>
+      
+      <p class="article-p">במשך עשרות שנים, מנהלי השקעות מקצועיים ניסו "להכות את השוק". הם ישבו במשרדים בוול סטריט, ניתחו דוחות כספיים, פגשו מנכ"לים, ניסו לנחש איזו מניה תעלה ואיזו תרד, וגבו על העבודה הזו עמלות ניהול גבוהות – בדרך כלל בין 1% ל-2% בשנה. הגישה הזו נקראת <strong>השקעה אקטיבית</strong>.</p>
+
+      <p class="article-p">ואז, בשנת 1975, הגיע אדם בשם ג'ון בוגל (John Bogle), מייסד חברת ההשקעות Vanguard, ועשה משהו שנחשב באותה תקופה מהפכני ואפילו מגוחך: הוא הקים את קרן המדד הראשונה בעולם שפתוחה למשקיעים פרטיים. הרעיון שלו היה פשוט ועוצמתי: <strong>במקום לנסות למצוא את המחט בערימת השחת – פשוט תקנו את כל ערימת השחת.</strong></p>
+
+      <p class="article-p">בהתחלה צחקו עליו. הכינו את הקרן שלו "הקרן של בוגל הטיפשות" (Bogle's Folly). המוסד הפיננסי התנגד לרעיון שאפשר להשיג תשואות טובות "בלי לעשות כלום". אבל עם השנים, המחקרים הוכיחו שהוא צדק: הרוב המוחלט של מנהלי ההשקעות האקטיביים לא מצליחים להכות את המדד לאורך זמן, ואחרי שמחשבים את דמי הניהול שהם גובים – עוד פחות.</p>
+
+      <h3 class="section-h3">מה אומרים המחקרים?</h3>
+      <p class="article-p">מחקרים רבים מראים שלאורך תקופות של 15 שנה ומעלה, מעל 90% ממנהלי ההשקעות האקטיביים מפגרים אחרי המדד שלהם. זה אומר שאם הייתם שמים את הכסף שלכם בקרן מחקה זולה על ה-S&P 500 במקום בקרן מנוהלת יקרה, ב-9 מתוך 10 מקרים הייתם מרוויחים יותר – ובהרבה פחות מאמץ.</p>
+
+      <p class="article-p">הסיבות לכך מורכבות, אבל ניתן לסכם אותן בשלושה גורמים מרכזיים. ראשית, <strong>עלויות</strong> – דמי ניהול גבוהים "מכרסמים" בתשואה שנה אחרי שנה, כפי שתוכלו לראות במחשבון בהמשך המאמר. שנית, <strong>תזמון השוק</strong> – גם המומחים הגדולים טועים, ולפעמים דווקא ההחלטות שלהם לקנות ולמכור בזמנים "נכונים" פוגעות בתשואה. שלישית, <strong>היעילות של השוק</strong> – כל מידע חדש על חברה מתומחר כמעט מיידית במחיר המניה, מה שמקשה מאוד לזהות "מציאות" לפני כולם.</p>
+
+      <p class="article-p">וורן באפט, אחד המשקיעים המצליחים בכל הזמנים ומי שידוע ביכולת שלו לבחור מניות, הגיע למסקנה דומה. הוא אמר שהוא רוצה שרוב הכסף שיוריש לאשתו יושקע בקרן מדד על ה-S&P 500, ולא בבחירת מניות ספציפיות. אם וורן באפט מאמין שלרוב האנשים עדיף להשקיע במדדים – כנראה שגם לנו כדאי לשקול את זה ברצינות.</p>
+
+      <div class="note-box-dark">
+        <strong>חשוב להבהיר:</strong> השקעה במדדים היא לא "חינם מסיכון". המדדים עולים ויורדים, ולפעמים הם יורדים בצורה חדה מאוד (גם 30% ויותר בתוך כמה חודשים). היתרון הוא שלאורך זמן, בדרך כלל עשור ומעלה, המגמה הכללית של מדדי המניות הגדולים הייתה עלייה. מי שמשקיע לטווח ארוך ולא נבהל ומוכר בירידות – נהנה מהתשואות הכי טובות.
       </div>
     </div>
 
-    <!-- SECTION 2 -->
-    <div class="card-light" id="etf-vs">
-      <h2 class="section-h2 section-h2-gradient">ETF vs קרן נאמנות vs מניה בודדת</h2>
+    <!-- SECTION 3: Infographic -->
+    <div class="card-light" id="infographic" style="background: #fff;">
+      <h2 class="section-h2 section-h2-gradient" style="text-align: center;">הכוח המרכזי של השקעה במדדים: פיזור סיכונים</h2>
+      <p class="article-p" style="text-align: center; max-width: 800px; margin: 0 auto 2rem;">מה קורה כשאנחנו לוקחים סכום כסף ושמים אותו במקום אחד, לעומת פיזורו על פני כל השוק?</p>
+      
+      <div class="infographic-wrap" style="box-shadow: none; border: none; padding: 0;">
+        <div class="info-grid">
+          <div class="info-side info-side-stock">
+            <div class="info-icon">🎯</div>
+            <div class="info-h">תרחיש א': מניה בודדת</div>
+            <p class="info-p">השקעתם 100,000₪ בחברה אחת. העתיד הכלכלי שלכם תלוי לחלוטין בהצלחה שלה, בהנהלה שלה, ובתחרות בענף. אם היא קורסת – אתם מפסידים הכל.</p>
+            <div class="risk-meter"><div class="risk-fill-high"></div></div>
+            <div class="risk-label">רמת סיכון: גבוהה מאוד</div>
+          </div>
+          <div class="info-side info-side-index">
+            <div class="info-icon">🧺</div>
+            <div class="info-h">תרחיש ב': מדד ה-S&P 500</div>
+            <p class="info-p">השקעתם 100,000₪ במדד. הכסף שלכם מפוזר על 500 חברות ענק – טכנולוגיה, בריאות, פיננסים, צריכה, אנרגיה ועוד. כשלון של חברה אחת כמעט לא מורגש.</p>
+            <div class="risk-meter"><div class="risk-fill-low"></div></div>
+            <div class="risk-label">רמת סיכון: מפוזרת ומבוקרת</div>
+          </div>
+        </div>
+      </div>
+
+      <p class="article-p" style="margin-top: 2rem;">חשבו על זה ככה: אם הייתם מחזיקים רק במניות של חברת Kodak בשנות ה-90, הייתם מפסידים כמעט הכל כשהחברה לא הצליחה להתמודד עם המהפכה הדיגיטלית. אבל אם הייתם מחזיקים במדד ה-S&P 500 באותה תקופה, Kodak הייתה רק חתיכה זעירה מהתיק שלכם, ובמקומה עלו חברות טכנולוגיה חדשות שמשכו את כל המדד למעלה. <strong>המדד מתקן את עצמו</strong> – חברות חלשות יוצאות וחברות חזקות נכנסות.</p>
+
+      <p class="article-p">הפיזור הזה הוא הסיבה המרכזית שמשקיעים רבים מעדיפים מדדים על פני בחירת מניות בודדות. אתם לא צריכים לנחש מי תהיה החברה הבאה שתצמח פי 10 – אתם פשוט מחזיקים את כולן, ונהנים מהצמיחה הכוללת של הכלכלה.</p>
+
+      <div class="info-quote">"אל תחפשו את המחט, פשוט תקנו את ערימת השחת כולה." - ג'ון בוגל, מייסד Vanguard</div>
+    </div>
+
+    <!-- SECTION 4: S&P 500 -->
+    <div class="card-light" id="sp500">
+      <h2 class="section-h2 section-h2-gradient">S&P 500 – המדד החשוב בעולם</h2>
+      <div class="index-detail-card">
+        <div class="index-detail-header">
+          <span class="index-detail-flag">🇺🇸</span>
+          <div>
+            <div class="index-detail-title">S&P 500</div>
+            <div class="index-detail-subtitle">Standard & Poor's 500</div>
+          </div>
+        </div>
+        <div class="index-stat-row">
+          <div class="index-stat"><div class="index-stat-val">1957</div><div class="index-stat-label">שנת ייסוד</div></div>
+          <div class="index-stat"><div class="index-stat-val">500</div><div class="index-stat-label">חברות</div></div>
+          <div class="index-stat"><div class="index-stat-val">~10.3%</div><div class="index-stat-label">תשואה שנתית ממוצעת</div></div>
+          <div class="index-stat"><div class="index-stat-val">~80%</div><div class="index-stat-label">מהשוק האמריקאי</div></div>
+        </div>
+      </div>
+
+      <h3 class="section-h3">ההיסטוריה המלאה</h3>
+      <p class="article-p">הסיפור של ה-S&P 500 מתחיל הרבה לפני 1957. כבר בשנת 1923, חברת Standard Statistics יצרה מדד ראשוני של 233 מניות שעודכן אחת לשבוע. בשנת 1926 הוקם מדד יומי מצומצם של 90 מניות, שנקרא "S&P 90" ומהווה את הבסיס ההיסטורי של המדד שאנחנו מכירים היום. בשנת 1941 התמזגה Standard Statistics עם חברת Poor's Publishing ונוצרה החברה Standard & Poor's.</p>
+
+      <p class="article-p">ב-4 במרץ 1957 הורחב המדד באופן רשמי ל-500 חברות וקיבל את שמו הנוכחי. באותה הזדמנות, הוא הפך למדד הבורסאי הראשון בעולם שחושב על ידי מחשב. אבן דרך נוספת הייתה ב-1976, כשחברת Vanguard השיקה את קרן המדד הראשונה למשקיעים פרטיים. ואז ב-1993 הונפקה קרן ה-SPDR (המכונה "Spider") – קרן הסל (ETF) הראשונה בעולם שעקבה אחרי ה-S&P 500 ונסחרה בבורסה. מאז, מאות מוצרים פיננסיים עוקבים אחרי המדד הזה בכל רחבי העולם – כולל עשרות קרנות מחקות וסל בישראל.</p>
+
+      <p class="article-p">היום, ה-S&P 500 מייצג כ-80% משווי השוק הכולל של המניות בארה"ב. עשר החברות הגדולות ביותר במדד (כמו אנבידיה, אלפבית (גוגל), אפל, מיקרוסופט ואמזון) מהוות לבדן כ-38% מהמשקל של המדד כולו. זה אומר שלמרות שיש 500 חברות, הביצועים מושפעים מאוד מהענקיות שבראש הרשימה.</p>
+
+      <h3 class="section-h3">איך נבחרות חברות למדד?</h3>
+      <p class="article-p">להיכנס ל-S&P 500 זו לא משימה קלה. ועדת המדדים של S&P Global בודקת שהחברה עומדת בכמה קריטריונים: שווי שוק גבוה (בדרך כלל מעל 18 מיליארד דולר), נפח מסחר מספיק, והחברה חייבת להציג רווחיות – סך הרווחים שלה בארבעת הרבעונים האחרונים חייב להיות חיובי, כולל הרבעון האחרון. הועדה מתכנסת מדי רבעון ומחליטה על שינויים. חברה שלא עומדת יותר בתנאים יוצאת ומתפנה מקום לחברה חדשה. כך המדד "מתחדש" ומשקף תמיד את העילית של הכלכלה האמריקאית.</p>
+
+      <h3 class="section-h3">ביצועים היסטוריים</h3>
+      <p class="article-p">מאז 1957, ה-S&P 500 הניב תשואה שנתית ממוצעת של כ-10.3% (כולל דיבידנדים שהושקעו מחדש). בניכוי אינפלציה, מדובר בתשואה ריאלית של כ-6-7% בשנה. כדי לתת לכם מושג מה המשמעות: השקעה של 100 דולר ב-1957 הייתה שווה היום למעלה מ-100,000 דולר (בהנחה שכל הדיבידנדים הושקעו מחדש).</p>
+
+      <p class="article-p">חשוב לציין שהמסלול לא היה חלק. המדד עבר 9 שווקים דוביים (bear markets – ירידות של מעל 20%) לאורך ההיסטוריה שלו. הירידה החזקה ביותר ביום אחד הייתה "יום שני השחור" באוקטובר 1987, עם צניחה של מעל 20% ביום בודד. היו גם תקופות ממושכות של ירידות, כמו בועת הדוט-קום (2000-2002) והמשבר הפיננסי (2007-2009). אבל אחרי כל ירידה, המדד התאושש והמשיך לעלות. לאורך כל ההיסטוריה, המדד סיים בעלייה בכ-70% מהשנים.</p>
+
+      <div class="note-box-light">
+        <strong>מה זה אומר בפועל?</strong> אם אתם שמים כסף במדד ה-S&P 500 ומתכוונים להשאיר אותו שם ל-20-30 שנה – ההיסטוריה מראה שהסיכויים שתרוויחו טובים מאוד. אבל צריך סבלנות ועצבים חזקים, כי בדרך יהיו שנים מפחידות. השקעה במדדים היא מרתון, לא ספרינט.
+      </div>
+    </div>
+
+    <!-- SECTION 5: NASDAQ 100 -->
+    <div class="card-dark" id="nasdaq">
+      <h2 class="section-h2 section-h2-mint">NASDAQ 100 – הקטר הטכנולוגי</h2>
+      <div class="index-detail-card" style="background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1);">
+        <div class="index-detail-header">
+          <span class="index-detail-flag">🇺🇸</span>
+          <div>
+            <div class="index-detail-title" style="color: var(--accent-light);">NASDAQ 100</div>
+            <div class="index-detail-subtitle">Nasdaq-100 Index</div>
+          </div>
+        </div>
+        <div class="index-stat-row">
+          <div class="index-stat" style="background: rgba(179,224,220,0.08); border-color: rgba(179,224,220,0.2);"><div class="index-stat-val" style="color: var(--accent-light);">1985</div><div class="index-stat-label" style="color: rgba(240,248,250,0.6);">שנת ייסוד</div></div>
+          <div class="index-stat" style="background: rgba(179,224,220,0.08); border-color: rgba(179,224,220,0.2);"><div class="index-stat-val" style="color: var(--accent-light);">100</div><div class="index-stat-label" style="color: rgba(240,248,250,0.6);">חברות (לא פיננסיות)</div></div>
+          <div class="index-stat" style="background: rgba(179,224,220,0.08); border-color: rgba(179,224,220,0.2);"><div class="index-stat-val" style="color: var(--accent-light);">~60%</div><div class="index-stat-label" style="color: rgba(240,248,250,0.6);">חשיפה לטכנולוגיה</div></div>
+        </div>
+      </div>
+
+      <h3 class="section-h3">ההיסטוריה</h3>
+      <p class="article-p">בורסת הנאסד"ק (NASDAQ – National Association of Securities Dealers Automated Quotations) הוקמה ב-1971 כבורסה אלקטרונית ראשונה בעולם, ללא "רצפת מסחר" פיזית כמו שהיה מקובל בבורסת ניו יורק. ב-1985 הושק מדד ה-NASDAQ 100, שעוקב אחרי 100 החברות הלא-פיננסיות הגדולות ביותר הנסחרות בבורסה זו. ההחרגה של חברות פיננסיות (בנקים, חברות ביטוח) היא מכוונת, ויוצרת מדד שמוטה בצורה משמעותית לכיוון טכנולוגיה, אינטרנט, תוכנה, שבבים ומדעי החיים.</p>
+
+      <p class="article-p">בין החברות הגדולות במדד: אפל, מיקרוסופט, אמזון, גוגל (אלפבית), מטא (פייסבוק), אנבידיה, טסלה ונטפליקס. כ-60% מהמשקל מרוכז בטכנולוגיה, ולכן הוא מושפע מאוד ממגמות טכנולוגיות.</p>
+
+      <h3 class="section-h3">NASDAQ 100 לעומת S&P 500</h3>
+      <p class="article-p">ההבדל המרכזי הוא הרכב ופיזור. ה-S&P 500 מייצג את כל הכלכלה האמריקאית – טכנולוגיה, בנקים, בריאות, אנרגיה, צריכה ותעשייה. הנאסד"ק 100 ממוקד הרבה יותר בטכנולוגיה. בעשור האחרון, הנאסד"ק 100 הציג תשואות גבוהות יותר, בעיקר בזכות הצמיחה של ענקיות הטכנולוגיה. אבל כשטכנולוגיה נופלת, הנאסד"ק נופל הרבה יותר חזק.</p>
+
+      <p class="article-p">בבועת הדוט-קום (2000-2002), מדד הנאסד"ק 100 איבד כ-83% מערכו – ירידה שלקח לו יותר מ-15 שנה להתאושש ממנה לחלוטין. לעומתו, ה-S&P 500 ירד "רק" כ-49% באותה תקופה והתאושש מהר יותר. זו דוגמה מצוינת ליתרון של הפיזור הרחב.</p>
+
+      <p class="article-p">רוב המשקיעים הפסיביים בישראל בוחרים ב-S&P 500 או בנאסד"ק 100 (או בשילוב). אין תשובה "נכונה" – מי שמאמין שהטכנולוגיה תמשיך להוביל ומוכן לתנודתיות גבוהה יותר, עשוי להעדיף נאסד"ק 100. מי שמעדיף פיזור ויציבות ייטה ל-S&P 500.</p>
+
+      <div class="note-box-dark">
+        <strong>טיפ למתחילים:</strong> הרבה מתחילים רוצים "רק נאסד"ק" בגלל התשואות המרשימות של השנים האחרונות. חשוב לזכור שתשואות העבר לא מבטיחות תשואות עתידיות, ושהריכוז בטכנולוגיה הוא גם סיכון. שילוב של שני המדדים, או התחלה עם S&P 500 בלבד, היא גישה שמרנית יותר למי שבתחילת הדרך.
+      </div>
+    </div>
+
+    <!-- SECTION 6: TA-35 -->
+    <div class="card-light" id="ta35">
+      <h2 class="section-h2 section-h2-gradient">ת"א 35 – חוד החנית של הכלכלה הישראלית</h2>
+      <div class="index-detail-card">
+        <div class="index-detail-header">
+          <span class="index-detail-flag">🇮🇱</span>
+          <div>
+            <div class="index-detail-title">ת"א 35 (TA-35)</div>
+            <div class="index-detail-subtitle">לשעבר מדד המעו"ף</div>
+          </div>
+        </div>
+        <div class="index-stat-row">
+          <div class="index-stat"><div class="index-stat-val">1992</div><div class="index-stat-label">שנת ייסוד</div></div>
+          <div class="index-stat"><div class="index-stat-val">35</div><div class="index-stat-label">חברות</div></div>
+          <div class="index-stat"><div class="index-stat-val">בנקים</div><div class="index-stat-label">סקטור דומיננטי</div></div>
+        </div>
+      </div>
+
+      <p class="article-p">מדד ת"א 35 הוא המדד המרכזי של הבורסה לניירות ערך בתל אביב. הוא כולל את 35 החברות בעלות שווי השוק הגבוה ביותר בבורסה הישראלית. שמו הקודם היה "מדד המעו"ף" (מכשירים עתידיים ואופציות פיננסיות), כיוון שעליו נסחרו חוזים עתידיים ואופציות. למרות שינוי השם, הרבה ותיקים עדיין קוראים לו "מדד המעו"ף".</p>
+
+      <p class="article-p">ההרכב של ת"א 35 מספר סיפור מעניין על הכלכלה הישראלית: חלק משמעותי מהמשקל שייך לבנקים הגדולים (לאומי, הפועלים, דיסקונט, מזרחי טפחות), חברות נדל"ן גדולות, חברות ביטוח, ומספר חברות טכנולוגיה. שלא כמו מדדים אמריקאיים שבהם הטכנולוגיה דומיננטית, בישראל הסקטור הפיננסי והנדל"ני עדיין תופס נתח גדול.</p>
+
+      <p class="article-p">מדד ת"א 35 מתעדכן פעמיים בשנה (בפברואר ובאוגוסט). ההשקעה בו מעניקה חשיפה ישירה לכלכלה הישראלית – וזה גם יתרון וגם חיסרון. יתרון כי אתם נהנים מצמיחה מקומית, חיסרון כי הכלכלה הישראלית קטנה יחסית ורגישה לאירועים גיאופוליטיים באזור.</p>
+
+      <div class="note-box-light">
+        <strong>למי מתאים ת"א 35?</strong> משקיעים שרוצים חשיפה ממוקדת ל-"Blue Chips" הישראליים. הוא מתאים כהשלמה לתיק שכולל מדד אמריקאי, ופחות כמדד יחיד (כי הוא מצומצם מדי ומרוכז בסקטורים מסוימים).
+      </div>
+    </div>
+
+    <!-- SECTION 7: TA-125 -->
+    <div class="card-dark" id="ta125">
+      <h2 class="section-h2 section-h2-mint">ת"א 125 – הכלכלה הישראלית הרחבה</h2>
+      <div class="index-detail-card" style="background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1);">
+        <div class="index-detail-header">
+          <span class="index-detail-flag">🇮🇱</span>
+          <div>
+            <div class="index-detail-title" style="color: var(--accent-light);">ת"א 125 (TA-125)</div>
+            <div class="index-detail-subtitle">מדד הדגל של הבורסה הישראלית</div>
+          </div>
+        </div>
+        <div class="index-stat-row">
+          <div class="index-stat" style="background: rgba(179,224,220,0.08); border-color: rgba(179,224,220,0.2);"><div class="index-stat-val" style="color: var(--accent-light);">125</div><div class="index-stat-label" style="color: rgba(240,248,250,0.6);">חברות</div></div>
+          <div class="index-stat" style="background: rgba(179,224,220,0.08); border-color: rgba(179,224,220,0.2);"><div class="index-stat-val" style="color: var(--accent-light);">TA-35 + TA-90</div><div class="index-stat-label" style="color: rgba(240,248,250,0.6);">הרכב</div></div>
+          <div class="index-stat" style="background: rgba(179,224,220,0.08); border-color: rgba(179,224,220,0.2);"><div class="index-stat-val" style="color: var(--accent-light);">מגוון</div><div class="index-stat-label" style="color: rgba(240,248,250,0.6);">סקטורים</div></div>
+        </div>
+      </div>
+
+      <p class="article-p">מדד ת"א 125 הוא <strong>מדד הדגל של הבורסה הישראלית</strong> – המקבילה הישראלית ל-S&P 500. הוא כולל את כל 35 החברות של ת"א 35, בתוספת עוד 90 חברות ישראליות גדולות ובינוניות (שמרכיבות את "מדד ת"א 90").</p>
+
+      <p class="article-p">מה שהופך את ת"א 125 למעניין במיוחד הוא הפיזור הרחב. ה-90 החברות הנוספות כוללות חברות מענפים מגוונים – טכנולוגיה בינונית, נדל"ן ובנייה, תעשייה, מסחר ושירותים, אנרגיה ועוד. הפיזור נותן חשיפה גם לחברות עם פוטנציאל צמיחה גבוה שעשויות בעתיד להיכנס לת"א 35.</p>
+
+      <p class="article-p">מרבית המשקיעים הפסיביים שרוצים חשיפה ישראלית מעדיפים ת"א 125 על פני ת"א 35, בדיוק בגלל הפיזור הרחב יותר. זהו גם המדד שרוב קרנות הפנסיה וההשתלמות בישראל משתמשות בו כ-benchmark כשהן מודדות ביצועים מול השוק הישראלי.</p>
+
+      <p class="article-p">אגב, כדאי לדעת שבתחילת 2025 הבורסה בתל אביב השיקה מדדי מניות חדשים: ת"א 200 (שוק רחב), ת"א 20 (חברות Large Cap), ות"א 50 ריאלי (דומה לנאסד"ק 100 – ללא חברות פיננסיות). מדדים אלו חדשים וטרם צברו היסטוריה משמעותית, אבל שווה לעקוב אחריהם.</p>
+
+      <div class="note-box-dark">
+        <strong>"על מה להשקיע – ת"א 35 או ת"א 125?"</strong> ברוב המקרים ת"א 125 עדיף, כי הוא כולל את כל מה שיש ב-ת"א 35 בתוספת 90 חברות נוספות. שניהם טובים, אבל הפיזור הרחב יותר של ת"א 125 בדרך כלל עדיף.
+      </div>
+    </div>
+
+    <!-- SECTION 8: ETF vs Mehake -->
+    <div class="card-light" id="israel-reality">
+      <h2 class="section-h2 section-h2-gradient">עושים סדר בישראל: קרן סל מול קרן מחקה</h2>
+      <p class="article-p">הבנו מה זה מדד ומה ההבדלים בין המדדים הפופולריים. עכשיו מגיעה השאלה הפרקטית: <strong>איך בפועל קונים מדד דרך בנק או בית השקעות ישראלי?</strong> בישראל קיימים שני סוגי מוצרים עיקריים שעוטפים מדדים, והם שונים באופן הרכישה.</p>
+
+      <h3 class="section-h3">הסיפור ההיסטורי: רפורמת תעודות הסל</h3>
+      <p class="article-p">עד שנת 2018 מי שרצה להשקיע במדד בישראל בדרך כלל קנה "תעודת סל" – התחייבות של גוף פיננסי לשלם למשקיע את תשואת המדד. הבעיה: זו לא הייתה השקעה אמיתית, רק הבטחה. אם החברה המנפיקה הייתה קורסת, המשקיעים היו מפסידים גם אם המדד עלה ("סיכון מנפיק").</p>
+
+      <p class="article-p">כדי לפתור את הבעיה, הכנסת העבירה את "תיקון 28 לחוק השקעות משותפות בנאמנות", שחייב את כל תעודות הסל להפוך ל-<strong>קרנות סל (ETFs)</strong> – קרנות נאמנות אמיתיות עם נכסים שמוחזקים אצל נאמן חיצוני. במקביל, המשיכו להתקיים גם <strong>קרנות מחקות פתוחות</strong>. שני המוצרים הם הדרך העיקרית שבה ישראלים משקיעים במדדים היום.</p>
+
+      <h3 class="section-h3">ההבדלים המעשיים</h3>
       <div class="comparison-table-wrap">
         <table class="comparison-table">
-          <thead>
-            <tr>
-              <th>מאפיין</th>
-              <th>ETF</th>
-              <th>קרן נאמנות</th>
-              <th>מניה בודדת</th>
-            </tr>
-          </thead>
+          <thead><tr><th>מאפיין</th><th>קרן סל (ETF)</th><th>קרן מחקה פתוחה</th></tr></thead>
           <tbody>
-            <tr>
-              <td>נסחר בבורסה בזמן אמת</td>
-              <td class="check">✅</td>
-              <td class="cross">❌</td>
-              <td class="check">✅</td>
-            </tr>
-            <tr>
-              <td>פיזור אוטומטי</td>
-              <td class="check">✅</td>
-              <td class="check">✅</td>
-              <td class="cross">❌</td>
-            </tr>
-            <tr>
-              <td>דמי ניהול</td>
-              <td>נמוכים מאוד<br><small style="color:#6b7280;">(0.03%–0.5%)</small></td>
-              <td>בינוניים–גבוהים<br><small style="color:#6b7280;">(0.5%–2%)</small></td>
-              <td>אין</td>
-            </tr>
-            <tr>
-              <td>שקיפות מלאה</td>
-              <td class="check">✅</td>
-              <td>חלקית</td>
-              <td class="check">✅</td>
-            </tr>
-            <tr>
-              <td>ניהול פסיבי</td>
-              <td class="check">✅ (רוב)</td>
-              <td>לרוב אקטיבי</td>
-              <td>—</td>
-            </tr>
-            <tr>
-              <td>מינימום השקעה</td>
-              <td>מחיר יחידה אחת</td>
-              <td>לרוב 1,000₪+</td>
-              <td>מחיר מניה אחת</td>
-            </tr>
+            <tr><td><strong>מה זה בעצם?</strong></td><td>קרן נאמנות הנסחרת בבורסה כמו מניה</td><td>קרן נאמנות רגילה שעוקבת אחרי מדד</td></tr>
+            <tr><td><strong>מתי מבוצעת העסקה?</strong></td><td>מיידי, בכל רגע בשעות המסחר</td><td>פעם ביום, בשער הנעילה של הקרן</td></tr>
+            <tr><td><strong>סוג הפקודה</strong></td><td>LMT (הגבלת מחיר) / MKT</td><td><strong>KRN</strong> (הוראת קרן)</td></tr>
+            <tr><td><strong>איך מגדירים כמה לקנות?</strong></td><td>כמות יחידות (למשל: 150 יחידות)</td><td>סכום כספי מדויק (למשל: 3,500 ש"ח)</td></tr>
+            <tr><td><strong>מרווח קנייה/מכירה</strong></td><td>קיים – תלוי בהיצע וביקוש</td><td>אין – שווי הוגן בסוף היום</td></tr>
+            <tr><td><strong>דמי ניהול ממוצעים</strong></td><td>~0.5% (אם כי יש גם זולות)</td><td>~0.1% (ולעתים 0%)</td></tr>
+            <tr><td><strong>מתאים ל...</strong></td><td>סכומים גדולים, מחיר מדויק</td><td>הפקדות חודשיות, סכום מדויק</td></tr>
           </tbody>
         </table>
       </div>
-    </div>
 
-    <!-- SECTION 3 -->
-    <div class="card-dark" id="big-etfs">
-      <h2 class="section-h2 section-h2-mint">ה-ETF הגדולים בעולם</h2>
-      <p class="article-p">אלו ה-ETF שכדאי להכיר — הם מנהלים טריליוני דולרים ומהווים את עמוד השדרה של תיקי השקעות פסיביים ברחבי העולם.</p>
-      <div class="etf-cards-grid">
-        <div class="etf-mini-card">
-          <div class="etf-ticker">SPY / VOO</div>
-          <div class="etf-desc">עוקב אחרי S&amp;P 500 — 500 החברות הגדולות בארה"ב. דמי ניהול: 0.03%–0.09%</div>
-        </div>
-        <div class="etf-mini-card">
-          <div class="etf-ticker">QQQ</div>
-          <div class="etf-desc">עוקב אחרי NASDAQ 100 — 100 חברות הטכנולוגיה הגדולות. דמי ניהול: 0.2%</div>
-        </div>
-        <div class="etf-mini-card">
-          <div class="etf-ticker">VTI</div>
-          <div class="etf-desc">כל שוק המניות האמריקאי — מעל 4,000 חברות. דמי ניהול: 0.03%</div>
-        </div>
-        <div class="etf-mini-card">
-          <div class="etf-ticker">VT</div>
-          <div class="etf-desc">כל שוק המניות העולמי — מעל 9,000 חברות מ-50 מדינות. דמי ניהול: 0.07%</div>
-        </div>
-        <div class="etf-mini-card">
-          <div class="etf-ticker">תכלית S&P 500</div>
-          <div class="etf-desc">ETF ישראלי העוקב אחרי S&amp;P 500 — נוח לרכישה בברוקרים ישראליים. דמי ניהול: ~0.5%</div>
-        </div>
-        <div class="etf-mini-card">
-          <div class="etf-ticker">מגדל S&P 500</div>
-          <div class="etf-desc">ETF ישראלי נוסף על S&amp;P 500. זמין בכל הברוקרים הישראליים. דמי ניהול: ~0.5%</div>
-        </div>
+      <p class="article-p" style="margin-top: 2rem;">ההבדל המעשי: בקרן סל אתם מגדירים כמה יחידות ובאיזה מחיר (כמו מניה); בקרן מחקה אתם מגדירים סכום שקלי, ובסוף היום הקרן קונה עבורכם יחידות בשווי הזה.</p>
+
+      <p class="article-p">מבחינת עלויות, בדיקת רשות שוק ההון מ-2024 הראתה שדמי הניהול בקרנות מחקות נמוכים יותר מאלה של קרנות סל. עם זאת, התחרות הובילה לירידה בדמי הניהול בכל המוצרים. חשוב לבדוק דמי ניהול מעודכנים לפני כל רכישה, כי הם עשויים להשתנות.</p>
+
+      <div class="note-box-light">
+        <strong>השורה התחתונה:</strong> הוראת קבע חודשית בסכום מדויק ולא אכפת לכם לחכות לסוף היום? → <strong>קרן מחקה (KRN)</strong>. סכום גדול ורוצים מחיר מדויק מיידית? → <strong>קרן סל (LMT)</strong>. רוב המשקיעים הפסיביים בישראל משתמשים בקרנות מחקות.
       </div>
-      <div class="note-box">💡 ETF ישראליים (תכלית, מגדל, קסם) נוחים יותר לרכישה בברוקרים ישראליים ויש להם יתרון מיסויי מסוים</div>
     </div>
 
-    <!-- SECTION 4 -->
-    <div class="card-light" id="tax">
-      <h2 class="section-h2 section-h2-gradient">מיסוי ETF בישראל</h2>
-      <p class="article-p">זה החלק שרוב המדריכים מדלגים עליו — ובדיוק בגלל זה כדאי להבין אותו.</p>
-      <div class="tax-columns">
-        <div class="tax-col">
-          <div class="tax-col-title">ETF זר (אמריקאי)</div>
-          <div class="tax-item"><span class="tax-item-label">רווח הון:</span> 25% מס</div>
-          <div class="tax-item"><span class="tax-item-label">דיבידנד:</span> 25% מס (15% נוכה במקור בארה"ב, 10% יתרה לישראל)</div>
-          <div class="tax-item"><span class="tax-item-label">מס עיזבון:</span> עשוי לחול על ישראלים מעל $60,000</div>
-          <div class="tax-item"><span class="tax-item-label">דיווח:</span> דרוש דיווח עצמי לרשות המיסים</div>
-        </div>
-        <div class="tax-col">
-          <div class="tax-col-title">ETF ישראלי (תכלית/מגדל)</div>
-          <div class="tax-item"><span class="tax-item-label">רווח הון:</span> 25% מס</div>
-          <div class="tax-item"><span class="tax-item-label">דיבידנד:</span> מחולק אוטומטית ואין כפל מס</div>
-          <div class="tax-item"><span class="tax-item-label">מס עיזבון:</span> לא חל</div>
-          <div class="tax-item"><span class="tax-item-label">דיווח:</span> הברוקר מנכה במקור — פשוט יותר</div>
-        </div>
+    <!-- SECTION 9: Currency -->
+    <div class="card-dark" id="currency">
+      <h2 class="section-h2 section-h2-mint">נושא חשוב: חשיפה מטבעית</h2>
+      <p class="article-p">כשאתם קונים קרן מחקה ישראלית שעוקבת אחרי מדד אמריקאי, אתם משלמים בשקלים, אבל הקרן מחזיקה נכסים דולריים. זה יוצר <strong>"חשיפה מטבעית"</strong> – התשואה שלכם מושפעת גם משינויים בשער הדולר-שקל.</p>
+
+      <p class="article-p">למשל: אם המדד לא זז אבל הדולר התחזק 5% מול השקל, הקרן שלכם "תעלה" 5% כי הנכסים הדולריים שווים יותר בשקלים. וההפך – אם השקל מתחזק, התשואה השקלית תהיה נמוכה מתשואת המדד.</p>
+
+      <p class="article-p">לכן קיימות שתי גרסאות לרוב הקרנות על מדדים אמריקאיים:</p>
+      <ul class="article-ul">
+        <li><strong>חשופה למט"ח (ללא גידור)</strong> – תשואה כוללת שינויי שער החליפין. מתאים למי שרוצה חשיפה גם למטבע.</li>
+        <li><strong>מנוטרלת מט"ח (מגודרת, "שקלי")</strong> – הקרן מנטרלת את השפעת המטבע. התשואה קרובה לתשואת המדד בלבד.</li>
+      </ul>
+
+      <p class="article-p">אין תשובה "נכונה" – זה תלוי בנסיבות. הרבה משקיעים בוחרים בגרסה חשופה למט"ח כפיזור נוסף. כשמחפשים קרן, שימו לב לשם: קרנות עם "שקלי" או "מנוטרלת מט"ח" הן מגודרות.</p>
+    </div>
+
+    <!-- SECTION: Value Investing + Index Investing -->
+    <div class="card-light" id="value-and-index">
+      <h2 class="section-h2 section-h2-gradient">השקעת ערך מול מדדים – למה לא צריך לבחור?</h2>
+      <p class="article-p">אם אתם מכירים את הגישה של <strong>השקעת ערך</strong> (Value Investing), אתם אולי שואלים את עצמכם: אם אני יודע לנתח חברות ולבחור מניות טובות, למה בכלל שאשקיע במדד? ומהצד השני: אם השקעה פסיבית במדדים כל כך טובה, למה בכלל לבחור מניות בודדות? התשובה היא שלשתי הגישות יש יתרונות ייחודיים, ורוב המשקיעים המנוסים משלבים ביניהן.</p>
+
+      <h3 class="section-h3">למה משקיע ערך בכל זאת קונה גם קרנות מחקות?</h3>
+      <p class="article-p">גם משקיע ערך מבין שהוא לא יכול לנתח לעומק כל חברה בכל סקטור בעולם. כשהוא משקיע במדד, הוא מקבל <strong>חשיפה רחבה לשוק כולו</strong> – כולל סקטורים וחברות שהוא לא מכיר מספיק טוב כדי לנתח לבד. זה שומר על פיזור בריא בתיק. בנוסף, קרנות מחקות הן "בסיס יציב" שעובד בשבילך 24/7 בלי מאמץ: אתה לא צריך לעקוב אחרי דוחות רבעוניים, לא צריך לדאוג מהחלפת מנכ"ל, ולא צריך לקרוא חדשות על החברה כל בוקר. זו "רשת ביטחון" שמבטיחה שגם אם בחירות המניות שלך לא יעבדו כמצופה, חלק משמעותי מהתיק שלך עדיין צומח עם השוק.</p>
+
+      <p class="article-p">זו הסיבה שמשקיעים פסיביים מתחילים, ובמיוחד כאלה שעדיין לומדים את שוק ההון, מתחילים בדרך כלל עם קרנות מחקות. זו הדרך הבטוחה והפשוטה ביותר להיכנס לשוק ולצבור ניסיון, בלי הסיכון של בחירת מניות בודדות בלי ידע מספיק.</p>
+
+      <h3 class="section-h3">ומהצד השני – למה לבחור גם מניות בודדות?</h3>
+      <p class="article-p">כשאתם בוחרים מניה ספציפית (למשל, חברה שנתחתם לעומק והחלטתם שהיא מתומחרת בחסר), אתם בעצם בונים <strong>"סל מותאם אישית"</strong> שמתאים בדיוק לאסטרטגיה שלכם. הכוח של בחירת מניות הוא היכולת <strong>להתאים את ההשקעה למידות תפורות אליכם</strong> – גם מצד הביטחון (אתם מכירים לעומק את החברה ומבינים את הסיכונים שלה) וגם מצד התשואה (אם הניתוח שלכם נכון, הפוטנציאל גבוה יותר מהמדד). כשאתם קונים מניה, אתם יודעים בדיוק למה אתם נכנסים – מה החברה עושה, מה המצב הפיננסי שלה, למה אתם חושבים שהמחיר שלה נמוך מדי, ומתי תמכרו.</p>
+
+      <p class="article-p">לעומת זאת, כשאתם קונים מדד, אתם קונים "הכל" – כולל חברות שאתם לא בהכרח אוהבים, כולל חברות שהן יקרות מדי לטעמכם, וכולל חברות מסקטורים שאתם לא מאמינים בהם. זה המחיר של הפיזור – אתם מקבלים את הממוצע, לא רק את הטוב.</p>
+
+      <div class="note-box-light">
+        <strong>הגישה המומלצת למתחילים:</strong> התחילו עם קרנות מחקות כבסיס התיק (לפחות 70%-80%). ככל שתלמדו יותר ותצברו ניסיון בניתוח חברות, תוכלו להוסיף מניות בודדות שבחרתם בעצמכם כחלק קטן מהתיק. ככה אתם נהנים מהפיזור והביטחון של המדדים, אבל גם מאפשרים לעצמכם ללמוד, להתנסות ולהרוויח יותר אם הניתוח שלכם נכון.
       </div>
-      <div class="warning-box">⚠️ המידע כאן הוא כללי ולצורכי לימוד בלבד. לייעוץ מס אישי פנו לרואה חשבון.</div>
     </div>
 
-    <!-- SECTION 5 -->
-    <div class="card-light" id="how-to-buy">
-      <h2 class="section-h2 section-h2-gradient">איך קונים ETF דרך ברוקר ישראלי?</h2>
-      <p class="article-p">בישראל יש כמה דרכים לרכוש ETF. הנה המדריך המעשי.</p>
+    <!-- SECTION: Sector Funds -->
+    <div class="card-dark" id="sector-funds">
+      <h2 class="section-h2 section-h2-mint">קרנות מחקות סקטוריאליות – השקעה ממוקדת בענף ספציפי</h2>
+      <p class="article-p">עד כה דיברנו על מדדים רחבים (כמו S&P 500 או ת"א 125) שמכסים את כל השוק או חלק גדול ממנו. אבל קיימות גם <strong>קרנות מחקות סקטוריאליות</strong> – קרנות שעוקבות אחרי מדד של ענף ספציפי. למשל: קרן שמחקה מדד של חברות טכנולוגיה בלבד, מדד של חברות בריאות, מדד של חברות אנרגיה, מדד של חברות נדל"ן, מדד של חברות פיננסיות, ועוד.</p>
+
+      <h3 class="section-h3">למי זה מתאים?</h3>
+      <p class="article-p">קרנות סקטוריאליות מתאימות למשקיע שמאמין שענף מסוים יניב תשואות עודפות על פני השוק הכללי. למשל, אם אתם מאמינים שבינה מלאכותית תשנה את העולם ושחברות השבבים ירוויחו מזה יותר מכל ענף אחר, אתם יכולים לקנות קרן מחקה על מדד חברות שבבים. בישראל קיימות קרנות מחקות וקרנות סל על סקטורים שונים, כולל טכנולוגיה, סייבר, בריאות, נדל"ן ועוד.</p>
+
+      <p class="article-p">חשוב להבין: השקעה סקטוריאלית היא <strong>פחות מפוזרת</strong> מהשקעה במדד רחב. אתם שמים את הכסף על "סוס" אחד – ענף ספציפי. אם הענף הזה פורח, תרוויחו יותר מהמדד. אם הוא נפגע (רגולציה חדשה, שינוי טכנולוגי, מיתון סקטוריאלי), ההפסדים שלכם יהיו גדולים יותר מאשר במדד מגוון. לכן, קרנות סקטוריאליות מומלצות בדרך כלל כתוספת (10%-20% מהתיק) ולא כתחליף למדד רחב.</p>
+
+      <div class="note-box-dark">
+        <strong>דוגמאות לסקטורים פופולריים:</strong> טכנולוגיה (מדדי IT ו-AI), בריאות ופארמה (מדדי Healthcare), פיננסים (מדד הבנקים), נדל"ן (מדדי REIT), אנרגיה (כולל אנרגיה נקייה), וסקטור הצריכה. בישראל תמצאו קרנות מחקות על חלק מהסקטורים האלה, וגם על סקטורים ישראליים ספציפיים כמו מדד הבנקים ומדד הנדל"ן.
+      </div>
+    </div>
+
+    <!-- SECTION: Leveraged Funds WARNING -->
+    <div class="card-light" id="leveraged">
+      <h2 class="section-h2 section-h2-gradient">קרנות ממונפות – לא מה שאתם חושבים (אזהרה!)</h2>
+      <p class="article-p">אם אתם מתעניינים בשוק ההון, סביר שנתקלתם במונח <strong>"קרן ממונפת"</strong> – קרן שמבטיחה להכפיל (פי 2) או לשלש (פי 3) את התשואה היומית של מדד מסוים. נשמע מפתה, נכון? אם ה-S&P 500 עולה 1% ביום, אתם מרוויחים 2% או 3%. אבל <strong>חייבים להבין את הסיכונים המשמעותיים</strong> שבאים עם הכלי הזה, במיוחד אם אתם משקיעים לטווח ארוך.</p>
+
+      <h3 class="section-h3">איך עובד המינוף?</h3>
+      <p class="article-p">קרן ממונפת לא קונה פשוט "יותר מניות". היא משתמשת בנגזרים פיננסיים כמו חוזים עתידיים, אופציות וחוזי SWAP כדי להשיג את הכפלת התשואה. וכאן נכנס הקאץ' הגדול: <strong>ההכפלה היא על בסיס יומי בלבד</strong>. כלומר, הקרן מתאפסת ומתאזנת מחדש כל יום. בטווח של יום אחד, הקרן אכן מספקת בערך פי 2 או פי 3 מהתשואה. אבל לאורך שבועות וחודשים, התוצאה יכולה להיות שונה לחלוטין ממה שמצפים.</p>
+
+      <h3 class="section-h3">שחיקת המינוף (Volatility Drag)</h3>
+      <p class="article-p">זו הבעיה המרכזית: בשוק תנודתי, שעולה ויורד לסירוגין, קרן ממונפת <strong>נשחקת בהכרח</strong>. הנה דוגמה פשוטה: נניח שמדד עולה 10% ביום אחד ואז יורד 10% ביום הבא. המדד עצמו ירד בסה"כ ל-99% (כי 10% ירידה מ-110 זה 11 נקודות). אבל קרן ממונפת פי 2 קודם עולה 20%, ואז יורדת 20% מהערך החדש – ומסיימת ב-96% (הפסד של 4% במקום 1%). עכשיו דמיינו את האפקט הזה חוזר על עצמו מאות ימי מסחר – השחיקה מצטברת.</p>
+
+      <p class="article-p">בנוסף, דמי הניהול בקרנות ממונפות <strong>גבוהים משמעותית</strong> – בישראל הם יכולים להגיע אפילו ל-2%-3.5% בשנה, לעומת 0%-0.1% בקרנות מחקות רגילות. כשמוסיפים את עלויות המינוף (ריבית, עלויות הנגזרים), העלות הכוללת גבוהה מאוד.</p>
+
+      <div class="note-box-light" style="border-right-color: #e57373; background: rgba(229,115,115,0.05); border-color: rgba(229,115,115,0.2);">
+        <strong style="color: #c44;">⚠️ אזהרה חשובה:</strong> קרנות ממונפות <strong>אינן מתאימות להשקעה לטווח ארוך</strong>. רוב המומחים מסכימים שהן מיועדות לסוחרים מנוסים שמשתמשים בהן לטווח קצר מאוד (ימים בודדים). משקיע פסיבי שקונה קרן ממונפת פי 3 על הנאסד"ק ומחזיק אותה שנים – חשוף לסיכון של שחיקה מתמשכת שיכולה למחוק חלק גדול מההשקעה, גם אם המדד עצמו עולה לאורך זמן. <strong>למתחילים: הימנעו מקרנות ממונפות.</strong>
+      </div>
+    </div>
+
+    <!-- SECTION: Taxation -->
+    <div class="card-dark" id="taxation">
+      <h2 class="section-h2 section-h2-mint">מיסוי קרנות מחקות וקרנות סל בישראל</h2>
+      <p class="article-p">נושא המיסוי הוא קריטי ומשפיע ישירות על כמה כסף נשאר אצלכם בסוף. הדבר המשמח הוא שאם אתם משקיעים בקרנות ישראליות, הגוף הפיננסי שלכם (הבנק או בית ההשקעות) מטפל בניכוי המס בשבילכם אוטומטית, כך שאתם לא צריכים להגיש דוחות מס מיוחדים על זה.</p>
+
+      <h3 class="section-h3">מסחר עצמאי (חשבון רגיל)</h3>
+      <p class="article-p">כשאתם מוכרים קרן מחקה או קרן סל ברווח בחשבון מסחר רגיל (לא קרן השתלמות ולא פנסיה), חל עליכם <strong>מס רווח הון בשיעור 25%</strong>. המס הוא על הרווח בלבד – כלומר, על ההפרש בין מחיר הקנייה למחיר המכירה. נקודה חשובה: ברוב קרנות המחקות הישראליות, המס מחושב על <strong>הרווח הריאלי</strong> – כלומר, מקזזים מהרווח את עליית מדד המחירים לצרכן (אינפלציה) בתקופת ההחזקה. זה אומר שאם הקרן עלתה 10% והאינפלציה הייתה 3%, תשלמו מס רק על 7% מהרווח. היתרון הזה הוא משמעותי מאוד לאורך זמן.</p>
+
+      <p class="article-p">נקודה נוספת: רוב קרנות המחקות הישראליות הן <strong>קרנות "צוברות"</strong> – הן לא מחלקות דיבידנדים אלא משקיעות אותם מחדש בתוך הקרן. זה אומר שאין לכם אירוע מס כל פעם שחברה במדד מחלקת דיבידנד. המס נדחה עד שתמכרו את הקרן – וזה מאפשר לריבית דריבית לעבוד במלוא הכוח.</p>
+
+      <h3 class="section-h3">בקרן השתלמות</h3>
+      <p class="article-p">אם יש לכם קרן השתלמות שבה אתם יכולים לבחור מסלול השקעה או לנהל תיק עצמאי (IRA), ישנו <strong>פטור ממס רווחי הון</strong> על הרווחים. זה הופך את קרן ההשתלמות לכלי מצוין להשקעה במדדים – כל הרווחים שלכם מושקעים מחדש ללא ניכוי מס. לכן, משקיעים רבים מעדיפים לרכז את ההשקעות הפסיביות שלהם דווקא בתוך קרן ההשתלמות כדי ליהנות מהפטור הזה.</p>
+
+      <h3 class="section-h3">בפנסיה</h3>
+      <p class="article-p">כספי הפנסיה מנוהלים בדרך כלל על ידי הגוף הפנסיוני (חברת הביטוח או קרן הפנסיה), שמשקיע את הכסף עבורכם. הרווחים על ההשקעות בתוך קופת הפנסיה <strong>פטורים ממס רווח הון</strong> כל עוד הכסף נשאר בתוך הקופה. כשתגיעו לגיל פרישה ותתחילו למשוך את הכסף כקצבה חודשית, המיסוי יהיה על הקצבה עצמה (לפי מדרגות מס הכנסה), ולא על רווחי ההון.</p>
+
+      <div class="note-box-dark" style="border-right-color: #ff8a80;">
+        <strong>הבהרה חשובה:</strong> המידע במאמר זה מובא על פי הבנתי הכללית בנושא המיסוי ומיועד לתת תמונה ראשונית בלבד. <strong>אני לא יועץ מס ולא רואה חשבון.</strong> נושאי מיסוי הם מורכבים ויש בהם ניואנסים רבים – כגון הבדלים בין ניירות ערך ישראליים לזרים, הצמדה למדד מחירים לצרכן מול הצמדה למט"ח, חוקי קיזוז הפסדים, ועוד. לפני קבלת החלטות על בסיס שיקולי מס, <strong>פנו ליועץ מס מוסמך</strong> שיתאים את הייעוץ לנסיבות האישיות שלכם.
+      </div>
+    </div>
+
+    <!-- SECTION: Practical Guide -->
+    <div class="card-light" id="practical-guide">
+      <h2 class="section-h2 section-h2-gradient">המדריך המעשי: איך מוצאים וקונים קרן מחקה בישראל</h2>
+      <p class="article-p">החלטתם שאתם רוצים לקנות קרן מחקה על מדד מסוים – מצוין! השיטה הבטוחה ביותר: מצאו את <strong>מספר נייר הערך</strong> של הקרן באתר Bizportal, ואז הזינו את המספר ישירות במערכת המסחר שלכם (Spark, אורדרנט וכד'). כך לא תתבלבלו בין שמות דומים.</p>
+
       <div class="steps-list">
-
         <div class="step-item" data-step>
           <div class="step-header" onclick="toggleStep(this)">
             <div class="step-number">1</div>
-            <div class="step-title">פתיחת חשבון ברוקר</div>
+            <div class="step-title">חיפוש הקרן באתר ביזפורטל</div>
             <span class="step-arrow">▼</span>
           </div>
           <div class="step-body">
-            <div class="step-content">הברוקרים הפופולריים בישראל: מיטב טרייד, IBI, אקסלנס, פסגות. לפתיחת חשבון תצטרכו: תעודת זהות, אסמכתא לחשבון בנק, טופס W-8BEN לרכישת ני"ע אמריקאים.</div>
+            <div class="step-content">
+              <ol class="article-ul">
+                <li>כנסו ל-<strong>Bizportal.co.il</strong></li>
+                <li>בתפריט: <strong>שוק ההון ← קרנות נאמנות ← סורק קרנות מתקדם</strong></li>
+                <li>סננו: <strong>סוג קרן:</strong> "קרן מחקה". <strong>אפיק:</strong> "מניות חו"ל" (ל-S&P / נאסד"ק) או "מניות בארץ" (לת"א 125). הקלידו בחיפוש החופשי את שם המדד.</li>
+                <li>מיינו לפי <strong>דמי ניהול</strong> מהנמוך לגבוה.</li>
+                <li>לחצו על הקרן שבחרתם. בראש העמוד יופיע מספר בן 7 ספרות, למשל: <span class="code-block">5129671</span>. <strong>העתיקו אותו.</strong></li>
+              </ol>
+              <div class="note-box-light" style="margin-bottom: 0; margin-top: 1rem;">
+                <strong>טיפ:</strong> בדקו גם "דמי ניהול משתנים" ו"דמי נאמנות" – שלושת הרכיבים ביחד הם העלות האמיתית. העדיפו קרנות גדולות (נכסים מנוהלים גבוהים) – יותר יציבות ונזילות.
+              </div>
+            </div>
           </div>
         </div>
 
         <div class="step-item" data-step>
           <div class="step-header" onclick="toggleStep(this)">
             <div class="step-number">2</div>
-            <div class="step-title">איתור ה-ETF — Bizportal</div>
+            <div class="step-title">הזנת פקודת רכישה במערכת המסחר</div>
             <span class="step-arrow">▼</span>
           </div>
           <div class="step-body">
-            <div class="step-content">גשו ל-bizportal.co.il → סורק ני"ע → קרנות סל. ניתן לסנן לפי: מדד עוקב, דמי ניהול, היקף נכסים. לחיפוש ETF אמריקאי — חפשו לפי ticker (SPY, VOO, QQQ) בממשק הברוקר ישירות.</div>
+            <div class="step-content">
+              <ul class="article-ul">
+                <li>הדביקו את <strong>מספר הנייר</strong> בשורת החיפוש. ודאו שהשם תואם.</li>
+                <li>לחצו <strong>קנייה</strong>.</li>
+                <li><strong>סוג פקודה:</strong> קרן מחקה → <strong>KRN</strong>. קרן סל → <strong>LMT</strong> (עם מחיר מקסימלי).</li>
+                <li><strong>סכום / כמות:</strong> KRN → סכום שקלי (למשל 2,000). LMT → כמות יחידות.</li>
+                <li>לחצו <strong>"שדר"</strong> ואשרו.</li>
+              </ul>
+              <div class="note-box-light" style="margin-bottom: 0; margin-top: 1rem;">
+                <strong>על KRN:</strong> הפקודה מבוצעת פעם ביום, בשער הנעילה. תופיע בתיק למחרת בבוקר. סטטוס "ממתינה" הוא נורמלי.
+              </div>
+            </div>
           </div>
         </div>
 
         <div class="step-item" data-step>
           <div class="step-header" onclick="toggleStep(this)">
             <div class="step-number">3</div>
-            <div class="step-title">ביצוע עסקה</div>
+            <div class="step-title">הגדרת הוראת קבע חודשית (מומלץ!)</div>
             <span class="step-arrow">▼</span>
           </div>
           <div class="step-body">
-            <div class="step-content">בחרו "קנייה", הזינו את מספר היחידות או הסכום, בחרו "מחיר שוק" (Market Order) לביצוע מיידי או "מחיר מוגבל" (Limit Order) למחיר ספציפי. בדקו עמלות לפני אישור.</div>
+            <div class="step-content">
+              <p>במקום לזכור כל חודש להיכנס למערכת, הגדירו <strong>הוראת קבע אוטומטית</strong>:</p>
+              <ul class="article-ul">
+                <li>חפשו "הוראות קבע" או "הפקדות אוטומטיות" באפליקציה.</li>
+                <li>בחרו את הקרן, הגדירו סכום חודשי ותאריך.</li>
+                <li>כל חודש ייקנו עבורכם יחידות באופן אוטומטי.</li>
+              </ul>
+              <p>הגישה הזו נקראת <strong>Dollar Cost Averaging</strong> (ממוצע עלות): אתם קונים בקביעות בכל מצב שוק. כשהשוק יורד – קונים יותר יחידות, כשעולה – פחות. לאורך זמן, זה מפחית סיכון כניסה בתזמון גרוע.</p>
+            </div>
           </div>
         </div>
-
-        <div class="step-item" data-step>
-          <div class="step-header" onclick="toggleStep(this)">
-            <div class="step-number">4</div>
-            <div class="step-title">מעקב ודיווח מס</div>
-            <span class="step-arrow">▼</span>
-          </div>
-          <div class="step-body">
-            <div class="step-content">עקבו אחרי הביצועים דרך הברוקר. בסוף שנה — הברוקר ישלח טופס 867 (ני"ע זרים) לדיווח לרשות המיסים. ETF ישראלי — הברוקר מנכה מס במקור.</div>
-          </div>
-        </div>
-
       </div>
     </div>
 
-    <!-- WIDGET 1: FEE CALCULATOR -->
+    <!-- SECTION 11: Calculator -->
     <div class="card-dark" id="fee-calculator">
-      <h2 class="section-h2 section-h2-mint">מחשבון: כמה עולים לכם דמי הניהול לאורך זמן?</h2>
-      <p class="article-p">הפרש של 0.5% בדמי ניהול נשמע זניח — אבל לאורך שנים זה אלפי שקלים</p>
+      <h2 class="section-h2 section-h2-mint">מחשבון: השוד השקט של דמי הניהול</h2>
+      <p class="article-p">קרנות מחקות פופולריות בישראל גובות 0.05%-0.1% בשנה, ויש כאלה שגובות 0%. לעומתן, קרנות מנוהלות (אקטיביות) בבנקים גובות 1%-2%. בגלל ריבית דריבית, ההבדל ה"קטן" הזה מצטבר לסכומים עצומים על פני עשרות שנים:</p>
 
       <div class="calc-grid">
         <div class="calc-field">
-          <label class="calc-label">סכום השקעה ראשוני (₪)</label>
-          <input class="calc-input" type="number" id="fc-initial" value="50000" min="0">
+          <label class="calc-label">סכום השקעה התחלתי (₪)</label>
+          <input class="calc-input" type="number" id="fc-initial" value="100000" min="0">
         </div>
         <div class="calc-field">
-          <label class="calc-label">תוספת חודשית (₪)</label>
-          <input class="calc-input" type="number" id="fc-monthly" value="1000" min="0">
+          <label class="calc-label">הפקדה חודשית קבועה (₪)</label>
+          <input class="calc-input" type="number" id="fc-monthly" value="2000" min="0">
         </div>
         <div class="calc-field">
-          <label class="calc-label">תשואה שנתית צפויה — <span id="fc-return-val">7</span>%</label>
+          <label class="calc-label">תשואת שוק שנתית צפויה: <span id="fc-return-val">8</span>%</label>
           <div class="calc-slider-row">
-            <input class="calc-slider" type="range" id="fc-return" min="1" max="15" value="7">
+            <input class="calc-slider" type="range" id="fc-return" min="3" max="15" value="8">
           </div>
         </div>
         <div class="calc-field">
-          <label class="calc-label">שנות השקעה — <span id="fc-years-val">20</span> שנה</label>
+          <label class="calc-label">תקופת חיסכון (שנים): <span id="fc-years-val">25</span></label>
           <div class="calc-slider-row">
-            <input class="calc-slider" type="range" id="fc-years" min="5" max="40" value="20">
+            <input class="calc-slider" type="range" id="fc-years" min="5" max="40" value="25">
           </div>
         </div>
         <div class="calc-field">
-          <label class="calc-label">דמי ניהול ETF א' (%)</label>
+          <label class="calc-label">דמי ניהול - קרן מחקה/סל זולה (%)</label>
           <input class="calc-input" type="number" id="fc-fee-a" value="0.07" min="0" max="5" step="0.01">
         </div>
         <div class="calc-field">
-          <label class="calc-label">דמי ניהול ETF ב' (%)</label>
-          <input class="calc-input" type="number" id="fc-fee-b" value="0.75" min="0" max="5" step="0.01">
+          <label class="calc-label">דמי ניהול - קרן מנוהלת יקרה (%)</label>
+          <input class="calc-input" type="number" id="fc-fee-b" value="1.50" min="0" max="5" step="0.01">
         </div>
       </div>
 
       <div class="calc-results">
         <div class="calc-result-box">
-          <div class="calc-result-label">שווי תיק א' (דמי ניהול נמוכים)</div>
+          <div class="calc-result-label">שווי עתידי (קרן מחקה פסיבית)</div>
           <div class="calc-result-val val-mint" id="fc-val-a">—</div>
         </div>
         <div class="calc-result-box">
-          <div class="calc-result-label">שווי תיק ב' (דמי ניהול גבוהים)</div>
+          <div class="calc-result-label">שווי עתידי (קרן אקטיבית בבנק)</div>
           <div class="calc-result-val val-red" id="fc-val-b">—</div>
         </div>
       </div>
-      <div class="calc-diff" id="fc-diff">חסכתם — ₪ בדמי ניהול</div>
-
-      <div class="bar-chart" id="fc-bar-chart">
-        <div class="bar-wrap">
-          <div class="bar bar-a" id="bar-a" style="height:80px;"></div>
-          <div class="bar-label">תיק א'</div>
-        </div>
-        <div class="bar-wrap">
-          <div class="bar bar-b" id="bar-b" style="height:80px;"></div>
-          <div class="bar-label">תיק ב'</div>
-        </div>
-      </div>
+      <div class="calc-diff" id="fc-diff">הפסדתם לגוף הפיננסי — ₪ בגלל עמלות</div>
     </div>
 
-    <!-- WIDGET 2: GROWTH SIMULATOR -->
-    <div class="card-light" id="growth-simulator">
-      <h2 class="section-h2 section-h2-gradient">סימולטור: תראו את הכסף שלכם גדל</h2>
+    <!-- SECTION 12: Summary -->
+    <div class="card-light" id="summary">
+      <h2 class="section-h2 section-h2-gradient">סיכום: מה למדנו ומה עושים עכשיו?</h2>
+      
+      <p class="article-p">עברנו מסלול ארוך, ועכשיו הגיע הזמן לסכם:</p>
 
-      <div class="sim-grid">
-        <div class="sim-field">
-          <label class="sim-label">סכום התחלתי (₪)</label>
-          <input class="sim-input" type="number" id="gs-initial" value="10000" min="0">
-        </div>
-        <div class="sim-field">
-          <label class="sim-label">השקעה חודשית (₪)</label>
-          <input class="sim-input" type="number" id="gs-monthly" value="500" min="0">
-        </div>
-        <div class="sim-field">
-          <label class="sim-label">תשואה שנתית — <span id="gs-return-val">8</span>%</label>
-          <div class="sim-slider-row">
-            <input class="sim-slider" type="range" id="gs-return" min="1" max="15" value="8">
-          </div>
-        </div>
-        <div class="sim-field">
-          <label class="sim-label">תקופה — <span id="gs-years-val">25</span> שנים</label>
-          <div class="sim-slider-row">
-            <input class="sim-slider" type="range" id="gs-years" min="5" max="40" value="25">
-          </div>
-        </div>
-      </div>
+      <p class="article-p"><strong>מדד בורסאי הוא רשימה מוגדרת של חברות.</strong> כשאתם משקיעים במוצר שעוקב אחרי מדד, הכסף מתפזר אוטומטית בין כל החברות ברשימה.</p>
 
-      <div class="sim-results">
-        <div class="sim-result-box">
-          <div class="sim-result-label">סך הכסף שהשקעתם</div>
-          <div class="sim-result-val sim-val-gray" id="gs-invested">—</div>
-        </div>
-        <div class="sim-result-box" style="border-color:rgba(42,157,143,0.3);background:rgba(42,157,143,0.05);">
-          <div class="sim-result-label">שווי התיק הצפוי</div>
-          <div class="sim-result-val sim-val-mint" id="gs-total">—</div>
-        </div>
-        <div class="sim-result-box" style="border-color:rgba(5,150,105,0.3);background:rgba(5,150,105,0.05);">
-          <div class="sim-result-label">רווח מריבית דריבית</div>
-          <div class="sim-result-val sim-val-green" id="gs-profit">—</div>
-        </div>
-      </div>
+      <p class="article-p"><strong>ה-S&P 500</strong> – 500 החברות הגדולות בארה"ב, תשואה היסטורית ~10% בשנה. נקודת התחלה מצוינת. <strong>הנאסד"ק 100</strong> – ממוקד טכנולוגיה, תשואות גבוהות יותר אך תנודתיות גבוהה. <strong>ת"א 125</strong> – מדד הדגל הישראלי, חשיפה רחבה לכלכלה המקומית.</p>
 
-      <div class="svg-wrap">
-        <svg id="growth-svg" viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="lineGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#b3e0dc" stop-opacity="0.4"/>
-              <stop offset="100%" stop-color="#b3e0dc" stop-opacity="0"/>
-            </linearGradient>
-          </defs>
-          <!-- Grid and content rendered by JS -->
-        </svg>
-      </div>
-      <div id="svg-tooltip" class="svg-tooltip"></div>
-    </div>
+      <p class="article-p">בשוק הישראלי, <strong>קרנות מחקות פתוחות</strong> הן הדרך הפשוטה והזולה ביותר להשקיע. הרכישה בפקודת <strong>KRN</strong>, דמי ניהול נמוכים, ואפשרות להוראת קבע חודשית.</p>
 
-    <!-- SECTION 6 -->
-    <div class="card-dark" id="value-investors">
-      <h2 class="section-h2 section-h2-mint">למה אפילו משקיעי ערך קונים ETF?</h2>
-      <p class="article-p">וורן באפט עצמו אמר שלאחר מותו, 90% מהכסף שישאיר לאשתו יושקע ב-S&amp;P 500 index fund. איך זה מסתדר עם השקעות ערך?</p>
-      <div class="vi-grid">
-        <div class="vi-card">
-          <div class="vi-card-icon">🛡️</div>
-          <div class="vi-card-title">בסיס יציב לתיק</div>
-          <div class="vi-card-desc">ETF על המדד הוא ה"בסיס" של התיק — מספק פיזור ויציבות בזמן שאתם מחפשים השקעות ערך ספציפיות</div>
-        </div>
-        <div class="vi-card">
-          <div class="vi-card-icon">📊</div>
-          <div class="vi-card-title">benchmark להשוואה</div>
-          <div class="vi-card-desc">אם התיק שלכם לא מכה את ה-S&amp;P 500 לאורך זמן — אולי כדאי פשוט להשקיע ב-ETF</div>
-        </div>
-        <div class="vi-card">
-          <div class="vi-card-icon">🚀</div>
-          <div class="vi-card-title">מתאים למתחילים</div>
-          <div class="vi-card-desc">לפני שמתחילים לבחור מניות בודדות, ETF מלמד אתכם להיות בשוק, לספוג תנודות ולחשוב לטווח ארוך</div>
-        </div>
-        <div class="vi-card">
-          <div class="vi-card-icon">⏰</div>
-          <div class="vi-card-title">חוסך זמן</div>
-          <div class="vi-card-desc">לא תמיד יש זמן לנתח חברות. ETF מאפשר לשמור על חשיפה לשוק בלי ניהול אקטיבי</div>
-        </div>
-      </div>
-
-      <div class="article-quote" id="buffett-quote">
-        <blockquote>"עבור רוב המשקיעים — לא המקצועיים — S&amp;P 500 index fund בעלויות נמוכות הוא ההשקעה ההגיונית ביותר"</blockquote>
-        <cite>— וורן באפט</cite>
+      <div class="note-box-light">
+        <strong>הצעדים הבאים:</strong>
+        <br><br>
+        1. <strong>פתחו חשבון מסחר</strong> – בבנק או בבית השקעות. חינם ולוקח דקות.
+        <br><br>
+        2. <strong>בחרו מדד</strong> – S&P 500 נקודת התחלה מצוינת. רוצים גם ישראלי? הוסיפו ת"א 125.
+        <br><br>
+        3. <strong>מצאו קרן מחקה זולה</strong> – בביזפורטל, מיינו לפי דמי ניהול.
+        <br><br>
+        4. <strong>הגדירו הוראת קבע</strong> – סכום קבוע כל חודש. ככה נבנה עושר.
+        <br><br>
+        5. <strong>אל תיבהלו מירידות</strong> – ב-70% מהשנים השוק עולה. חשבו לטווח ארוך.
       </div>
     </div>
 
@@ -1265,75 +735,22 @@
       <div class="author-avatar">י.ת</div>
       <div>
         <div class="author-name">נכתב על ידי יאיר תכלת</div>
-        <div class="author-bio">מייסד NewGen Finance. משקיע ערך, מחנך פיננסי, ובונה כלים שעוזרים למשקיעים מתחילים להתחיל נכון.</div>
-        <a href="/about/" class="author-link">קרא עוד אודות יאיר ←</a>
+        <div class="author-bio">מייסד NewGen Finance. משקיע ערך, מחנך פיננסי, ובונה כלים טכנולוגיים שעוזרים לישראלים לקחת אחריות על הכסף שלהם, להבין את שוק ההון ולהשקיע בצורה חכמה ואחראית.</div>
       </div>
     </div>
 
     <!-- SHARE -->
     <div class="share-section">
-      <span class="share-label">אהבתם? שתפו:</span>
-      <button class="share-btn" onclick="copyLink()">🔗 העתק קישור</button>
+      <span style="font-weight: 700; color: var(--text-white); font-size: 1.1rem;">המדריך עשה לכם סדר? שתפו עם חברים שיפסיקו לשלם עמלות מיותרות:</span>
+      <button class="share-btn" onclick="copyLink()">🔗 העתק קישור למדריך</button>
     </div>
-
-    <!-- NEXT ARTICLE -->
-    <div class="next-article">
-      <div class="next-label">המאמר הבא</div>
-      <div class="next-title">מניות vs ETF — מתי כל אחד מתאים? ← בקרוב</div>
-    </div>
-
-    <!-- BACK TO BLOG -->
-    <a href="/blog/" class="back-btn">← חזרה לבלוג</a>
 
   </main>
 </div>
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-inner">
-    <div>
-      <div class="footer-logo">NewGen <span>Finance</span></div>
-      <div class="footer-tagline">הבית של משקיע הערך המתחיל</div>
-    </div>
-    <nav class="footer-links" aria-label="קישורים">
-      <a href="/">דף הבית</a>
-      <a href="/investor-academy/">הקורס</a>
-      <a href="/calculator/">המחשבון</a>
-      <a href="/investor-academy/game/">המשחק</a>
-      <a href="/portfolio-tracker/">מעקב תיק</a>
-      <a href="/blog/">בלוג</a>
-      <a href="/about/">אודות</a>
-      <a href="/contact/">יצירת קשר</a>
-      <a href="/terms/">תנאי שימוש</a>
-    </nav>
-    <div class="footer-credit">נבנה עם ❤️ על ידי יאיר תכלת</div>
-  </div>
-</footer>
-
-<!-- Supabase -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="/assets/js/supabase-config.js"></script>
+<!-- Scripts -->
 <script>
-// ── Auth ──
-(async () => {
-  const _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  const { data: { session } } = await _sb.auth.getSession();
-  const navAuth = document.getElementById('nav-auth');
-  if (!session) {
-    navAuth.innerHTML =
-      '<a href="/auth/login/" class="hp-nav-link">התחברות</a>' +
-      '<a href="/auth/register/" class="hp-nav-pill hp-nav-pill-mint">הרשמה חינם</a>';
-  } else {
-    navAuth.innerHTML =
-      '<a href="/members/" class="hp-nav-link">אזור החברים</a>' +
-      '<button class="hp-nav-pill hp-nav-pill-outline" id="hp-signout">יציאה</button>';
-    document.getElementById('hp-signout').addEventListener('click', async () => {
-      await _sb.auth.signOut(); window.location.reload();
-    });
-  }
-})();
-
-// ── Reading progress bar ──
+// Reading progress bar
 window.addEventListener('scroll', () => {
   const scrolled = document.documentElement.scrollTop || document.body.scrollTop;
   const total = document.body.scrollHeight - window.innerHeight;
@@ -1341,7 +758,7 @@ window.addEventListener('scroll', () => {
   document.getElementById('reading-progress-bar').style.width = pct + '%';
 });
 
-// ── TOC active link ──
+// TOC active link
 (function () {
   const sections = document.querySelectorAll('[id]');
   const links = document.querySelectorAll('.toc-link');
@@ -1357,22 +774,7 @@ window.addEventListener('scroll', () => {
   sections.forEach(s => { if (document.querySelector('.toc-link[href="#' + s.id + '"]')) obs.observe(s); });
 })();
 
-// ── Diagram animation on scroll ──
-(function () {
-  const diagram = document.getElementById('etf-diagram');
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        setTimeout(() => document.getElementById('arrow-1').classList.add('animated'), 200);
-        setTimeout(() => document.getElementById('arrow-2').classList.add('animated'), 500);
-        obs.unobserve(diagram);
-      }
-    });
-  }, { threshold: 0.4 });
-  obs.observe(diagram);
-})();
-
-// ── Accordion steps ──
+// Accordion steps
 function toggleStep(header) {
   const item = header.parentElement;
   const isOpen = item.classList.contains('open');
@@ -1380,23 +782,22 @@ function toggleStep(header) {
   if (!isOpen) item.classList.add('open');
 }
 
-// ── Fee calculator ──
+// Format helpers
+function formatILS(n) { return '₪' + Math.round(n).toLocaleString('he-IL'); }
+
+// Fee calculator
 function calcPortfolio(initial, monthly, annualReturn, years, annualFee) {
   const monthlyRate = (annualReturn - annualFee) / 100 / 12;
   let value = initial;
-  for (let m = 0; m < years * 12; m++) {
-    value = value * (1 + monthlyRate) + monthly;
-  }
+  for (let m = 0; m < years * 12; m++) { value = value * (1 + monthlyRate) + monthly; }
   return value;
 }
-function formatILS(n) {
-  return '₪' + Math.round(n).toLocaleString('he-IL');
-}
+
 function runFeeCalc() {
   const initial = parseFloat(document.getElementById('fc-initial').value) || 0;
   const monthly = parseFloat(document.getElementById('fc-monthly').value) || 0;
-  const ret     = parseFloat(document.getElementById('fc-return').value) || 7;
-  const years   = parseInt(document.getElementById('fc-years').value) || 20;
+  const ret     = parseFloat(document.getElementById('fc-return').value) || 8;
+  const years   = parseInt(document.getElementById('fc-years').value) || 25;
   const feeA    = parseFloat(document.getElementById('fc-fee-a').value) || 0;
   const feeB    = parseFloat(document.getElementById('fc-fee-b').value) || 0;
 
@@ -1409,155 +810,20 @@ function runFeeCalc() {
 
   document.getElementById('fc-val-a').textContent = formatILS(valA);
   document.getElementById('fc-val-b').textContent = formatILS(valB);
-  document.getElementById('fc-diff').innerHTML = 'חסכתם <span>' + formatILS(Math.max(0, diff)) + '</span> בדמי ניהול';
-
-  const max = Math.max(valA, valB, 1);
-  const chartH = 90;
-  document.getElementById('bar-a').style.height = (valA / max * chartH) + 'px';
-  document.getElementById('bar-b').style.height = (valB / max * chartH) + 'px';
+  document.getElementById('fc-diff').innerHTML = 'הקרן המנוהלת תעלה לכם <span>' + formatILS(Math.max(0, diff)) + '</span> באובדן רווחים';
 }
+
 ['fc-initial','fc-monthly','fc-return','fc-years','fc-fee-a','fc-fee-b'].forEach(id => {
   document.getElementById(id).addEventListener('input', runFeeCalc);
 });
 runFeeCalc();
 
-// ── Growth simulator + SVG chart ──
-let svgFirstRender = true;
-function runGrowthSim() {
-  const initial = parseFloat(document.getElementById('gs-initial').value) || 0;
-  const monthly = parseFloat(document.getElementById('gs-monthly').value) || 0;
-  const ret     = parseFloat(document.getElementById('gs-return').value) || 8;
-  const years   = parseInt(document.getElementById('gs-years').value) || 25;
-
-  document.getElementById('gs-return-val').textContent = ret;
-  document.getElementById('gs-years-val').textContent = years;
-
-  const monthlyRate = ret / 100 / 12;
-  const data = []; // year-by-year values
-  let val = initial;
-  for (let y = 0; y <= years; y++) {
-    data.push(val);
-    for (let m = 0; m < 12; m++) val = val * (1 + monthlyRate) + monthly;
-  }
-
-  const totalInvested = initial + monthly * 12 * years;
-  const finalVal = data[data.length - 1];
-  const profit = finalVal - totalInvested;
-
-  document.getElementById('gs-invested').textContent = formatILS(totalInvested);
-  document.getElementById('gs-total').textContent = formatILS(finalVal);
-  document.getElementById('gs-profit').textContent = formatILS(Math.max(0, profit));
-
-  drawSVGChart(data, years, svgFirstRender);
-  svgFirstRender = false;
-}
-
-function drawSVGChart(data, years, animate) {
-  const svg = document.getElementById('growth-svg');
-  const W = 600, H = 300;
-  const padL = 70, padR = 30, padT = 30, padB = 40;
-  const chartW = W - padL - padR;
-  const chartH = H - padT - padB;
-
-  const maxVal = Math.max(...data, 1);
-  const minVal = 0;
-
-  function xPos(i) { return padL + (i / years) * chartW; }
-  function yPos(v) { return padT + (1 - (v - minVal) / (maxVal - minVal)) * chartH; }
-
-  const points = data.map((v, i) => xPos(i) + ',' + yPos(v)).join(' ');
-  const areaPoints = (padL + ',') + (padT + chartH) + ' ' + points + ' ' + (xPos(years) + ',' + (padT + chartH));
-
-  // Build SVG HTML
-  let html = '<defs><linearGradient id="lineGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#b3e0dc" stop-opacity="0.35"/><stop offset="100%" stop-color="#b3e0dc" stop-opacity="0"/></linearGradient></defs>';
-
-  // Grid lines (5 horizontal)
-  for (let i = 0; i <= 4; i++) {
-    const y = padT + (i / 4) * chartH;
-    const val = maxVal * (1 - i / 4);
-    html += '<line x1="' + padL + '" y1="' + y + '" x2="' + (W - padR) + '" y2="' + y + '" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>';
-    html += '<text x="' + (padL - 6) + '" y="' + (y + 4) + '" text-anchor="end" fill="rgba(255,255,255,0.45)" font-size="10" font-family="Assistant,sans-serif">₪' + formatK(val) + '</text>';
-  }
-
-  // X axis labels
-  const step = Math.ceil(years / 6);
-  for (let i = 0; i <= years; i += step) {
-    const x = xPos(i);
-    html += '<text x="' + x + '" y="' + (padT + chartH + 18) + '" text-anchor="middle" fill="rgba(255,255,255,0.45)" font-size="10" font-family="Assistant,sans-serif">' + i + 'y</text>';
-  }
-
-  // Area fill
-  html += '<polygon points="' + areaPoints + '" fill="url(#lineGrad)"/>';
-
-  // Line
-  const lineId = 'growth-line';
-  html += '<polyline id="' + lineId + '" points="' + points + '" fill="none" stroke="#b3e0dc" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>';
-
-  // Dots (every few years to avoid clutter)
-  const dotStep = Math.max(1, Math.ceil(years / 12));
-  data.forEach((v, i) => {
-    if (i % dotStep !== 0 && i !== years) return;
-    html += '<circle cx="' + xPos(i) + '" cy="' + yPos(v) + '" r="4" fill="#b3e0dc" class="svg-dot" data-year="' + i + '" data-val="' + Math.round(v) + '"/>';
-  });
-
-  svg.innerHTML = html;
-
-  // Animate line
-  if (animate) {
-    const line = svg.querySelector('#' + lineId);
-    if (line) {
-      const len = line.getTotalLength ? line.getTotalLength() : 1200;
-      line.style.strokeDasharray = len;
-      line.style.strokeDashoffset = len;
-      line.style.transition = 'stroke-dashoffset 1.4s ease';
-      requestAnimationFrame(() => { line.style.strokeDashoffset = 0; });
-    }
-  }
-
-  // Tooltip
-  svg.querySelectorAll('.svg-dot').forEach(dot => {
-    dot.addEventListener('mouseenter', (e) => {
-      const tip = document.getElementById('svg-tooltip');
-      tip.style.display = 'block';
-      tip.textContent = 'שנה ' + dot.dataset.year + ': ' + formatILS(parseFloat(dot.dataset.val));
-    });
-    dot.addEventListener('mousemove', (e) => {
-      const tip = document.getElementById('svg-tooltip');
-      tip.style.left = (e.clientX + 14) + 'px';
-      tip.style.top  = (e.clientY - 28) + 'px';
-    });
-    dot.addEventListener('mouseleave', () => {
-      document.getElementById('svg-tooltip').style.display = 'none';
-    });
-  });
-}
-
-function formatK(n) {
-  if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
-  if (n >= 1000)    return (n / 1000).toFixed(0) + 'K';
-  return Math.round(n).toString();
-}
-
-['gs-initial','gs-monthly','gs-return','gs-years'].forEach(id => {
-  document.getElementById(id).addEventListener('input', runGrowthSim);
-});
-runGrowthSim();
-
-// ── Quote animation ──
-(function () {
-  const q = document.getElementById('buffett-quote');
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) { q.classList.add('visible'); obs.unobserve(q); } });
-  }, { threshold: 0.4 });
-  obs.observe(q);
-})();
-
-// ── Copy link ──
+// Copy link
 function copyLink() {
   navigator.clipboard.writeText(window.location.href).then(() => {
     const btn = document.querySelector('.share-btn');
-    btn.textContent = '✅ הקישור הועתק!';
-    setTimeout(() => { btn.textContent = '🔗 העתק קישור'; }, 2500);
+    btn.textContent = '✅ הקישור הועתק בהצלחה!';
+    setTimeout(() => { btn.textContent = '🔗 העתק קישור למדריך'; }, 3000);
   });
 }
 </script>
