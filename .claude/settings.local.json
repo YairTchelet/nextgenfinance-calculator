@@ -2,7 +2,21 @@
   "permissions": {
     "allow": [
       "Bash(cd:*)",
-      "Bash(cd /c/Users/yairt/newgenfinance && git add index.html profile/index.html && git commit -m \"$\\(cat <<'EOF'\nadd dynamic navbar auth and user profile page\n\n- Update navbar to show login/register buttons when logged out, and\n  greeting + profile link + logout when logged in \\(Supabase session\\)\n- Create profile/index.html: protected page showing email, full name,\n  and course access status pulled from the profiles table\n\nCo-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>\nEOF\n\\)\")"
+      "Bash(cd /c/Users/yairt/newgenfinance && git add index.html profile/index.html && git commit -m \"$\\(cat <<'EOF'\nadd dynamic navbar auth and user profile page\n\n- Update navbar to show login/register buttons when logged out, and\n  greeting + profile link + logout when logged in \\(Supabase session\\)\n- Create profile/index.html: protected page showing email, full name,\n  and course access status pulled from the profiles table\n\nCo-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(cd C:\\\\Users\\\\yairt\\\\newgenfinance:*)",
+      "Bash(curl:*)",
+      "Bash(for f in \"C:/Users/yairt/newgenfinance/index.html\" \"C:/Users/yairt/newgenfinance/investor-academy/index.html\" \"C:/Users/yairt/newgenfinance/calculator/index.html\" \"C:/Users/yairt/newgenfinance/investor-academy/game/index.html\" \"C:/Users/yairt/newgenfinance/members/index.html\" \"C:/Users/yairt/newgenfinance/profile/index.html\" \"C:/Users/yairt/newgenfinance/auth/login/index.html\" \"C:/Users/yairt/newgenfinance/auth/register/index.html\")",
+      "Bash(do echo \"=== $f ===\")",
+      "Read(//c/Users/yairt/newgenfinance/**)",
+      "Bash(done)",
+      "Bash(for f in \"C:/Users/yairt/newgenfinance/investor-academy/lessons/intro.html\" \"C:/Users/yairt/newgenfinance/investor-academy/lessons/chapter-1.html\" \"C:/Users/yairt/newgenfinance/investor-academy/lessons/chapter-2.html\" \"C:/Users/yairt/newgenfinance/investor-academy/lessons/chapter-3.html\" \"C:/Users/yairt/newgenfinance/investor-academy/lessons/chapter-4.html\" \"C:/Users/yairt/newgenfinance/investor-academy/lessons/index.html\")",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(npm install:*)",
+      "Bash(node:*)",
+      "Bash(cp:*)",
+      "Bash(xargs sed:*)"
     ]
   }
 }
