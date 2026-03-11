@@ -1009,5 +1009,243 @@ function ch1PlayVideo(wrapperId) {
 })();
 </script>
 
+<!-- Novo Chat Widget -->
+<style>
+#novo-bubble {
+  position: fixed; bottom: 24px; left: 24px;
+  width: 56px; height: 56px; border-radius: 50%;
+  background: #b3e0dc; color: #0c3d52;
+  font-size: 1.4rem; cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+  z-index: 9999; display: flex;
+  align-items: center; justify-content: center;
+  transition: transform 0.2s;
+  border: none; outline: none;
+}
+#novo-bubble:hover { transform: scale(1.1); }
+
+#novo-badge {
+  position: fixed; bottom: 88px; left: 14px;
+  background: #b3e0dc; color: #0c3d52;
+  font-family: 'Assistant', sans-serif; font-size: 0.82rem; font-weight: 600;
+  padding: 5px 12px; border-radius: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.18);
+  z-index: 9999; white-space: nowrap;
+  opacity: 1; transition: opacity 0.6s;
+  pointer-events: none;
+}
+
+#novo-window {
+  position: fixed; bottom: 90px; left: 24px;
+  width: 340px; max-height: 480px;
+  background: #0c3d52; border-radius: 16px;
+  box-shadow: 0 12px 48px rgba(0,0,0,0.4);
+  z-index: 9999; display: none;
+  flex-direction: column; overflow: hidden;
+}
+@media (max-width: 400px) {
+  #novo-window { width: calc(100vw - 32px); left: 16px; }
+}
+
+#novo-header {
+  background: rgba(179,224,220,0.15);
+  padding: 12px 16px;
+  border-radius: 16px 16px 0 0;
+  display: flex; justify-content: space-between; align-items: center;
+  color: #b3e0dc;
+  font-family: 'Rubik', sans-serif; font-weight: 600;
+}
+#novo-close {
+  background: none; border: none; color: #b3e0dc;
+  cursor: pointer; font-size: 1.1rem; line-height: 1;
+}
+
+#novo-messages {
+  flex: 1; overflow-y: auto;
+  padding: 16px; display: flex;
+  flex-direction: column; gap: 10px;
+  max-height: 300px;
+}
+
+.novo-msg-user {
+  background: rgba(179,224,220,0.2); color: #fefefe;
+  border-radius: 12px 12px 4px 12px;
+  padding: 8px 12px; align-self: flex-end;
+  max-width: 80%; font-size: 0.9rem;
+  font-family: 'Assistant', sans-serif;
+  direction: rtl; text-align: right;
+}
+.novo-msg-bot {
+  background: rgba(255,255,255,0.08); color: #fefefe;
+  border-radius: 12px 12px 12px 4px;
+  padding: 8px 12px; align-self: flex-start;
+  max-width: 85%; font-size: 0.9rem;
+  font-family: 'Assistant', sans-serif;
+  line-height: 1.6; direction: rtl; text-align: right;
+}
+.novo-msg-typing {
+  background: rgba(255,255,255,0.08); color: rgba(254,254,254,0.5);
+  border-radius: 12px 12px 12px 4px;
+  padding: 8px 12px; align-self: flex-start;
+  font-size: 0.9rem; font-family: 'Assistant', sans-serif;
+  animation: novoDots 1.2s infinite;
+}
+@keyframes novoDots {
+  0%, 100% { opacity: 0.5; } 50% { opacity: 1; }
+}
+
+#novo-input-row {
+  padding: 12px; display: flex; gap: 8px;
+  border-top: 1px solid rgba(179,224,220,0.15);
+}
+#novo-input {
+  flex: 1; background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(179,224,220,0.3);
+  border-radius: 8px; padding: 8px 12px;
+  color: #fefefe; font-family: 'Assistant', sans-serif;
+  font-size: 0.9rem; outline: none; direction: rtl;
+}
+#novo-input:focus { border-color: #b3e0dc; }
+#novo-input::placeholder { color: rgba(254,254,254,0.4); }
+#novo-send {
+  background: #b3e0dc; color: #0c3d52;
+  border: none; border-radius: 8px;
+  padding: 8px 14px;
+  font-family: 'Rubik', sans-serif; font-weight: 600;
+  cursor: pointer; transition: filter 0.2s;
+  white-space: nowrap;
+}
+#novo-send:hover:not(:disabled) { filter: brightness(1.1); }
+#novo-send:disabled { opacity: 0.5; cursor: default; }
+</style>
+
+<script>
+(function() {
+  var history = [];
+  var opened = false;
+
+  function init() {
+    var badge = document.createElement('div');
+    badge.id = 'novo-badge';
+    badge.textContent = 'שאל את נובו 👆';
+    document.body.appendChild(badge);
+    setTimeout(function() { badge.style.opacity = '0'; }, 4000);
+    setTimeout(function() { badge.remove(); }, 4700);
+
+    var bubble = document.createElement('div');
+    bubble.id = 'novo-bubble';
+    bubble.textContent = '💬';
+    document.body.appendChild(bubble);
+
+    var win = document.createElement('div');
+    win.id = 'novo-window';
+    win.innerHTML =
+      '<div id="novo-header">' +
+        '<span>🤖 נובו — עוזר הקורס</span>' +
+        '<button id="novo-close">✕</button>' +
+      '</div>' +
+      '<div id="novo-messages"></div>' +
+      '<div id="novo-input-row">' +
+        '<input id="novo-input" type="text" placeholder="שאל אותי כל שאלה על הקורס..." />' +
+        '<button id="novo-send">שלח</button>' +
+      '</div>';
+    document.body.appendChild(win);
+
+    bubble.addEventListener('click', function() {
+      var showing = win.style.display === 'flex';
+      win.style.display = showing ? 'none' : 'flex';
+      if (!showing && !opened) {
+        opened = true;
+        appendBot('שלום! אני נובו 👋 אני כאן לעזור לך עם שאלות על הקורס. מה תרצה לדעת?');
+      }
+      if (!showing) {
+        setTimeout(function() { document.getElementById('novo-input').focus(); }, 50);
+      }
+    });
+
+    document.getElementById('novo-close').addEventListener('click', function() {
+      win.style.display = 'none';
+    });
+
+    document.getElementById('novo-send').addEventListener('click', sendMessage);
+    document.getElementById('novo-input').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') sendMessage();
+    });
+  }
+
+  function appendUser(text) {
+    var el = document.createElement('div');
+    el.className = 'novo-msg-user';
+    el.textContent = text;
+    document.getElementById('novo-messages').appendChild(el);
+    scrollBottom();
+    return el;
+  }
+
+  function appendBot(text) {
+    var el = document.createElement('div');
+    el.className = 'novo-msg-bot';
+    el.textContent = text;
+    document.getElementById('novo-messages').appendChild(el);
+    scrollBottom();
+    return el;
+  }
+
+  function appendTyping() {
+    var el = document.createElement('div');
+    el.className = 'novo-msg-typing';
+    el.textContent = '●●●';
+    el.id = 'novo-typing';
+    document.getElementById('novo-messages').appendChild(el);
+    scrollBottom();
+    return el;
+  }
+
+  function scrollBottom() {
+    var msgs = document.getElementById('novo-messages');
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function sendMessage() {
+    var input = document.getElementById('novo-input');
+    var sendBtn = document.getElementById('novo-send');
+    var text = (input.value || '').trim();
+    if (!text) return;
+
+    input.value = '';
+    sendBtn.disabled = true;
+    appendUser(text);
+    var typing = appendTyping();
+
+    history.push({ role: 'user', content: text });
+    var historyToSend = history.slice(-10);
+
+    fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: text, history: historyToSend.slice(0, -1) })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      typing.remove();
+      var reply = data.reply || 'מצטער, לא הצלחתי לענות.';
+      appendBot(reply);
+      history.push({ role: 'assistant', content: reply });
+      if (history.length > 20) history = history.slice(-20);
+    })
+    .catch(function() {
+      typing.remove();
+      appendBot('מצטער, משהו השתבש. נסה שוב 🙏');
+    })
+    .finally(function() {
+      sendBtn.disabled = false;
+      scrollBottom();
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', init);
+})();
+</script>
+
 </body>
 </html>
