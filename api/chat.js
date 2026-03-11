@@ -9,6 +9,46 @@ const SYSTEM_PROMPT = `אתה "נובו" — העוזר החכם של Investor A
 אם שואלים אותך משהו שלא קשור להשקעות ופיננסים — הפנה בנימוס לנושאי הקורס.
 אל תיתן ייעוץ השקעות אישי — תמיד הזכר שההחלטות הן של המשתמש.`;
 
+async function fetchYahooFinance(ticker) {
+  try {
+    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=1d`;
+    const res = await fetch(url, {
+      headers: { 'User-Agent': 'Mozilla/5.0' }
+    });
+    const data = await res.json();
+    const meta = data?.chart?.result?.[0]?.meta;
+    if (!meta) return null;
+    return {
+      ticker,
+      price: meta.regularMarketPrice,
+      currency: meta.currency,
+      exchange: meta.exchangeName,
+      previousClose: meta.previousClose,
+      changePercent: (((meta.regularMarketPrice - meta.previousClose) / meta.previousClose) * 100).toFixed(2)
+    };
+  } catch (e) {
+    return null;
+  }
+}
+
+function extractTickers(message) {
+  const upper = message.match(/\b[A-Z]{2,5}\b/g) || [];
+  const hebrewMap = {
+    'סנופי': 'SPY', 'סנופ': 'SPY', 'נאסדק': 'QQQ',
+    'תכלית': 'TKLTY', 'מגדל': 'MGDLY'
+  };
+  const fromHebrew = Object.entries(hebrewMap)
+    .filter(([heb]) => message.includes(heb))
+    .map(([, ticker]) => ticker);
+  return [...new Set([...upper, ...fromHebrew])].slice(0, 3);
+}
+
+const FINANCIAL_KEYWORDS = ['מחיר', 'שער', 'תשואה', 'מדד', 'מניה', 'ETF'];
+
+function hasFinancialKeywords(message) {
+  return FINANCIAL_KEYWORDS.some(kw => message.includes(kw));
+}
+
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -23,10 +63,28 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ error: 'Missing message' });
   }
 
-  const client = new Anthropic();
+  // Step 1: Try Yahoo Finance if message references financial data or tickers
+  const tickers = (hasFinancialKeywords(message) || message.match(/\b[A-Z]{2,5}\b/))
+    ? extractTickers(message)
+    : [];
 
+  let yahooContext = '';
+  if (tickers.length > 0) {
+    const results = await Promise.all(tickers.map(fetchYahooFinance));
+    const valid = results.filter(Boolean);
+    if (valid.length > 0) {
+      yahooContext = '\n\n[נתוני שוק בזמן אמת מ-Yahoo Finance:]\n' +
+        valid.map(d =>
+          `${d.ticker}: מחיר ${d.price} ${d.currency} | שינוי יומי: ${d.changePercent}% | בורסה: ${d.exchange}`
+        ).join('\n');
+    }
+  }
+
+  // Step 2: Use web_search only if tickers were mentioned but Yahoo returned nothing
+  const needsWebSearch = tickers.length > 0 && yahooContext === '';
+
+  // Build messages array
   const messages = [];
-
   if (Array.isArray(history)) {
     for (const entry of history) {
       if (entry.role === 'user' || entry.role === 'assistant') {
@@ -34,18 +92,29 @@ module.exports = async function handler(req, res) {
       }
     }
   }
-
   messages.push({ role: 'user', content: message });
 
+  const client = new Anthropic();
+
   try {
-    const response = await client.messages.create({
+    const createParams = {
       model: 'claude-haiku-4-5-20251001',
       max_tokens: 600,
-      system: SYSTEM_PROMPT,
+      system: SYSTEM_PROMPT + (yahooContext || ''),
       messages,
-    });
+    };
 
-    const text = response.content[0]?.text || '';
+    if (needsWebSearch) {
+      createParams.tools = [{ type: 'web_search_20260209', name: 'web_search', max_uses: 2 }];
+    }
+
+    const response = await client.messages.create(createParams);
+
+    const text = response.content
+      .filter(b => b.type === 'text')
+      .map(b => b.text)
+      .join('');
+
     return res.status(200).json({ reply: text });
   } catch (err) {
     console.error('Chat API error:', err);
