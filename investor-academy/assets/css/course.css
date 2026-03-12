@@ -144,6 +144,7 @@ img { max-width: 100%; height: auto; }
     margin-bottom: 2rem;
     overflow: hidden;
 }
+.course-card * { max-width: 100%; box-sizing: border-box; }
 .course-card-dark {
     background: #0c3d52;
     border-radius: 16px;

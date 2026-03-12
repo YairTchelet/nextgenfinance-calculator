@@ -620,7 +620,7 @@
       </h1>
       <p class="hero-subtitle">הפסיקו להשאיר כסף על השולחן בפיקדון בנקאי שלא מנצח את האינפלציה. גלו את השיטה שמחברת את חוכמת ההשקעות של וורן באפט עם הכלים הטכנולוגיים של העתיד, והופכת את החסכונות שלכם למנוע צמיחה אמיתי. <strong>גם אם אתם מתחילים מאפס.</strong></p>
       <div class="hero-cta">
-        <a href="/auth/register/" class="cta-button cta-button-accent main-cta-link">בקש גישה לקורס</a>
+        <a href="/auth/register/" class="cta-button cta-button-accent main-cta-link">התחל בחינם</a>
       </div>
     </div>
     <div class="hero-bottom-visual">
@@ -979,7 +979,7 @@
         <span class="launch-badge">מבצע השקה מיוחד!</span>
         <p style="font-size: 1.2rem; font-weight: 700; color: var(--color-darker); margin: 1.5em 0 0.5em;">רוצה להצטרף לקורס?</p>
         <p style="font-size: 1.05rem; color: var(--color-text-muted); margin-bottom: 0.5em;">שלח בקשת גישה ונחזור אליך תוך 24 שעות.</p>
-        <a href="/auth/register/" class="cta-button cta-button-accent main-cta-link">בקש גישה לקורס</a>
+        <a href="/auth/register/" class="cta-button cta-button-accent main-cta-link">התחל בחינם</a>
         <p class="access-info">חשבון קיים? <a href="/profile/" style="color: var(--teal); font-weight: 600;" id="profile-link">שלח בקשה מהפרופיל שלך</a></p>
       </div>
     </div>
@@ -1114,12 +1114,16 @@
         const mobileMembers = document.getElementById('mobile-nav-members');
         if (mobileMembers) mobileMembers.style.display = '';
 
-        // Update CTA links to profile
+        // Update CTA links for logged-in users
         document.querySelectorAll('.main-cta-link').forEach(function(link) {
-          link.href = '/profile/';
+          link.href = '/investor-academy/lessons/intro.html';
+          link.textContent = 'המשך ללמוד ←';
         });
         var mobileCta = document.getElementById('mobile-cta-link');
-        if (mobileCta) mobileCta.href = '/profile/';
+        if (mobileCta) {
+          mobileCta.href = '/investor-academy/lessons/intro.html';
+          mobileCta.textContent = 'המשך ללמוד ←';
+        }
       }
     })();
 

@@ -354,6 +354,10 @@
         }
         .bookshelf-item img { display: block; width: 70px; height: auto; border-radius: 6px; }
 
+        /* ===== OVERFLOW CONTAINMENT ===== */
+        .ch1-card { overflow: hidden; }
+        .ch1-card * { max-width: 100%; box-sizing: border-box; }
+
     </style>
 </head>
 <body>
@@ -592,7 +596,7 @@
         </div>
 
         <!-- 2 הידעת widgets side by side -->
-        <div class="course-sidebyside" style="margin-top:1.5rem;">
+        <div class="course-sidebyside" style="margin-top:1.5rem; max-width:100%; overflow:hidden;">
 
             <!-- הידעת 1: ספליט -->
             <div class="did-you-know-widget" id="s7-dyk-split">
@@ -633,7 +637,7 @@
     <div class="course-card-dark" id="s8-tv-graph">
         <h2 class="course-section-title-white">גרף מחירים של מדדי ה-S&amp;P500, NASDAQ100 ו-TA125</h2>
 
-        <div class="course-tv-wrap">
+        <div class="course-tv-wrap" style="max-width:100%; overflow:hidden;">
             <!-- TradingView Symbol Overview Widget -->
             <div class="tradingview-widget-container" id="s8-tv-container">
                 <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js" async>
@@ -689,7 +693,7 @@
         </div>
 
         <!-- TradingView Heatmap -->
-        <div class="course-tv-wrap">
+        <div class="course-tv-wrap" style="max-width:100%; overflow:hidden;">
             <div class="tradingview-widget-container" id="s9-heatmap-container">
                 <div class="tradingview-widget-container__widget"></div>
                 <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-stock-heatmap.js" async>
