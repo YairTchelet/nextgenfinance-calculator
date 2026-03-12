@@ -394,23 +394,26 @@
 
     .scroll-arrow {
       position: absolute;
-      bottom: 2.2rem;
+      bottom: 2rem;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 5px;
+      gap: 3px;
       animation: bounce 2.2s ease-in-out infinite;
       z-index: 2;
     }
     .scroll-arrow span {
       display: block;
-      width: 11px; height: 11px;
-      border-right: 2px solid rgba(179,224,220,0.6);
-      border-bottom: 2px solid rgba(179,224,220,0.6);
+      width: 10px;
+      height: 10px;
+      border-right: 2px solid rgba(179,224,220,0.5);
+      border-bottom: 2px solid rgba(179,224,220,0.5);
       transform: rotate(45deg);
+      opacity: 0.6;
     }
+    .scroll-arrow span:last-child { opacity: 0.3; margin-top: -6px; }
     @keyframes bounce {
       0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.5; }
       50%       { transform: translateX(-50%) translateY(9px); opacity: 1; }
@@ -784,14 +787,23 @@
       .footer-credit { text-align: center; }
       .footer-links { gap: 0.25rem 1rem; }
     }
+    .hp-nav-center {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex: 1;
+      justify-content: center;
+    }
+
     @media (max-width: 768px) {
-      .hp-nav > div { display: none; } /* hide desktop nav center */
+      .hp-nav-center { display: none; }
       .hp-hamburger { display: flex; }
       .hp-mobile-menu { display: flex; }
     }
     @media (max-width: 560px) {
       .products-grid { grid-template-columns: 1fr; }
-      .hero-ctas { flex-direction: column; align-items: center; }
+      .hero-ctas { flex-direction: column; align-items: center; width: 100%; padding: 0 1.5rem; }
+      .btn-hero-primary, .btn-hero-outline { width: 100%; max-width: 320px; justify-content: center; }
     }
   </style>
   <script type="application/ld+json">
@@ -822,7 +834,7 @@
     <img src="/assets/images/logo.png" alt="NewGen Finance לוגו">
     <span>NewGen Finance</span>
   </a>
-  <div style="display:flex;align-items:center;gap:1.5rem;flex:1;justify-content:center;">
+  <div class="hp-nav-center">
     <a href="/about/" class="hp-nav-link">אודות</a>
     <a href="/blog/" class="hp-nav-link">בלוג</a>
   </div>
