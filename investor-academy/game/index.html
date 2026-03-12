@@ -65,6 +65,11 @@
             direction: rtl; padding: 0; margin: 0; color: var(--text-primary);
             min-height: 100vh; display: flex; flex-direction: column; align-items: center; line-height: 1.6;
         }
+        /* Fix 1: nav must stretch full-width regardless of body align-items:center */
+        .course-nav, .hp-mobile-menu { width: 100%; align-self: stretch; }
+        /* Fix 2: hbnav-panel RTL puts scrollbar on left edge — force ltr so scrollbar goes to outer-right */
+        .hbnav-panel { direction: ltr; }
+        .hbnav-panel > * { direction: rtl; }
         .container { max-width: 900px; width: 95%; padding: 20px; margin-top: 10px; }
         h1 {
             font-size: 2.5em; font-weight: 700; margin-bottom: 15px;
