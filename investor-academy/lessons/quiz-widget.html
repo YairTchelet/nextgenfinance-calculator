@@ -339,7 +339,7 @@
 
   <script>
     // Supabase
-    const supabase = window.supabase.createClient(
+    const supabaseClient = window.supabase.createClient(
       'https://pmlkhkagtorhlteplvak.supabase.co',
       'sb_publishable_tV2FY5_h6ba6-nhdVbENLQ_gkejPX38'
     );
@@ -497,9 +497,9 @@
       btnSave.textContent = 'טוען...';
 
       try {
-        const { data: { user } } = await supabase.auth.getUser();
+        const { data: { user } } = await supabaseClient.auth.getUser();
 
-        const { error } = await supabase
+        const { error } = await supabaseClient
           .from('quiz_results')
           .insert([{
             user_id: user ? user.id : null,
