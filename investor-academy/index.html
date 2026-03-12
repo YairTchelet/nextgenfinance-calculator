@@ -202,20 +202,269 @@
 
     /* ─── HERO ───────────────────────────────────────── */
     .hero-section {
-      padding: 80px 0 60px;
-      background: linear-gradient(135deg, #0b4a64 0%, #1680a0 48%, #0d6a82 100%);
-      text-align: center; display: flex; flex-direction: column;
-      align-items: center; justify-content: center; min-height: 80vh;
+      min-height: 100dvh;
+      padding: 100px 0 80px;
+      background: #071e2b;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
     }
-    .hero-content { max-width: 850px; animation: fadeIn 1s ease-out; margin-bottom: 40px; }
-    .hero-title { font-size: 3.5rem; font-weight: 900; color: #fefefe; margin-bottom: 25px; line-height: 1.3; }
-    .hero-title .year { display: block; font-size: 6rem; color: var(--gold); margin-top: 15px; }
+
+    /* ── Gradient orbs ── */
+    .hero-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      will-change: transform;
+    }
+    .hero-orb-1 {
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(42,157,143,0.22) 0%, transparent 70%);
+      top: -10%; left: -10%;
+      animation: orbDrift1 18s ease-in-out infinite alternate;
+    }
+    .hero-orb-2 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(22,128,160,0.18) 0%, transparent 70%);
+      bottom: -5%; right: -5%;
+      animation: orbDrift2 22s ease-in-out infinite alternate;
+    }
+    .hero-orb-3 {
+      width: 350px; height: 350px;
+      background: radial-gradient(circle, rgba(179,224,220,0.1) 0%, transparent 65%);
+      top: 40%; left: 55%;
+      animation: orbDrift3 15s ease-in-out infinite alternate;
+    }
+    @keyframes orbDrift1 {
+      from { transform: translate(0, 0) scale(1); }
+      to   { transform: translate(80px, 60px) scale(1.15); }
+    }
+    @keyframes orbDrift2 {
+      from { transform: translate(0, 0) scale(1); }
+      to   { transform: translate(-60px, -80px) scale(1.2); }
+    }
+    @keyframes orbDrift3 {
+      from { transform: translate(0, 0) scale(1); }
+      to   { transform: translate(40px, -50px) scale(0.9); }
+    }
+
+    /* ── Animated grid overlay ── */
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(42,157,143,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(42,157,143,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      animation: gridFade 4s ease-in forwards;
+    }
+    @keyframes gridFade {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* ── Floating chapter cards ── */
+    .hero-floating-cards {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .hero-float-card {
+      position: absolute;
+      background: rgba(12, 61, 82, 0.75);
+      border: 1px solid rgba(179, 224, 220, 0.18);
+      border-radius: 14px;
+      padding: 12px 18px;
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      white-space: nowrap;
+    }
+    .hero-float-card-icon {
+      width: 32px; height: 32px;
+      background: rgba(42,157,143,0.2);
+      border: 1px solid rgba(42,157,143,0.35);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      color: #7dd8d2;
+    }
+    .hero-float-card-icon svg {
+      width: 16px; height: 16px;
+      stroke: currentColor; fill: none;
+      stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .hero-float-card-text {
+      font-family: 'Heebo', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: rgba(240, 248, 250, 0.8);
+      direction: rtl;
+    }
+    .hero-float-card-num {
+      font-size: 0.72rem;
+      color: rgba(179, 224, 220, 0.55);
+      font-weight: 500;
+    }
+    .hfc-1 { top: 18%; right: 7%; }
+    .hfc-2 { top: 32%; left: 5%; }
+    .hfc-3 { top: 58%; right: 9%; }
+    .hfc-4 { top: 72%; left: 7%; }
+    .hfc-5 { top: 46%; right: 4%; }
+    .hero-float-card {
+      opacity: 0;
+      animation: cardEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards,
+                 floatCard 9s ease-in-out infinite alternate;
+    }
+    .hfc-1 { animation-delay: 0.9s, 1.7s; }
+    .hfc-2 { animation-delay: 1.1s, 1.9s; }
+    .hfc-3 { animation-delay: 1.3s, 2.1s; }
+    .hfc-4 { animation-delay: 1.5s, 2.3s; }
+    .hfc-5 { animation-delay: 1.7s, 2.5s; }
+    @keyframes floatCard {
+      from { transform: translateY(0px) rotate(-0.5deg); }
+      to   { transform: translateY(-14px) rotate(0.5deg); }
+    }
+    @keyframes cardEntrance {
+      from { opacity: 0; transform: translateY(20px) scale(0.95); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* ── Animated ticker bar ── */
+    .hero-ticker {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 40px;
+      background: rgba(12, 61, 82, 0.9);
+      border-top: 1px solid rgba(179, 224, 220, 0.12);
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+    .hero-ticker-track {
+      display: flex;
+      gap: 3rem;
+      animation: tickerScroll 30s linear infinite;
+      white-space: nowrap;
+      padding: 0 1.5rem;
+    }
+    .hero-ticker-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.78rem;
+      font-family: 'Heebo', sans-serif;
+      font-weight: 600;
+      color: rgba(179, 224, 220, 0.7);
+      flex-shrink: 0;
+    }
+    .hero-ticker-item span.up   { color: #4ade80; }
+    .hero-ticker-item span.down { color: #f87171; }
+    .hero-ticker-sep {
+      color: rgba(179, 224, 220, 0.2);
+      font-size: 1rem;
+    }
+    @keyframes tickerScroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ── Hero content z-index ── */
+    .hero-content { position: relative; z-index: 2; max-width: 850px; margin-bottom: 40px; }
+
+    /* ── Hero title upgrade ── */
+    .hero-title {
+      font-size: clamp(2.4rem, 6vw, 4.2rem);
+      font-weight: 900;
+      color: #fefefe;
+      margin-bottom: 25px;
+      line-height: 1.15;
+      letter-spacing: -1px;
+    }
+    .hero-title .year {
+      display: block;
+      font-size: clamp(3.5rem, 9vw, 6.5rem);
+      background: linear-gradient(135deg, #b3e0dc 0%, #2a9d8f 40%, #7dd8d2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-top: 10px;
+      line-height: 1;
+      letter-spacing: -3px;
+      animation: shimmer 4s ease-in-out 1.5s infinite;
+      background-size: 200% auto;
+    }
+    @keyframes shimmer {
+      0%, 100% { background-position: 0% center; }
+      50%       { background-position: 100% center; }
+    }
+    .hero-title .academy-label {
+      display: inline-block;
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      font-weight: 700;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: rgba(179, 224, 220, 0.75);
+      margin-bottom: 8px;
+    }
     .hero-subtitle { font-size: 1.35rem; color: rgba(254,254,254,0.85); margin-bottom: 45px; max-width: 700px; margin-left: auto; margin-right: auto; }
     .hero-cta { margin-top: 45px; }
-    .hero-bottom-visual { width: 100%; max-width: 450px; margin: 50px auto 0; aspect-ratio: 10 / 3; animation: fadeIn 1s 0.5s ease-out backwards; }
-    .hero-bottom-visual svg { display: block; width: 100%; height: 100%; }
-    .hero-svg-bar { fill: url(#heroBarGradient); transition: transform 0.3s ease-out; }
-    .hero-svg-pixel { fill: var(--color-primary-light); opacity: 0; }
+
+    /* ── Hero entrance animations ── */
+    @keyframes heroSlideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero-content > * {
+      opacity: 0;
+      animation: heroSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .hero-content > *:nth-child(1) { animation-delay: 0.1s; }
+    .hero-content > *:nth-child(2) { animation-delay: 0.25s; }
+    .hero-content > *:nth-child(3) { animation-delay: 0.42s; }
+    .hero-content > *:nth-child(4) { animation-delay: 0.58s; }
+    .hero-content > *:nth-child(5) { animation-delay: 0.72s; }
+    .hero-content > *:nth-child(6) { animation-delay: 0.85s; }
+
+    /* ── Pulsing CTA glow ── */
+    .cta-button {
+      box-shadow: 0 8px 25px rgba(94,129,125,0.3),
+                  0 0 0 0 rgba(42,157,143,0.4) !important;
+      animation: ctaPulse 3s ease-in-out 2s infinite !important;
+    }
+    @keyframes ctaPulse {
+      0%, 100% { box-shadow: 0 8px 25px rgba(94,129,125,0.3), 0 0 0 0 rgba(42,157,143,0); }
+      50%       { box-shadow: 0 12px 35px rgba(94,129,125,0.45), 0 0 0 12px rgba(42,157,143,0); }
+    }
+
+    /* ── Reduced motion ── */
+    @media (prefers-reduced-motion: reduce) {
+      .hero-orb-1, .hero-orb-2, .hero-orb-3,
+      .hero-grid, .hero-float-card, .hero-ticker-track,
+      .hero-title .year, .hero-content > *, .cta-button {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    }
+
+    /* ── Mobile: hide side cards on small screens ── */
+    @media (max-width: 768px) {
+      .hero-floating-cards { display: none; }
+      .hero-orb-1 { width: 300px; height: 300px; }
+      .hero-orb-2 { width: 250px; height: 250px; }
+      .hero-orb-3 { display: none; }
+      .hero-ticker-item { font-size: 0.72rem; }
+    }
 
     @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -710,28 +959,125 @@
 
   <!-- ─── HERO ─────────────────────────────────────────── -->
   <section class="hero-section" id="hero">
-    <div class="container hero-content">
-      <h1 class="hero-title">
-        הכסף שלכם יכול לעבוד קשה יותר מכם.
-        <span class="year">שוק ההון 2026</span>
-      </h1>
-      <p class="hero-subtitle">הפסיקו להשאיר כסף על השולחן בפיקדון בנקאי שלא מנצח את האינפלציה. גלו את השיטה שמחברת את חוכמת ההשקעות של וורן באפט עם הכלים הטכנולוגיים של העתיד, והופכת את החסכונות שלכם למנוע צמיחה אמיתי. <strong>גם אם אתם מתחילים מאפס.</strong></p>
-      <div class="hero-cta">
-        <a href="/auth/register/" class="cta-button cta-button-accent main-cta-link">התחל בחינם</a>
+
+    <!-- Atmospheric layers -->
+    <div class="hero-orb hero-orb-1" aria-hidden="true"></div>
+    <div class="hero-orb hero-orb-2" aria-hidden="true"></div>
+    <div class="hero-orb hero-orb-3" aria-hidden="true"></div>
+    <div class="hero-grid" aria-hidden="true"></div>
+
+    <!-- Floating chapter cards -->
+    <div class="hero-floating-cards" aria-hidden="true">
+
+      <div class="hero-float-card hfc-1">
+        <div class="hero-float-card-icon">
+          <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        </div>
+        <div>
+          <div class="hero-float-card-num">פרק 1</div>
+          <div class="hero-float-card-text">שלב הכלים</div>
+        </div>
+      </div>
+
+      <div class="hero-float-card hfc-2">
+        <div class="hero-float-card-icon">
+          <svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+        </div>
+        <div>
+          <div class="hero-float-card-num">פרק 2</div>
+          <div class="hero-float-card-text">שלב האסטרטגיה</div>
+        </div>
+      </div>
+
+      <div class="hero-float-card hfc-3">
+        <div class="hero-float-card-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+        </div>
+        <div>
+          <div class="hero-float-card-num">פרק 3</div>
+          <div class="hero-float-card-text">ניתוח עסקי</div>
+        </div>
+      </div>
+
+      <div class="hero-float-card hfc-4">
+        <div class="hero-float-card-icon">
+          <svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+        </div>
+        <div>
+          <div class="hero-float-card-num">פרק 4</div>
+          <div class="hero-float-card-text">בניית תיק השקעות</div>
+        </div>
+      </div>
+
+      <div class="hero-float-card hfc-5">
+        <div class="hero-float-card-icon">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <div>
+          <div class="hero-float-card-num">בונוס</div>
+          <div class="hero-float-card-text">+500 תלמידים</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Main content -->
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-title">
+          <span class="academy-label">Investor Academy</span>
+          השקעות ערך —
+          <span class="year">2025</span>
+        </div>
+        <p class="hero-subtitle">השיטה המלאה להשקעות ערך. 4 פרקים, ניתוח דוחות כספיים, תמחור מניות וכלים מקצועיים — הכל בעברית.</p>
+        <div class="hero-cta">
+          <a href="#offer" class="cta-button">אני רוצה להצטרף</a>
+        </div>
       </div>
     </div>
-    <div class="hero-bottom-visual">
-      <svg viewBox="0 0 150 45" preserveAspectRatio="xMidYMid meet">
-        <g>
-          <rect class="hero-svg-bar gsap-element" x="10" y="30" width="15" height="15" rx="2"></rect>
-          <rect class="hero-svg-bar gsap-element" x="35" y="20" width="15" height="25" rx="2"></rect>
-          <rect class="hero-svg-bar gsap-element" x="60" y="10" width="15" height="35" rx="2"></rect>
-          <rect class="hero-svg-bar gsap-element" x="85" y="15" width="15" height="30" rx="2"></rect>
-          <rect class="hero-svg-bar gsap-element" x="110" y="5" width="15" height="40" rx="2"></rect>
-          <rect class="hero-svg-bar gsap-element" x="135" y="25" width="15" height="20" rx="2"></rect>
-        </g>
-      </svg>
+
+    <!-- Ticker bar -->
+    <div class="hero-ticker" aria-hidden="true">
+      <div class="hero-ticker-track">
+        <div class="hero-ticker-item">AAPL <span class="up">▲ 1.24%</span></div>
+        <div class="hero-ticker-sep">·</div>
+        <div class="hero-ticker-item">MSFT <span class="up">▲ 0.87%</span></div>
+        <div class="hero-ticker-sep">·</div>
+        <div class="hero-ticker-item">GOOGL <span class="down">▼ 0.43%</span></div>
+        <div class="hero-ticker-sep">·</div>
+        <div class="hero-ticker-item">BRK.B <span class="up">▲ 0.55%</span></div>
+        <div class="hero-ticker-sep">·</div>
+        <div class="hero-ticker-item">AMZN <span class="up">▲ 2.10%</span></div>
+        <div class="hero-ticker-sep">·</div>
+        <div class="hero-ticker-item">NVDA <span class="up">▲ 3.45%</span></div>
+        <div class="hero-ticker-sep">·</div>
+        <div class="hero-ticker-item">META <span class="down">▼ 0.29%</span></div>
+        <div class="hero-ticker-sep">·</div>
+        <div class="hero-ticker-item">ת"א 125 <span class="up">▲ 0.71%</span></div>
+        <div class="hero-ticker-sep">·</div>
+        <div class="hero-ticker-item">S&amp;P 500 <span class="up">▲ 0.44%</span></div>
+        <div class="hero-ticker-sep">·</div>
+        <!-- Duplicate for seamless loop -->
+        <div class="hero-ticker-item">AAPL <span class="up">▲ 1.24%</span></div>
+        <div class="hero-ticker-sep">·</div>
+        <div class="hero-ticker-item">MSFT <span class="up">▲ 0.87%</span></div>
+        <div class="hero-ticker-sep">·</div>
+        <div class="hero-ticker-item">GOOGL <span class="down">▼ 0.43%</span></div>
+        <div class="hero-ticker-sep">·</div>
+        <div class="hero-ticker-item">BRK.B <span class="up">▲ 0.55%</span></div>
+        <div class="hero-ticker-sep">·</div>
+        <div class="hero-ticker-item">AMZN <span class="up">▲ 2.10%</span></div>
+        <div class="hero-ticker-sep">·</div>
+        <div class="hero-ticker-item">NVDA <span class="up">▲ 3.45%</span></div>
+        <div class="hero-ticker-sep">·</div>
+        <div class="hero-ticker-item">META <span class="down">▼ 0.29%</span></div>
+        <div class="hero-ticker-sep">·</div>
+        <div class="hero-ticker-item">ת"א 125 <span class="up">▲ 0.71%</span></div>
+        <div class="hero-ticker-sep">·</div>
+        <div class="hero-ticker-item">S&amp;P 500 <span class="up">▲ 0.44%</span></div>
+      </div>
     </div>
+
   </section>
 
   <!-- ─── PROBLEM SECTION ──────────────────────────────── -->
