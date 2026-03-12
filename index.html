@@ -31,7 +31,7 @@
     html { scroll-behavior: smooth; }
     body {
       font-family: 'Rubik', sans-serif;
-      background: linear-gradient(155deg, #0b4a64 0%, #1680a0 48%, #0d6a82 100%) fixed;
+      background: linear-gradient(170deg, #071e2b 0%, #0c3d52 50%, #0a3347 100%) fixed;
       background-attachment: fixed;
       color: #f0f8fa;
       direction: rtl;
@@ -40,6 +40,14 @@
       overflow-x: hidden;
     }
     a { text-decoration: none; color: inherit; }
+
+    /* ── Icon base ── */
+    .icon {
+      width: 24px;
+      height: 24px;
+      display: inline-block;
+      vertical-align: middle;
+    }
 
     /* ── NAVBAR ── */
     .hp-nav {
@@ -189,27 +197,98 @@
 
     /* ── HERO ── */
     #hero {
-      min-height: 100vh;
-      background: #0c3d52;
+      min-height: 100dvh;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(42, 157, 143, 0.18) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 80% 80%, rgba(22, 128, 160, 0.12) 0%, transparent 60%),
+        linear-gradient(170deg, #071e2b 0%, #0c3d52 45%, #093548 100%);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: clamp(4rem, 10vw, 6rem) clamp(1.25rem, 6vw, 4rem);
+      padding: clamp(5rem, 12vw, 8rem) clamp(1.25rem, 6vw, 4rem) clamp(4rem, 8vw, 6rem);
       position: relative;
       overflow: hidden;
     }
 
-    #hero::before {
-      content: '';
+    /* Hero visual background */
+    .hero-visual {
       position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      width: 700px; height: 700px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(42, 157, 143, 0.11) 0%, transparent 68%);
+      inset: 0;
+      overflow: hidden;
       pointer-events: none;
+    }
+    .hero-svg {
+      width: 100%;
+      height: 100%;
+      opacity: 0.65;
+    }
+
+    /* Animated line draw-on effect */
+    .hero-line {
+      stroke-dasharray: 1200;
+      stroke-dashoffset: 1200;
+      animation: drawLine 2.2s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+    }
+    .hero-area {
+      opacity: 0;
+      animation: fadeIn 1.5s ease 1.2s forwards;
+    }
+    .hero-dot {
+      opacity: 0;
+      animation: dotPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+    .hero-dot:nth-child(1) { animation-delay: 0.8s; }
+    .hero-dot:nth-child(2) { animation-delay: 1.0s; }
+    .hero-dot:nth-child(3) { animation-delay: 1.2s; }
+    .hero-dot:nth-child(4) { animation-delay: 1.4s; }
+    .hero-dot:nth-child(5) { animation-delay: 1.6s; }
+
+    .hero-pulse-ring {
+      animation: pulse 2.5s ease-in-out 2s infinite;
+    }
+    .hero-badge-svg {
+      opacity: 0;
+      animation: fadeSlideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .hero-float-1 { animation: fadeSlideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 1.5s forwards, float 6s ease-in-out 2.2s infinite; }
+    .hero-float-2 { animation: fadeSlideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 1.8s forwards, float 7s ease-in-out 2.5s infinite reverse; }
+    .hero-particle {
+      animation: float 4s ease-in-out infinite;
+    }
+    .hero-particle:nth-child(odd) { animation-duration: 5s; animation-direction: reverse; }
+
+    @keyframes drawLine {
+      to { stroke-dashoffset: 0; }
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+    @keyframes dotPop {
+      0% { opacity: 0; transform: scale(0); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    @keyframes pulse {
+      0%, 100% { r: 12; opacity: 0.5; }
+      50% { r: 18; opacity: 0; }
+    }
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-line, .hero-area, .hero-dot, .hero-pulse-ring,
+      .hero-badge-svg, .hero-particle {
+        animation: none !important;
+        opacity: 1 !important;
+        stroke-dashoffset: 0 !important;
+      }
     }
 
     .hero-badge {
@@ -225,17 +304,26 @@
       padding: 0.35rem 1rem;
       margin-bottom: 1.5rem;
       position: relative;
+      z-index: 2;
     }
 
     .hero-title {
-      font-size: clamp(2rem, 6.5vw, 4rem);
+      font-size: clamp(2.2rem, 7vw, 4.5rem);
       font-weight: 900;
-      line-height: 1.13;
+      line-height: 1.1;
       letter-spacing: -1.5px;
       color: #f0f8fa;
-      margin-bottom: 1.25rem;
-      max-width: 760px;
+      margin-bottom: 1.4rem;
+      max-width: 800px;
       position: relative;
+      z-index: 2;
+    }
+
+    .hero-title-accent {
+      background: linear-gradient(135deg, #b3e0dc 0%, #2a9d8f 50%, #7dd8d2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .hero-sub {
@@ -246,6 +334,7 @@
       max-width: 500px;
       margin-bottom: 2.5rem;
       position: relative;
+      z-index: 2;
     }
 
     .hero-ctas {
@@ -254,23 +343,38 @@
       flex-wrap: wrap;
       justify-content: center;
       position: relative;
+      z-index: 2;
     }
 
     .btn-hero-primary {
       display: inline-flex;
       align-items: center;
-      padding: 0.9rem 2.2rem;
+      padding: 1rem 2.5rem;
       border-radius: 12px;
-      font-size: 1rem;
+      font-size: 1.05rem;
       font-weight: 700;
       font-family: 'Rubik', sans-serif;
-      background: #b3e0dc;
-      color: #0c3d52;
-      border: none;
+      background: linear-gradient(135deg, #2a9d8f 0%, #1a8070 100%);
+      color: #f0f8fa;
+      border: 1px solid rgba(179, 224, 220, 0.3);
       cursor: pointer;
+      box-shadow: 0 4px 24px rgba(42, 157, 143, 0.35), inset 0 1px 0 rgba(255,255,255,0.1);
       transition: background 0.18s, transform 0.18s, box-shadow 0.18s;
+      position: relative;
+      overflow: hidden;
     }
-    .btn-hero-primary:hover { background: #8fc9c4; transform: translateY(-2px); box-shadow: 0 10px 28px rgba(179,224,220,0.4); }
+    .btn-hero-primary::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .btn-hero-primary:hover {
+      background: linear-gradient(135deg, #30b39f 0%, #1a9080 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(42, 157, 143, 0.5), inset 0 1px 0 rgba(255,255,255,0.15);
+    }
 
     .btn-hero-outline {
       display: inline-flex;
@@ -298,6 +402,7 @@
       align-items: center;
       gap: 5px;
       animation: bounce 2.2s ease-in-out infinite;
+      z-index: 2;
     }
     .scroll-arrow span {
       display: block;
@@ -313,28 +418,13 @@
 
     /* ── Hero entrance animation ── */
     @keyframes heroFadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(22px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-
-    .hero-badge,
-    .hero-title,
-    .hero-sub,
-    .hero-ctas {
-      opacity: 0;
-      animation: heroFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    .hero-badge  { animation-delay: 0.05s; }
-    .hero-title  { animation-delay: 0.2s; }
-    .hero-sub    { animation-delay: 0.35s; }
-    .hero-ctas   { animation-delay: 0.5s; }
+    .hero-badge  { opacity: 0; animation: heroFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards; }
+    .hero-title  { opacity: 0; animation: heroFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.25s forwards; }
+    .hero-sub    { opacity: 0; animation: heroFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.42s forwards; }
+    .hero-ctas   { opacity: 0; animation: heroFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.58s forwards; }
 
     @media (prefers-reduced-motion: reduce) {
       .hero-badge, .hero-title, .hero-sub, .hero-ctas {
@@ -374,42 +464,65 @@
     .products-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 1.25rem;
+      gap: 1.5rem;
     }
 
     .product-card {
-      background: rgba(236, 232, 229, 0.97);
-      border-radius: 16px;
-      padding: 1.75rem 1.5rem;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+      background: rgba(240, 236, 233, 0.97);
+      border-radius: 18px;
+      padding: 1.85rem 1.65rem;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.16);
       display: flex;
       flex-direction: column;
-      gap: 0.65rem;
+      gap: 0.7rem;
       color: #1a2e38;
-      transition: transform 0.22s ease, box-shadow 0.22s ease;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+      position: relative;
+      overflow: hidden;
     }
-    .product-card:hover { transform: translateY(-4px); box-shadow: 0 18px 44px rgba(0,0,0,0.28); }
+    .product-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 18px;
+      border: 1.5px solid transparent;
+      background: linear-gradient(135deg, rgba(42,157,143,0.35), transparent 60%) border-box;
+      -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: destination-out;
+      mask-composite: exclude;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+      pointer-events: none;
+    }
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 44px rgba(0,0,0,0.22), 0 0 0 1px rgba(42,157,143,0.1);
+    }
+    .product-card:hover::before {
+      opacity: 1;
+    }
 
     .product-card-icon {
-      width: 48px;
-      height: 48px;
+      width: 52px;
+      height: 52px;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(42, 157, 143, 0.1);
-      border: 1px solid rgba(42, 157, 143, 0.2);
-      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(42,157,143,0.15) 0%, rgba(42,157,143,0.05) 100%);
+      border: 1px solid rgba(42, 157, 143, 0.25);
+      border-radius: 14px;
       color: #2a9d8f;
       flex-shrink: 0;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
     }
-    .product-card-icon svg {
-      width: 24px;
-      height: 24px;
-      stroke: currentColor;
-      fill: none;
-      stroke-width: 1.75;
-      stroke-linecap: round;
-      stroke-linejoin: round;
+    .product-card:hover .product-card-icon {
+      background: linear-gradient(135deg, rgba(42,157,143,0.25) 0%, rgba(42,157,143,0.1) 100%);
+      border-color: rgba(42,157,143,0.45);
+      color: #b3e0dc;
+    }
+    .product-card-icon .icon {
+      width: 26px;
+      height: 26px;
     }
 
     .product-card-title { font-size: 1.1rem; font-weight: 800; color: #1a2e38; }
@@ -463,15 +576,21 @@
     }
 
     .feature-icon {
-      font-size: 1.9rem;
+      font-size: 1.4rem;
       flex-shrink: 0;
-      width: 58px; height: 58px;
+      width: 58px;
+      height: 58px;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(42, 157, 143, 0.13);
+      background: linear-gradient(135deg, rgba(42,157,143,0.18) 0%, rgba(42,157,143,0.06) 100%);
       border-radius: 14px;
-      border: 1px solid rgba(42, 157, 143, 0.2);
+      border: 1px solid rgba(42, 157, 143, 0.22);
+      color: #7dd8d2;
+    }
+    .feature-icon .icon {
+      width: 26px;
+      height: 26px;
     }
 
     .feature-title {
@@ -492,6 +611,19 @@
     #quote {
       padding: clamp(4rem, 10vw, 7rem) clamp(1.25rem, 6vw, 4rem);
       text-align: center;
+      background: linear-gradient(170deg, rgba(7,30,43,0) 0%, rgba(12,61,82,0.5) 50%, rgba(7,30,43,0) 100%);
+      position: relative;
+    }
+    #quote::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 500px;
+      height: 300px;
+      background: radial-gradient(ellipse, rgba(42,157,143,0.08) 0%, transparent 70%);
+      pointer-events: none;
     }
 
     .quote-block {
@@ -500,6 +632,7 @@
       opacity: 0;
       transform: translateY(28px);
       transition: opacity 1s ease, transform 1s ease;
+      position: relative;
     }
     .quote-block.visible { opacity: 1; transform: translateY(0); }
 
@@ -531,9 +664,22 @@
 
     /* ── SECTION 5 — CTA Banner ── */
     #cta-banner {
-      background: #b3e0dc;
+      background: linear-gradient(135deg, #b3e0dc 0%, #7dd8d2 40%, #a8d8d3 100%);
       padding: clamp(3.5rem, 8vw, 5.5rem) clamp(1.25rem, 6vw, 4rem);
       text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    #cta-banner::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 400px;
+      background: radial-gradient(ellipse, rgba(255,255,255,0.25) 0%, transparent 65%);
+      pointer-events: none;
     }
 
     .cta-title {
@@ -541,6 +687,7 @@
       font-weight: 800;
       color: #0c3d52;
       margin-bottom: 0.75rem;
+      position: relative;
     }
 
     .cta-sub {
@@ -549,6 +696,7 @@
       color: rgba(12, 61, 82, 0.68);
       margin-bottom: 2rem;
       line-height: 1.65;
+      position: relative;
     }
 
     .cta-btn {
@@ -564,6 +712,7 @@
       border: none;
       cursor: pointer;
       transition: background 0.18s, transform 0.18s, box-shadow 0.18s;
+      position: relative;
     }
     .cta-btn:hover { background: #0a3346; transform: translateY(-2px); box-shadow: 0 10px 32px rgba(12,61,82,0.3); }
 
@@ -698,8 +847,113 @@
 
 <!-- ── SECTION 1 — Hero ── -->
 <section id="hero">
+
+  <!-- Animated background SVG illustration -->
+  <div class="hero-visual" aria-hidden="true">
+    <svg class="hero-svg" viewBox="0 0 900 500" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="gridFade" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#2a9d8f" stop-opacity="0.15"/>
+          <stop offset="100%" stop-color="#2a9d8f" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#2a9d8f" stop-opacity="0.3"/>
+          <stop offset="50%" stop-color="#b3e0dc" stop-opacity="0.9"/>
+          <stop offset="100%" stop-color="#2a9d8f" stop-opacity="0.4"/>
+        </linearGradient>
+        <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#2a9d8f" stop-opacity="0.25"/>
+          <stop offset="100%" stop-color="#2a9d8f" stop-opacity="0"/>
+        </linearGradient>
+        <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+          <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="orbGlow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+          <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <clipPath id="chartClip">
+          <rect x="60" y="40" width="780" height="380"/>
+        </clipPath>
+      </defs>
+
+      <!-- Background grid lines (horizontal) -->
+      <line x1="60" y1="120" x2="840" y2="120" stroke="#2a9d8f" stroke-opacity="0.08" stroke-width="1"/>
+      <line x1="60" y1="200" x2="840" y2="200" stroke="#2a9d8f" stroke-opacity="0.08" stroke-width="1"/>
+      <line x1="60" y1="280" x2="840" y2="280" stroke="#2a9d8f" stroke-opacity="0.08" stroke-width="1"/>
+      <line x1="60" y1="360" x2="840" y2="360" stroke="#2a9d8f" stroke-opacity="0.08" stroke-width="1"/>
+
+      <!-- Background grid lines (vertical) -->
+      <line x1="190" y1="40" x2="190" y2="420" stroke="#2a9d8f" stroke-opacity="0.05" stroke-width="1"/>
+      <line x1="320" y1="40" x2="320" y2="420" stroke="#2a9d8f" stroke-opacity="0.05" stroke-width="1"/>
+      <line x1="450" y1="40" x2="450" y2="420" stroke="#2a9d8f" stroke-opacity="0.05" stroke-width="1"/>
+      <line x1="580" y1="40" x2="580" y2="420" stroke="#2a9d8f" stroke-opacity="0.05" stroke-width="1"/>
+      <line x1="710" y1="40" x2="710" y2="420" stroke="#2a9d8f" stroke-opacity="0.05" stroke-width="1"/>
+
+      <!-- Area fill under the chart line -->
+      <path class="hero-area"
+        d="M60,360 L130,320 L200,300 L270,280 L340,260 L400,240 L460,200 L520,190 L580,160 L640,130 L700,110 L760,90 L840,80 L840,420 L60,420 Z"
+        fill="url(#areaGrad)"
+        clip-path="url(#chartClip)"/>
+
+      <!-- Main chart line with glow -->
+      <path class="hero-line" filter="url(#glow)"
+        d="M60,360 L130,320 L200,300 L270,280 L340,260 L400,240 L460,200 L520,190 L580,160 L640,130 L700,110 L760,90 L840,80"
+        fill="none"
+        stroke="url(#lineGrad)"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+
+      <!-- Data point dots on the line -->
+      <circle class="hero-dot" cx="200" cy="300" r="4" fill="#2a9d8f" opacity="0.7"/>
+      <circle class="hero-dot" cx="340" cy="260" r="4" fill="#2a9d8f" opacity="0.7"/>
+      <circle class="hero-dot" cx="460" cy="200" r="4" fill="#b3e0dc" opacity="0.9"/>
+      <circle class="hero-dot" cx="580" cy="160" r="5" fill="#b3e0dc" opacity="1" filter="url(#orbGlow)"/>
+      <circle class="hero-dot" cx="700" cy="110" r="4" fill="#2a9d8f" opacity="0.7"/>
+
+      <!-- Highlighted current point with pulse ring -->
+      <circle class="hero-pulse-ring" cx="760" cy="90" r="12" fill="none" stroke="#b3e0dc" stroke-width="1.5" opacity="0.5"/>
+      <circle cx="760" cy="90" r="5" fill="#b3e0dc" filter="url(#orbGlow)"/>
+
+      <!-- Floating candlesticks (abstract, left area) -->
+      <g class="hero-candles" opacity="0.35">
+        <rect x="80" y="280" width="8" height="60" rx="2" fill="#2a9d8f"/>
+        <line x1="84" y1="270" x2="84" y2="280" stroke="#2a9d8f" stroke-width="1.5"/>
+        <line x1="84" y1="340" x2="84" y2="355" stroke="#2a9d8f" stroke-width="1.5"/>
+        <rect x="100" y="260" width="8" height="70" rx="2" fill="#b3e0dc"/>
+        <line x1="104" y1="250" x2="104" y2="260" stroke="#b3e0dc" stroke-width="1.5"/>
+        <line x1="104" y1="330" x2="104" y2="340" stroke="#b3e0dc" stroke-width="1.5"/>
+        <rect x="120" y="240" width="8" height="50" rx="2" fill="#2a9d8f"/>
+        <line x1="124" y1="230" x2="124" y2="240" stroke="#2a9d8f" stroke-width="1.5"/>
+        <line x1="124" y1="290" x2="124" y2="305" stroke="#2a9d8f" stroke-width="1.5"/>
+      </g>
+
+      <!-- Floating stat badge — top right -->
+      <g class="hero-badge-svg hero-float-1">
+        <rect x="680" y="50" width="150" height="52" rx="12" fill="rgba(12,61,82,0.85)" stroke="#2a9d8f" stroke-width="1" stroke-opacity="0.5"/>
+        <text x="755" y="72" text-anchor="middle" font-family="Rubik, sans-serif" font-size="11" fill="rgba(179,224,220,0.7)">תשואה שנתית</text>
+        <text x="755" y="91" text-anchor="middle" font-family="Rubik, sans-serif" font-size="16" font-weight="700" fill="#b3e0dc">+24.7%</text>
+      </g>
+
+      <!-- Floating stat badge — bottom left -->
+      <g class="hero-badge-svg hero-float-2">
+        <rect x="60" y="390" width="160" height="52" rx="12" fill="rgba(12,61,82,0.85)" stroke="#2a9d8f" stroke-width="1" stroke-opacity="0.5"/>
+        <text x="140" y="412" text-anchor="middle" font-family="Rubik, sans-serif" font-size="11" fill="rgba(179,224,220,0.7)">תלמידים פעילים</text>
+        <text x="140" y="431" text-anchor="middle" font-family="Rubik, sans-serif" font-size="16" font-weight="700" fill="#b3e0dc">500+</text>
+      </g>
+
+      <!-- Small floating dots / particles -->
+      <circle class="hero-particle" cx="480" cy="60" r="3" fill="#b3e0dc" opacity="0.4"/>
+      <circle class="hero-particle" cx="620" cy="45" r="2" fill="#2a9d8f" opacity="0.5"/>
+      <circle class="hero-particle" cx="380" cy="410" r="2.5" fill="#b3e0dc" opacity="0.3"/>
+      <circle class="hero-particle" cx="800" cy="300" r="2" fill="#2a9d8f" opacity="0.4"/>
+    </svg>
+  </div>
+
   <div class="hero-badge">השקעות ערך בעברית</div>
-  <h1 class="hero-title">השקעות ערך —<br>פשוטות, מהנות ומשתלמות</h1>
+  <h1 class="hero-title">השקעות <span class="hero-title-accent">ערך</span> —<br>פשוטות, מהנות ומשתלמות</h1>
   <p class="hero-sub">הבית של המשקיע המתחיל. כלים, ידע וחוויה — הכל במקום אחד.</p>
   <div class="hero-ctas">
     <a href="/auth/register/" class="btn-hero-primary">התחל בחינם</a>
@@ -720,7 +974,7 @@
 
       <div class="product-card fade-up">
         <div class="product-card-icon">
-          <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="13" rx="4"/><path d="M8 11v4M6 13h4"/><circle cx="15" cy="12" r="1" fill="currentColor"/><circle cx="18" cy="14" r="1" fill="currentColor"/></svg>
+          <svg class="icon"><use href="/assets/icons/sprite.svg#icon-game"></use></svg>
         </div>
         <div class="product-card-title">משחק ההשקעות</div>
         <p class="product-card-desc">תרגלו ניתוח חברות בסגנון וורן באפט — 10 סיבובים, נתונים אמיתיים, ומשוב מיידי</p>
@@ -730,7 +984,7 @@
 
       <div class="product-card fade-up">
         <div class="product-card-icon">
-          <svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+          <svg class="icon"><use href="/assets/icons/sprite.svg#icon-chart"></use></svg>
         </div>
         <div class="product-card-title">מחשבון פיננסי</div>
         <p class="product-card-desc">נתחו את הבריאות הפיננסית של כל חברה ב-13 מדדים מרכזיים</p>
@@ -740,7 +994,7 @@
 
       <div class="product-card fade-up">
         <div class="product-card-icon">
-          <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          <svg class="icon"><use href="/assets/icons/sprite.svg#icon-book"></use></svg>
         </div>
         <div class="product-card-title">קורס Investor Academy</div>
         <p class="product-card-desc">השיטה המלאה להשקעות ערך — מהבסיס ועד ניתוח חברות אמיתיות. 4 פרקים מלאים</p>
@@ -750,7 +1004,7 @@
 
       <div class="product-card fade-up">
         <div class="product-card-icon">
-          <svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+          <svg class="icon"><use href="/assets/icons/sprite.svg#icon-trend"></use></svg>
         </div>
         <div class="product-card-title">מעקב תיק השקעות</div>
         <p class="product-card-desc">מערכת ניהול חכמה על Google Sheets — מעקב אוטומטי, TWR, סימולטור עסקאות ודוחות PDF</p>
@@ -770,7 +1024,9 @@
     <div class="features-list">
 
       <div class="feature-row fade-up">
-        <div class="feature-icon">🎯</div>
+        <div class="feature-icon">
+          <svg class="icon"><use href="/assets/icons/sprite.svg#icon-target"></use></svg>
+        </div>
         <div class="feature-body">
           <div class="feature-title">גישה פרקטית</div>
           <p class="feature-desc">לא תיאוריה יבשה. כל מושג מוסבר עם דוגמאות אמיתיות מהשוק</p>
@@ -778,7 +1034,9 @@
       </div>
 
       <div class="feature-row fade-up">
-        <div class="feature-icon">🧠</div>
+        <div class="feature-icon">
+          <svg class="icon"><use href="/assets/icons/sprite.svg#icon-brain"></use></svg>
+        </div>
         <div class="feature-body">
           <div class="feature-title">ללמוד תוך כדי משחק</div>
           <p class="feature-desc">המשחק, המחשבון והקורס בנויים יחד — כל אחד מחזק את השני</p>
@@ -786,7 +1044,9 @@
       </div>
 
       <div class="feature-row fade-up">
-        <div class="feature-icon">🚀</div>
+        <div class="feature-icon">
+          <svg class="icon"><use href="/assets/icons/sprite.svg#icon-rocket"></use></svg>
+        </div>
         <div class="feature-body">
           <div class="feature-title">צעד ראשון בטוח</div>
           <p class="feature-desc">לא צריך ניסיון קודם. בניתי את זה עבור מי שרוצה להתחיל נכון</p>
