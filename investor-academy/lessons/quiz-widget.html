@@ -521,6 +521,16 @@
       }
     }
 
+    function postHeight() {
+      window.parent.postMessage(
+        { type: 'quizHeight', height: document.body.scrollHeight },
+        '*'
+      );
+    }
+
+    // Re-post whenever layout changes (e.g. fonts load, images render)
+    new ResizeObserver(postHeight).observe(document.body);
+
     window.addEventListener('DOMContentLoaded', initQuiz);
   </script>
 </body>
