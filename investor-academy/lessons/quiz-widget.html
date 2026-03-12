@@ -339,9 +339,10 @@
 
   <script>
     // Supabase
-    const SUPABASE_URL = 'https://pmlkhkagtorhlteplvak.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtbGtoa2FndG9yaGx0ZXBsdmFrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE3NzEwMTksImV4cCI6MjA4NzM0NzAxOX0.jIG9l6gjAemJCa7b0J6yxzBRbblXL9r9XET10eGxLUo';
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const supabase = window.supabase.createClient(
+      'https://pmlkhkagtorhlteplvak.supabase.co',
+      'sb_publishable_tV2FY5_h6ba6-nhdVbENLQ_gkejPX38'
+    );
 
     // Read chapter from URL: ?chapter=1 or ?chapter=2
     const chapter = new URLSearchParams(window.location.search).get('chapter') || '1';
