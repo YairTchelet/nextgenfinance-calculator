@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>חידון משקיעים - Premium</title>
+  
+  <!-- גופן Rubik -->
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    :root {
+      /* צבעי בסיס */
+      --bg-body: #080c16; 
+      --accent-light: #b3e0dc;
+      --accent-dark: #6eb5b0;
+      
+      /* גרדיאנטים */
+      --card-gradient: linear-gradient(145deg, #172135, #0f1523);
+      --primary-gradient: linear-gradient(135deg, var(--accent-light), var(--accent-dark));
+      --correct-gradient: linear-gradient(135deg, #4ade80, #16a34a);
+      --wrong-gradient: linear-gradient(135deg, #f87171, #dc2626);
+      
+      /* טקסטים */
+      --text-main: #ffffff;
+      --text-muted: #94a3b8;
+      
+      /* עיצוב Squircle */
+      --squircle-card: 40px;
+      --squircle-btn: 24px;
+      
+      /* אפקטים */
+      --shadow-soft: 0 20px 50px rgba(0,0,0,0.5), inset 0 2px 0 rgba(255,255,255,0.05);
+      --shadow-glow: 0 10px 30px rgba(179, 224, 220, 0.2);
+      --transition-smooth: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Rubik', sans-serif;
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem 1rem;
+      background-image: radial-gradient(circle at 50% 0%, rgba(179, 224, 220, 0.05) 0%, transparent 50%);
+    }
+
+    .quiz-card {
+      width: 100%;
+      max-width: 650px;
+      background: var(--card-gradient);
+      border-radius: var(--squircle-card);
+      box-shadow: var(--shadow-soft);
+      padding: 3rem 2.5rem;
+      border: 1px solid rgba(255,255,255,0.03);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Header & Progress */
+    .header-stats {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .score-pill {
+      background: rgba(179, 224, 220, 0.1);
+      color: var(--accent-light);
+      padding: 6px 16px;
+      border-radius: 50px;
+      border: 1px solid rgba(179, 224, 220, 0.2);
+      box-shadow: 0 0 15px rgba(179, 224, 220, 0.05);
+      transition: var(--transition-smooth);
+    }
+
+    .progress-container {
+      width: 100%;
+      height: 8px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 20px;
+      margin-bottom: 2.5rem;
+      overflow: hidden;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--primary-gradient);
+      width: 0%;
+      border-radius: 20px;
+      transition: width 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+      box-shadow: 0 0 10px rgba(179, 224, 220, 0.5);
+    }
+
+    /* Question & Options */
+    .question-text {
+      font-size: 1.4rem;
+      font-weight: 600;
+      line-height: 1.5;
+      margin-bottom: 2rem;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .option-btn {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+      padding: 1.2rem 1.5rem;
+      border-radius: var(--squircle-btn);
+      font-family: inherit;
+      font-size: 1.05rem;
+      text-align: right;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      line-height: 1.4;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      transform: translateY(-4px) scale(1.01);
+      background: rgba(179, 224, 220, 0.05);
+      border-color: rgba(179, 224, 220, 0.4);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2), 0 0 15px rgba(179,224,220,0.1);
+    }
+
+    .option-btn.selected {
+      background: var(--primary-gradient);
+      color: #080c16;
+      font-weight: 600;
+      border-color: transparent;
+      box-shadow: var(--shadow-glow);
+    }
+
+    .option-btn.correct {
+      background: var(--correct-gradient);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 10px 25px rgba(74, 222, 128, 0.2);
+    }
+
+    .option-btn.wrong {
+      background: var(--wrong-gradient);
+      color: #fff;
+      border-color: transparent;
+    }
+
+    .option-btn:disabled { cursor: default; }
+    .option-btn:disabled:not(.correct):not(.wrong) { opacity: 0.4; }
+
+    /* Actions */
+    .actions-area {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 2.5rem;
+    }
+
+    .action-btn {
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 1.05rem;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+
+    .btn-submit {
+      background: var(--primary-gradient);
+      color: #080c16;
+      box-shadow: var(--shadow-glow);
+    }
+
+    .btn-submit:hover:not(:disabled) {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 35px rgba(179, 224, 220, 0.3);
+    }
+
+    .btn-submit:disabled {
+      background: #2a3441;
+      color: #64748b;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .btn-hint {
+      background: transparent;
+      color: #fbbf24;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.8rem 1.5rem;
+      border: 1px solid rgba(251, 191, 36, 0.3);
+    }
+
+    .btn-hint:hover {
+      background: rgba(251, 191, 36, 0.1);
+      border-color: #fbbf24;
+      transform: translateY(-2px);
+    }
+
+    /* Glass Panels */
+    .glass-panel {
+      margin-top: 1.5rem;
+      padding: 1.5rem;
+      border-radius: var(--squircle-btn);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      display: none;
+      animation: slideUp 0.4s ease forwards;
+    }
+
+    .glass-panel.hint { border-right: 4px solid #fbbf24; color: #fde68a; }
+    .glass-panel.explanation.success { border-right: 4px solid #4ade80; }
+    .glass-panel.explanation.error { border-right: 4px solid #f87171; }
+
+    .exp-title { font-weight: 600; margin-bottom: 0.5rem; font-size: 1.1rem; }
+    .exp-text { line-height: 1.6; color: var(--text-muted); }
+
+    /* Results Screen */
+    .results-screen {
+      text-align: center;
+      display: none;
+      animation: slideUp 0.6s ease;
+    }
+
+    .results-screen h2 {
+      font-size: 2.2rem;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    .final-score {
+      font-size: 4.5rem;
+      font-weight: 700;
+      margin: 1.5rem 0;
+      text-shadow: var(--shadow-glow);
+    }
+
+    .btn-save { width: 100%; margin-top: 2rem; font-size: 1.2rem; padding: 1.2rem; }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 600px) {
+      .quiz-card { padding: 2rem 1.5rem; border-radius: 30px; }
+      .actions-area { flex-direction: column-reverse; gap: 1rem; }
+      .action-btn { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="quiz-card">
+    
+    <!-- מסך החידון -->
+    <div id="quiz-active">
+      <div class="header-stats">
+        <div>שאלה <span id="current-q">1</span> מתוך <span id="total-q">-</span></div>
+        <div class="score-pill">ניקוד: <span id="score-display">0</span></div>
+      </div>
+      <div class="progress-container">
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+
+      <div class="question-text" id="question-text">טוען נתונים...</div>
+
+      <div class="options-grid" id="options-container"></div>
+
+      <div class="glass-panel hint" id="hint-panel">
+        <div class="exp-title">💡 רמז בשבילך:</div>
+        <div class="exp-text" id="hint-text"></div>
+      </div>
+
+      <div class="glass-panel explanation" id="explanation-panel">
+        <div class="exp-title" id="exp-title"></div>
+        <div class="exp-text" id="exp-text"></div>
+      </div>
+
+      <div class="actions-area">
+        <button class="action-btn btn-hint" id="btn-hint" onclick="showHint()">
+          <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+          רמז (5 נק')
+        </button>
+        <button class="action-btn btn-submit" id="btn-submit" onclick="handleSubmit()" disabled>
+          בדוק תשובה
+        </button>
+      </div>
+    </div>
+
+    <!-- מסך סיום -->
+    <div id="quiz-results" class="results-screen">
+      <h2>סיימת את הפרק! 🎉</h2>
+      <p style="color: var(--text-muted); font-size: 1.1rem;">הנה הציון הסופי שלך:</p>
+      
+      <div class="final-score" id="final-score-text">0</div>
+      
+      <p id="supabase-status" style="color: #fbbf24; font-size: 0.95rem; margin-top: 1rem;"></p>
+      
+      <button class="action-btn btn-submit btn-save" id="btn-save" onclick="saveResultsToSupabase()">
+        שמור הישגים לפרופיל
+      </button>
+    </div>
+
+  </div>
+
+  <script>
+    // הגדרות Supabase
+    // TODO: להחליף מפתחות ב-VSCode
+    const SUPABASE_URL = 'https://pmlkhkagtorhlteplvak.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBtbGtoa2FndG9yaGx0ZXBsdmFrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE3NzEwMTksImV4cCI6MjA4NzM0NzAxOX0.jIG9l6gjAemJCa7b0J6yxzBRbblXL9r9XET10eGxLUo';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // נתיב הקובץ - תלוי במיקום הקובץ בשרת שלך
+    const JSON_PATH = './quiz-chapter-1.json';
+
+    let quizData = [];
+    let currentIndex = 0;
+    let score = 0;
+    let selectedIndex = null;
+    let state = 'answering'; // answering | reviewing
+    const POINTS_PER_Q = 10;
+    const HINT_PENALTY = 5;
+
+    const DOM = {
+      activeView: document.getElementById('quiz-active'),
+      resultsView: document.getElementById('quiz-results'),
+      qText: document.getElementById('question-text'),
+      options: document.getElementById('options-container'),
+      progress: document.getElementById('progress-bar'),
+      currentQ: document.getElementById('current-q'),
+      totalQ: document.getElementById('total-q'),
+      score: document.getElementById('score-display'),
+      btnSubmit: document.getElementById('btn-submit'),
+      btnHint: document.getElementById('btn-hint'),
+      hintPanel: document.getElementById('hint-panel'),
+      hintText: document.getElementById('hint-text'),
+      expPanel: document.getElementById('explanation-panel'),
+      expTitle: document.getElementById('exp-title'),
+      expText: document.getElementById('exp-text')
+    };
+
+    async function initQuiz() {
+      try {
+        const res = await fetch(JSON_PATH);
+        if(!res.ok) throw new Error("Failed to load JSON");
+        const data = await res.json();
+        quizData = data.questions;
+        DOM.totalQ.textContent = quizData.length;
+        loadQuestion();
+      } catch (err) {
+        DOM.qText.innerHTML = `<span style="color:var(--wrong)">שגיאה בטעינת החידון: ${err.message}</span>`;
+      }
+    }
+
+    function loadQuestion() {
+      const q = quizData[currentIndex];
+      state = 'answering';
+      selectedIndex = null;
+      
+      DOM.options.innerHTML = '';
+      DOM.expPanel.style.display = 'none';
+      DOM.hintPanel.style.display = 'none';
+      DOM.btnHint.style.display = 'flex';
+      DOM.btnSubmit.textContent = 'בדוק תשובה';
+      DOM.btnSubmit.disabled = true;
+
+      DOM.currentQ.textContent = currentIndex + 1;
+      const progress = (currentIndex / quizData.length) * 100;
+      DOM.progress.style.width = `${progress}%`;
+      
+      DOM.qText.textContent = q.question;
+      DOM.hintText.textContent = q.hint;
+
+      q.options.forEach((opt, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.textContent = opt.replace(/^[A-D]\.\s*/, ''); // מנקה את ה-A. B. מההתחלה
+        btn.onclick = () => selectOption(index, btn);
+        DOM.options.appendChild(btn);
+      });
+    }
+
+    function selectOption(index, btn) {
+      if (state !== 'answering') return;
+      
+      selectedIndex = index;
+      Array.from(DOM.options.children).forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      DOM.btnSubmit.disabled = false;
+    }
+
+    function showHint() {
+      DOM.hintPanel.style.display = 'block';
+      DOM.btnHint.style.display = 'none';
+      score = Math.max(0, score - HINT_PENALTY);
+      DOM.score.textContent = score;
+    }
+
+    function handleSubmit() {
+      if (state === 'answering') checkAnswer();
+      else nextQuestion();
+    }
+
+    function checkAnswer() {
+      state = 'reviewing';
+      const q = quizData[currentIndex];
+      const isCorrect = selectedIndex === q.correct;
+      const buttons = Array.from(DOM.options.children);
+
+      buttons.forEach((btn, idx) => {
+        btn.disabled = true;
+        if (idx === q.correct) btn.classList.add('correct');
+        else if (idx === selectedIndex && !isCorrect) btn.classList.add('wrong');
+      });
+
+      if (isCorrect) {
+        score += POINTS_PER_Q;
+        DOM.score.textContent = score;
+        DOM.score.parentElement.style.transform = 'scale(1.1)';
+        setTimeout(() => DOM.score.parentElement.style.transform = 'scale(1)', 300);
+        
+        DOM.expPanel.className = 'glass-panel explanation success';
+        DOM.expTitle.innerHTML = '✨ תשובה נכונה!';
+        DOM.expText.innerHTML = q.explanations[selectedIndex];
+      } else {
+        DOM.expPanel.className = 'glass-panel explanation error';
+        DOM.expTitle.innerHTML = '❌ לא מדויק...';
+        DOM.expText.innerHTML = `
+          <div style="margin-bottom: 10px;">${q.explanations[selectedIndex]}</div>
+          <strong style="color: #4ade80">התשובה הנכונה:</strong><br>
+          <span style="color:var(--text-main)">${q.explanations[q.correct]}</span>
+        `;
+      }
+
+      DOM.expPanel.style.display = 'block';
+      DOM.btnHint.style.display = 'none';
+      
+      const isLast = currentIndex === quizData.length - 1;
+      DOM.btnSubmit.textContent = isLast ? 'סיים מבחן ➔' : 'לשאלה הבאה ➔';
+    }
+
+    function nextQuestion() {
+      currentIndex++;
+      if (currentIndex < quizData.length) {
+        loadQuestion();
+      } else {
+        finishQuiz();
+      }
+    }
+
+    function finishQuiz() {
+      DOM.progress.style.width = '100%';
+      DOM.activeView.classList.add('hidden');
+      DOM.resultsView.style.display = 'block';
+      
+      const maxScore = quizData.length * POINTS_PER_Q;
+      document.getElementById('final-score-text').textContent = `${score} / ${maxScore}`;
+    }
+
+    async function saveResultsToSupabase() {
+      const btnSave = document.getElementById('btn-save');
+      const statusTxt = document.getElementById('supabase-status');
+      btnSave.disabled = true;
+      btnSave.textContent = 'טוען...';
+
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        // אם אין משתמש מחובר (Auth), ישמור null או יעבוד רק אם הטבלה מאפשרת אנונימיות
+        
+        const { error } = await supabase
+          .from('quiz_results')
+          .insert([{ 
+            user_id: user ? user.id : null, 
+            chapter: 1, 
+            score: score,
+            max_score: quizData.length * POINTS_PER_Q
+          }]);
+
+        if (error) throw error;
+
+        btnSave.textContent = '✔️ נשמר בהצלחה!';
+        btnSave.style.background = 'var(--correct-gradient)';
+        btnSave.style.color = '#fff';
+      } catch (err) {
+        console.error(err);
+        statusTxt.textContent = "שגיאה: " + err.message;
+        btnSave.disabled = false;
+        btnSave.textContent = 'נסה שוב';
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', initQuiz);
+  </script>
+</body>
+</html>
