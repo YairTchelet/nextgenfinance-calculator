@@ -534,6 +534,88 @@
       .invest-calc-labels { display: none; }
       .faq-title { font-size: 1.8rem; }
     }
+
+    /* ── Hamburger ── */
+    .hp-hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 40px;
+      height: 40px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 8px;
+      flex-shrink: 0;
+    }
+    .hp-hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: rgba(240, 248, 250, 0.8);
+      border-radius: 2px;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    .hp-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hp-hamburger.open span:nth-child(2) { opacity: 0; }
+    .hp-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ── Mobile drawer ── */
+    .hp-mobile-menu {
+      display: none;
+      flex-direction: column;
+      background: #0c3d52;
+      border-bottom: 1px solid rgba(179, 224, 220, 0.12);
+      position: sticky;
+      top: 68px;
+      z-index: 99;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease, padding 0.35s ease;
+    }
+    .hp-mobile-menu.open {
+      max-height: 420px;
+      padding: 0.75rem 0 1.25rem;
+    }
+    .hp-mobile-menu a {
+      display: block;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 500;
+      color: rgba(240, 248, 250, 0.82);
+      border-right: 3px solid transparent;
+      transition: color 0.18s, border-color 0.18s, background 0.18s;
+      text-decoration: none;
+    }
+    .hp-mobile-menu a:hover {
+      color: #f0f8fa;
+      background: rgba(179, 224, 220, 0.07);
+      border-right-color: #7dd8d2;
+    }
+    .hp-mobile-auth {
+      padding: 0.75rem 1.5rem 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .hp-mobile-auth a, .hp-mobile-auth button {
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      font-family: 'Heebo', sans-serif;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    @media (max-width: 768px) {
+      .hp-hamburger { display: flex; }
+      .hp-mobile-menu { display: flex; }
+    }
   </style>
   <script type="application/ld+json">
   {
@@ -590,6 +672,9 @@
       </a>
       <div id="nav-auth" class="nav-auth"></div>
     </div>
+    <button class="hp-hamburger" id="hp-hamburger" aria-label="תפריט" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
     <ul class="nav-links">
       <li><a href="/">ראשי</a></li>
       <li><a href="/#tools">כלים</a></li>
@@ -599,6 +684,18 @@
       <li><a href="/blog/">בלוג</a></li>
     </ul>
   </nav>
+
+  <!-- Mobile drawer -->
+  <div class="hp-mobile-menu" id="hp-mobile-menu" aria-hidden="true">
+    <a href="/about/">אודות</a>
+    <a href="/blog/">בלוג</a>
+    <a href="/investor-academy/game/">משחק ההשקעות</a>
+    <a href="/calculator/">מחשבון פיננסי</a>
+    <a href="/investor-academy/">קורס Investor Academy</a>
+    <a href="/portfolio-tracker/">מעקב תיק</a>
+    <div class="hp-mobile-auth" id="hp-mobile-auth"></div>
+  </div>
+
   <div class="mobile-nav-overlay" id="mobile-nav-overlay"></div>
   <nav class="mobile-nav-panel" id="mobile-nav-panel" aria-label="תפריט ניווט">
     <div class="mobile-nav-panel-title">ניווט</div>
@@ -1085,10 +1182,14 @@
       const { data: { session } } = await _sb.auth.getSession();
       const navAuth = document.getElementById('nav-auth');
 
+      const mobileAuth = document.getElementById('hp-mobile-auth');
       if (!session) {
         navAuth.innerHTML =
           '<a href="/auth/login/" class="btn-nav btn-nav-outline">כניסה</a>' +
           '<a href="/auth/register/" class="btn-nav btn-nav-gold">הרשמה</a>';
+        if (mobileAuth) mobileAuth.innerHTML =
+          '<a href="/auth/login/" style="background:rgba(179,224,220,0.1);color:#f0f8fa;">התחברות</a>' +
+          '<a href="/auth/register/" style="background:#b3e0dc;color:#0c3d52;">הרשמה חינם</a>';
       } else {
         const user = session.user;
         const { data: profile } = await _sb
@@ -1110,6 +1211,16 @@
           await _sb.auth.signOut();
           window.location.reload();
         });
+
+        if (mobileAuth) {
+          mobileAuth.innerHTML =
+            '<a href="/members/" style="background:rgba(179,224,220,0.1);color:#f0f8fa;">אזור החברים</a>' +
+            '<button id="hp-mobile-signout" style="background:rgba(240,248,250,0.1);color:rgba(240,248,250,0.7);border:1px solid rgba(240,248,250,0.2);">יציאה</button>';
+          document.getElementById('hp-mobile-signout').addEventListener('click', async () => {
+            await _sb.auth.signOut();
+            window.location.reload();
+          });
+        }
 
         const mobileMembers = document.getElementById('mobile-nav-members');
         if (mobileMembers) mobileMembers.style.display = '';
@@ -1137,6 +1248,27 @@
       btn.addEventListener('click', function () { panel.classList.contains('open') ? close() : open(); });
       overlay.addEventListener('click', close);
       document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+    })();
+
+    // HP Hamburger toggle
+    (function() {
+      var btn = document.getElementById('hp-hamburger');
+      var menu = document.getElementById('hp-mobile-menu');
+      if (!btn || !menu) return;
+      btn.addEventListener('click', function() {
+        var isOpen = menu.classList.toggle('open');
+        btn.classList.toggle('open', isOpen);
+        btn.setAttribute('aria-expanded', isOpen);
+        menu.setAttribute('aria-hidden', !isOpen);
+      });
+      menu.querySelectorAll('a').forEach(function(link) {
+        link.addEventListener('click', function() {
+          menu.classList.remove('open');
+          btn.classList.remove('open');
+          btn.setAttribute('aria-expanded', 'false');
+          menu.setAttribute('aria-hidden', 'true');
+        });
+      });
     })();
   </script>
 
