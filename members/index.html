@@ -264,6 +264,36 @@
 
   </div>
 
+  <!-- QUIZ PROGRESS SECTION -->
+  <div style="margin-bottom:1.25rem;">
+    <p style="font-size:0.74rem;font-weight:700;letter-spacing:0.9px;text-transform:uppercase;color:#7dd8d2;margin-bottom:1rem;">ההתקדמות שלי</p>
+    <div style="background:rgba(236,232,229,0.97);border-radius:16px;padding:1.5rem 1.25rem;box-shadow:0 4px 24px rgba(0,0,0,0.18);">
+      <p style="font-size:1rem;font-weight:800;color:#1a2e38;margin:0 0 1.25rem;">📊 ההתקדמות שלי בקורס</p>
+
+      <!-- Chapter 1 -->
+      <div style="margin-bottom:1.1rem;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem;">
+          <span style="font-size:0.88rem;font-weight:700;color:#1a2e38;">פרק 1 — יסודות שוק ההון</span>
+          <span id="ch1-score-text" style="font-size:0.8rem;font-weight:600;color:#9ca3af;">טוען...</span>
+        </div>
+        <div style="height:8px;background:#e5e7eb;border-radius:20px;overflow:hidden;">
+          <div id="ch1-progress-bar" style="height:100%;width:0%;background:linear-gradient(135deg,#2a9d8f,#1680a0);border-radius:20px;transition:width 0.6s ease;"></div>
+        </div>
+      </div>
+
+      <!-- Chapter 2 -->
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem;">
+          <span style="font-size:0.88rem;font-weight:700;color:#1a2e38;">פרק 2 — אסטרטגיה וניתוח פיננסי</span>
+          <span id="ch2-score-text" style="font-size:0.8rem;font-weight:600;color:#9ca3af;">טוען...</span>
+        </div>
+        <div style="height:8px;background:#e5e7eb;border-radius:20px;overflow:hidden;">
+          <div id="ch2-progress-bar" style="height:100%;width:0%;background:linear-gradient(135deg,#2a9d8f,#1680a0);border-radius:20px;transition:width 0.6s ease;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- READING RECOMMENDATION -->
   <div style="margin-bottom:1.25rem;">
     <p style="font-size:0.74rem;font-weight:700;letter-spacing:0.9px;text-transform:uppercase;color:#7dd8d2;margin-bottom:1rem;">קריאה מומלצת</p>
@@ -347,6 +377,36 @@
     courseBtn.href = '/profile/?request=true';
   }
   courseBtn.style.visibility = '';
+
+  // Quiz progress
+  const { data: quizRows } = await _sb
+    .from('quiz_results')
+    .select('chapter, score, max_score')
+    .eq('user_id', user.id)
+    .in('chapter', [1, 2]);
+
+  const bestByChapter = { 1: null, 2: null };
+  if (quizRows) {
+    quizRows.forEach(row => {
+      const prev = bestByChapter[row.chapter];
+      if (!prev || row.score > prev.score) bestByChapter[row.chapter] = row;
+    });
+  }
+
+  [1, 2].forEach(ch => {
+    const best    = bestByChapter[ch];
+    const scoreEl = document.getElementById('ch' + ch + '-score-text');
+    const barEl   = document.getElementById('ch' + ch + '-progress-bar');
+    if (!best) {
+      scoreEl.textContent = 'טרם בוצע';
+      scoreEl.style.color = '#9ca3af';
+    } else {
+      const pct = Math.round((best.score / best.max_score) * 100);
+      scoreEl.textContent = best.score + ' / ' + best.max_score + ' (' + pct + '%)';
+      scoreEl.style.color = pct >= 70 ? '#065f46' : '#9a3412';
+      barEl.style.width = pct + '%';
+    }
+  });
 
   // Sign out
   document.getElementById('members-signout-btn').addEventListener('click', async () => {
