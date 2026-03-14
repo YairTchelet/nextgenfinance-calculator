@@ -5,13 +5,25 @@
 
 window.CalcDB = (() => {
     // ── Helpers ──
+    let _client = null;
+
     function getClient() {
-        if (typeof window.__supabase !== 'undefined') return window.__supabase;
-        if (typeof supabase !== 'undefined' && supabase.createClient &&
-            typeof SUPABASE_URL !== 'undefined' && typeof SUPABASE_ANON_KEY !== 'undefined') {
-            window.__supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-            return window.__supabase;
+        if (_client) return _client;
+
+        // Option 1: Already created elsewhere on window
+        if (window.__supabase) { _client = window.__supabase; return _client; }
+        if (window.supabaseClient) { _client = window.supabaseClient; return _client; }
+
+        // Option 2: Create from global constants (supabase-config.js defines these)
+        if (typeof SUPABASE_URL !== 'undefined' && typeof SUPABASE_ANON_KEY !== 'undefined' &&
+            typeof supabase !== 'undefined' && supabase.createClient) {
+            _client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            window.__supabase = _client; // Store for other scripts
+            console.log('CalcDB: created Supabase client from global config');
+            return _client;
         }
+
+        console.warn('CalcDB: Supabase not available');
         return null;
     }
 
@@ -42,6 +54,7 @@ window.CalcDB = (() => {
     async function saveAnalysis(analysisData) {
         const client = getClient();
         const userId = await getUserIdAsync();
+        console.log('CalcDB.saveAnalysis — userId:', userId, '| client:', !!client);
         if (!client || !userId) {
             console.warn('CalcDB: No auth, falling back to localStorage');
             return saveAnalysisLocal(analysisData);
@@ -60,16 +73,19 @@ window.CalcDB = (() => {
             total_score: analysisData.totalScore || 0
         };
 
+        console.log('CalcDB.saveAnalysis — inserting row for:', row.company);
+
         const { data, error } = await client
             .from('calculator_analyses')
             .insert(row)
             .select()
-            .single();
+            .maybeSingle();
 
         if (error) {
-            console.error('CalcDB saveAnalysis error:', error);
+            console.error('CalcDB saveAnalysis error:', error.message, error.details, error.hint);
             return saveAnalysisLocal(analysisData);
         }
+        console.log('CalcDB.saveAnalysis — saved successfully:', data?.id);
         return data;
     }
 
@@ -176,7 +192,7 @@ window.CalcDB = (() => {
             .from('calculator_custom_metrics')
             .insert(row)
             .select()
-            .single();
+            .maybeSingle();
 
         if (error) {
             console.error('CalcDB saveCustomMetric error:', error);
@@ -269,7 +285,8 @@ window.CalcDB = (() => {
         const { data, error } = await client
             .from('calculator_preferences')
             .select('*')
-            .single();
+            .eq('user_id', userId)
+            .maybeSingle();
 
         if (error || !data) {
             try { return JSON.parse(localStorage.getItem('fh_prefs')) || {}; }
