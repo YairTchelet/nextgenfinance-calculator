@@ -10,18 +10,22 @@ window.CalcAI = (() => {
     let chatPanelOpen = false;
 
     // ── Edge Function URL ──
-    // Set this after Supabase project is configured
     function getEdgeFunctionUrl() {
-        if (typeof SUPABASE_URL === 'undefined' || !SUPABASE_URL) return null;
-        return `${SUPABASE_URL}/functions/v1/calculator-ai`;
+        // Use the global SUPABASE_URL from supabase-config.js
+        if (typeof SUPABASE_URL !== 'undefined' && SUPABASE_URL) {
+            return `${SUPABASE_URL}/functions/v1/calculator-ai`;
+        }
+        return null;
     }
 
     async function callAI(action, payload) {
         const url = getEdgeFunctionUrl();
         if (!url) throw new Error('Supabase not configured');
+        console.log('CalcAI calling:', url);
 
         const client = CalcDB.getClient();
         if (!client) throw new Error('Supabase client not available');
+
         const { data: { session } } = await client.auth.getSession();
         const token = session?.access_token;
         if (!token) throw new Error('Not authenticated');
@@ -31,14 +35,17 @@ window.CalcAI = (() => {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`,
-                'apikey': SUPABASE_ANON_KEY
+                'apikey': (typeof SUPABASE_ANON_KEY !== 'undefined') ? SUPABASE_ANON_KEY : ''
             },
             body: JSON.stringify({ action, payload })
         });
 
         if (!resp.ok) {
-            const err = await resp.json().catch(() => ({ error: resp.statusText }));
-            throw new Error(err.error || 'AI request failed');
+            const errBody = await resp.text().catch(() => 'no body');
+            console.error(`CalcAI error: HTTP ${resp.status} — ${errBody}`);
+            let errMsg = `HTTP ${resp.status}`;
+            try { errMsg = JSON.parse(errBody).error || errMsg; } catch {}
+            throw new Error(errMsg);
         }
 
         const data = await resp.json();
@@ -94,6 +101,8 @@ window.CalcAI = (() => {
                 'altman-z': 'altman-z-value'
             };
 
+            const metricSources = result.metricSources || {};
+
             Object.entries(metricMap).forEach(([key, inputId]) => {
                 const value = result[key];
                 if (value !== null && value !== undefined && !isNaN(Number(value))) {
@@ -103,6 +112,20 @@ window.CalcAI = (() => {
                         input.classList.add('ai-filled');
                         setTimeout(() => input.classList.remove('ai-filled'), 2000);
                         filled++;
+
+                        // Add per-metric source badge
+                        const source = metricSources[key];
+                        if (source) {
+                            // Remove old badge if exists
+                            const oldBadge = input.parentElement?.querySelector('.ai-source-badge');
+                            if (oldBadge) oldBadge.remove();
+
+                            const badge = document.createElement('span');
+                            badge.className = 'ai-source-badge';
+                            badge.textContent = source;
+                            badge.title = `מקור: ${source}`;
+                            input.parentElement?.appendChild(badge);
+                        }
                     }
                 }
             });
@@ -121,11 +144,12 @@ window.CalcAI = (() => {
                 updateAllMetrics();
             }
 
-            const sourceNote = result.sources ? ` | ${result.dataDate || 'TTM'}` : '';
-            showToast(`🤖 ${filled} מדדים מולאו אוטומטית${sourceNote}`);
+            const confidenceEmoji = result.confidence === 'high' ? '🟢' : result.confidence === 'medium' ? '🟡' : '🟠';
+            const sourceNote = result.dataDate ? ` | ${result.dataDate}` : '';
+            showToast(`🤖 ${filled} מדדים מולאו אוטומטית ${confidenceEmoji}${sourceNote}`);
 
-            // Show source disclaimer
-            showAIDisclaimer(result.sources, result.dataDate);
+            // Show source disclaimer with per-metric sources
+            showAIDisclaimer(result.sources, result.dataDate, result.confidence, result.warnings, metricSources);
 
         } catch (err) {
             console.error('AutoFill error:', err);
@@ -144,9 +168,31 @@ window.CalcAI = (() => {
             'eps-growth', 'buyback', 'pe', 'peg', 'cr', 'de', 'altman-z'];
     }
 
-    function showAIDisclaimer(sources, dataDate) {
+    function showAIDisclaimer(sources, dataDate, confidence, warnings, metricSources) {
         const existing = document.getElementById('ai-disclaimer');
         if (existing) existing.remove();
+
+        const confidenceMap = {
+            high: { label: 'ביטחון גבוה', color: '#059669', bg: '#ECFDF5' },
+            medium: { label: 'ביטחון בינוני', color: '#D97706', bg: '#FFFBEB' },
+            low: { label: 'ביטחון נמוך', color: '#DC2626', bg: '#FEF2F2' }
+        };
+        const conf = confidenceMap[confidence] || confidenceMap.medium;
+
+        const warningsHtml = (warnings && warnings.length > 0)
+            ? `<div class="ai-disclaimer-warnings">${warnings.map(w => `<span class="ai-warning-pill">⚠️ ${w}</span>`).join('')}</div>`
+            : '';
+
+        // Extract unique sources from per-metric data
+        let sourcesHtml = '';
+        if (metricSources && Object.keys(metricSources).length > 0) {
+            const uniqueSources = [...new Set(Object.values(metricSources))].filter(Boolean);
+            if (uniqueSources.length > 0) {
+                sourcesHtml = `<div class="ai-disclaimer-sources" style="margin:4px 0;">מקורות: ${uniqueSources.join(' · ')}</div>`;
+            }
+        } else if (sources) {
+            sourcesHtml = `<div class="ai-disclaimer-sources">${sources}</div>`;
+        }
 
         const disc = document.createElement('div');
         disc.id = 'ai-disclaimer';
@@ -154,9 +200,14 @@ window.CalcAI = (() => {
         disc.innerHTML = `
             <div class="ai-disclaimer-icon">🤖</div>
             <div class="ai-disclaimer-text">
-                <strong>נתונים מולאו ע"י AI</strong> — ${dataDate || 'TTM'} 
-                ${sources ? `<br><span class="ai-disclaimer-sources">${sources}</span>` : ''}
-                <br><span class="ai-disclaimer-warn">⚠️ בדוק את הנתונים מול דוחות רשמיים לפני קבלת החלטות</span>
+                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
+                    <strong>נתונים נאספו מהאינטרנט</strong>
+                    <span class="ai-confidence-badge" style="background:${conf.bg};color:${conf.color};padding:2px 8px;border-radius:12px;font-size:11px;font-weight:600;">${conf.label}</span>
+                    <span style="font-size:12px;color:var(--text-muted);">${dataDate || 'TTM'}</span>
+                </div>
+                ${sourcesHtml}
+                ${warningsHtml}
+                <div class="ai-disclaimer-warn">⚠️ הנתונים נלקחו מהאתרים המצוינים — בדוק אותם מול דוחות רשמיים לפני קבלת החלטות</div>
             </div>
             <button onclick="this.parentElement.remove()" class="ai-disclaimer-close">&times;</button>
         `;
@@ -417,10 +468,36 @@ window.CalcAI = (() => {
         const totalScore = scoreText ? parseInt(scoreText.textContent) : 0;
 
         if (!companyName) return null;
+
+        // Build a concise metrics summary for chat context
+        let metricsSummary = '';
+        try {
+            if (typeof getAllMetrics === 'function' && typeof metricScores !== 'undefined') {
+                const parts = [];
+                const passing = [];
+                const failing = [];
+                getAllMetrics().forEach(m => {
+                    const card = document.getElementById(`${m.id}-card`);
+                    if (!card) return;
+                    const inp = card.querySelector(`#${m.inputs[0].id}`);
+                    if (!inp || inp.value === '') return;
+                    const status = document.getElementById(`${m.id}-status`);
+                    const pass = status?.classList.contains('pass');
+                    const shortName = m.name.split('(')[0].trim();
+                    if (pass) passing.push(shortName);
+                    else failing.push(shortName);
+                });
+                if (passing.length) parts.push(`עוברים: ${passing.join(', ')}`);
+                if (failing.length) parts.push(`לא עוברים: ${failing.join(', ')}`);
+                metricsSummary = parts.join(' | ');
+            }
+        } catch (e) { /* non-critical */ }
+
         return {
             company: companyName,
             totalScore,
-            mode: typeof currentMode !== 'undefined' ? currentMode : 'balanced'
+            mode: typeof currentMode !== 'undefined' ? currentMode : 'balanced',
+            metricsSummary
         };
     }
 
@@ -599,6 +676,26 @@ window.CalcAI = (() => {
     100% { background: inherit; }
 }
 
+/* ── Per-metric Source Badge ── */
+.ai-source-badge {
+    display: inline-block;
+    padding: 1px 7px;
+    background: #F0F1FA;
+    color: #6366F1;
+    border-radius: 6px;
+    font-size: 9px;
+    font-weight: 500;
+    font-family: var(--font);
+    white-space: nowrap;
+    margin-right: 4px;
+    cursor: help;
+    border: 1px solid #E0E7FF;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+}
+
 /* ── AI Disclaimer ── */
 .ai-disclaimer {
     display: flex;
@@ -616,6 +713,22 @@ window.CalcAI = (() => {
 .ai-disclaimer-icon { font-size: 24px; flex-shrink: 0; }
 .ai-disclaimer-sources { font-size: 11px; color: var(--text-muted); }
 .ai-disclaimer-warn { font-size: 11px; color: var(--warning); font-weight: 500; }
+.ai-disclaimer-warnings {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 6px 0;
+}
+.ai-warning-pill {
+    display: inline-block;
+    padding: 3px 10px;
+    background: #FEF3C7;
+    color: #92400E;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 500;
+    border: 1px solid #FDE68A;
+}
 .ai-disclaimer-close {
     margin-right: auto;
     background: none;
