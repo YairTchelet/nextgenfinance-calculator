@@ -142,7 +142,7 @@ After the CSV, list the source for each metric like:
                 <button class="modal-close" onclick="document.getElementById('ai-autofill-modal').classList.remove('open');document.body.style.overflow='';">&times;</button>
                 <div class="modal-header">
                     <div style="display:flex;align-items:center;gap:12px;">
-                        <div style="width:40px;height:40px;background:linear-gradient(135deg,#6366F1,#8B5CF6);border-radius:10px;display:flex;align-items:center;justify-content:center;">
+                        <div style="width:40px;height:40px;background:linear-gradient(135deg,#0d9488,#14b8a6);border-radius:10px;display:flex;align-items:center;justify-content:center;">
                             <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width:22px;height:22px;"><path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 017 7h1a1 1 0 011 1v3a1 1 0 01-1 1h-1v1a2 2 0 01-2 2H5a2 2 0 01-2-2v-1H2a1 1 0 01-1-1v-3a1 1 0 011-1h1a7 7 0 017-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 012-2z"/></svg>
                         </div>
                         <div>
@@ -166,7 +166,7 @@ After the CSV, list the source for each metric like:
                     </div>
                 </div>
                 <div style="padding:12px 24px 20px;display:flex;gap:10px;">
-                    <button onclick="CalcAI._copyAutoFillPrompt()" style="flex:1;padding:14px 20px;background:linear-gradient(135deg,#6366F1,#8B5CF6);color:white;border:none;border-radius:10px;font-weight:600;font-size:15px;cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:8px;">
+                    <button onclick="CalcAI._copyAutoFillPrompt()" style="flex:1;padding:14px 20px;background:linear-gradient(135deg,#0d9488,#14b8a6);color:white;border:none;border-radius:10px;font-weight:600;font-size:15px;cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:8px;">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
                         העתק פרומפט
                     </button>
@@ -352,7 +352,7 @@ After the CSV, list the source for each metric like:
                     <button class="modal-close" onclick="document.getElementById('ai-analysis-modal').classList.remove('open');document.body.style.overflow='';">&times;</button>
                     <div class="modal-header">
                         <div style="display:flex;align-items:center;gap:12px;">
-                            <div style="width:40px;height:40px;background:linear-gradient(135deg,#6366F1,#8B5CF6);border-radius:10px;display:flex;align-items:center;justify-content:center;">
+                            <div style="width:40px;height:40px;background:linear-gradient(135deg,#0d9488,#14b8a6);border-radius:10px;display:flex;align-items:center;justify-content:center;">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width:22px;height:22px;"><path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 017 7h1a1 1 0 011 1v3a1 1 0 01-1 1h-1v1a2 2 0 01-2 2H5a2 2 0 01-2-2v-1H2a1 1 0 01-1-1v-3a1 1 0 011-1h1a7 7 0 017-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 012-2z"/></svg>
                             </div>
                             <div>
@@ -691,7 +691,7 @@ After the CSV, list the source for each metric like:
     align-items: center;
     gap: 6px;
     padding: 10px 16px;
-    background: linear-gradient(135deg, #6366F1, #8B5CF6);
+    background: linear-gradient(135deg, #0d9488, #14b8a6);
     color: white;
     border: none;
     border-radius: var(--radius-md);
@@ -704,30 +704,30 @@ After the CSV, list the source for each metric like:
     flex-shrink: 0;
 }
 .ai-autofill-btn:hover { 
-    background: linear-gradient(135deg, #5558E6, #7C3AED);
-    box-shadow: 0 4px 12px rgba(99,102,241,0.3);
+    background: linear-gradient(135deg, #0f766e, #0d9488);
+    box-shadow: 0 4px 12px rgba(20,184,166,0.3);
 }
 .ai-autofill-btn:disabled { opacity: 0.6; cursor: wait; }
 
 /* ── AI Tool Button ── */
 .ai-tool-btn {
-    background: linear-gradient(135deg, #EEF2FF, #E0E7FF) !important;
-    color: #6366F1 !important;
-    border: 1px solid #C7D2FE !important;
+    background: linear-gradient(135deg, #f0fdfa, #ccfbf1) !important;
+    color: #0d9488 !important;
+    border: 1px solid #99f6e4 !important;
 }
 .ai-tool-btn:hover {
-    background: linear-gradient(135deg, #6366F1, #8B5CF6) !important;
+    background: linear-gradient(135deg, #0d9488, #14b8a6) !important;
     color: white !important;
 }
 
 /* ── AI Filled Input Flash ── */
 .metric-input.ai-filled {
     animation: aiFillFlash 0.8s ease;
-    border-color: #6366F1 !important;
-    box-shadow: 0 0 0 3px rgba(99,102,241,0.15) !important;
+    border-color: #14b8a6 !important;
+    box-shadow: 0 0 0 3px rgba(20,184,166,0.15) !important;
 }
 @keyframes aiFillFlash {
-    0% { background: #EEF2FF; }
+    0% { background: #f0fdfa; }
     100% { background: inherit; }
 }
 
@@ -735,8 +735,8 @@ After the CSV, list the source for each metric like:
 .ai-source-badge {
     display: inline-block;
     padding: 1px 7px;
-    background: #F0F1FA;
-    color: #6366F1;
+    background: #f0fdfa;
+    color: #0d9488;
     border-radius: 6px;
     font-size: 9px;
     font-weight: 500;
@@ -744,7 +744,7 @@ After the CSV, list the source for each metric like:
     white-space: nowrap;
     margin-right: 4px;
     cursor: help;
-    border: 1px solid #E0E7FF;
+    border: 1px solid #99f6e4;
     max-width: 120px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -757,8 +757,8 @@ After the CSV, list the source for each metric like:
     align-items: flex-start;
     gap: 12px;
     padding: 14px 18px;
-    background: linear-gradient(135deg, #EEF2FF, #F5F3FF);
-    border: 1px solid #C7D2FE;
+    background: linear-gradient(135deg, #f0fdfa, #ecfdf5);
+    border: 1px solid #99f6e4;
     border-radius: var(--radius-lg);
     margin-top: 8px;
     font-size: 13px;
@@ -767,7 +767,7 @@ After the CSV, list the source for each metric like:
 }
 .ai-disclaimer-icon { font-size: 24px; flex-shrink: 0; }
 .ai-disclaimer-sources { font-size: 11px; color: var(--text-muted); }
-.ai-disclaimer-warn { font-size: 11px; color: var(--warning); font-weight: 500; }
+.ai-disclaimer-warn { font-size: 11px; color: var(--warning); font-weight: 500; margin-top: 4px; }
 .ai-disclaimer-warnings {
     display: flex;
     flex-wrap: wrap;
@@ -824,8 +824,8 @@ After the CSV, list the source for each metric like:
     color: var(--text-secondary);
 }
 .ai-loading .ai-spinner {
-    border-color: rgba(99,102,241,0.2);
-    border-top-color: #6366F1;
+    border-color: rgba(20,184,166,0.2);
+    border-top-color: #14b8a6;
 }
 .ai-error {
     padding: 20px;
@@ -841,20 +841,24 @@ After the CSV, list the source for each metric like:
     width: 56px;
     height: 56px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #6366F1, #8B5CF6);
-    color: white;
-    border: none;
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: #b3e0dc;
+    border: 2px solid #14b8a6;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 16px rgba(99,102,241,0.35);
+    box-shadow: 0 4px 16px rgba(15,23,42,0.4), 0 0 0 0 rgba(20,184,166,0.3);
     z-index: 1000;
     transition: all .3s;
 }
 .ai-chat-fab svg { width: 26px; height: 26px; }
-.ai-chat-fab:hover { transform: scale(1.08); box-shadow: 0 6px 24px rgba(99,102,241,0.45); }
-.ai-chat-fab.active { background: var(--text-secondary); transform: rotate(180deg); }
+.ai-chat-fab:hover { 
+    transform: scale(1.08); 
+    box-shadow: 0 6px 24px rgba(15,23,42,0.5), 0 0 20px rgba(20,184,166,0.2);
+    color: #2dd4bf;
+}
+.ai-chat-fab.active { background: #14b8a6; color: white; border-color: #14b8a6; transform: rotate(180deg); }
 
 /* ── Chat Panel ── */
 .ai-chat-panel {
@@ -863,10 +867,10 @@ After the CSV, list the source for each metric like:
     left: 24px;
     width: 380px;
     max-height: 520px;
-    background: var(--surface);
-    border-radius: var(--radius-xl);
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow-xl);
+    background: #0f172a;
+    border-radius: 20px;
+    border: 1px solid #1e3a5f;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.4);
     z-index: 1001;
     display: flex;
     flex-direction: column;
@@ -896,7 +900,7 @@ After the CSV, list the source for each metric like:
     align-items: center;
     justify-content: space-between;
     padding: 14px 16px;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid #1e3a5f;
     flex-shrink: 0;
 }
 .ai-chat-header-info {
@@ -907,7 +911,7 @@ After the CSV, list the source for each metric like:
 .ai-chat-avatar {
     width: 32px;
     height: 32px;
-    background: linear-gradient(135deg, #6366F1, #8B5CF6);
+    background: linear-gradient(135deg, #0d9488, #14b8a6);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -915,8 +919,8 @@ After the CSV, list the source for each metric like:
     color: white;
 }
 .ai-chat-avatar svg { width: 18px; height: 18px; }
-.ai-chat-header-info strong { font-size: 14px; display: block; }
-.ai-chat-status { font-size: 11px; color: var(--text-muted); }
+.ai-chat-header-info strong { font-size: 14px; display: block; color: #e2e8f0; }
+.ai-chat-status { font-size: 11px; color: #64748b; }
 .ai-chat-header-actions { display: flex; gap: 4px; }
 .ai-chat-header-btn {
     width: 30px;
@@ -928,10 +932,10 @@ After the CSV, list the source for each metric like:
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--text-muted);
+    color: #64748b;
     transition: all .2s;
 }
-.ai-chat-header-btn:hover { background: var(--bg); color: var(--text); }
+.ai-chat-header-btn:hover { background: #1e293b; color: #b3e0dc; }
 
 /* ── Chat Messages ── */
 .ai-chat-messages {
@@ -947,12 +951,12 @@ After the CSV, list the source for each metric like:
 .ai-chat-welcome {
     text-align: center;
     padding: 24px 16px;
-    color: var(--text-secondary);
+    color: #94a3b8;
     font-size: 13px;
     line-height: 1.6;
 }
 .ai-chat-welcome-icon { font-size: 32px; margin-bottom: 8px; }
-.ai-chat-welcome strong { display: block; font-size: 15px; color: var(--text); margin-bottom: 4px; }
+.ai-chat-welcome strong { display: block; font-size: 15px; color: #e2e8f0; margin-bottom: 4px; }
 .ai-chat-suggestions {
     display: flex;
     flex-wrap: wrap;
@@ -962,18 +966,19 @@ After the CSV, list the source for each metric like:
 }
 .ai-chat-suggestions button {
     padding: 6px 12px;
-    background: var(--bg);
-    border: 1px solid var(--border);
+    background: #1e293b;
+    border: 1px solid #334155;
     border-radius: var(--radius-pill);
     font-size: 12px;
     font-family: var(--font);
-    color: var(--primary);
+    color: #b3e0dc;
     cursor: pointer;
     transition: all .2s;
 }
 .ai-chat-suggestions button:hover {
-    background: var(--primary-bg);
-    border-color: var(--primary-light);
+    background: #0d9488;
+    border-color: #14b8a6;
+    color: white;
 }
 
 /* ── Chat Message Bubbles ── */
@@ -993,7 +998,7 @@ After the CSV, list the source for each metric like:
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #6366F1, #8B5CF6);
+    background: linear-gradient(135deg, #0d9488, #14b8a6);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1008,14 +1013,14 @@ After the CSV, list the source for each metric like:
     line-height: 1.6;
 }
 .ai-chat-msg-user .ai-chat-msg-content {
-    background: var(--primary);
+    background: #14b8a6;
     color: white;
-    border-bottom-left: 4px;
+    border-bottom-left-radius: 4px;
 }
 .ai-chat-msg-assistant .ai-chat-msg-content {
-    background: var(--bg);
-    color: var(--text);
-    border-bottom-right: 4px;
+    background: #1e293b;
+    color: #e2e8f0;
+    border-bottom-right-radius: 4px;
 }
 
 /* ── Typing Indicator ── */
@@ -1024,7 +1029,7 @@ After the CSV, list the source for each metric like:
     display: inline-block;
     font-size: 18px;
     font-weight: 700;
-    color: var(--text-muted);
+    color: #64748b;
     animation: aiTypingBounce 1.4s infinite ease-in-out;
 }
 .ai-typing-dots span:nth-child(2) { animation-delay: 0.2s; }
@@ -1040,32 +1045,33 @@ After the CSV, list the source for each metric like:
     align-items: flex-end;
     gap: 8px;
     padding: 12px 16px;
-    border-top: 1px solid var(--border);
+    border-top: 1px solid #1e3a5f;
     flex-shrink: 0;
 }
 .ai-chat-input-area textarea {
     flex: 1;
     resize: none;
-    border: 1px solid var(--border);
+    border: 1px solid #334155;
     border-radius: var(--radius-md);
     padding: 10px 14px;
     font-size: 13px;
     font-family: var(--font);
     line-height: 1.5;
     max-height: 120px;
-    background: var(--bg);
-    color: var(--text);
+    background: #1e293b;
+    color: #e2e8f0;
     transition: border-color .2s;
 }
+.ai-chat-input-area textarea::placeholder { color: #64748b; }
 .ai-chat-input-area textarea:focus {
     outline: none;
-    border-color: var(--primary);
+    border-color: #14b8a6;
 }
 .ai-chat-send-btn {
     width: 38px;
     height: 38px;
     border-radius: 50%;
-    background: var(--primary);
+    background: #14b8a6;
     color: white;
     border: none;
     cursor: pointer;
@@ -1075,7 +1081,12 @@ After the CSV, list the source for each metric like:
     flex-shrink: 0;
     transition: all .2s;
 }
-.ai-chat-send-btn:hover { background: var(--primary-hover); }
+.ai-chat-send-btn:hover { background: #0d9488; }
+
+/* ── Chat Panel Scrollbar ── */
+.ai-chat-messages::-webkit-scrollbar { width: 4px; }
+.ai-chat-messages::-webkit-scrollbar-track { background: transparent; }
+.ai-chat-messages::-webkit-scrollbar-thumb { background: #334155; border-radius: 2px; }
         `;
         document.head.appendChild(style);
     }

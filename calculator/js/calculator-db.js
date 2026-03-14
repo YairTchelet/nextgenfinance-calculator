@@ -10,16 +10,41 @@ window.CalcDB = (() => {
     function getClient() {
         if (_client) return _client;
 
-        // Option 1: Already created elsewhere on window
-        if (window.__supabase) { _client = window.__supabase; return _client; }
-        if (window.supabaseClient) { _client = window.supabaseClient; return _client; }
+        // Option 1: Check common variable names used by auth-guard.js
+        const candidates = [
+            window.__supabase, window.supabaseClient, window._supabase, 
+            window.sb, window.supa, window.client
+        ];
+        for (const c of candidates) {
+            if (c && typeof c === 'object' && c.auth && typeof c.auth.getSession === 'function') {
+                _client = c;
+                console.log('CalcDB: reusing existing Supabase client');
+                return _client;
+            }
+        }
 
-        // Option 2: Create from global constants (supabase-config.js defines these)
+        // Option 2: Search window for any Supabase client (avoids duplicate)
+        try {
+            for (const key of Object.getOwnPropertyNames(window)) {
+                try {
+                    const val = window[key];
+                    if (val && typeof val === 'object' && val !== window && 
+                        val.auth && typeof val.auth.getSession === 'function' &&
+                        val.from && typeof val.from === 'function') {
+                        _client = val;
+                        console.log('CalcDB: found Supabase client on window.' + key);
+                        return _client;
+                    }
+                } catch { /* skip non-accessible properties */ }
+            }
+        } catch { }
+
+        // Option 3: Create new (last resort)
         if (typeof SUPABASE_URL !== 'undefined' && typeof SUPABASE_ANON_KEY !== 'undefined' &&
             typeof supabase !== 'undefined' && supabase.createClient) {
             _client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-            window.__supabase = _client; // Store for other scripts
-            console.log('CalcDB: created Supabase client from global config');
+            window.__supabase = _client;
+            console.log('CalcDB: created new Supabase client');
             return _client;
         }
 
