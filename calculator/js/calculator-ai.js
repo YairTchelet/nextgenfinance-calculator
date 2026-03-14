@@ -3,7 +3,7 @@
 // Auto-fill, Analysis, Chat Assistant
 // ═══════════════════════════════════════════
 
-const CalcAI = (() => {
+window.CalcAI = (() => {
     // ── State ──
     let chatHistory = [];
     let isProcessing = false;

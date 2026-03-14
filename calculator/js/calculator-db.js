@@ -3,7 +3,7 @@
 // Replaces all localStorage usage with Supabase
 // ═══════════════════════════════════════════
 
-const CalcDB = (() => {
+window.CalcDB = (() => {
     // ── Helpers ──
     function getClient() {
         if (typeof window.__supabase !== 'undefined') return window.__supabase;
