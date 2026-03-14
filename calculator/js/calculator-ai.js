@@ -12,11 +12,8 @@ window.CalcAI = (() => {
     // ── Edge Function URL ──
     // Set this after Supabase project is configured
     function getEdgeFunctionUrl() {
-        const client = CalcDB.getClient();
-        if (!client) return null;
-        // Extract project URL from supabase client
-        const url = client.supabaseUrl || client.rest?.url?.replace('/rest/v1', '') || '';
-        return url ? `${url}/functions/v1/calculator-ai` : null;
+        if (typeof SUPABASE_URL === 'undefined' || !SUPABASE_URL) return null;
+        return `${SUPABASE_URL}/functions/v1/calculator-ai`;
     }
 
     async function callAI(action, payload) {
@@ -24,6 +21,7 @@ window.CalcAI = (() => {
         if (!url) throw new Error('Supabase not configured');
 
         const client = CalcDB.getClient();
+        if (!client) throw new Error('Supabase client not available');
         const { data: { session } } = await client.auth.getSession();
         const token = session?.access_token;
         if (!token) throw new Error('Not authenticated');
@@ -33,7 +31,7 @@ window.CalcAI = (() => {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`,
-                'apikey': client.supabaseKey || client.rest?.headers?.apikey || ''
+                'apikey': SUPABASE_ANON_KEY
             },
             body: JSON.stringify({ action, payload })
         });

@@ -7,11 +7,12 @@ window.CalcDB = (() => {
     // ── Helpers ──
     function getClient() {
         if (typeof window.__supabase !== 'undefined') return window.__supabase;
-        if (typeof supabase !== 'undefined' && supabase.createClient) {
-            // Fallback: check if global supabase-config created it
-            console.warn('CalcDB: using fallback supabase detection');
+        if (typeof supabase !== 'undefined' && supabase.createClient &&
+            typeof SUPABASE_URL !== 'undefined' && typeof SUPABASE_ANON_KEY !== 'undefined') {
+            window.__supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            return window.__supabase;
         }
-        return window.__supabase || null;
+        return null;
     }
 
     function getUserId() {
