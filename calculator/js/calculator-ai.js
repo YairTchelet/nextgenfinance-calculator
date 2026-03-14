@@ -53,114 +53,169 @@ window.CalcAI = (() => {
     }
 
     // ═══════════════════════════════════════════
-    // 1. AUTO-FILL BY COMPANY NAME
+    // 1. AUTO-FILL → Opens prompt modal for Gemini/ChatGPT
     // ═══════════════════════════════════════════
-    async function autoFill(companyName) {
+    function autoFill(companyName) {
         if (!companyName || companyName.trim().length < 2) {
             showToast('הקלד שם חברה קודם', 'warning');
             return;
         }
+        openAutoFillPromptModal(companyName.trim());
+    }
 
-        if (isProcessing) return;
-        isProcessing = true;
+    function buildAutoFillPrompt(companyName) {
+        return `I need ACCURATE, CURRENT financial data for "${companyName}" to calculate a Financial Health Score.
 
-        const btn = document.getElementById('ai-autofill-btn');
-        const originalHTML = btn ? btn.innerHTML : '';
-        if (btn) {
-            btn.innerHTML = '<span class="ai-spinner"></span> מאתר נתונים...';
-            btn.disabled = true;
-        }
+## CRITICAL: DATA ACCURACY
+- Use the MOST RECENT data available (TTM or latest annual report)
+- For 5-year growth metrics, calculate CAGR (Compound Annual Growth Rate):
+  Formula: ((value_now / value_5_years_ago) ^ (1/5) - 1) × 100
+  Example: EPS went from $2 to $6 in 5 years → CAGR = ((6/2)^(0.2) - 1) × 100 = 24.6%
+  This is NOT total growth. Total growth would be 200%, but CAGR is 24.6%.
+- Cite the source website for EACH metric
 
-        try {
-            const result = await callAI('autofill', {
-                companyName: companyName.trim(),
-                metrics: getMetricIds()
-            });
+## THE 13 METRICS I NEED:
 
-            if (result.error) {
-                showToast('AI לא הצליח למצוא נתונים: ' + result.error, 'error');
-                return;
+### PROFITABILITY
+| # | Metric | Formula | Unit | Source suggestion |
+|---|--------|---------|------|-------------------|
+| 1 | ROI (or ROIC) | Net Income ÷ Total Invested Capital × 100 | % | stockanalysis.com, gurufocus.com |
+| 2 | ROE | Net Income ÷ Equity × 100 | % | stockanalysis.com |
+| 3 | Gross Margin | (Revenue - COGS) ÷ Revenue × 100 | % | stockanalysis.com |
+| 4 | Gross Margin Growth | YoY change in gross margin (ppts, not %) | ppts | macrotrends.net |
+| 5 | Net Profit Margin | Net Income ÷ Revenue × 100 | % | stockanalysis.com |
+| 6 | FCF Yield | Free Cash Flow ÷ Market Cap × 100 | % | gurufocus.com |
+
+### GROWTH (5-YEAR CAGR — NOT total growth!)
+| # | Metric | Formula | Unit | Source suggestion |
+|---|--------|---------|------|-------------------|
+| 7 | FCF Growth (5Y CAGR) | ((FCF_now / FCF_5y_ago)^(1/5) - 1) × 100 | % | macrotrends.net FCF history |
+| 8 | EPS Growth (5Y CAGR) | ((EPS_now / EPS_5y_ago)^(1/5) - 1) × 100 | % | macrotrends.net EPS history |
+| 9 | Buyback Yield | Net buybacks ÷ Market Cap × 100 | % | gurufocus.com |
+
+### VALUATION
+| # | Metric | Formula | Unit | Source suggestion |
+|---|--------|---------|------|-------------------|
+| 10 | P/E Ratio | Price ÷ EPS (TTM) | ratio | yahoo finance |
+| 11 | PEG Ratio | P/E ÷ Expected Growth | ratio | yahoo finance, morningstar |
+
+### STABILITY
+| # | Metric | Formula | Unit | Source suggestion |
+|---|--------|---------|------|-------------------|
+| 12 | Current Ratio | Current Assets ÷ Current Liabilities | ratio | stockanalysis.com |
+| 13 | D/E Ratio | Total Debt ÷ Equity | ratio | stockanalysis.com |
+| 14 | Altman Z-Score | 5-factor formula | score | gurufocus.com |
+
+## REQUIRED OUTPUT FORMAT:
+Return a CSV file with this EXACT structure:
+
+\`\`\`csv
+שם החברה,פרופיל השקעה (growth/balanced/value),הערות,תשואה על ההשקעה (ROI),תשואה על ההון (ROE),מרווח גולמי,צמיחת מרווח גולמי,שולי רווח נקי,תשואת FCF,צמיחת FCF (5Y CAGR),צמיחת EPS (5Y CAGR),רכישה עצמית (שנתי),יחס מחיר לרווח (P/E),יחס PEG,יחס שוטף (CR),יחס חוב להון (D/E),Altman Z-Score
+${companyName},balanced,,ROI_VALUE,ROE_VALUE,GM_VALUE,GM_GROWTH,PM_VALUE,FCF_YIELD,FCF_GROWTH_CAGR,EPS_GROWTH_CAGR,BUYBACK,PE,PEG,CR,DE,ALTMAN_Z
+\`\`\`
+
+## RULES:
+1. Numbers only — no % signs, no "x" suffix
+2. Round to 2 decimal places
+3. For CAGR: show the annual compound rate, NOT total 5-year growth
+4. If P/E is negative, leave empty
+5. CITE YOUR SOURCE for each metric
+6. If you calculated CAGR manually, show the start and end values used
+
+After the CSV, list the source for each metric like:
+- ROI: [value] from stockanalysis.com
+- ROE: [value] from stockanalysis.com
+- etc.`;
+    }
+
+    function openAutoFillPromptModal(companyName) {
+        const prompt = buildAutoFillPrompt(companyName);
+
+        // Remove existing modal
+        document.getElementById('ai-autofill-modal')?.remove();
+
+        const modal = document.createElement('div');
+        modal.id = 'ai-autofill-modal';
+        modal.className = 'modal-overlay';
+        modal.innerHTML = `
+            <div class="modal-box" style="max-width:750px">
+                <button class="modal-close" onclick="document.getElementById('ai-autofill-modal').classList.remove('open');document.body.style.overflow='';">&times;</button>
+                <div class="modal-header">
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <div style="width:40px;height:40px;background:linear-gradient(135deg,#6366F1,#8B5CF6);border-radius:10px;display:flex;align-items:center;justify-content:center;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width:22px;height:22px;"><path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 017 7h1a1 1 0 011 1v3a1 1 0 01-1 1h-1v1a2 2 0 01-2 2H5a2 2 0 01-2-2v-1H2a1 1 0 01-1-1v-3a1 1 0 011-1h1a7 7 0 017-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 012-2z"/></svg>
+                        </div>
+                        <div>
+                            <h2>הפקת נתונים באמצעות AI</h2>
+                            <p style="font-size:13px;color:var(--text-secondary);margin:4px 0 0;">מילוי אוטומטי בקרוב — בינתיים, העתק את הפרומפט</p>
+                        </div>
+                    </div>
+                </div>
+                <div style="padding:16px 24px;">
+                    <div style="background:var(--primary-bg);border:1px solid var(--primary-light);border-radius:12px;padding:14px 16px;margin-bottom:16px;">
+                        <div style="font-size:14px;font-weight:600;color:var(--primary-dark);margin-bottom:8px;">📋 איך להשתמש:</div>
+                        <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+                            1. העתק את הפרומפט למטה<br>
+                            2. הדבק ב-<strong>Gemini</strong>, <strong>ChatGPT</strong>, או <strong>Claude</strong><br>
+                            3. קבל CSV מוכן + מקורות לכל מדד<br>
+                            4. ייבא את ה-CSV דרך כפתור "ייבוא CSV" בכלי
+                        </div>
+                    </div>
+                    <div style="position:relative;">
+                        <pre style="background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px;font-size:11px;line-height:1.6;white-space:pre-wrap;word-wrap:break-word;color:var(--text);max-height:350px;overflow-y:auto;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;direction:ltr;text-align:left;">${escapeHtml(prompt)}</pre>
+                    </div>
+                </div>
+                <div style="padding:12px 24px 20px;display:flex;gap:10px;">
+                    <button onclick="CalcAI._copyAutoFillPrompt()" style="flex:1;padding:14px 20px;background:linear-gradient(135deg,#6366F1,#8B5CF6);color:white;border:none;border-radius:10px;font-weight:600;font-size:15px;cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:8px;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                        העתק פרומפט
+                    </button>
+                    <button onclick="CalcAI._downloadAutoFillPrompt()" style="padding:14px 20px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:10px;font-weight:600;font-size:15px;cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:8px;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        הורד .txt
+                    </button>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+        // Store prompt for copy/download
+        window._aiAutoFillPrompt = prompt;
+        window._aiAutoFillCompany = companyName;
+
+        // Open with animation
+        requestAnimationFrame(() => modal.classList.add('open'));
+        document.body.style.overflow = 'hidden';
+
+        // Close on backdrop
+        modal.addEventListener('click', e => {
+            if (e.target === modal) {
+                modal.classList.remove('open');
+                document.body.style.overflow = '';
             }
+        });
+    }
 
-            // Fill in the metrics
-            let filled = 0;
-            const metricMap = {
-                'roi': 'roi-value',
-                'roe': 'roe-value',
-                'gross-margin': 'gross-margin-value',
-                'gross-margin-growth': 'gross-margin-growth-value',
-                'pm': 'pm-value',
-                'fcf-yield': 'fcf-yield-value',
-                'fcf-growth': 'fcf-growth-value',
-                'eps-growth': 'eps-growth-value',
-                'buyback': 'buyback-value',
-                'pe': 'pe-value',
-                'peg': 'peg-value',
-                'cr': 'cr-value',
-                'de': 'de-value',
-                'altman-z': 'altman-z-value'
-            };
+    function _copyAutoFillPrompt() {
+        const prompt = window._aiAutoFillPrompt;
+        if (!prompt) return;
+        navigator.clipboard.writeText(prompt).then(() => {
+            showToast('הפרומפט הועתק! 📋 הדבק ב-Gemini או ChatGPT');
+        }).catch(() => {
+            showToast('שגיאה בהעתקה — נסה הורדה', 'error');
+        });
+    }
 
-            const metricSources = result.metricSources || {};
-
-            Object.entries(metricMap).forEach(([key, inputId]) => {
-                const value = result[key];
-                if (value !== null && value !== undefined && !isNaN(Number(value))) {
-                    const input = document.getElementById(inputId);
-                    if (input) {
-                        input.value = Number(value).toFixed(2);
-                        input.classList.add('ai-filled');
-                        setTimeout(() => input.classList.remove('ai-filled'), 2000);
-                        filled++;
-
-                        // Add per-metric source badge
-                        const source = metricSources[key];
-                        if (source) {
-                            // Remove old badge if exists
-                            const oldBadge = input.parentElement?.querySelector('.ai-source-badge');
-                            if (oldBadge) oldBadge.remove();
-
-                            const badge = document.createElement('span');
-                            badge.className = 'ai-source-badge';
-                            badge.textContent = source;
-                            badge.title = `מקור: ${source}`;
-                            input.parentElement?.appendChild(badge);
-                        }
-                    }
-                }
-            });
-
-            // Update company name if ticker was returned
-            if (result.ticker) {
-                const companyEl = document.getElementById('company-name');
-                if (companyEl && !companyEl.value.includes(result.ticker)) {
-                    companyEl.value = `${companyEl.value.trim()} (${result.ticker})`;
-                    document.getElementById('topbar-company').textContent = companyEl.value;
-                }
-            }
-
-            // Trigger recalculation
-            if (typeof updateAllMetrics === 'function') {
-                updateAllMetrics();
-            }
-
-            const confidenceEmoji = result.confidence === 'high' ? '🟢' : result.confidence === 'medium' ? '🟡' : '🟠';
-            const sourceNote = result.dataDate ? ` | ${result.dataDate}` : '';
-            showToast(`🤖 ${filled} מדדים מולאו אוטומטית ${confidenceEmoji}${sourceNote}`);
-
-            // Show source disclaimer with per-metric sources
-            showAIDisclaimer(result.sources, result.dataDate, result.confidence, result.warnings, metricSources);
-
-        } catch (err) {
-            console.error('AutoFill error:', err);
-            showToast('שגיאה בשליפת נתונים: ' + err.message, 'error');
-        } finally {
-            isProcessing = false;
-            if (btn) {
-                btn.innerHTML = originalHTML;
-                btn.disabled = false;
-            }
-        }
+    function _downloadAutoFillPrompt() {
+        const prompt = window._aiAutoFillPrompt;
+        const company = window._aiAutoFillCompany || 'company';
+        if (!prompt) return;
+        const blob = new Blob([prompt], { type: 'text/plain;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `ai_prompt_${company.replace(/\s+/g, '_')}.txt`;
+        link.click();
+        showToast('הפרומפט הורד!');
     }
 
     function getMetricIds() {
@@ -583,7 +638,7 @@ window.CalcAI = (() => {
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;">
                     <path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 017 7h1a1 1 0 011 1v3a1 1 0 01-1 1h-1v1a2 2 0 01-2 2H5a2 2 0 01-2-2v-1H2a1 1 0 01-1-1v-3a1 1 0 011-1h1a7 7 0 017-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 012-2z"/>
                 </svg>
-                <span>מלא ע"י AI</span>
+                <span>שלוף נתונים 🤖</span>
             `;
             btn.onclick = () => autoFill(companyInput.value);
             wrapper.appendChild(btn);
@@ -1049,7 +1104,9 @@ window.CalcAI = (() => {
         toggleChat,
         clearChat,
         initChat,
-        injectUI
+        injectUI,
+        _copyAutoFillPrompt,
+        _downloadAutoFillPrompt
     };
 })();
 
