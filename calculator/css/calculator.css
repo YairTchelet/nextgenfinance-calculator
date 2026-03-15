@@ -57,6 +57,50 @@
     --gauge-arc: 282.743; /* π × 90 */
 }
 
+/* ═══ LIGHT MODE ═══ */
+[data-theme="light"] {
+    --bg: #f8fafc;
+    --bg-subtle: #f1f5f9;
+    --surface: #ffffff;
+    --surface-hover: #f8fafc;
+    --surface-active: #f1f5f9;
+
+    --primary: #0d9488;
+    --primary-hover: #0f766e;
+    --primary-light: #14b8a6;
+    --primary-bg: rgba(13,148,136,0.08);
+    --primary-dark: #115e59;
+    --primary-glow: rgba(13,148,136,0.15);
+
+    --accent: #d97706;
+    --accent-bg: rgba(217,119,6,0.08);
+
+    --success: #059669;
+    --success-bg: rgba(5,150,105,0.08);
+    --success-light: #10b981;
+
+    --danger: #dc2626;
+    --danger-bg: rgba(220,38,38,0.06);
+    --danger-light: #ef4444;
+
+    --warning: #d97706;
+    --warning-bg: rgba(217,119,6,0.06);
+
+    --text: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    --text-inverse: #f8fafc;
+
+    --border: #e2e8f0;
+    --border-hover: #cbd5e1;
+
+    --shadow-xs: 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.08);
+    --shadow-xl: 0 16px 48px rgba(0,0,0,0.1);
+}
+
 /* ═══════════════════════════════════════════
    2. RESET & BASE
    ═══════════════════════════════════════════ */
@@ -470,13 +514,16 @@ body.scrolled .topbar-center { opacity: 1; transform: translateY(0); pointer-eve
     line-height: 1.4;
 }
 .info-btn {
-    width: 24px; height: 24px;
+    width: 26px; height: 26px;
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 12px; color: var(--text-muted);
+    font-size: 12px; color: var(--primary);
+    background: var(--primary-bg);
+    border: 1px solid rgba(20,184,166,0.2);
     transition: all .2s; flex-shrink: 0;
+    cursor: pointer;
 }
-.info-btn:hover { background: var(--primary-bg); color: var(--primary); }
+.info-btn:hover { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 2px 8px rgba(20,184,166,0.3); }
 .metric-desc {
     font-size: 12.5px; color: var(--text-secondary);
     line-height: 1.5; margin-top: -4px;
@@ -750,6 +797,23 @@ body.scrolled .topbar-center { opacity: 1; transform: translateY(0); pointer-eve
     background: var(--surface);
 }
 
+/* ── Disclaimer ── */
+.disclaimer-section { margin-top: 16px; }
+.disclaimer-card {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 14px 18px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+}
+.disclaimer-card p {
+    font-size: 11px; line-height: 1.6;
+    color: var(--text-muted);
+}
+.disclaimer-card strong {
+    color: var(--text-secondary); font-weight: 600;
+}
+
 /* ═══════════════════════════════════════════
    11. MODALS
    ═══════════════════════════════════════════ */
@@ -814,26 +878,62 @@ body.scrolled .topbar-center { opacity: 1; transform: translateY(0); pointer-eve
 .tab-content.active { display: block; }
 
 /* Term items */
-.term-item {
-    margin-bottom: 20px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid var(--bg);
+/* ── Metric Encyclopedia Grid ── */
+.terms-grid { }
+.terms-cat-label {
+    font-size: 13px; font-weight: 700;
+    color: var(--text-secondary);
+    margin: 16px 0 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
 }
-.term-item:last-child { border-bottom: none; }
-.term-name {
-    font-size: 15px; font-weight: 600; color: var(--text);
-    margin-bottom: 4px;
+.terms-cat-label:first-child { margin-top: 0; }
+.terms-cat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 10px;
+    margin-bottom: 8px;
+}
+.terms-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: all .2s;
+    display: flex; flex-direction: column; gap: 6px;
+}
+.terms-card:hover {
+    border-color: var(--primary);
+    background: var(--primary-bg);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+.terms-card-head {
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+}
+.terms-card-name {
+    font-size: 13px; font-weight: 600; color: var(--text);
+}
+.terms-card-score {
+    font-size: 12px; font-weight: 700;
+}
+.terms-card-desc {
+    font-size: 11px; color: var(--text-muted); line-height: 1.5;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.terms-card-foot {
     display: flex; align-items: center; justify-content: space-between;
-    flex-wrap: wrap; gap: 8px;
+    margin-top: auto; padding-top: 6px;
 }
-.term-formula {
-    font-size: 12px; font-weight: 400;
-    color: var(--text-muted);
-    direction: ltr; text-align: left;
+.terms-card-threshold {
+    font-size: 10px; color: var(--text-muted); font-weight: 500;
 }
-.term-desc {
-    font-size: 13.5px; color: var(--text-secondary);
-    line-height: 1.7;
+.terms-card-action {
+    font-size: 10px; color: var(--primary); font-weight: 600;
+}
+@media (max-width: 640px) {
+    .terms-cat-grid { grid-template-columns: 1fr; }
 }
 
 /* Template metrics */
@@ -2675,7 +2775,7 @@ body.scrolled .topbar-center { opacity: 1; transform: translateY(0); pointer-eve
 
 /* ── Analogy Card ── */
 .dd-analogy {
-    background: linear-gradient(135deg, rgba(245,158,11,0.08) 0%, rgba(245,158,11,0.12) 100%);
+    background: linear-gradient(135deg, rgba(245,158,11,0.08) 0%, rgba(245,158,11,0.15) 100%);
     border-radius: var(--radius-lg);
     padding: 18px 20px;
     border-right: 4px solid #F59E0B;
@@ -2691,13 +2791,13 @@ body.scrolled .topbar-center { opacity: 1; transform: translateY(0); pointer-eve
 }
 .dd-analogy-text {
     font-size: 14px;
-    color: #78350F;
+    color: var(--text);
     line-height: 1.7;
 }
 
 /* ── Pitfalls Card ── */
 .dd-pitfalls {
-    background: linear-gradient(135deg, rgba(239,68,68,0.08) 0%, rgba(239,68,68,0.12) 100%);
+    background: linear-gradient(135deg, rgba(239,68,68,0.08) 0%, rgba(239,68,68,0.15) 100%);
     border-radius: var(--radius-lg);
     padding: 18px 20px;
     border-right: 4px solid #DC2626;
@@ -2733,7 +2833,7 @@ body.scrolled .topbar-center { opacity: 1; transform: translateY(0); pointer-eve
 }
 .dd-pitfall-item .pi-text {
     font-size: 13px;
-    color: #7F1D1D;
+    color: var(--text);
     line-height: 1.6;
 }
 

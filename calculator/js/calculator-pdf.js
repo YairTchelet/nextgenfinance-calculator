@@ -206,7 +206,7 @@ window.CalcPDF = (() => {
 *{margin:0;padding:0;box-sizing:border-box}
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap');
 body{font-family:'Rubik',sans-serif;background:white}
-.page{width:210mm;min-height:297mm;max-height:297mm;margin:0 auto;padding:18mm 16mm 14mm;overflow:hidden;position:relative}
+.page{width:210mm;min-height:297mm;margin:0 auto;padding:18mm 16mm 14mm;position:relative}
 table{width:100%;border-collapse:collapse}
 </style>
 </head>
@@ -254,8 +254,12 @@ table{width:100%;border-collapse:collapse}
     ${insightsSection}
     ${notesSection}
 
-    <!-- Footer -->
-    <div style="position:absolute;bottom:14mm;left:16mm;right:16mm;display:flex;justify-content:space-between;align-items:center;padding-top:8px;border-top:1px solid #e2e8f0;">
+    <!-- Disclaimer + Footer -->
+    <div style="margin-top:16px;padding:10px 12px;background:#fefce8;border:1px solid #fde68a;border-radius:6px;">
+        <div style="font-size:8px;font-weight:700;color:#92400e;margin-bottom:2px;">⚠️ גילוי נאות</div>
+        <div style="font-size:7px;color:#a16207;line-height:1.5;">כלי זה מיועד למטרות חינוכיות בלבד ואינו מהווה ייעוץ השקעות, המלצה לפעולה, או תחליף לייעוץ מקצועי. מפעיל האתר אינו יועץ השקעות מורשה. כל החלטת השקעה היא באחריות המשתמש בלבד. ביצועי עבר אינם מעידים על תשואות עתידיות.</div>
+    </div>
+    <div style="margin-top:10px;display:flex;justify-content:space-between;align-items:center;padding-top:8px;border-top:1px solid #e2e8f0;">
         <div style="font-size:7px;color:#94a3b8;">הופק באמצעות מחשבון הבריאות הפיננסית של NewGen Finance</div>
         <div style="font-size:7px;color:#94a3b8;">www.newgenfinance.co.il · ${dateStr}</div>
     </div>
@@ -281,7 +285,7 @@ table{width:100%;border-collapse:collapse}
         try {
             const html = buildReportHTML(data);
             const iframe = document.createElement('iframe');
-            iframe.style.cssText = 'position:fixed;left:-9999px;top:0;width:210mm;height:297mm;border:none;';
+            iframe.style.cssText = 'position:fixed;left:-9999px;top:0;width:210mm;height:auto;border:none;';
             document.body.appendChild(iframe);
 
             const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
@@ -297,12 +301,35 @@ table{width:100%;border-collapse:collapse}
                 width: pageEl.scrollWidth, height: pageEl.scrollHeight, logging: false
             });
 
-            const imgData = canvas.toDataURL('image/png');
             const { jsPDF } = window.jspdf;
             const pdf = new jsPDF('p', 'mm', 'a4');
             const pdfW = pdf.internal.pageSize.getWidth();
             const pdfH = pdf.internal.pageSize.getHeight();
-            pdf.addImage(imgData, 'PNG', 0, 0, pdfW, pdfH);
+
+            // Calculate how many pages we need
+            const imgW = canvas.width;
+            const imgH = canvas.height;
+            const ratio = pdfW / imgW;
+            const scaledH = imgH * ratio;
+            const totalPages = Math.ceil(scaledH / pdfH);
+
+            for (let i = 0; i < totalPages; i++) {
+                if (i > 0) pdf.addPage();
+                // Slice source canvas for this page
+                const srcY = Math.round((i * pdfH / ratio));
+                const srcH = Math.min(Math.round(pdfH / ratio), imgH - srcY);
+                if (srcH <= 0) break;
+
+                const pageCanvas = document.createElement('canvas');
+                pageCanvas.width = imgW;
+                pageCanvas.height = srcH;
+                const ctx = pageCanvas.getContext('2d');
+                ctx.drawImage(canvas, 0, srcY, imgW, srcH, 0, 0, imgW, srcH);
+
+                const pageImg = pageCanvas.toDataURL('image/png');
+                const drawH = srcH * ratio;
+                pdf.addImage(pageImg, 'PNG', 0, 0, pdfW, drawH);
+            }
 
             const safeName = data.companyName.replace(/[^א-תa-zA-Z0-9\s-]/g, '').trim().replace(/\s+/g, '-') || 'report';
             pdf.save(`${safeName}-financial-health.pdf`);

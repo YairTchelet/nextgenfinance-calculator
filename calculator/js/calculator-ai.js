@@ -694,6 +694,16 @@ After the CSV, list the source for each metric like:
         const message = input.value.trim();
         if (!message || isProcessing) return;
 
+        // ── Rate limit: 20 messages per day ──
+        const today = new Date().toDateString();
+        const chatKey = 'calc-chat-' + today;
+        const chatCount = parseInt(localStorage.getItem(chatKey) || '0');
+        if (chatCount >= 20) {
+            appendChatMessage('assistant', '⚠️ הגעת למגבלת 20 הודעות ליום. הצ׳אט יתאפס מחר. בינתיים, אפשר להשתמש בניתוח AI ובהדבקת טקסט ללא הגבלה.');
+            return;
+        }
+        localStorage.setItem(chatKey, String(chatCount + 1));
+
         input.value = '';
         input.style.height = 'auto';
 
