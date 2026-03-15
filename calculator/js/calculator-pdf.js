@@ -349,8 +349,8 @@ window.CalcPDF = (() => {
 
     // ── Inject PDF button into toolbar ──
     function injectPDFButton() {
-        const toolbar = document.querySelector('.toolbar');
-        if (!toolbar || document.getElementById('pdf-export-btn')) return;
+        const analysisGroup = document.getElementById('toolbar-analysis');
+        if (!analysisGroup || document.getElementById('pdf-export-btn')) return;
 
         const btn = document.createElement('button');
         btn.id = 'pdf-export-btn';
@@ -366,14 +366,7 @@ window.CalcPDF = (() => {
             <span class="ai-pro-badge">PRO</span>
         `;
         btn.onclick = generatePDF;
-
-        // Insert after save button
-        const saveBtn = document.getElementById('save-btn');
-        if (saveBtn && saveBtn.nextSibling) {
-            toolbar.insertBefore(btn, saveBtn.nextSibling);
-        } else {
-            toolbar.appendChild(btn);
-        }
+        analysisGroup.appendChild(btn);
     }
 
     // ── Also add PDF button to score panel actions ──

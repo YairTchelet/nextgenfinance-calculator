@@ -853,9 +853,9 @@ After the CSV, list the source for each metric like:
             wrapper.appendChild(btn);
         }
 
-        // Add AI analyze button to toolbar (with PRO badge)
-        const toolbar = document.querySelector('.toolbar');
-        if (toolbar && !document.getElementById('ai-analyze-btn')) {
+        // Add AI analyze button to analysis group (with PRO badge)
+        const analysisGroup = document.getElementById('toolbar-analysis');
+        if (analysisGroup && !document.getElementById('ai-analyze-btn')) {
             const btn = document.createElement('button');
             btn.id = 'ai-analyze-btn';
             btn.className = 'tool-btn ai-tool-btn';
@@ -867,13 +867,12 @@ After the CSV, list the source for each metric like:
                 <span class="ai-pro-badge">PRO</span>
             `;
             btn.onclick = analyzeCompany;
-            const saveBtn = document.getElementById('save-btn');
-            if (saveBtn) toolbar.insertBefore(btn, saveBtn);
-            else toolbar.appendChild(btn);
+            analysisGroup.insertBefore(btn, analysisGroup.firstChild);
         }
 
-        // Add paste button to toolbar (with PRO badge)
-        if (toolbar && !document.getElementById('ai-paste-btn')) {
+        // Add paste button to data group (with PRO badge)
+        const dataGroup = document.getElementById('toolbar-data');
+        if (dataGroup && !document.getElementById('ai-paste-btn')) {
             const btn = document.createElement('button');
             btn.id = 'ai-paste-btn';
             btn.className = 'tool-btn ai-tool-btn';
@@ -885,9 +884,7 @@ After the CSV, list the source for each metric like:
                 <span class="ai-pro-badge">PRO</span>
             `;
             btn.onclick = openPasteModal;
-            const analyzeBtn = document.getElementById('ai-analyze-btn');
-            if (analyzeBtn) toolbar.insertBefore(btn, analyzeBtn.nextSibling);
-            else toolbar.appendChild(btn);
+            dataGroup.appendChild(btn);
         }
 
         // Initialize chat

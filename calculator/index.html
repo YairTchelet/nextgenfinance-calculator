@@ -67,36 +67,60 @@
                     <button class="mode-tab active" data-mode="balanced">⚖️ מאוזן</button>
                     <button class="mode-tab" data-mode="value">💎 ערך</button>
                 </div>
-                <div class="toolbar">
-                    <button class="tool-btn primary" id="show-templates-btn">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-                        <span>תבניות</span>
-                    </button>
-                    <input type="file" id="csv-file-input" accept=".csv" style="display:none">
-                    <button class="tool-btn" id="import-csv-btn">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                        <span>ייבוא CSV</span>
-                    </button>
-                    <button class="tool-btn" id="download-csv-btn">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                        <span>הורד תבנית</span>
-                    </button>
-                    <button class="tool-btn" id="save-btn">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                        <span>שמור</span>
-                    </button>
-                    <button class="tool-btn" id="load-btn">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
-                        <span>טען</span>
-                    </button>
-                    <button class="tool-btn danger" id="reset-btn">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
-                        <span>אפס</span>
-                    </button>
-                    <button class="tool-btn" id="compare-toggle">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
-                        <span>השוואה</span>
-                    </button>
+                <div class="toolbar" id="toolbar">
+                    <!-- Group: Data Input -->
+                    <div class="toolbar-group" id="toolbar-data">
+                        <button class="tool-btn primary" id="show-templates-btn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                            <span>תבניות</span>
+                        </button>
+                        <!-- ai-paste-btn injected here by calculator-ai.js -->
+                    </div>
+                    <div class="toolbar-sep"></div>
+                    <!-- Group: Analysis -->
+                    <div class="toolbar-group" id="toolbar-analysis">
+                        <!-- ai-analyze-btn injected here by calculator-ai.js -->
+                        <button class="tool-btn" id="compare-toggle">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+                            <span>השוואה</span>
+                        </button>
+                        <!-- pdf-export-btn injected here by calculator-pdf.js -->
+                    </div>
+                    <div class="toolbar-sep"></div>
+                    <!-- Group: File -->
+                    <div class="toolbar-group" id="toolbar-file">
+                        <button class="tool-btn" id="save-btn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                            <span>שמור</span>
+                        </button>
+                        <button class="tool-btn" id="load-btn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
+                            <span>טען</span>
+                        </button>
+                        <!-- Overflow menu -->
+                        <div class="toolbar-overflow" id="toolbar-overflow">
+                            <button class="tool-btn" id="toolbar-more-btn" onclick="document.getElementById('toolbar-overflow').classList.toggle('open')">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+                                <span>עוד</span>
+                            </button>
+                            <div class="toolbar-dropdown">
+                                <input type="file" id="csv-file-input" accept=".csv" style="display:none">
+                                <button class="toolbar-dropdown-item" id="import-csv-btn">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                    <span>ייבוא CSV</span>
+                                </button>
+                                <button class="toolbar-dropdown-item" id="download-csv-btn">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                    <span>הורד תבנית CSV</span>
+                                </button>
+                                <div class="toolbar-dropdown-sep"></div>
+                                <button class="toolbar-dropdown-item danger" id="reset-btn">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+                                    <span>אפס הכל</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="advanced-toggle">
@@ -1200,156 +1224,7 @@ const companyData = {
     2: { name: 'חברה 2', metrics: {}, score: null }
 };
 
-
-
-function saveCurrentCompanyData(companyNum) {
-    const data = {};
-    baseMetrics.forEach(m => {
-        const inp = document.getElementById(m.inputs[0].id);
-        if (inp) data[m.id] = inp.value;
-    });
-    customMetricsData.forEach(m => {
-        const inp = document.getElementById(m.inputs[0].id);
-        if (inp) data[m.id] = inp.value;
-    });
-    companyData[companyNum].metrics = data;
-    companyData[companyNum].score = getCurrentScore();
-    updateCompanyTabScore(companyNum);
-}
-
-function loadCompanyData(companyNum) {
-    const data = companyData[companyNum].metrics;
-    document.querySelectorAll('.metric-card input[type="number"]').forEach(inp => { inp.value = ''; });
-    Object.entries(data).forEach(([metricId, value]) => {
-        const metric = baseMetrics.find(m => m.id === metricId) || customMetricsData.find(m => m.id === metricId);
-        if (metric) {
-            const inp = document.getElementById(metric.inputs[0].id);
-            if (inp) inp.value = value;
-        }
-    });
-    updateAllMetrics();
-}
-
-function getCurrentScore() {
-    const scoreEl = document.querySelector('.score-number');
-    return scoreEl ? scoreEl.textContent : '--';
-}
-
-function updateCompanyTabScore(companyNum) {
-    const scoreEl = document.getElementById(`company${companyNum}-score`);
-    if (scoreEl) scoreEl.textContent = companyData[companyNum].score || '--';
-}
-
-function switchCompany(companyNum) {
-    if (activeCompany === companyNum) return;
-    saveCurrentCompanyData(activeCompany);
-    activeCompany = companyNum;
-    document.querySelectorAll('.company-tab').forEach(tab => {
-        tab.classList.toggle('active', parseInt(tab.dataset.company) === companyNum);
-    });
-    loadCompanyData(companyNum);
-    showToast(`עבר ל${companyData[companyNum].name}`);
-}
-
-function editCompanyName(companyNum) {
-    const currentName = companyData[companyNum].name;
-    const newName = prompt('הזן שם חברה:', currentName);
-    if (newName && newName.trim()) {
-        companyData[companyNum].name = newName.trim();
-        document.getElementById(`company${companyNum}-name`).textContent = newName.trim();
-    }
-}
-
-function showCompareResults() {
-    // Save current company data first
-    saveCurrentCompanyData(activeCompany);
-    
-    const grid = document.getElementById('compare-grid');
-    const summary = document.getElementById('compare-summary');
-    
-    // Build header
-    let html = `
-        <div class="cmp-cell cmp-header">מדד</div>
-        <div class="cmp-cell cmp-header cmp-center">${companyData[1].name}</div>
-        <div class="cmp-cell cmp-header cmp-center">${companyData[2].name}</div>
-        <div class="cmp-cell cmp-header cmp-center" style="width:60px;">מוביל</div>
-    `;
-    
-    let c1Wins = 0, c2Wins = 0, ties = 0;
-    
-    // Build rows for each metric
-    baseMetrics.forEach(m => {
-        const v1 = companyData[1].metrics[m.id] ? parseFloat(companyData[1].metrics[m.id]) : null;
-        const v2 = companyData[2].metrics[m.id] ? parseFloat(companyData[2].metrics[m.id]) : null;
-        
-        let cls1 = '', cls2 = '', winnerIcon = '';
-        
-        if (v1 !== null && v2 !== null && !isNaN(v1) && !isNaN(v2)) {
-            const better1 = m.compare === 'above' ? v1 > v2 : v1 < v2;
-            const better2 = m.compare === 'above' ? v2 > v1 : v2 < v1;
-            if (v1 !== v2) {
-                if (better1) {
-                    cls1 = 'cmp-better'; cls2 = 'cmp-worse';
-                    winnerIcon = `<span class="cmp-winner-dot c1"></span>`;
-                    c1Wins++;
-                } else {
-                    cls1 = 'cmp-worse'; cls2 = 'cmp-better';
-                    winnerIcon = `<span class="cmp-winner-dot c2"></span>`;
-                    c2Wins++;
-                }
-            } else {
-                winnerIcon = '<span class="cmp-tie">—</span>';
-                ties++;
-            }
-        }
-        
-        const display1 = v1 !== null && !isNaN(v1) ? v1.toFixed(1) + (m.unit || '') : '—';
-        const display2 = v2 !== null && !isNaN(v2) ? v2.toFixed(1) + (m.unit || '') : '—';
-        
-        html += `
-            <div class="cmp-cell cmp-metric">${m.name}</div>
-            <div class="cmp-cell cmp-center ${cls1}">${display1}</div>
-            <div class="cmp-cell cmp-center ${cls2}">${display2}</div>
-            <div class="cmp-cell cmp-center">${winnerIcon}</div>
-        `;
-    });
-    
-    grid.innerHTML = html;
-    
-    // Build summary with visual winner card
-    const score1 = companyData[1].score || '--';
-    const score2 = companyData[2].score || '--';
-    const s1 = parseFloat(score1) || 0;
-    const s2 = parseFloat(score2) || 0;
-    const winner = s1 > s2 ? 1 : s2 > s1 ? 2 : 0;
-    
-    summary.innerHTML = `
-        <div class="cmp-summary-card ${winner === 1 ? 'cmp-winner' : ''}">
-            <div class="cmp-summary-name">${companyData[1].name} ${winner === 1 ? '🏆' : ''}</div>
-            <div class="cmp-summary-score">${score1}</div>
-            <div class="cmp-summary-detail">
-                <span class="cmp-wins-badge good">🏆 ${c1Wins}</span>
-                <span class="cmp-wins-badge bad">— ${c2Wins}</span>
-            </div>
-        </div>
-        <div class="cmp-vs">VS</div>
-        <div class="cmp-summary-card ${winner === 2 ? 'cmp-winner' : ''}">
-            <div class="cmp-summary-name">${companyData[2].name} ${winner === 2 ? '🏆' : ''}</div>
-            <div class="cmp-summary-score">${score2}</div>
-            <div class="cmp-summary-detail">
-                <span class="cmp-wins-badge good">🏆 ${c2Wins}</span>
-                <span class="cmp-wins-badge bad">— ${c1Wins}</span>
-            </div>
-        </div>
-    `;
-    
-    document.getElementById('compare-view').style.display = 'block';
-    document.getElementById('compare-view').scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-function hideCompareResults() {
-    document.getElementById('compare-view').style.display = 'none';
-}
+// All comparison functions consolidated below (after deep-dive/templates)
 
 // ═══════════════════════════════════════════
 // INFOGRAPHICS GALLERY
@@ -1418,7 +1293,7 @@ function populateGalleryContent() {
     // Score
     const scoreGalleryEl = document.getElementById('gallery-score');
     if (scoreGalleryEl) {
-        const currentScore = getCurrentScore();
+        const currentScore = calculateTotalScoreValue() || 0;
         const scoreNum = parseInt(currentScore) || 0;
         const scoreColor = scoreNum >= 80 ? '#0d9488' : scoreNum >= 60 ? '#10B981' : scoreNum >= 40 ? '#F59E0B' : '#DC2626';
         scoreGalleryEl.innerHTML = `<div style="text-align:center;padding:20px;"><div style="font-size:64px;font-weight:900;color:${scoreColor};">${currentScore}</div><div style="font-size:14px;color:var(--text-secondary);margin-top:8px;">ציון בריאות פיננסית</div></div>`;
@@ -1812,19 +1687,22 @@ function switchMode(mode) {
 // METRIC DEEP-DIVE DATA
 // ═══════════════════════════════════════════
 
-// NOTE: Dual company comparison mode variables are defined above (around line 4287)
+// NOTE: Dual company comparison mode variables are defined above (around line 1220)
 // Do not redeclare companyData, compareMode, or activeCompany here
 
 function toggleCompareMode() {
     compareMode = !compareMode;
     const tabsBar = document.getElementById('company-tabs-bar');
+    const toggleBtn = document.getElementById('compare-toggle');
     
     if (compareMode) {
         tabsBar.classList.add('active');
-        saveCurrentCompanyData(1);
+        if (toggleBtn) toggleBtn.classList.add('active');
+        saveCurrentToCompany(activeCompany);
         showToast('מצב השוואה הופעל. מלא נתונים לחברה 1, לחץ על "חברה 2" כדי לעבור.');
     } else {
         tabsBar.classList.remove('active');
+        if (toggleBtn) toggleBtn.classList.remove('active');
         document.getElementById('compare-view').style.display = 'none';
         showToast('מצב השוואה כובה');
     }
@@ -1846,6 +1724,7 @@ function saveCurrentToCompany(companyNum) {
     });
     companyData[companyNum].metrics = data;
     companyData[companyNum].score = calculateTotalScoreValue();
+    companyData[companyNum].name = document.getElementById('company-name')?.value?.trim() || companyData[companyNum].name;
     updateCompanyTabDisplay(companyNum);
 }
 
@@ -1866,6 +1745,12 @@ function loadCompanyData(companyNum) {
             if (inp) inp.value = value;
         }
     });
+    // Update company name input
+    const nameInput = document.getElementById('company-name');
+    if (nameInput) {
+        nameInput.value = companyData[companyNum].name || '';
+        document.getElementById('topbar-company').textContent = companyData[companyNum].name || 'ניתוח חדש';
+    }
     updateAllMetrics();
 }
 
@@ -1879,13 +1764,14 @@ function calculateTotalScoreValue() {
 }
 
 function switchCompany(companyNum) {
-    if (currentCompany === companyNum) return;
-    saveCurrentToCompany(currentCompany);
-    currentCompany = companyNum;
+    if (activeCompany === companyNum) return;
+    saveCurrentToCompany(activeCompany);
+    activeCompany = companyNum;
     document.querySelectorAll('.company-tab').forEach((tab, i) => {
-        tab.classList.toggle('active', i + 1 === companyNum);
+        tab.classList.toggle('active', parseInt(tab.dataset.company) === companyNum);
     });
     loadCompanyData(companyNum);
+    showToast(`עבר ל${companyData[companyNum].name}`);
 }
 
 function updateCompanyTabDisplay(companyNum) {
@@ -1911,54 +1797,89 @@ function editCompanyName(companyNum) {
     }
 }
 
-function showComparisonView() {
-    saveCurrentToCompany(currentCompany);
-    const grid = document.getElementById('comparison-grid');
-    const view = document.getElementById('comparison-view');
+function showCompareResults() {
+    saveCurrentToCompany(activeCompany);
+    
+    const grid = document.getElementById('compare-grid');
+    const summary = document.getElementById('compare-summary');
     
     let html = `
-        <div class="cg-header">מדד</div>
-        <div class="cg-header">${companyData[1].name}</div>
-        <div class="cg-header">${companyData[2].name}</div>
+        <div class="cmp-cell cmp-header">מדד</div>
+        <div class="cmp-cell cmp-header cmp-center">${companyData[1].name}</div>
+        <div class="cmp-cell cmp-header cmp-center">${companyData[2].name}</div>
+        <div class="cmp-cell cmp-header cmp-center" style="width:60px;">מוביל</div>
     `;
     
-    const allMetrics = [...baseMetrics, ...customMetricsData];
+    let c1Wins = 0, c2Wins = 0;
     
-    allMetrics.forEach(m => {
-        const val1 = companyData[1].metrics[m.id];
-        const val2 = companyData[2].metrics[m.id];
+    baseMetrics.forEach(m => {
+        const v1 = companyData[1].metrics[m.id] !== undefined ? companyData[1].metrics[m.id] : null;
+        const v2 = companyData[2].metrics[m.id] !== undefined ? companyData[2].metrics[m.id] : null;
         
-        if (val1 !== undefined || val2 !== undefined) {
-            let class1 = 'equal', class2 = 'equal';
-            
-            if (val1 !== undefined && val2 !== undefined) {
-                const higher = m.compare === 'below' ? 'worse' : 'better';
-                const lower = m.compare === 'below' ? 'better' : 'worse';
-                
-                if (val1 > val2) { class1 = higher; class2 = lower; }
-                else if (val2 > val1) { class2 = higher; class1 = lower; }
+        let cls1 = '', cls2 = '', winnerIcon = '';
+        
+        if (v1 !== null && v2 !== null && !isNaN(v1) && !isNaN(v2)) {
+            const better1 = m.compare === 'above' ? v1 > v2 : v1 < v2;
+            if (v1 !== v2) {
+                if (better1) {
+                    cls1 = 'cmp-better'; cls2 = 'cmp-worse';
+                    winnerIcon = '<span class="cmp-winner-dot c1"></span>';
+                    c1Wins++;
+                } else {
+                    cls1 = 'cmp-worse'; cls2 = 'cmp-better';
+                    winnerIcon = '<span class="cmp-winner-dot c2"></span>';
+                    c2Wins++;
+                }
+            } else {
+                winnerIcon = '<span class="cmp-tie">—</span>';
             }
-            
-            html += `
-                <div class="cg-metric">${m.name}</div>
-                <div class="cg-value ${class1}">${val1 !== undefined ? val1.toFixed(1) + (m.unit || '') : '—'}</div>
-                <div class="cg-value ${class2}">${val2 !== undefined ? val2.toFixed(1) + (m.unit || '') : '—'}</div>
-            `;
         }
+        
+        const display1 = v1 !== null && !isNaN(v1) ? Number(v1).toFixed(1) + (m.unit || '') : '—';
+        const display2 = v2 !== null && !isNaN(v2) ? Number(v2).toFixed(1) + (m.unit || '') : '—';
+        
+        html += `
+            <div class="cmp-cell cmp-metric">${m.name}</div>
+            <div class="cmp-cell cmp-center ${cls1}">${display1}</div>
+            <div class="cmp-cell cmp-center ${cls2}">${display2}</div>
+            <div class="cmp-cell cmp-center">${winnerIcon}</div>
+        `;
     });
     
-    html += `
-        <div class="cg-metric" style="font-weight:700;">ציון כולל</div>
-        <div class="cg-value ${companyData[1].score > companyData[2].score ? 'better' : companyData[1].score < companyData[2].score ? 'worse' : ''}" style="font-size:18px;font-weight:700;">${companyData[1].score || '—'}</div>
-        <div class="cg-value ${companyData[2].score > companyData[1].score ? 'better' : companyData[2].score < companyData[1].score ? 'worse' : ''}" style="font-size:18px;font-weight:700;">${companyData[2].score || '—'}</div>
+    grid.innerHTML = html;
+    
+    const score1 = companyData[1].score;
+    const score2 = companyData[2].score;
+    const s1 = score1 || 0;
+    const s2 = score2 || 0;
+    const winner = s1 > s2 ? 1 : s2 > s1 ? 2 : 0;
+    
+    summary.innerHTML = `
+        <div class="cmp-summary-card ${winner === 1 ? 'cmp-winner' : ''}">
+            <div class="cmp-summary-name">${companyData[1].name} ${winner === 1 ? '🏆' : ''}</div>
+            <div class="cmp-summary-score">${score1 !== null ? score1 : '—'}</div>
+            <div class="cmp-summary-detail">
+                <span class="cmp-wins-badge good">🏆 ${c1Wins}</span>
+                <span class="cmp-wins-badge bad">— ${c2Wins}</span>
+            </div>
+        </div>
+        <div class="cmp-vs">VS</div>
+        <div class="cmp-summary-card ${winner === 2 ? 'cmp-winner' : ''}">
+            <div class="cmp-summary-name">${companyData[2].name} ${winner === 2 ? '🏆' : ''}</div>
+            <div class="cmp-summary-score">${score2 !== null ? score2 : '—'}</div>
+            <div class="cmp-summary-detail">
+                <span class="cmp-wins-badge good">🏆 ${c2Wins}</span>
+                <span class="cmp-wins-badge bad">— ${c1Wins}</span>
+            </div>
+        </div>
     `;
     
-    grid.innerHTML = html;
-    view.classList.add('visible');
+    document.getElementById('compare-view').style.display = 'block';
+    document.getElementById('compare-view').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-function hideComparisonView() {
-    document.getElementById('comparison-view').classList.remove('visible');
+function hideCompareResults() {
+    document.getElementById('compare-view').style.display = 'none';
 }
 
 // ═══════════════════════════════════════════
@@ -2246,8 +2167,8 @@ function exportToCSV() {
     rows.push(['total_score', calculateTotalScoreValue() || '']);
     rows.push(['mode', document.getElementById('mode-selector')?.value || 'balanced']);
     
-    if (compareModeActive) {
-        rows.push(['company_name', companyData[currentCompany].name]);
+    if (compareMode) {
+        rows.push(['company_name', companyData[activeCompany].name]);
     }
     
     const csv = rows.map(row => row.map(cell => {
@@ -2262,7 +2183,7 @@ function exportToCSV() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    const companyName = compareModeActive ? companyData[currentCompany].name : 'financial-health';
+    const companyName = compareMode ? companyData[activeCompany].name : 'financial-health';
     a.download = `${companyName}-${new Date().toISOString().slice(0,10)}.csv`;
     document.body.appendChild(a);
     a.click();
@@ -4810,6 +4731,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if(!body||!btn)return;
         body.classList.toggle('collapsed');
         btn.textContent=body.classList.contains('collapsed')?'הצג ▾':'הסתר ▴';
+    });
+
+    // Toolbar overflow menu — close on click outside
+    document.addEventListener('click', e => {
+        const overflow = document.getElementById('toolbar-overflow');
+        if (overflow && overflow.classList.contains('open') && !overflow.contains(e.target)) {
+            overflow.classList.remove('open');
+        }
     });
 
     updateAllMetrics();
