@@ -433,6 +433,37 @@ window.CalcDB = (() => {
         }
     }
 
+    // ═══════════════════════════════════════════
+    // COURSE ACCESS CHECK (profiles.has_access)
+    // ═══════════════════════════════════════════
+    let _accessCache = null; // { value: bool, ts: number }
+
+    async function hasAccess() {
+        // Cache for 5 minutes to avoid spamming
+        if (_accessCache && Date.now() - _accessCache.ts < 300000) {
+            return _accessCache.value;
+        }
+
+        const client = getClient();
+        const userId = await getUserIdAsync();
+        if (!client || !userId) return false;
+
+        try {
+            const { data, error } = await client
+                .from('profiles')
+                .select('has_access')
+                .eq('id', userId)
+                .maybeSingle();
+
+            const access = !error && data?.has_access === true;
+            _accessCache = { value: access, ts: Date.now() };
+            return access;
+        } catch (e) {
+            console.warn('CalcDB hasAccess error:', e);
+            return false;
+        }
+    }
+
     // ═══ Public API ═══
     return {
         // Analyses
@@ -451,6 +482,7 @@ window.CalcDB = (() => {
         migrateFromLocalStorage,
         // Utilities
         getUserIdAsync,
-        getClient
+        getClient,
+        hasAccess
     };
 })();

@@ -8,6 +8,84 @@ window.CalcAI = (() => {
     let chatHistory = [];
     let isProcessing = false;
     let chatPanelOpen = false;
+    let _userHasAccess = null; // null = unchecked, true/false = checked
+
+    // ── Access Check ──
+    async function checkAccess() {
+        if (_userHasAccess !== null) return _userHasAccess;
+        try {
+            _userHasAccess = await CalcDB.hasAccess();
+        } catch { _userHasAccess = false; }
+        return _userHasAccess;
+    }
+
+    async function requireAccess(featureName) {
+        const has = await checkAccess();
+        if (has) return true;
+        showUpgradeModal(featureName);
+        return false;
+    }
+
+    function showUpgradeModal(featureName) {
+        document.getElementById('ai-upgrade-modal')?.remove();
+
+        const modal = document.createElement('div');
+        modal.id = 'ai-upgrade-modal';
+        modal.className = 'modal-overlay';
+        modal.innerHTML = `
+            <div class="modal-box" style="max-width:520px;background:var(--surface);border:1px solid var(--border);">
+                <button class="modal-close" onclick="document.getElementById('ai-upgrade-modal').classList.remove('open');document.body.style.overflow='';">&times;</button>
+                <div style="text-align:center;padding:32px 24px 8px;">
+                    <div style="width:64px;height:64px;background:linear-gradient(135deg,#0d9488,#14b8a6);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width:32px;height:32px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                    </div>
+                    <h2 style="font-size:22px;font-weight:800;color:var(--text);margin-bottom:8px;">
+                        ${featureName || 'יכולות AI'} — לתלמידי הקורס
+                    </h2>
+                    <p style="color:var(--text-secondary);font-size:14px;line-height:1.7;margin-bottom:24px;">
+                        הפיצ'ר הזה זמין לתלמידי <strong style="color:var(--primary);">Investor Academy</strong>.<br>
+                        הצטרף לקורס וקבל גישה לכלי AI מתקדמים שיעזרו לך לנתח חברות כמו מקצוען.
+                    </p>
+                </div>
+                <div style="background:var(--bg);border-radius:12px;margin:0 24px;padding:20px;">
+                    <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:12px;">מה מקבלים עם הקורס:</div>
+                    <div style="display:flex;flex-direction:column;gap:10px;">
+                        <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text-secondary);">
+                            <span style="color:#14b8a6;font-size:16px;">✦</span>
+                            <span><strong style="color:var(--text);">ניתוח AI</strong> — ניתוח מעמיק בסגנון באפט לכל חברה</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text-secondary);">
+                            <span style="color:#14b8a6;font-size:16px;">✦</span>
+                            <span><strong style="color:var(--text);">עוזר פיננסי</strong> — שאל כל שאלה על מדדים והשקעות</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text-secondary);">
+                            <span style="color:#14b8a6;font-size:16px;">✦</span>
+                            <span><strong style="color:var(--text);">הדבקת נתונים חכמה</strong> — העתק טקסט מ-AI, הכלי ימלא הכל</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text-secondary);">
+                            <span style="color:#14b8a6;font-size:16px;">✦</span>
+                            <span><strong style="color:var(--text);">4 פרקים מלאים</strong> — השיטה המלאה להשקעות ערך</span>
+                        </div>
+                    </div>
+                </div>
+                <div style="padding:20px 24px 28px;display:flex;flex-direction:column;gap:10px;">
+                    <a href="/investor-academy/" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:14px 24px;background:linear-gradient(135deg,#0d9488,#14b8a6);color:white;border-radius:12px;font-weight:700;font-size:15px;text-decoration:none;transition:all .2s;">
+                        גלה את הקורס ←
+                    </a>
+                    <button onclick="document.getElementById('ai-upgrade-modal').classList.remove('open');document.body.style.overflow='';" style="padding:10px;background:none;border:none;color:var(--text-muted);font-size:13px;cursor:pointer;font-family:var(--font);">
+                        אולי אח"כ
+                    </button>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+        requestAnimationFrame(() => modal.classList.add('open'));
+        document.body.style.overflow = 'hidden';
+        modal.addEventListener('click', e => {
+            if (e.target === modal) { modal.classList.remove('open'); document.body.style.overflow = ''; }
+        });
+    }
 
     // ── Edge Function URL ──
     function getEdgeFunctionUrl() {
@@ -223,14 +301,143 @@ After the CSV, list the source for each metric like:
             'eps-growth', 'buyback', 'pe', 'peg', 'cr', 'de', 'altman-z'];
     }
 
+    // ═══════════════════════════════════════════
+    // 1b. TEXT PASTE → AUTO-PARSE (Premium)
+    // ═══════════════════════════════════════════
+    async function openPasteModal() {
+        if (!(await requireAccess('הדבקת נתונים חכמה'))) return;
+
+        document.getElementById('ai-paste-modal')?.remove();
+
+        const modal = document.createElement('div');
+        modal.id = 'ai-paste-modal';
+        modal.className = 'modal-overlay';
+        modal.innerHTML = `
+            <div class="modal-box" style="max-width:650px;background:var(--surface);border:1px solid var(--border);">
+                <button class="modal-close" onclick="document.getElementById('ai-paste-modal').classList.remove('open');document.body.style.overflow='';">&times;</button>
+                <div class="modal-header">
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <div style="width:40px;height:40px;background:linear-gradient(135deg,#0d9488,#14b8a6);border-radius:10px;display:flex;align-items:center;justify-content:center;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="width:22px;height:22px;"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                        </div>
+                        <div>
+                            <h2 style="color:var(--text);">הדבקת נתונים חכמה</h2>
+                            <p style="font-size:13px;color:var(--text-secondary);margin:2px 0 0;">העתק פלט מ-Gemini/ChatGPT והדבק כאן — הכלי ימלא הכל</p>
+                        </div>
+                    </div>
+                </div>
+                <div style="padding:16px 24px;">
+                    <textarea id="ai-paste-textarea" placeholder="הדבק כאן את הטקסט מה-AI... (טבלאות, CSV, טקסט חופשי — הכל עובד)" 
+                        style="width:100%;min-height:200px;max-height:350px;resize:vertical;border:2px solid var(--border);border-radius:12px;padding:14px;font-size:13px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;line-height:1.6;background:var(--bg);color:var(--text);direction:ltr;text-align:left;" dir="ltr"></textarea>
+                    <div style="font-size:11px;color:var(--text-muted);margin-top:8px;display:flex;align-items:center;gap:6px;">
+                        <span style="color:var(--primary);">💡</span>
+                        אפשר להדביק: טבלאות, CSV, JSON, טקסט חופשי עם מספרים — ה-AI יזהה הכל
+                    </div>
+                </div>
+                <div style="padding:12px 24px 20px;display:flex;gap:10px;">
+                    <button id="ai-paste-submit" onclick="CalcAI.parsePastedText()" style="flex:1;padding:14px 20px;background:linear-gradient(135deg,#0d9488,#14b8a6);color:white;border:none;border-radius:10px;font-weight:600;font-size:15px;cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:8px;">
+                        🤖 מלא נתונים
+                    </button>
+                    <button onclick="document.getElementById('ai-paste-modal').classList.remove('open');document.body.style.overflow='';" style="padding:14px 20px;background:var(--bg);color:var(--text-secondary);border:1px solid var(--border);border-radius:10px;font-weight:500;font-size:14px;cursor:pointer;font-family:var(--font);">
+                        ביטול
+                    </button>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+        requestAnimationFrame(() => modal.classList.add('open'));
+        document.body.style.overflow = 'hidden';
+        modal.addEventListener('click', e => {
+            if (e.target === modal) { modal.classList.remove('open'); document.body.style.overflow = ''; }
+        });
+
+        // Focus textarea
+        setTimeout(() => document.getElementById('ai-paste-textarea')?.focus(), 200);
+    }
+
+    async function parsePastedText() {
+        const textarea = document.getElementById('ai-paste-textarea');
+        const text = textarea?.value?.trim();
+        if (!text || text.length < 20) {
+            showToast('הדבק טקסט ארוך יותר', 'warning');
+            return;
+        }
+
+        const submitBtn = document.getElementById('ai-paste-submit');
+        if (submitBtn) {
+            submitBtn.innerHTML = '<span class="ai-spinner"></span> מנתח טקסט...';
+            submitBtn.disabled = true;
+        }
+
+        try {
+            const result = await callAI('parse', { text });
+
+            if (result.error) {
+                showToast('לא הצלחתי לחלץ נתונים: ' + result.error, 'error');
+                return;
+            }
+
+            // Fill metrics from parsed result
+            const metricMap = {
+                'roi': 'roi-value', 'roe': 'roe-value', 'gross-margin': 'gross-margin-value',
+                'gross-margin-growth': 'gross-margin-growth-value', 'pm': 'pm-value',
+                'fcf-yield': 'fcf-yield-value', 'fcf-growth': 'fcf-growth-value',
+                'eps-growth': 'eps-growth-value', 'buyback': 'buyback-value',
+                'pe': 'pe-value', 'peg': 'peg-value', 'cr': 'cr-value',
+                'de': 'de-value', 'altman-z': 'altman-z-value'
+            };
+
+            let filled = 0;
+            Object.entries(metricMap).forEach(([key, inputId]) => {
+                const value = result[key];
+                if (value !== null && value !== undefined && !isNaN(Number(value))) {
+                    const input = document.getElementById(inputId);
+                    if (input) {
+                        input.value = Number(value).toFixed(2);
+                        input.classList.add('ai-filled');
+                        setTimeout(() => input.classList.remove('ai-filled'), 2000);
+                        filled++;
+                    }
+                }
+            });
+
+            // Update company name if found
+            if (result.company) {
+                const companyEl = document.getElementById('company-name');
+                if (companyEl && !companyEl.value.trim()) {
+                    companyEl.value = result.company;
+                    document.getElementById('topbar-company').textContent = result.company;
+                }
+            }
+
+            if (typeof updateAllMetrics === 'function') updateAllMetrics();
+
+            // Close modal
+            document.getElementById('ai-paste-modal')?.classList.remove('open');
+            document.body.style.overflow = '';
+
+            showToast(`🤖 ${filled} מדדים מולאו מהטקסט!`);
+
+        } catch (err) {
+            console.error('Parse error:', err);
+            showToast('שגיאה בניתוח הטקסט: ' + err.message, 'error');
+        } finally {
+            if (submitBtn) {
+                submitBtn.innerHTML = '🤖 מלא נתונים';
+                submitBtn.disabled = false;
+            }
+        }
+    }
+
     function showAIDisclaimer(sources, dataDate, confidence, warnings, metricSources) {
         const existing = document.getElementById('ai-disclaimer');
         if (existing) existing.remove();
 
         const confidenceMap = {
-            high: { label: 'ביטחון גבוה', color: '#059669', bg: '#ECFDF5' },
-            medium: { label: 'ביטחון בינוני', color: '#D97706', bg: '#FFFBEB' },
-            low: { label: 'ביטחון נמוך', color: '#DC2626', bg: '#FEF2F2' }
+            high: { label: 'ביטחון גבוה', color: '#10b981', bg: 'rgba(16,185,129,0.12)' },
+            medium: { label: 'ביטחון בינוני', color: '#f59e0b', bg: 'rgba(245,158,11,0.12)' },
+            low: { label: 'ביטחון נמוך', color: '#ef4444', bg: 'rgba(239,68,68,0.12)' }
         };
         const conf = confidenceMap[confidence] || confidenceMap.medium;
 
@@ -276,6 +483,7 @@ After the CSV, list the source for each metric like:
     // ═══════════════════════════════════════════
     async function analyzeCompany() {
         if (isProcessing) return;
+        if (!(await requireAccess('ניתוח AI'))) return;
 
         const companyName = document.getElementById('company-name')?.value?.trim();
         if (!companyName) {
@@ -381,7 +589,7 @@ After the CSV, list the source for each metric like:
         const fab = document.createElement('button');
         fab.id = 'ai-chat-fab';
         fab.className = 'ai-chat-fab';
-        fab.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 017 7h1a1 1 0 011 1v3a1 1 0 01-1 1h-1v1a2 2 0 01-2 2H5a2 2 0 01-2-2v-1H2a1 1 0 01-1-1v-3a1 1 0 011-1h1a7 7 0 017-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 012-2z"/></svg>`;
+        fab.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 017 7h1a1 1 0 011 1v3a1 1 0 01-1 1h-1v1a2 2 0 01-2 2H5a2 2 0 01-2-2v-1H2a1 1 0 01-1-1v-3a1 1 0 011-1h1a7 7 0 017-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 012-2z"/></svg><span class="ai-pro-badge">PRO</span>`;
         fab.title = 'עוזר AI';
         fab.onclick = toggleChat;
         document.body.appendChild(fab);
@@ -442,7 +650,8 @@ After the CSV, list the source for each metric like:
         }
     }
 
-    function toggleChat() {
+    async function toggleChat() {
+        if (!chatPanelOpen && !(await requireAccess('עוזר AI פיננסי'))) return;
         chatPanelOpen = !chatPanelOpen;
         const panel = document.getElementById('ai-chat-panel');
         const fab = document.getElementById('ai-chat-fab');
@@ -644,7 +853,7 @@ After the CSV, list the source for each metric like:
             wrapper.appendChild(btn);
         }
 
-        // Add AI analyze button to toolbar
+        // Add AI analyze button to toolbar (with PRO badge)
         const toolbar = document.querySelector('.toolbar');
         if (toolbar && !document.getElementById('ai-analyze-btn')) {
             const btn = document.createElement('button');
@@ -655,11 +864,29 @@ After the CSV, list the source for each metric like:
                     <path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 017 7h1a1 1 0 011 1v3a1 1 0 01-1 1h-1v1a2 2 0 01-2 2H5a2 2 0 01-2-2v-1H2a1 1 0 01-1-1v-3a1 1 0 011-1h1a7 7 0 017-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 012-2z"/>
                 </svg>
                 <span>ניתוח AI</span>
+                <span class="ai-pro-badge">PRO</span>
             `;
             btn.onclick = analyzeCompany;
-            // Insert before the save button
             const saveBtn = document.getElementById('save-btn');
             if (saveBtn) toolbar.insertBefore(btn, saveBtn);
+            else toolbar.appendChild(btn);
+        }
+
+        // Add paste button to toolbar (with PRO badge)
+        if (toolbar && !document.getElementById('ai-paste-btn')) {
+            const btn = document.createElement('button');
+            btn.id = 'ai-paste-btn';
+            btn.className = 'tool-btn ai-tool-btn';
+            btn.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                </svg>
+                <span>הדבק טקסט</span>
+                <span class="ai-pro-badge">PRO</span>
+            `;
+            btn.onclick = openPasteModal;
+            const analyzeBtn = document.getElementById('ai-analyze-btn');
+            if (analyzeBtn) toolbar.insertBefore(btn, analyzeBtn.nextSibling);
             else toolbar.appendChild(btn);
         }
 
@@ -1087,6 +1314,29 @@ After the CSV, list the source for each metric like:
 .ai-chat-messages::-webkit-scrollbar { width: 4px; }
 .ai-chat-messages::-webkit-scrollbar-track { background: transparent; }
 .ai-chat-messages::-webkit-scrollbar-thumb { background: #334155; border-radius: 2px; }
+
+/* ── PRO Badge ── */
+.ai-pro-badge {
+    display: inline-block;
+    padding: 1px 6px;
+    background: linear-gradient(135deg, #0d9488, #14b8a6);
+    color: white;
+    border-radius: 4px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    line-height: 1.4;
+    vertical-align: middle;
+}
+.ai-chat-fab .ai-pro-badge {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    padding: 2px 5px;
+    font-size: 8px;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
         `;
         document.head.appendChild(style);
     }
@@ -1117,7 +1367,10 @@ After the CSV, list the source for each metric like:
         initChat,
         injectUI,
         _copyAutoFillPrompt,
-        _downloadAutoFillPrompt
+        _downloadAutoFillPrompt,
+        openPasteModal,
+        parsePastedText,
+        checkAccess
     };
 })();
 
