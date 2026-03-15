@@ -11,12 +11,12 @@
     --surface-hover: #F8F9FE;
     --surface-active: #F0F1FA;
 
-    --primary: #6366F1;
-    --primary-hover: #5558E6;
-    --primary-light: #C7D2FE;
-    --primary-bg: #EEF2FF;
-    --primary-dark: #4338CA;
-    --primary-glow: rgba(99,102,241,0.25);
+    --primary: #0d9488;
+    --primary-hover: #0f766e;
+    --primary-light: #99f6e4;
+    --primary-bg: #f0fdfa;
+    --primary-dark: #115e59;
+    --primary-glow: rgba(20,184,166,0.25);
 
     --accent: #F59E0B;
     --accent-bg: #FFFBEB;
@@ -95,7 +95,7 @@ body.scrolled .topbar { box-shadow: var(--shadow-sm); }
 .topbar-right { display:flex; align-items:center; gap:12px; min-width:0; }
 .topbar-logo {
     width: 36px; height: 36px;
-    background: linear-gradient(135deg, var(--primary), #818CF8);
+    background: linear-gradient(135deg, var(--primary), #14b8a6);
     border-radius: var(--radius-sm);
     display: flex; align-items: center; justify-content: center;
     color: white; font-weight: 700; font-size: 16px;
@@ -127,7 +127,7 @@ body.scrolled .topbar-center { opacity: 1; transform: translateY(0); pointer-eve
 .topbar-mini-gauge svg { width: 100%; height: 100%; display: block; }
 .topbar-score {
     font-size: 18px; font-weight: 700;
-    background: linear-gradient(135deg, var(--primary), #818CF8);
+    background: linear-gradient(135deg, var(--primary), #14b8a6);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     background-clip: text;
     min-width: 44px; text-align: center;
@@ -146,7 +146,7 @@ body.scrolled .topbar-center { opacity: 1; transform: translateY(0); pointer-eve
 .topbar-brand { display: flex; align-items: center; gap: 10px; }
 .topbar-brand-name {
     font-size: 15px; font-weight: 700;
-    background: linear-gradient(135deg, var(--primary-dark), var(--primary), #818CF8);
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary), #14b8a6);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     background-clip: text;
     letter-spacing: -0.4px;
@@ -172,7 +172,7 @@ body.scrolled .topbar-center { opacity: 1; transform: translateY(0); pointer-eve
 .hero h1 {
     font-size: clamp(1.8rem, 4vw, 2.6rem);
     font-weight: 800;
-    background: linear-gradient(135deg, var(--primary-dark), var(--primary), #818CF8);
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary), #14b8a6);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     background-clip: text;
     letter-spacing: -0.5px;
@@ -317,7 +317,7 @@ body.scrolled .topbar-center { opacity: 1; transform: translateY(0); pointer-eve
 }
 .progress-fill {
     height: 100%; width: 0%;
-    background: linear-gradient(90deg, var(--primary), #818CF8);
+    background: linear-gradient(90deg, var(--primary), #14b8a6);
     border-radius: 4px;
     transition: width .5s cubic-bezier(.4,0,.2,1);
 }
@@ -346,7 +346,7 @@ body.scrolled .topbar-center { opacity: 1; transform: translateY(0); pointer-eve
 .cat-icon.profit { background: #DBEAFE; color: #2563EB; }
 .cat-icon.growth { background: #D1FAE5; color: #059669; }
 .cat-icon.value  { background: #FEF3C7; color: #D97706; }
-.cat-icon.stable { background: #E0E7FF; color: #4338CA; }
+.cat-icon.stable { background: #ccfbf1; color: #115e59; }
 .cat-icon.custom { background: #F3E8FF; color: #7C3AED; }
 .cat-title { flex:1; font-weight: 600; font-size: 15px; color: var(--text); }
 .cat-badge {
@@ -630,7 +630,7 @@ body.scrolled .topbar-center { opacity: 1; transform: translateY(0); pointer-eve
     width: 10px; height: 10px; border-radius: 3px;
 }
 .legend-dot.threshold { background: var(--primary-bg); border: 1px dashed var(--primary); }
-.legend-dot.value { background: rgba(99,102,241,0.6); border: 1px solid var(--primary); }
+.legend-dot.value { background: rgba(20,184,166,0.6); border: 1px solid var(--primary); }
 
 .score-actions {
     display: flex; flex-direction: column; gap: 8px;
@@ -898,7 +898,7 @@ body.scrolled .topbar-center { opacity: 1; transform: translateY(0); pointer-eve
     align-items: center;
     gap: 8px;
     padding: 12px 20px;
-    background: linear-gradient(135deg, var(--primary-bg) 0%, #E0E7FF 100%);
+    background: linear-gradient(135deg, var(--primary-bg) 0%, #ccfbf1 100%);
     border-radius: var(--radius-lg);
     margin-bottom: 20px;
     border: 1px solid var(--primary-light);
@@ -1171,7 +1171,7 @@ body.scrolled .topbar-center { opacity: 1; transform: translateY(0); pointer-eve
     direction: ltr;
     text-align: left;
     background: #1E1B4B;
-    color: #E0E7FF;
+    color: #ccfbf1;
 }
 .ai-prompt-textarea:focus {
     outline: none;
@@ -1570,7 +1570,7 @@ body.scrolled .topbar-center { opacity: 1; transform: translateY(0); pointer-eve
     line-height: 1.6;
     resize: vertical;
     background: #1E1B4B;
-    color: #E0E7FF;
+    color: #ccfbf1;
     direction: ltr;
     text-align: left;
 }
@@ -1700,13 +1700,13 @@ body.scrolled .topbar-center { opacity: 1; transform: translateY(0); pointer-eve
    12.40 TOOLBAR BUTTON FOR INFOGRAPHICS
    ═══════════════════════════════════════════ */
 .toolbar-btn-info {
-    background: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%) !important;
+    background: linear-gradient(135deg, #2dd4bf 0%, #0d9488 100%) !important;
     color: white !important;
     border: none !important;
 }
 .toolbar-btn-info:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(99,102,241,0.3);
+    box-shadow: 0 4px 12px rgba(20,184,166,0.3);
 }
 
 @media (max-width: 768px) {
@@ -1769,7 +1769,7 @@ body.scrolled .topbar-center { opacity: 1; transform: translateY(0); pointer-eve
 }
 .dd-flow-box:hover {
     border-color: var(--primary);
-    background: linear-gradient(135deg, var(--primary-bg) 0%, #E0E7FF 100%);
+    background: linear-gradient(135deg, var(--primary-bg) 0%, #ccfbf1 100%);
     transform: translateY(-3px);
     box-shadow: var(--shadow-md);
 }
@@ -1934,7 +1934,7 @@ body.scrolled .topbar-center { opacity: 1; transform: translateY(0); pointer-eve
 .dd-examples-title {
     font-size: 13px;
     font-weight: 700;
-    color: #C7D2FE;
+    color: #99f6e4;
     margin-bottom: 14px;
     display: flex;
     align-items: center;
@@ -1965,8 +1965,8 @@ body.scrolled .topbar-center { opacity: 1; transform: translateY(0); pointer-eve
 }
 .dd-example-card .ec-ticker {
     font-size: 10px;
-    background: rgba(99,102,241,0.5);
-    color: #E0E7FF;
+    background: rgba(20,184,166,0.5);
+    color: #ccfbf1;
     padding: 2px 6px;
     border-radius: 4px;
     font-weight: 600;
@@ -2037,7 +2037,7 @@ body.scrolled .topbar-center { opacity: 1; transform: translateY(0); pointer-eve
 .dd-scale-bar {
     height: 14px;
     border-radius: 7px;
-    background: linear-gradient(to left, #DC2626 0%, #F97316 25%, #F59E0B 50%, #10B981 75%, #6366F1 100%);
+    background: linear-gradient(to left, #DC2626 0%, #F97316 25%, #F59E0B 50%, #10B981 75%, #0d9488 100%);
 }
 .dd-scale-marker {
     position: absolute;
@@ -2076,7 +2076,7 @@ body.scrolled .topbar-center { opacity: 1; transform: translateY(0); pointer-eve
 .dd-your-value-box .yv-num {
     font-size: 28px;
     font-weight: 800;
-    background: linear-gradient(135deg, var(--primary), #818CF8);
+    background: linear-gradient(135deg, var(--primary), #14b8a6);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -2249,7 +2249,7 @@ body.scrolled .topbar-center { opacity: 1; transform: translateY(0); pointer-eve
 }
 .deepdive-header-icon {
     width: 52px; height: 52px;
-    background: linear-gradient(135deg, var(--primary), #818CF8);
+    background: linear-gradient(135deg, var(--primary), #14b8a6);
     border-radius: var(--radius-lg);
     display: flex;
     align-items: center;
@@ -2377,7 +2377,7 @@ body.scrolled .topbar-center { opacity: 1; transform: translateY(0); pointer-eve
 .dd-scale-bar {
     height: 12px;
     border-radius: 6px;
-    background: linear-gradient(to left, #DC2626 0%, #F59E0B 33%, #10B981 66%, #6366F1 100%);
+    background: linear-gradient(to left, #DC2626 0%, #F59E0B 33%, #10B981 66%, #0d9488 100%);
     position: relative;
     margin-bottom: 8px;
 }
@@ -2433,7 +2433,7 @@ body.scrolled .topbar-center { opacity: 1; transform: translateY(0); pointer-eve
 .dd-your-value .yv-num {
     font-size: 1.5rem;
     font-weight: 800;
-    background: linear-gradient(135deg, var(--primary), #818CF8);
+    background: linear-gradient(135deg, var(--primary), #14b8a6);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -2683,7 +2683,7 @@ body.scrolled .topbar-center { opacity: 1; transform: translateY(0); pointer-eve
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 3px;
-    background: linear-gradient(90deg, #EF4444, #F59E0B, #6366F1, #059669);
+    background: linear-gradient(90deg, #EF4444, #F59E0B, #0d9488, #059669);
     opacity: 0.85;
 }
 
@@ -2902,11 +2902,11 @@ body.scrolled .topbar-center { opacity: 1; transform: translateY(0); pointer-eve
 }
 .severity-badge.sev-positive .sev-dot { background: #059669; }
 .severity-badge.sev-info {
-    background: #EEF2FF;
-    color: #3730A3;
-    border: 1px solid #C7D2FE;
+    background: #f0fdfa;
+    color: #134e4a;
+    border: 1px solid #99f6e4;
 }
-.severity-badge.sev-info .sev-dot { background: #6366F1; }
+.severity-badge.sev-info .sev-dot { background: #0d9488; }
 
 @keyframes sevPulse {
     0%, 100% { opacity: 1; transform: scale(1); }
@@ -2974,10 +2974,10 @@ body.scrolled .topbar-center { opacity: 1; transform: translateY(0); pointer-eve
 }
 .insight-item.sev-positive:hover { background: linear-gradient(to left, #D1FAE5 0%, var(--surface-hover) 80%); }
 .insight-item.sev-info {
-    border-right-color: #6366F1;
-    background: linear-gradient(to left, #EEF2FF 0%, var(--bg) 80%);
+    border-right-color: #0d9488;
+    background: linear-gradient(to left, #f0fdfa 0%, var(--bg) 80%);
 }
-.insight-item.sev-info:hover { background: linear-gradient(to left, #E0E7FF 0%, var(--surface-hover) 80%); }
+.insight-item.sev-info:hover { background: linear-gradient(to left, #ccfbf1 0%, var(--surface-hover) 80%); }
 
 .insight-icon {
     width: 38px;
@@ -2992,7 +2992,7 @@ body.scrolled .topbar-center { opacity: 1; transform: translateY(0); pointer-eve
 .insight-icon.critical { background: #FEE2E2; }
 .insight-icon.warning { background: #FEF3C7; }
 .insight-icon.positive { background: #D1FAE5; }
-.insight-icon.info { background: #E0E7FF; }
+.insight-icon.info { background: #ccfbf1; }
 
 .insight-content { flex: 1; min-width: 0; }
 .insight-title {

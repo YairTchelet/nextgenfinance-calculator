@@ -254,6 +254,23 @@
         // ═══════════════════════════════════════════
         // 8. SAVE PREFERENCES ON MODE CHANGE
         // ═══════════════════════════════════════════
+
+        // CRITICAL: Rebind save/load buttons because DOMContentLoaded
+        // captured the original functions before we patched them
+        const saveBtn = document.getElementById('save-btn');
+        if (saveBtn) {
+            const newSaveBtn = saveBtn.cloneNode(true);
+            saveBtn.parentNode.replaceChild(newSaveBtn, saveBtn);
+            newSaveBtn.addEventListener('click', () => window.saveAnalysis());
+        }
+        const loadBtn = document.getElementById('load-btn');
+        if (loadBtn) {
+            const newLoadBtn = loadBtn.cloneNode(true);
+            loadBtn.parentNode.replaceChild(newLoadBtn, loadBtn);
+            newLoadBtn.addEventListener('click', () => { populateHistory(); openModal('history-modal'); });
+        }
+        console.log('🔌 Save/Load buttons rebound to Supabase');
+
         const _originalSwitchMode = window.switchMode;
         window.switchMode = function (mode) {
             if (_originalSwitchMode) _originalSwitchMode(mode);

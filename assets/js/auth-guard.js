@@ -6,6 +6,7 @@
  */
 (async () => {
   const _client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  window.__supabase = _client; // Expose for calculator and other tools
   const { data: { session } } = await _client.auth.getSession();
   if (!session) {
     sessionStorage.setItem('redirectAfterLogin', window.location.href);
