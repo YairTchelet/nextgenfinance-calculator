@@ -536,7 +536,16 @@ After the CSV, list the source for each metric like:
             if (contentEl) {
                 // Convert markdown-ish to HTML
                 const html = formatAIResponse(result);
-                contentEl.innerHTML = html;
+                contentEl.innerHTML = html + `
+                    <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end;">
+                        <button onclick="CalcAI._saveAnalysisToNotes()" style="display:flex;align-items:center;gap:6px;padding:10px 18px;background:var(--primary);color:white;border:none;border-radius:var(--radius-md);font-weight:600;font-size:13px;cursor:pointer;font-family:var(--font);transition:all .2s;">
+                            📝 שמור להערות
+                        </button>
+                        <button onclick="document.getElementById('ai-analysis-modal').classList.remove('open');document.body.style.overflow='';" style="padding:10px 18px;background:var(--bg);color:var(--text-secondary);border:1px solid var(--border);border-radius:var(--radius-md);font-weight:500;font-size:13px;cursor:pointer;font-family:var(--font);">
+                            סגור
+                        </button>
+                    </div>
+                `;
             }
 
         } catch (err) {
@@ -1352,6 +1361,25 @@ After the CSV, list the source for each metric like:
         }
     }
 
+    // ── Save AI analysis to notes ──
+    function _saveAnalysisToNotes() {
+        const contentEl = document.getElementById('ai-analysis-content');
+        if (!contentEl) return;
+        // Extract plain text from the analysis (skip the buttons)
+        const clone = contentEl.cloneNode(true);
+        clone.querySelectorAll('button, [style*="border-top"]').forEach(el => el.remove());
+        const text = clone.innerText.trim();
+        if (!text) { if (typeof showToast === 'function') showToast('אין ניתוח לשמור', 'warning'); return; }
+
+        const notesEl = document.getElementById('user-notes');
+        if (notesEl) {
+            const separator = notesEl.value.trim() ? '\n\n───── ניתוח AI ─────\n' : '───── ניתוח AI ─────\n';
+            notesEl.value += separator + text;
+            notesEl.scrollTop = notesEl.scrollHeight;
+            if (typeof showToast === 'function') showToast('📝 הניתוח נשמר להערות!');
+        }
+    }
+
     // ═══ Public API ═══
     return {
         init,
@@ -1368,7 +1396,8 @@ After the CSV, list the source for each metric like:
         openPasteModal,
         parsePastedText,
         checkAccess,
-        showUpgradeModal
+        showUpgradeModal,
+        _saveAnalysisToNotes
     };
 })();
 
