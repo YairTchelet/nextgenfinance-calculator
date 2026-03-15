@@ -1,0 +1,415 @@
+/* ═══════════════════════════════════════════
+   CALCULATOR WIZARD — Guided UX Flow
+   ═══════════════════════════════════════════ */
+
+/* ── Overlay ── */
+.wz-overlay {
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 40px 20px 60px;
+    background: var(--bg);
+}
+.wz-container {
+    width: 100%;
+    max-width: 680px;
+}
+
+/* ── Progress Bar ── */
+.wz-progress {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 40px;
+    padding: 0 10px;
+}
+.wz-progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+.wz-progress-step span {
+    font-size: 10px;
+    color: var(--text-muted);
+    font-weight: 500;
+    white-space: nowrap;
+}
+.wz-progress-step.active span { color: var(--primary); font-weight: 700; }
+.wz-progress-step.done span { color: var(--success); }
+.wz-progress-dot {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    transition: all .3s;
+}
+.wz-progress-step.active .wz-progress-dot {
+    border-color: var(--primary);
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 0 0 6px var(--primary-glow);
+}
+.wz-progress-step.done .wz-progress-dot {
+    border-color: var(--success);
+    background: var(--success);
+    color: white;
+    font-size: 12px;
+}
+.wz-progress-line {
+    width: 40px; height: 2px;
+    background: var(--border);
+    margin: 0 4px;
+    margin-bottom: 22px;
+    transition: background .3s;
+}
+.wz-progress-line.done { background: var(--success); }
+
+/* ── Panels ── */
+.wz-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: 36px 32px 28px;
+    box-shadow: var(--shadow-lg);
+}
+.wz-slide-in {
+    animation: wzSlideIn .35s ease-out;
+}
+@keyframes wzSlideIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+/* ── Step Header ── */
+.wz-step-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+.wz-step-icon-big {
+    font-size: 48px;
+    margin-bottom: 12px;
+}
+.wz-step-header h2 {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 6px;
+}
+.wz-step-header p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* ── Company Input ── */
+.wz-input-wrap {
+    margin: 0 auto 24px;
+    max-width: 460px;
+}
+.wz-company-input {
+    width: 100%;
+    padding: 16px 20px;
+    font-size: 18px;
+    font-family: var(--font);
+    font-weight: 600;
+    color: var(--text);
+    background: var(--bg);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-lg);
+    text-align: center;
+    direction: ltr;
+    transition: all .2s;
+}
+.wz-company-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px var(--primary-glow);
+}
+.wz-company-input::placeholder {
+    color: var(--text-muted);
+    font-weight: 400;
+    font-size: 15px;
+}
+
+/* ── Nav Buttons ── */
+.wz-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+}
+.wz-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 28px;
+    border-radius: var(--radius-md);
+    font-size: 15px;
+    font-weight: 600;
+    font-family: var(--font);
+    cursor: pointer;
+    border: none;
+    transition: all .2s;
+}
+.wz-btn.primary {
+    background: linear-gradient(135deg, #0d9488, #14b8a6);
+    color: white;
+}
+.wz-btn.primary:hover { box-shadow: 0 4px 16px rgba(20,184,166,0.35); transform: translateY(-1px); }
+.wz-btn.primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+.wz-btn.ghost {
+    background: var(--bg);
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+}
+.wz-btn.ghost:hover { color: var(--text); border-color: var(--text-muted); }
+.wz-skip-link {
+    display: block;
+    text-align: center;
+    margin-top: 16px;
+    font-size: 12px;
+    color: var(--text-muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font);
+    transition: color .2s;
+}
+.wz-skip-link:hover { color: var(--primary); }
+
+/* ── Mode Cards ── */
+.wz-mode-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 8px;
+}
+.wz-mode-card {
+    padding: 16px 14px;
+    background: var(--bg);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-lg);
+    text-align: center;
+    cursor: pointer;
+    transition: all .2s;
+}
+.wz-mode-card:hover { border-color: var(--primary-light); background: var(--surface-hover); }
+.wz-mode-card.selected {
+    border-color: var(--primary);
+    background: var(--primary-bg);
+    box-shadow: 0 0 0 4px var(--primary-glow);
+}
+.wz-mode-icon { font-size: 28px; margin-bottom: 6px; }
+.wz-mode-name { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.wz-mode-desc { font-size: 11px; color: var(--text-secondary); line-height: 1.5; }
+
+/* ── Template Cards ── */
+.wz-template-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.wz-tmpl-card {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: var(--bg);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+    transition: all .2s;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+.wz-tmpl-card:hover { border-color: var(--primary-light); color: var(--text); }
+.wz-tmpl-card.selected {
+    border-color: var(--primary);
+    background: var(--primary-bg);
+    color: var(--primary);
+    font-weight: 600;
+}
+.wz-tmpl-icon { font-size: 16px; }
+
+/* ── Data Method Cards ── */
+.wz-method-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 8px;
+}
+.wz-method-card {
+    padding: 24px 16px;
+    background: var(--bg);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-lg);
+    text-align: center;
+    cursor: pointer;
+    transition: all .25s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.wz-method-card:hover { border-color: var(--primary-light); transform: translateY(-2px); }
+.wz-method-card.selected {
+    border-color: var(--primary);
+    background: var(--primary-bg);
+    box-shadow: 0 0 0 4px var(--primary-glow);
+}
+.wz-method-icon { font-size: 36px; margin-bottom: 10px; }
+.wz-method-name { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+.wz-method-desc { font-size: 11px; color: var(--text-secondary); line-height: 1.5; }
+
+/* ── Processing Overlay ── */
+.wz-processing {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn .3s ease;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.wz-proc-content {
+    text-align: center;
+    max-width: 420px;
+    padding: 40px;
+}
+.wz-proc-spinner {
+    width: 56px; height: 56px;
+    border: 4px solid var(--border);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 24px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.wz-proc-content h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    transition: all .3s;
+}
+.wz-proc-content p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+    min-height: 20px;
+    transition: all .3s;
+}
+.wz-proc-bar {
+    width: 100%;
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+}
+.wz-proc-fill {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, var(--primary), var(--primary-light));
+    border-radius: 3px;
+    transition: width .8s ease;
+}
+
+/* ── Action Bar (bottom sticky) ── */
+.wz-action-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    box-shadow: 0 -4px 24px rgba(0,0,0,0.1);
+    transform: translateY(100%);
+    transition: transform .4s ease;
+}
+.wz-action-bar.visible { transform: translateY(0); }
+.wz-action-bar-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+.wz-action-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+.wz-action-btns {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    flex: 1;
+    justify-content: flex-end;
+}
+.wz-action-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-family: var(--font);
+    transition: all .2s;
+}
+.wz-action-btn:hover { background: var(--surface-hover); color: var(--text); border-color: var(--primary-light); }
+.wz-action-btn.primary {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+.wz-action-btn.primary:hover {
+    background: var(--primary-hover);
+    box-shadow: 0 2px 8px var(--primary-glow);
+}
+
+/* ── Score highlight animation ── */
+.wz-highlight {
+    animation: wzPulse 1.5s ease;
+}
+@keyframes wzPulse {
+    0%, 100% { box-shadow: var(--shadow-xs); }
+    50% { box-shadow: 0 0 0 8px var(--primary-glow), var(--shadow-lg); }
+}
+
+/* When wizard is active, add padding to body for action bar */
+body.wizard-done { padding-bottom: 70px; }
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+    .wz-overlay { padding: 20px 12px 40px; }
+    .wz-panel { padding: 24px 18px 20px; }
+    .wz-step-header h2 { font-size: 18px; }
+    .wz-step-icon-big { font-size: 36px; }
+    .wz-company-input { font-size: 16px; padding: 14px 16px; }
+    .wz-mode-grid { grid-template-columns: 1fr; }
+    .wz-method-grid { grid-template-columns: 1fr; }
+    .wz-progress-step span { display: none; }
+    .wz-progress-dot { width: 28px; height: 28px; font-size: 11px; }
+    .wz-progress-line { width: 20px; margin-bottom: 4px; }
+    .wz-action-bar-inner { flex-direction: column; gap: 8px; }
+    .wz-action-label { display: none; }
+    .wz-action-btns { justify-content: center; }
+}

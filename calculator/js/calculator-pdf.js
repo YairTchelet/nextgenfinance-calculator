@@ -188,14 +188,14 @@ window.CalcPDF = (() => {
         const insightsSection = insightsText ? `
             <div style="margin-top:10px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px 10px;">
                 <div style="font-size:9px;font-weight:700;color:#475569;margin-bottom:3px;">💡 תובנות</div>
-                <div style="font-size:9px;color:#475569;line-height:1.5;white-space:pre-wrap;">${insightsText.substring(0, 400)}${insightsText.length > 400 ? '...' : ''}</div>
+                <div style="font-size:9px;color:#475569;line-height:1.5;white-space:pre-wrap;">${insightsText}</div>
             </div>` : '';
 
         // Notes section
         const notesSection = notes ? `
             <div style="margin-top:8px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:8px 10px;">
                 <div style="font-size:9px;font-weight:700;color:#475569;margin-bottom:3px;">📝 הערות</div>
-                <div style="font-size:9px;color:#64748b;line-height:1.5;white-space:pre-wrap;">${notes.substring(0, 250)}${notes.length > 250 ? '...' : ''}</div>
+                <div style="font-size:9px;color:#64748b;line-height:1.5;white-space:pre-wrap;">${notes}</div>
             </div>` : '';
 
         return `<!DOCTYPE html>
