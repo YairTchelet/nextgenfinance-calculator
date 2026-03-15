@@ -22,6 +22,9 @@
     <script src="/assets/js/auth-guard.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
         <link rel="stylesheet" href="css/calculator.css">
+    <!-- PDF Export deps -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
     <!-- ═══ TOPBAR ═══ -->
@@ -90,6 +93,10 @@
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
                         <span>אפס</span>
                     </button>
+                    <button class="tool-btn" id="compare-toggle">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+                        <span>השוואה</span>
+                    </button>
                 </div>
             </div>
             <div class="advanced-toggle">
@@ -99,28 +106,37 @@
         </section>
 
         <!-- Company Comparison Tabs -->
-        <div class="company-tabs-bar" id="company-tabs-bar" style="display:none;background:var(--surface);border-radius:12px;padding:8px;margin-bottom:16px;border:1px solid var(--border);gap:8px;">
-            <div class="company-tab active" data-company="1" onclick="switchCompany(1)" style="flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;background:var(--primary);color:white;border-radius:8px;cursor:pointer;">
-                <span>🏢</span>
-                <span id="company1-name">חברה 1</span>
-                <span class="ct-score" id="company1-score" style="font-size:11px;padding:2px 8px;background:rgba(255,255,255,0.2);border-radius:20px;">--</span>
+        <div class="company-tabs-bar" id="company-tabs-bar">
+            <div class="company-tab active" data-company="1" onclick="switchCompany(1)">
+                <span class="ct-icon">🏢</span>
+                <div class="ct-info">
+                    <span class="ct-name" id="company1-name">חברה 1</span>
+                    <span class="ct-score" id="company1-score">--</span>
+                </div>
+                <button class="ct-edit company-tab-edit" data-company="1" title="ערוך שם">✎</button>
             </div>
-            <div class="company-tab" data-company="2" onclick="switchCompany(2)" style="flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;background:var(--bg);color:var(--text-secondary);border-radius:8px;cursor:pointer;">
-                <span>🏢</span>
-                <span id="company2-name">חברה 2</span>
-                <span class="ct-score" id="company2-score" style="font-size:11px;padding:2px 8px;background:var(--border);border-radius:20px;">--</span>
+            <div class="company-tab" data-company="2" onclick="switchCompany(2)">
+                <span class="ct-icon">🏢</span>
+                <div class="ct-info">
+                    <span class="ct-name" id="company2-name">חברה 2</span>
+                    <span class="ct-score" id="company2-score">--</span>
+                </div>
+                <button class="ct-edit company-tab-edit" data-company="2" title="ערוך שם">✎</button>
             </div>
-            <button onclick="showCompareResults()" style="padding:10px 16px;background:var(--success);color:white;border:none;border-radius:8px;font-weight:600;cursor:pointer;">📊 השווה</button>
+            <button class="compare-action-btn" onclick="showCompareResults()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+                <span>השווה</span>
+            </button>
         </div>
 
         <!-- Compare Results View -->
-        <div class="compare-view" id="compare-view" style="display:none;background:var(--surface);border-radius:12px;border:1px solid var(--border);padding:20px;margin-bottom:16px;">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border);">
-                <h3 style="font-size:16px;font-weight:700;color:var(--text);">📊 השוואת חברות</h3>
-                <button onclick="hideCompareResults()" style="padding:8px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;cursor:pointer;">✕ סגור</button>
+        <div class="compare-view" id="compare-view">
+            <div class="compare-view-header">
+                <h3>📊 השוואת חברות</h3>
+                <button class="compare-view-close" onclick="hideCompareResults()">✕ סגור</button>
             </div>
-            <div id="compare-grid" style="display:grid;grid-template-columns:180px 1fr 1fr;gap:1px;background:var(--border);border-radius:8px;overflow:hidden;font-size:13px;"></div>
-            <div id="compare-summary" style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px;"></div>
+            <div class="compare-grid" id="compare-grid"></div>
+            <div class="compare-summary" id="compare-summary"></div>
         </div>
 
         <!-- Dashboard Grid -->
@@ -1253,67 +1269,82 @@ function showCompareResults() {
     
     // Build header
     let html = `
-        <div style="background:var(--bg);padding:10px 12px;font-weight:700;color:var(--text);">מדד</div>
-        <div style="background:var(--bg);padding:10px 12px;font-weight:700;color:var(--text);text-align:center;">${companyData[1].name}</div>
-        <div style="background:var(--bg);padding:10px 12px;font-weight:700;color:var(--text);text-align:center;">${companyData[2].name}</div>
+        <div class="cmp-cell cmp-header">מדד</div>
+        <div class="cmp-cell cmp-header cmp-center">${companyData[1].name}</div>
+        <div class="cmp-cell cmp-header cmp-center">${companyData[2].name}</div>
+        <div class="cmp-cell cmp-header cmp-center" style="width:60px;">מוביל</div>
     `;
     
-    let c1Wins = 0, c2Wins = 0;
+    let c1Wins = 0, c2Wins = 0, ties = 0;
     
     // Build rows for each metric
     baseMetrics.forEach(m => {
         const v1 = companyData[1].metrics[m.id] ? parseFloat(companyData[1].metrics[m.id]) : null;
         const v2 = companyData[2].metrics[m.id] ? parseFloat(companyData[2].metrics[m.id]) : null;
         
-        let style1 = 'background:var(--surface);padding:10px 12px;text-align:center;';
-        let style2 = 'background:var(--surface);padding:10px 12px;text-align:center;';
+        let cls1 = '', cls2 = '', winnerIcon = '';
         
         if (v1 !== null && v2 !== null && !isNaN(v1) && !isNaN(v2)) {
             const better1 = m.compare === 'above' ? v1 > v2 : v1 < v2;
+            const better2 = m.compare === 'above' ? v2 > v1 : v2 < v1;
             if (v1 !== v2) {
                 if (better1) {
-                    style1 += 'background:var(--success-bg);color:var(--success);font-weight:600;';
-                    style2 += 'background:var(--danger-bg);color:var(--danger);';
+                    cls1 = 'cmp-better'; cls2 = 'cmp-worse';
+                    winnerIcon = `<span class="cmp-winner-dot c1"></span>`;
                     c1Wins++;
                 } else {
-                    style1 += 'background:var(--danger-bg);color:var(--danger);';
-                    style2 += 'background:var(--success-bg);color:var(--success);font-weight:600;';
+                    cls1 = 'cmp-worse'; cls2 = 'cmp-better';
+                    winnerIcon = `<span class="cmp-winner-dot c2"></span>`;
                     c2Wins++;
                 }
+            } else {
+                winnerIcon = '<span class="cmp-tie">—</span>';
+                ties++;
             }
         }
         
-        const display1 = v1 !== null && !isNaN(v1) ? v1.toFixed(1) + (m.unit || '') : '-';
-        const display2 = v2 !== null && !isNaN(v2) ? v2.toFixed(1) + (m.unit || '') : '-';
+        const display1 = v1 !== null && !isNaN(v1) ? v1.toFixed(1) + (m.unit || '') : '—';
+        const display2 = v2 !== null && !isNaN(v2) ? v2.toFixed(1) + (m.unit || '') : '—';
         
         html += `
-            <div style="background:var(--surface);padding:10px 12px;font-weight:500;color:var(--text-secondary);font-size:12px;">${m.name}</div>
-            <div style="${style1}">${display1}</div>
-            <div style="${style2}">${display2}</div>
+            <div class="cmp-cell cmp-metric">${m.name}</div>
+            <div class="cmp-cell cmp-center ${cls1}">${display1}</div>
+            <div class="cmp-cell cmp-center ${cls2}">${display2}</div>
+            <div class="cmp-cell cmp-center">${winnerIcon}</div>
         `;
     });
     
     grid.innerHTML = html;
     
-    // Build summary
+    // Build summary with visual winner card
     const score1 = companyData[1].score || '--';
     const score2 = companyData[2].score || '--';
-    const winner = parseFloat(score1) > parseFloat(score2) ? 1 : parseFloat(score2) > parseFloat(score1) ? 2 : 0;
+    const s1 = parseFloat(score1) || 0;
+    const s2 = parseFloat(score2) || 0;
+    const winner = s1 > s2 ? 1 : s2 > s1 ? 2 : 0;
     
     summary.innerHTML = `
-        <div style="background:var(--bg);border-radius:8px;padding:16px;text-align:center;${winner === 1 ? 'border:2px solid var(--success);' : ''}">
-            <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:8px;">${companyData[1].name} ${winner === 1 ? '🏆' : ''}</div>
-            <div style="font-size:28px;font-weight:800;background:linear-gradient(135deg,var(--primary),#14b8a6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">${score1}</div>
-            <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">מנצחת ב-${c1Wins} מדדים</div>
+        <div class="cmp-summary-card ${winner === 1 ? 'cmp-winner' : ''}">
+            <div class="cmp-summary-name">${companyData[1].name} ${winner === 1 ? '🏆' : ''}</div>
+            <div class="cmp-summary-score">${score1}</div>
+            <div class="cmp-summary-detail">
+                <span class="cmp-wins-badge good">🏆 ${c1Wins}</span>
+                <span class="cmp-wins-badge bad">— ${c2Wins}</span>
+            </div>
         </div>
-        <div style="background:var(--bg);border-radius:8px;padding:16px;text-align:center;${winner === 2 ? 'border:2px solid var(--success);' : ''}">
-            <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:8px;">${companyData[2].name} ${winner === 2 ? '🏆' : ''}</div>
-            <div style="font-size:28px;font-weight:800;background:linear-gradient(135deg,var(--primary),#14b8a6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">${score2}</div>
-            <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">מנצחת ב-${c2Wins} מדדים</div>
+        <div class="cmp-vs">VS</div>
+        <div class="cmp-summary-card ${winner === 2 ? 'cmp-winner' : ''}">
+            <div class="cmp-summary-name">${companyData[2].name} ${winner === 2 ? '🏆' : ''}</div>
+            <div class="cmp-summary-score">${score2}</div>
+            <div class="cmp-summary-detail">
+                <span class="cmp-wins-badge good">🏆 ${c2Wins}</span>
+                <span class="cmp-wins-badge bad">— ${c1Wins}</span>
+            </div>
         </div>
     `;
     
     document.getElementById('compare-view').style.display = 'block';
+    document.getElementById('compare-view').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function hideCompareResults() {
@@ -1789,11 +1820,11 @@ function toggleCompareMode() {
     const tabsBar = document.getElementById('company-tabs-bar');
     
     if (compareMode) {
-        tabsBar.style.display = 'flex';
+        tabsBar.classList.add('active');
         saveCurrentCompanyData(1);
         showToast('מצב השוואה הופעל. מלא נתונים לחברה 1, לחץ על "חברה 2" כדי לעבור.');
     } else {
-        tabsBar.style.display = 'none';
+        tabsBar.classList.remove('active');
         document.getElementById('compare-view').style.display = 'none';
         showToast('מצב השוואה כובה');
     }
@@ -1858,8 +1889,8 @@ function switchCompany(companyNum) {
 }
 
 function updateCompanyTabDisplay(companyNum) {
-    const nameEl = document.getElementById(`company-${companyNum}-name`);
-    const scoreEl = document.getElementById(`company-${companyNum}-score`);
+    const nameEl = document.getElementById(`company${companyNum}-name`);
+    const scoreEl = document.getElementById(`company${companyNum}-score`);
     const data = companyData[companyNum];
     if (nameEl) nameEl.textContent = data.name;
     if (scoreEl) {
@@ -4867,5 +4898,7 @@ function startTour() {
     <script src="js/calculator-bridge.js"></script>
     <!-- AI Features (auto-fill, analysis, chat) -->
     <script src="js/calculator-ai.js"></script>
+    <!-- PDF Export (branded report) -->
+    <script src="js/calculator-pdf.js"></script>
 </body>
 </html>

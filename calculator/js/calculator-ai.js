@@ -1370,7 +1370,8 @@ After the CSV, list the source for each metric like:
         _downloadAutoFillPrompt,
         openPasteModal,
         parsePastedText,
-        checkAccess
+        checkAccess,
+        showUpgradeModal
     };
 })();
 
