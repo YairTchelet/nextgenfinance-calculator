@@ -215,6 +215,7 @@ body.scrolled .topbar-center { opacity: 1; transform: translateY(0); pointer-eve
     font-size: 1.1rem; font-weight: 500;
     transition: border-color .2s, box-shadow .2s;
     background: var(--bg);
+    color: var(--text);
 }
 .input-card > input[type="text"]:focus {
     outline: none;
