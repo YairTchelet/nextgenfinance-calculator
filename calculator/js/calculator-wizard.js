@@ -179,10 +179,7 @@ window.CalcWizard = (() => {
                         <span>💾</span> שמור
                     </button>
                     <button class="wz-action-btn" onclick="if(typeof CalcPDF!=='undefined')CalcPDF.generatePDF()">
-                        <span>📄</span> PDF
-                    </button>
-                    <button class="wz-action-btn" onclick="if(typeof CalcAI!=='undefined')CalcAI.analyzeCompany()">
-                        <span>🤖</span> ניתוח AI
+                        <span>📄</span> ייצוא PDF
                     </button>
                     <button class="wz-action-btn" onclick="CalcWizard.goAdvanced()">
                         <span>🔧</span> מצב מתקדם
@@ -363,9 +360,33 @@ window.CalcWizard = (() => {
     // ── Show results view ──
     function showResults() {
         currentStep = 3;
-        renderProgress(); // Won't show since wizard is hidden, but keeps state
+
+        // Force recalculate everything
+        if (typeof updateAllMetrics === 'function') updateAllMetrics();
+
+        // Force insights body expanded
+        const insightsBody = document.getElementById('insights-body');
+        if (insightsBody) insightsBody.classList.remove('collapsed');
+        const insightsToggle = document.getElementById('insights-toggle');
+        if (insightsToggle) insightsToggle.textContent = 'הסתר ▴';
 
         setState('results');
+
+        // Inject AI analysis CTA inside insights header (if not already)
+        if (!document.getElementById('wz-ai-cta')) {
+            const insightsHeader = document.querySelector('.insights-header');
+            if (insightsHeader) {
+                const cta = document.createElement('button');
+                cta.id = 'wz-ai-cta';
+                cta.className = 'wz-ai-cta-btn';
+                cta.innerHTML = '🤖 קבל ניתוח AI מעמיק';
+                cta.onclick = () => {
+                    if (typeof CalcAI !== 'undefined' && CalcAI.analyzeCompany) CalcAI.analyzeCompany();
+                };
+                // Insert after the toggle button
+                insightsHeader.appendChild(cta);
+            }
+        }
 
         // Scroll to top
         window.scrollTo({ top: 0, behavior: 'smooth' });
