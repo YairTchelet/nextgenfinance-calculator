@@ -17,7 +17,7 @@ function createEmailTemplate(type, data) {
       preheader: 'החשבון שלך נוצר בהצלחה',
       body: 'שלום ' + name + ',<br><br>ברוך הבא! החשבון שלך נוצר בהצלחה.<br><br>כדי לגשת לקורס ההשקעות, עבור לפרופיל שלך ובקש גישה. בינתיים תוכל ליהנות מהכלים החינמיים שלנו.',
       btnText: 'לכלים החינמיים',
-      btnUrl: 'https://newgenfinance.co.il/calculator/',
+      btnUrl: 'https://newgenfinance.co.il/members/',
     },
     access_granted: {
       subject: 'הגישה לקורס אושרה! 🚀',
