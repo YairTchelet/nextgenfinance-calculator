@@ -14,25 +14,25 @@ function createEmailTemplate(type, data) {
     welcome: {
       subject: 'ברוך הבא ל-NewGen Finance! 🎉',
       title: 'ברוך הבא!',
-      preheader: 'החשבון שלך נוצר בהצלחה',
-      body: 'שלום ' + name + ',<br><br>ברוך הבא! החשבון שלך נוצר בהצלחה.<br><br>כדי לגשת לקורס ההשקעות, עבור לפרופיל שלך ובקש גישה. בינתיים תוכל ליהנות מהכלים החינמיים שלנו.',
-      btnText: 'לכלים החינמיים',
+      preheader: 'שמחים שהצטרפת — הנה מה שמחכה לך',
+      body: 'היי ' + name + ',<br><br>שמחים שהצטרפת! 🙌<br><br>יצרנו לך חשבון אישי באתר. מכאן תוכל לגשת לכלים הפיננסיים שלנו — מחשבון הבריאות הפיננסית, כלי הניתוח, ועוד.<br><br>אם תרצה גישה לקורס ההשקעות המלא, תוכל לבקש אותה ישירות מהפרופיל שלך.',
+      btnText: 'לאזור האישי שלי',
       btnUrl: 'https://newgenfinance.co.il/members/',
     },
     access_granted: {
       subject: 'הגישה לקורס אושרה! 🚀',
       title: 'הגישה אושרה!',
-      preheader: 'תוכל עכשיו להתחיל ללמוד ב-Investor Academy',
-      body: 'שלום ' + name + ',<br><br>שמחים לבשר שהגישה שלך ל-Investor Academy אושרה!<br><br>תוכל עכשיו להתחיל ללמוד.',
-      btnText: 'התחל ללמוד עכשיו',
+      preheader: 'מוכן להתחיל? הקורס מחכה לך',
+      body: 'היי ' + name + ',<br><br>אישרתי לך גישה ל-Investor Academy! 🎉<br><br>הקורס בנוי מ-4 שלבים — החל מהבסיס של שוק ההון, דרך אסטרטגיית השקעות ערך, וכלה בכלים טכנולוגיים לניתוח מניות.<br><br>תתחיל מהפרק הראשון ותתקדם בקצב שלך.',
+      btnText: 'התחל ללמוד עכשיו →',
       btnUrl: 'https://newgenfinance.co.il/investor-academy/lessons/chapter-1.html',
     },
     access_denied: {
       subject: 'עדכון לגבי בקשת הגישה שלך',
       title: 'עדכון על בקשתך',
-      preheader: 'עדכון לגבי בקשת הגישה שלך לקורס',
-      body: 'שלום ' + name + ',<br><br>לאחר בדיקה, לא ניתן לאשר את בקשתך בשלב זה.<br><br>לשאלות פנה אלינו ישירות.',
-      btnText: 'צור קשר',
+      preheader: 'עדכון קצר על הבקשה שלך',
+      body: 'היי ' + name + ',<br><br>תודה על הסבלנות.<br><br>בדקתי את הבקשה שלך, ולצערי לא יכולתי לאשר אותה בשלב הזה.<br><br>אם אתה חושב שזו טעות, או שיש לך שאלות — פשוט תשיב למייל הזה ואני אבדוק מחדש.',
+      btnText: 'שלח לי הודעה',
       btnUrl: 'mailto:yair@newgenfinance.co.il',
     },
   };
@@ -105,7 +105,7 @@ function createEmailTemplate(type, data) {
 '                       text-align:center;border-top:1px solid #e5e2df;\n' +
 '                       border-radius:0 0 16px 16px;">\n' +
 '              <p style="margin:0 0 6px;font-size:12px;color:#9b9794;">\n' +
-'                &copy; 2025 NewGen Finance &mdash; כל הזכויות שמורות\n' +
+'                &copy; ' + new Date().getFullYear() + ' NewGen Finance &mdash; כל הזכויות שמורות\n' +
 '              </p>\n' +
 '              <a href="https://newgenfinance.co.il"\n' +
 '                 style="font-size:12px;color:#5e817d;text-decoration:none;">\n' +
