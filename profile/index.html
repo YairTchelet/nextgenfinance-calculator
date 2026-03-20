@@ -605,6 +605,10 @@
       .nav-user-link { display: none; }
       .mobile-menu-btn { display: flex; }
     }
+    select#req-message:focus {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(94, 129, 125, 0.15);
+    }
   </style>
 </head>
 <body>
@@ -848,8 +852,16 @@
               '<input type="text" id="req-phone" placeholder="05X-XXXXXXX">' +
             '</div>' +
             '<div class="form-field">' +
-              '<label for="req-message">הודעה</label>' +
-              '<textarea id="req-message" placeholder="ספר לנו קצת על עצמך ולמה אתה מעוניין בקורס"></textarea>' +
+              '<label for="req-message">למה אתה מעוניין בקורס?</label>' +
+              '<select id="req-message" style="font-family:var(--font);font-size:0.95rem;font-weight:500;color:var(--text-dark);background:#f4f0ed;border:1.5px solid #c8c4c1;border-radius:10px;padding:11px 14px;width:100%;direction:rtl;outline:none;cursor:pointer;">' +
+                '<option value="" disabled selected>בחר סיבה...</option>' +
+                '<option value="רוצה ללמוד להשקיע בעצמי ולא לסמוך על אחרים">רוצה ללמוד להשקיע בעצמי</option>' +
+                '<option value="יש לי חסכונות ואני רוצה לדעת מה לעשות איתם">יש לי חסכונות ואני לא יודע מה לעשות איתם</option>' +
+                '<option value="מתחיל מאפס ורוצה להבין את שוק ההון">מתחיל מאפס ורוצה להבין שוק ההון</option>' +
+                '<option value="כבר משקיע אבל רוצה לשפר את הגישה שלי">כבר משקיע אבל רוצה לשפר</option>' +
+                '<option value="רוצה להשיג עצמאות פיננסית בטווח הארוך">רוצה עצמאות פיננסית</option>' +
+                '<option value="סיבה אחרת">סיבה אחרת</option>' +
+              '</select>' +
             '</div>' +
             '<button type="submit" class="btn access-request-btn" id="req-submit-btn">שלח בקשה</button>' +
           '</form>' +
