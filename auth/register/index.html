@@ -222,6 +222,22 @@
     }
 
     .card-footer-link a:hover { text-decoration: underline; }
+
+    /* ── Redirect notice ── */
+    .redirect-notice {
+      display: none;
+      background: #eef6f5;
+      border: 1px solid #a8ddd6;
+      border-radius: 10px;
+      padding: 11px 14px;
+      font-size: 0.875rem;
+      color: #1a6b5e;
+      line-height: 1.55;
+      margin-bottom: 22px;
+      text-align: center;
+    }
+
+    .redirect-notice.visible { display: block; }
   </style>
 </head>
 <body>
@@ -229,6 +245,11 @@
   <div class="card">
     <a href="/" class="logo">NewGen <span>Finance</span></a>
     <h1 class="page-title">יצירת חשבון</h1>
+
+    <div class="redirect-notice" id="redirect-notice">
+      הדף שניסית לגשת אליו זמין לחברים רשומים בלבד.<br>
+      צור חשבון חינמי כדי להמשיך.
+    </div>
 
     <!-- Google OAuth -->
     <button class="btn-google" id="google-btn" type="button">
@@ -277,6 +298,10 @@
   <!-- Config -->
   <script src="/assets/js/supabase-config.js"></script>
   <script>
+    if (sessionStorage.getItem('redirectAfterLogin')) {
+      document.getElementById('redirect-notice').classList.add('visible');
+    }
+
     const _client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const form       = document.getElementById('register-form');
