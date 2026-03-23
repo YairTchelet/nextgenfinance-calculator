@@ -493,3 +493,224 @@
       .hp-hamburger { display: flex; }
       .hp-mobile-menu { display: flex; }
     }
+
+/* ═══════════════════════════════════════════════════════════════════
+   V2 ADDITIONS — new chart types, versus, sell/hold, feedback extras
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Chart extras ────────────────────────────────────────────────── */
+.chart-no-data {
+    text-align: center; color: var(--text-muted); padding: 2rem 1rem; font-size: 0.9em;
+}
+/* Segments table */
+.segments-table {
+    width: 100%; border-collapse: collapse; font-size: 0.9em;
+    margin: 0.5rem 0;
+}
+.segments-table th {
+    background: var(--surface-dim); padding: 8px 10px; text-align: right;
+    font-weight: 600; color: var(--text-secondary); border-bottom: 2px solid var(--border-color);
+}
+.segments-table td { padding: 8px 10px; border-bottom: 1px solid var(--border-color); }
+.seg-name { font-weight: 500; color: var(--text-primary); }
+.seg-num { text-align: center; font-weight: 600; }
+.seg-positive { color: var(--success); }
+.seg-negative { color: var(--danger); }
+
+/* Waterfall table */
+.waterfall-table {
+    width: 100%; border-collapse: collapse; font-size: 0.88em; margin: 0.5rem 0;
+}
+.waterfall-table th {
+    background: var(--surface-dim); padding: 7px 8px; text-align: center;
+    font-weight: 600; color: var(--text-secondary); border-bottom: 2px solid var(--border-color);
+}
+.waterfall-table td { padding: 7px 8px; border-bottom: 1px solid var(--border-color); text-align: center; }
+.wf-year { font-weight: 600; color: var(--text-primary); text-align: right; }
+.wf-positive { color: var(--success); font-weight: 600; }
+.wf-negative { color: var(--danger); font-weight: 600; }
+
+/* No-chart placeholder */
+.no-chart-message {
+    display: flex; align-items: center; justify-content: center;
+    gap: 10px; padding: 2rem 1rem; color: var(--text-muted);
+    font-size: 0.95em; font-style: italic;
+    border: 2px dashed var(--border-color); border-radius: var(--radius-xs);
+    margin: 0.5rem 0;
+}
+.no-chart-icon { font-size: 1.5em; }
+
+/* ── Phase 3 — Feedback collapsibles ────────────────────────────── */
+.feedback-collapsible {
+    margin-top: 0.75rem; border-radius: var(--radius-xs);
+    border: 1px solid var(--border-color); overflow: hidden;
+}
+.feedback-collapsible.counter-signal {
+    background: linear-gradient(135deg, rgba(237,242,247,0.8), rgba(226,232,240,0.6));
+    border-color: #a0aec0;
+}
+.feedback-collapsible.worked-example {
+    background: linear-gradient(135deg, rgba(235,248,255,0.9), rgba(190,227,248,0.5));
+    border-color: #63b3ed;
+}
+.feedback-collapsible.sell-triggers {
+    background: linear-gradient(135deg, rgba(255,245,245,0.9), rgba(254,215,215,0.5));
+    border-color: var(--danger);
+}
+.feedback-collapsible.due-diligence {
+    background: linear-gradient(135deg, rgba(240,253,244,0.9), rgba(198,246,213,0.5));
+    border-color: var(--success);
+}
+.collapsible-header {
+    display: flex; align-items: center; gap: 8px;
+    width: 100%; padding: 10px 14px; background: none; border: none;
+    cursor: pointer; text-align: right; font-family: 'Rubik', sans-serif;
+    font-size: 0.9em; font-weight: 600; color: var(--text-primary);
+    transition: background 0.15s ease;
+}
+.collapsible-header:hover { background: rgba(0,0,0,0.04); }
+.collapsible-icon { font-size: 1em; flex-shrink: 0; }
+.collapsible-title { flex: 1; }
+.collapsible-arrow {
+    font-size: 0.75em; color: var(--text-muted); transition: transform 0.25s ease;
+    flex-shrink: 0;
+}
+.feedback-collapsible.open .collapsible-arrow { transform: rotate(180deg); }
+.collapsible-body {
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+    padding: 0 14px;
+    color: var(--text-secondary); font-size: 0.9em; line-height: 1.7;
+}
+.feedback-collapsible.open .collapsible-body {
+    max-height: 600px; padding: 0 14px 12px;
+}
+.worked-example-steps {
+    margin: 0; padding-right: 1.25rem; display: flex; flex-direction: column; gap: 6px;
+}
+.worked-example-steps li { color: var(--text-secondary); }
+.collapsible-body ul { margin: 0; padding-right: 1.25rem; }
+.collapsible-body ul li { margin-bottom: 6px; }
+
+/* ── Phase 4 — Versus round ─────────────────────────────────────── */
+.versus-round-card {
+    background: linear-gradient(135deg, #f0f4ff, #e8ecff);
+    border: 2px solid #667eea; border-radius: var(--radius-sm);
+    padding: 1.5rem; position: relative; margin-bottom: 1.5rem;
+}
+.versus-round-title {
+    font-size: 1.5em; font-weight: 700; color: var(--text-primary);
+    margin: 0.5rem 0 0.5rem; text-align: center;
+}
+.versus-round-desc {
+    color: var(--text-secondary); text-align: center; margin-bottom: 1.25rem;
+    font-size: 0.95em; line-height: 1.6;
+}
+.versus-companies-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 1.25rem;
+}
+.versus-company {
+    background: var(--surface-bg); border-radius: var(--radius-sm);
+    border: 2px solid var(--border-color); padding: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.versus-company.versus-winner {
+    border-color: var(--success); box-shadow: 0 0 0 3px rgba(72,187,120,0.25);
+    background: linear-gradient(135deg, #f0fff4, #c6f6d5);
+}
+.versus-company.versus-loser {
+    border-color: var(--danger); opacity: 0.65;
+    background: linear-gradient(135deg, #fff5f5, #fed7d7);
+}
+.versus-company-header { margin-bottom: 0.75rem; }
+.versus-label {
+    display: inline-block; padding: 3px 10px; border-radius: 12px;
+    font-size: 0.8em; font-weight: 700; margin-bottom: 6px;
+}
+.versus-label-a { background: var(--accent-gradient); color: white; }
+.versus-label-b { background: linear-gradient(135deg, #9f7aea, #6b46c1); color: white; }
+.versus-company-name { font-size: 1.05em; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+.versus-company-meta { font-size: 0.8em; color: var(--text-muted); display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.symbol-badge {
+    background: var(--accent-gradient); color: white;
+    padding: 2px 8px; border-radius: 6px; font-weight: 600; font-size: 0.85em;
+}
+.sector-tag { color: var(--text-secondary); }
+.versus-company-desc {
+    font-size: 0.88em; color: var(--text-secondary); line-height: 1.5;
+    margin-bottom: 0.75rem; border-bottom: 1px dashed var(--border-color); padding-bottom: 0.75rem;
+}
+.versus-metrics-list { display: flex; flex-direction: column; gap: 4px; margin-bottom: 0.75rem; }
+.versus-metric-row {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.85em; padding: 3px 0;
+    border-bottom: 1px dotted var(--border-color);
+}
+.versus-metric-row:last-child { border-bottom: none; }
+.versus-metric-name { color: var(--text-muted); }
+.versus-metric-value { font-weight: 600; color: var(--accent-end); }
+.versus-sparkline-row { display: flex; align-items: center; gap: 10px; }
+.versus-sparkline-label { font-size: 0.78em; color: var(--text-muted); font-weight: 500; white-space: nowrap; }
+.versus-sparkline { flex: 1; }
+.versus-a-button {
+    background: var(--accent-gradient); color: white;
+    flex-grow: 1; box-shadow: 0 4px 6px rgba(56,178,172,0.25);
+}
+.versus-b-button {
+    background: linear-gradient(135deg, #9f7aea, #6b46c1); color: white;
+    flex-grow: 1; box-shadow: 0 4px 6px rgba(107,70,193,0.25);
+}
+.versus-a-button:hover, .versus-b-button:hover { transform: translateY(-2px); }
+
+/* ── Phase 5 — Sell/Hold round ───────────────────────────────────── */
+.sellhold-round-card {
+    background: linear-gradient(135deg, #fffaf0, #feebcb);
+    border: 2px solid #dd6b20; border-radius: var(--radius-sm);
+    padding: 1.5rem; position: relative; margin-bottom: 1.5rem;
+}
+.portfolio-card {
+    background: var(--surface-bg); border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color); padding: 1.25rem;
+    margin-bottom: 1.25rem; box-shadow: var(--shadow-sm);
+}
+.portfolio-company-name {
+    font-size: 1.2em; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;
+}
+.portfolio-meta { font-size: 0.85em; color: var(--text-muted); margin-bottom: 1rem; }
+.portfolio-info-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+}
+.portfolio-info-item { text-align: center; }
+.portfolio-info-label { font-size: 0.78em; color: var(--text-muted); margin-bottom: 4px; font-weight: 500; }
+.portfolio-info-value { font-size: 1.1em; font-weight: 700; color: var(--text-primary); }
+.portfolio-change { font-size: 1.2em !important; }
+.portfolio-change.positive { color: var(--success); }
+.portfolio-change.negative { color: var(--danger); }
+.sell-button {
+    background: linear-gradient(135deg, var(--danger), #e53e3e); color: white;
+    flex-grow: 1; box-shadow: 0 4px 6px rgba(229,62,62,0.25);
+}
+.hold-button {
+    background: linear-gradient(135deg, var(--success), #38a169); color: white;
+    flex-grow: 1; box-shadow: 0 4px 6px rgba(56,161,105,0.25);
+}
+.sell-button:hover, .hold-button:hover { transform: translateY(-2px); }
+.sellhold-round-card .info-section.events { background: rgba(255,255,255,0.7); }
+
+/* Bias warning box */
+.bias-warning {
+    background: linear-gradient(135deg, #fffbeb, #fef3c7);
+    border: 2px solid var(--warning); border-radius: var(--radius-xs);
+    padding: 0.85rem 1rem; margin: 0.75rem 0;
+    font-size: 0.9em; color: #744210; line-height: 1.6;
+}
+
+/* ── Responsive overrides ─────────────────────────────────────────── */
+@media (max-width: 640px) {
+    .versus-companies-grid { grid-template-columns: 1fr; }
+    .portfolio-info-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+    .versus-round-title { font-size: 1.25em; }
+    .versus-company-desc { font-size: 0.85em; }
+}
