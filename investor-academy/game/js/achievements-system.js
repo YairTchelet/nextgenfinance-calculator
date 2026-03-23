@@ -63,10 +63,22 @@ window.BuffettMastery = (function () {
     }
 
     // ── Storage ───────────────────────────────────────────────────────────────
+    // Map affinity IDs (from principle-selection) → mastery IDs
+    const _AFFINITY_TO_MASTERY = {
+        'moat': 'moat', 'owner-earnings': 'fcf', 'value-trap': 'valuation',
+        'margin-of-safety': 'margin_of_safety', 'growth-trap': 'growth',
+        'circle-of-competence': 'long_term', 'too-hard': 'long_term',
+        'leverage-risk': 'risk', 'cyclical-trap': 'risk', 'turnaround': 'management',
+        'dividend-sustainability': 'fcf', 'management-quality': 'management',
+        'sunk-cost': 'psychology', 'loss-aversion': 'psychology',
+        'disposition-effect': 'psychology'
+    };
+
     function getDefaultMastery() {
         const principles = {};
         PRINCIPLE_DEFS.forEach(p => {
-            principles[p.id] = { attempts: 0, correct: 0, streak: 0, bestStreak: 0, lastSeen: null };
+            principles[p.id] = { attempts: 0, correct: 0, streak: 0, bestStreak: 0, lastSeen: null,
+                identifyAttempts: 0, identifyCorrect: 0 };
         });
         return {
             principles,
@@ -90,6 +102,14 @@ window.BuffettMastery = (function () {
             data.principles = Object.assign({}, def.principles, data.principles || {});
             data.overall = Object.assign({}, def.overall, data.overall || {});
             if (!Array.isArray(data.history)) data.history = [];
+            // Back-compat: ensure identifyAttempts / identifyCorrect on existing principle objects
+            PRINCIPLE_DEFS.forEach(p => {
+                if (!data.principles[p.id]) data.principles[p.id] = def.principles[p.id];
+                else {
+                    if (data.principles[p.id].identifyAttempts === undefined) data.principles[p.id].identifyAttempts = 0;
+                    if (data.principles[p.id].identifyCorrect  === undefined) data.principles[p.id].identifyCorrect  = 0;
+                }
+            });
             return data;
         } catch (e) { return getDefaultMastery(); }
     }
@@ -330,6 +350,9 @@ window.BuffettMastery = (function () {
                     </div>
                     <div class="principle-name">${p.name}</div>
                     <div class="principle-attempts">${stats.attempts > 0 ? stats.attempts + ' ניסיונות' : 'טרם'}</div>
+                    ${stats.identifyAttempts > 0
+                        ? `<div class="principle-identify">זיהוי: ${Math.round(stats.identifyCorrect / stats.identifyAttempts * 100)}%</div>`
+                        : ''}
                 </div>`;
         }).join('');
 
@@ -398,6 +421,17 @@ window.BuffettMastery = (function () {
             </div>`;
     }
 
+    // ── Record principle identification (called from principle-selection UI) ─
+    function recordPrincipleIdentification(affinityId, isCorrect) {
+        const masteryId = _AFFINITY_TO_MASTERY[affinityId];
+        if (!masteryId) return;
+        const mastery = loadMastery();
+        if (!mastery.principles[masteryId]) return;
+        mastery.principles[masteryId].identifyAttempts++;
+        if (isCorrect) mastery.principles[masteryId].identifyCorrect++;
+        saveMastery(mastery);
+    }
+
     // ── Public API ────────────────────────────────────────────────────────────
     return {
         BELT_DEFS, PRINCIPLE_DEFS,
@@ -405,6 +439,7 @@ window.BuffettMastery = (function () {
         loadAchievements, saveAchievements,
         getBeltById, computeBelt, computeBeltProgress,
         recordRound, normalizePrincipleId,
+        recordPrincipleIdentification,
         onGameEnd, getCompanyWeight, weightedShuffle,
         showMasteryDashboard, hideMasteryDashboard,
         showBeltCelebration
@@ -468,6 +503,14 @@ window.BuffettAchievements = (function () {
           check: (g, m) => m.overall.totalGames >= 50 },
         { id: 'hint_avoider',   category: 'persistence', icon: '🧩', name: 'ללא רמזים',             description: 'השלם משחק מבלי לקנות רמז',
           check: (g, m) => g.total >= 10 && !g.hintUsed },
+
+        // Category 6 — Principle Identification
+        { id: 'principle_spotter',  category: 'identify', icon: '🎯', name: 'מזהה עקרונות',
+          description: 'זהה נכון 20 עקרונות לפני ההחלטה',
+          check: (g, m) => Object.values(m.principles).reduce((s, p) => s + (p.identifyCorrect || 0), 0) >= 20 },
+        { id: 'principle_streak_5', category: 'identify', icon: '🎪', name: 'זיהוי מושלם',
+          description: 'זהה 5 עקרונות ברצף',
+          check: (g, m) => (g.maxPrincipleStreak || 0) >= 5 },
 
         // Category 5 — Bonus
         { id: 'night_owl',      category: 'bonus',       icon: '🦉', name: 'ינשוף לילה',            description: 'שחק אחרי 22:00',

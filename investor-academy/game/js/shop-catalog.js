@@ -548,6 +548,17 @@ BuffettShop.items = {
                 message: '!השקעה מצוינת',
                 duration: 3000
             }
+        },
+        {
+            id: 'effect-target-glow',
+            name: 'זוהר מטרה',
+            description: '🏆 הישג: זהה 5 עקרונות ברצף',
+            price: 0,
+            rarity: 'epic',
+            unlockedBy: 'principle_streak_5',
+            preview: '🎯',
+            effectType: 'targetGlow',
+            effectConfig: { color: '#2a9d8f', rings: 3, duration: 1200 }
         }
     ],
 
@@ -665,6 +676,16 @@ BuffettShop.items = {
             unlockedBy: 'hot_streak',
             preview: '🔥',
             displayText: '🔥 מאסטר הרצף'
+        },
+        {
+            id: 'title-principle-identifier',
+            name: 'מזהה עקרונות',
+            description: '🏆 הישג: זהה נכון 20 עקרונות לפני ההחלטה',
+            price: 0,
+            rarity: 'epic',
+            unlockedBy: 'principle_spotter',
+            preview: '🎯',
+            displayText: '🎯 מזהה עקרונות'
         }
     ],
 

@@ -142,7 +142,10 @@ const GameState = {
     gameRounds: [], roundOutcomes: [], lastDecision: null,
     // Mastery & achievement tracking
     startTime: 0, maxStreak: 0, maxCombo: 0,
-    hintUsedThisGame: false, versusCorrect: 0, sellHoldCorrect: 0
+    hintUsedThisGame: false, versusCorrect: 0, sellHoldCorrect: 0,
+    // Principle pre-selection
+    principleSelected: null, principleCorrect: false,
+    principleStreak: 0, maxPrincipleStreak: 0
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -542,6 +545,235 @@ function injectFeedbackExtras(feedback, containerEl) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// PRINCIPLE PRE-SELECTION  (pre-decision pedagogical step)
+// ─────────────────────────────────────────────────────────────────────────────
+
+const PRINCIPLE_NAMES = {
+    'moat':                 'חפיר כלכלי',
+    'owner-earnings':       'רווחי בעלים',
+    'value-trap':           'מלכודת ערך',
+    'margin-of-safety':     'מרווח ביטחון',
+    'growth-trap':          'מלכודת צמיחה',
+    'circle-of-competence': 'מעגל כשירות',
+    'leverage-risk':        'סיכון מינוף',
+    'too-hard':             'קשה מדי',
+    'cyclical-trap':        'מלכודת מחזוריות',
+    'turnaround':           'שיקום',
+    'dividend-sustainability': 'קיימות דיבידנד',
+    'management-quality':   'איכות הנהלה'
+};
+
+const SELLHOLD_PRINCIPLE_NAMES = {
+    'sunk-cost':          'עלות שקועה',
+    'loss-aversion':      'שנאת הפסד',
+    'disposition-effect': 'אפקט דיספוזיציה',
+    'management-quality': 'איכות הנהלה',
+    'moat':               'חפיר כלכלי',
+    'margin-of-safety':   'מרווח ביטחון'
+};
+
+const PRINCIPLE_AFFINITIES = {
+    'moat':                  ['value-trap', 'growth-trap', 'margin-of-safety'],
+    'owner-earnings':        ['value-trap', 'margin-of-safety', 'management-quality'],
+    'value-trap':            ['moat', 'margin-of-safety', 'dividend-sustainability'],
+    'margin-of-safety':      ['value-trap', 'moat', 'growth-trap'],
+    'growth-trap':           ['moat', 'margin-of-safety', 'owner-earnings'],
+    'circle-of-competence':  ['too-hard', 'growth-trap', 'moat'],
+    'leverage-risk':         ['value-trap', 'margin-of-safety', 'dividend-sustainability'],
+    'too-hard':              ['circle-of-competence', 'growth-trap', 'moat'],
+    'cyclical-trap':         ['value-trap', 'margin-of-safety', 'turnaround'],
+    'turnaround':            ['value-trap', 'cyclical-trap', 'management-quality'],
+    'dividend-sustainability':['value-trap', 'leverage-risk', 'owner-earnings'],
+    'management-quality':    ['owner-earnings', 'moat', 'turnaround']
+};
+
+// Map game-data principle IDs (mastery IDs) → affinity map keys
+const _P_NORM = {
+    moat: 'moat', competitive_advantage: 'moat', competitive: 'moat',
+    management: 'management-quality', management_quality: 'management-quality',
+    fcf: 'owner-earnings', free_cash_flow: 'owner-earnings', cash_flow: 'owner-earnings',
+    financials: 'owner-earnings', financial_analysis: 'owner-earnings',
+    capital: 'owner-earnings', capital_allocation: 'owner-earnings',
+    margin_of_safety: 'margin-of-safety',
+    growth: 'growth-trap', sustainable_growth: 'growth-trap',
+    valuation: 'value-trap', value: 'value-trap',
+    long_term: 'too-hard', patience: 'too-hard',
+    risk: 'leverage-risk', risk_management: 'leverage-risk',
+    psychology: 'sunk-cost', behavioral: 'sunk-cost',
+    // sell-hold bias IDs (may come from game data)
+    sunk_cost: 'sunk-cost', loss_aversion: 'loss-aversion',
+    disposition: 'disposition-effect', disposition_effect: 'disposition-effect'
+};
+
+// Map affinity IDs → mastery principle IDs (for identification tracking)
+const _AFFINITY_TO_MASTERY = {
+    'moat': 'moat',
+    'owner-earnings': 'fcf',
+    'value-trap': 'valuation',
+    'margin-of-safety': 'margin_of_safety',
+    'growth-trap': 'growth',
+    'circle-of-competence': 'long_term',
+    'too-hard': 'long_term',
+    'leverage-risk': 'risk',
+    'cyclical-trap': 'risk',
+    'turnaround': 'management',
+    'dividend-sustainability': 'fcf',
+    'management-quality': 'management',
+    'sunk-cost': 'psychology',
+    'loss-aversion': 'psychology',
+    'disposition-effect': 'psychology'
+};
+
+function _normToAffinityKey(rawId, roundType) {
+    if (!rawId) return roundType === 'sellhold' ? 'sunk-cost' : 'moat';
+    const key = String(rawId).toLowerCase().replace(/[-\s]+/g, '_');
+    const mapped = _P_NORM[key];
+    if (mapped) return mapped;
+    // Direct match in the affinity/sellhold pool
+    const normHyphen = String(rawId).toLowerCase().replace(/[_\s]+/g, '-');
+    if (roundType === 'sellhold' && SELLHOLD_PRINCIPLE_NAMES[normHyphen]) return normHyphen;
+    if (PRINCIPLE_NAMES[normHyphen]) return normHyphen;
+    return roundType === 'sellhold' ? 'sunk-cost' : 'moat';
+}
+
+function _buildPrincipleOptions(rawPrincipleId, roundType) {
+    const isSellHold = roundType === 'sellhold';
+    const pool = isSellHold ? SELLHOLD_PRINCIPLE_NAMES : PRINCIPLE_NAMES;
+    const correctId = _normToAffinityKey(rawPrincipleId, roundType);
+    // Ensure correctId is in pool; if not, pick first
+    const validId = pool[correctId] ? correctId : Object.keys(pool)[0];
+    // Build distractor list
+    let distractors = (PRINCIPLE_AFFINITIES[validId] || []).filter(d => pool[d]);
+    // Fill from remaining pool if needed
+    if (distractors.length < 3) {
+        const rest = Object.keys(pool).filter(k => k !== validId && !distractors.includes(k));
+        while (distractors.length < 3 && rest.length) {
+            distractors.push(rest.splice(Math.floor(Math.random() * rest.length), 1)[0]);
+        }
+    }
+    const options = [
+        { id: validId, name: pool[validId], correct: true },
+        ...distractors.slice(0, 3).map(d => ({ id: d, name: pool[d] || d, correct: false }))
+    ];
+    // Fisher-Yates shuffle
+    for (let i = options.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [options[i], options[j]] = [options[j], options[i]];
+    }
+    return { options, correctId: validId };
+}
+
+// Tracks which buttons to un-lock after principle is selected
+let _principleDecisiveButtons = [];
+
+function _renderPrincipleSelection(roundType, rawPrincipleId) {
+    // Clean up any previous instance and unlock buttons
+    const prev = document.getElementById('principle-selection');
+    if (prev) prev.remove();
+    _principleDecisiveButtons.forEach(b => b && b.classList.remove('principle-pending'));
+    _principleDecisiveButtons = [];
+
+    const { options, correctId } = _buildPrincipleOptions(rawPrincipleId, roundType);
+
+    // Determine the parent container and anchor element (insert before this)
+    let anchors;
+    if (roundType === 'company') {
+        anchors = { parent: DOM.companyDisplay, before: DOM.decisionButtons };
+        _principleDecisiveButtons = [DOM.buyButton, DOM.passButton];
+    } else if (roundType === 'versus') {
+        anchors = { parent: DOM.versusDisplay, before: DOM.versusButtons };
+        _principleDecisiveButtons = [DOM.chooseAButton, DOM.chooseBButton];
+    } else if (roundType === 'sellhold') {
+        anchors = { parent: DOM.sellHoldDisplay, before: DOM.sellHoldButtons };
+        _principleDecisiveButtons = [DOM.sellButton, DOM.holdButton];
+    } else return;
+
+    // Disable decision buttons until principle picked
+    _principleDecisiveButtons.forEach(b => b && b.classList.add('principle-pending'));
+
+    const sel = document.createElement('div');
+    sel.id = 'principle-selection';
+    sel.className = 'principle-selection';
+    sel.innerHTML = `
+        <div class="principle-selection-title">🎯 מה העיקרון המרכזי שצריך להנחות אותך כאן?</div>
+        <div class="principle-options">
+            ${options.map(o =>
+                `<button class="principle-btn" data-pid="${o.id}" data-correct="${o.correct}">${o.name}</button>`
+            ).join('')}
+        </div>`;
+
+    // Wire up button clicks
+    sel.querySelectorAll('.principle-btn').forEach(btn => {
+        btn.addEventListener('click', () => _handlePrincipleSelect(btn.dataset.pid, correctId));
+    });
+
+    anchors.parent.insertBefore(sel, anchors.before);
+}
+
+function _handlePrincipleSelect(selectedId, correctId) {
+    if (GameState.principleSelected !== null) return; // already picked
+    GameState.principleSelected = selectedId;
+    GameState.principleCorrect = (selectedId === correctId);
+
+    // Highlight selected (no reveal of correct/wrong yet — just selection state)
+    document.querySelectorAll('#principle-selection .principle-btn').forEach(btn => {
+        btn.disabled = true;
+        if (btn.dataset.pid === selectedId) btn.classList.add('principle-selected');
+    });
+
+    // Unlock decision buttons
+    _principleDecisiveButtons.forEach(b => b && b.classList.remove('principle-pending'));
+    _principleDecisiveButtons = [];
+}
+
+// Inject principle result into a feedback container (call after decision)
+function _injectPrincipleResult(feedbackEl, rawPrincipleId, roundType, decisionWasCorrect) {
+    if (GameState.principleSelected === null) return 0;
+    const correctAffinityId = _normToAffinityKey(rawPrincipleId, roundType);
+    const pool = roundType === 'sellhold' ? { ...PRINCIPLE_NAMES, ...SELLHOLD_PRINCIPLE_NAMES } : PRINCIPLE_NAMES;
+    const correctName  = pool[correctAffinityId] || correctAffinityId;
+    const selectedName = pool[GameState.principleSelected] || GameState.principleSelected;
+
+    let bonus = 0, html = '', cssClass = '';
+    if (GameState.principleCorrect && decisionWasCorrect) {
+        bonus = 50;
+        html = `🎯 <strong>+50 נק'</strong> — זיהית נכון: ${correctName}!`;
+        cssClass = 'principle-result-correct';
+    } else if (GameState.principleCorrect && !decisionWasCorrect) {
+        bonus = 25;
+        html = `🎯 <strong>+25 נק'</strong> — זיהית נכון: ${correctName} (אבל ההחלטה שגויה)`;
+        cssClass = 'principle-result-partial';
+    } else {
+        html = `🎯 העיקרון היה: <strong>${correctName}</strong> (בחרת: ${selectedName})`;
+        cssClass = 'principle-result-wrong';
+    }
+
+    const div = document.createElement('div');
+    div.className = `principle-result ${cssClass}`;
+    div.innerHTML = html;
+    const continueBtn = feedbackEl.querySelector('.continue-button');
+    continueBtn ? feedbackEl.insertBefore(div, continueBtn) : feedbackEl.appendChild(div);
+
+    // Update principle streak tracking
+    if (GameState.principleCorrect) {
+        GameState.principleStreak++;
+        GameState.maxPrincipleStreak = Math.max(GameState.maxPrincipleStreak, GameState.principleStreak);
+    } else {
+        GameState.principleStreak = 0;
+    }
+
+    // Score the bonus
+    if (bonus > 0) { GameState.score += bonus; DOM.scoreEl.textContent = GameState.score; }
+
+    // Record identification in mastery (System 1A extension)
+    if (window.BuffettMastery && typeof BuffettMastery.recordPrincipleIdentification === 'function') {
+        BuffettMastery.recordPrincipleIdentification(correctAffinityId, GameState.principleCorrect);
+    }
+
+    return bonus;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // PHASE 2 — CHART RENDERING
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -819,6 +1051,7 @@ function displayCompany(company) {
     hideAllRoundDisplays();
     DOM.companyDisplay.classList.remove('hidden');
     requestAnimationFrame(() => renderChart(DOM.linePlotContainer, company, false));
+    _renderPrincipleSelection('company', company.feedback?.principle?.id);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -868,6 +1101,7 @@ function displayVersusRound(round) {
 
     hideAllRoundDisplays();
     DOM.versusDisplay.classList.remove('hidden');
+    _renderPrincipleSelection('versus', round.feedback?.principle?.id);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -903,6 +1137,7 @@ function displaySellHoldRound(round) {
 
     hideAllRoundDisplays();
     DOM.sellHoldDisplay.classList.remove('hidden');
+    _renderPrincipleSelection('sellhold', round.feedback?.principle?.id);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1000,6 +1235,9 @@ function handleInvestmentDecision(decision) {
 
     // Mastery tracking (System 1A)
     if (window.BuffettMastery) BuffettMastery.recordRound(feedback.principle?.id, isCorrect);
+
+    // Principle pre-selection result + bonus
+    _injectPrincipleResult(DOM.decisionFeedback, feedback.principle?.id, 'company', isCorrect);
 
     // Phase 3 + 7: inject extras (counterSignal, workedExample, sellTriggers, dueDiligence)
     const extrasData = { ...feedback };
@@ -1126,6 +1364,9 @@ function handleVersusDecision(choice) {
     if (aEl) aEl.classList.add(correctIsA ? 'versus-winner' : 'versus-loser');
     if (bEl) bEl.classList.add(correctIsA ? 'versus-loser' : 'versus-winner');
 
+    // Principle pre-selection result
+    _injectPrincipleResult(DOM.versusFeedback, fb.principle?.id, 'versus', isCorrect);
+
     // Inject extras (counterArgument as counterSignalExplanation, workedExample)
     injectFeedbackExtras({
         counterSignalExplanation: fb.counterArgument,
@@ -1171,6 +1412,9 @@ function handleSellHoldDecision(decision) {
     // Mastery tracking (System 1A)
     if (window.BuffettMastery) BuffettMastery.recordRound(fb.principle?.id, isCorrect);
     if (isCorrect) GameState.sellHoldCorrect++;
+
+    // Principle pre-selection result
+    _injectPrincipleResult(DOM.sellHoldFeedback, fb.principle?.id, 'sellhold', isCorrect);
 
     // Bias warning (Phase 5) — insert before continue button
     if (fb.biasWarning) {
@@ -1251,6 +1495,7 @@ function loadCurrentRound() {
 
     GameState.decisionMade = false; GameState.projectionsUnlocked = false; GameState.hintUsed = false;
     GameState.lastDecision = null;
+    GameState.principleSelected = null; GameState.principleCorrect = false;
 
     selectedReasonings = [];
     reasoningSubmitted = false;
@@ -1348,6 +1593,7 @@ function endGame() {
             maxCombo: GameState.maxCombo,
             versusCorrect: GameState.versusCorrect,
             sellHoldCorrect: GameState.sellHoldCorrect,
+            maxPrincipleStreak: GameState.maxPrincipleStreak,
             durationMs: Date.now() - (GameState.startTime || Date.now()),
             previousLow
         };
@@ -1374,6 +1620,8 @@ function initGame() {
     GameState.projectionsUnlocked = false; GameState.hintUsed = false; GameState.lastDecision = null;
     GameState.startTime = 0; GameState.maxStreak = 0; GameState.maxCombo = 0;
     GameState.hintUsedThisGame = false; GameState.versusCorrect = 0; GameState.sellHoldCorrect = 0;
+    GameState.principleSelected = null; GameState.principleCorrect = false;
+    GameState.principleStreak = 0; GameState.maxPrincipleStreak = 0;
     resetCombo();
 
     DOM.correctDecisionsEl.textContent = "0";
