@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>לוח בקרה | Investor Academy | NewGen Finance</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="canonical" href="https://www.newgenfinance.co.il/investor-academy/dashboard/">
+
+    <!-- Auth protection (requires login, not necessarily has_access) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <script src="/assets/js/supabase-config.js"></script>
+    <script src="/assets/js/auth-guard.js"></script>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800&family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/investor-academy/assets/css/course.css">
+
+    <style>
+        /* ═══ DASHBOARD BASE ════════════════════════════════════════════ */
+        body {
+            background: linear-gradient(135deg, #0d1117 0%, #161b22 60%, #0d1f2d 100%);
+            min-height: 100vh;
+            color: #e2e8f0;
+        }
+
+        .db-container {
+            max-width: 960px;
+            width: 95%;
+            margin: 0 auto;
+            padding: 2rem 0 4rem;
+        }
+
+        /* ═══ GLASS CARD ════════════════════════════════════════════════ */
+        .db-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.09);
+            border-radius: 18px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+        .db-card-title {
+            font-size: 1.1em;
+            font-weight: 700;
+            color: #f0f8fa;
+            margin: 0 0 1.25rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* ═══ SKELETON ══════════════════════════════════════════════════ */
+        .skeleton {
+            background: linear-gradient(90deg, rgba(255,255,255,0.06) 25%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.06) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 10px;
+        }
+        @keyframes shimmer {
+            0%   { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        .sk-block { height: 18px; margin-bottom: 10px; }
+        .sk-w60 { width: 60%; }
+        .sk-w40 { width: 40%; }
+        .sk-w80 { width: 80%; }
+        .sk-h80 { height: 80px; }
+        .sk-card { height: 120px; border-radius: 14px; }
+        .sk-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+        .sk-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+
+        /* ═══ FADE-IN ═══════════════════════════════════════════════════ */
+        .db-content { opacity: 0; transition: opacity 0.4s ease; }
+        .db-content.visible { opacity: 1; }
+        .db-hidden { display: none !important; }
+
+        /* ═══ SECTION 1 — WELCOME ═══════════════════════════════════════ */
+        .welcome-card {
+            background: linear-gradient(135deg, rgba(42,157,143,0.15), rgba(99,179,237,0.1));
+            border-color: rgba(42,157,143,0.25);
+        }
+        .welcome-greeting {
+            font-size: 1.7em;
+            font-weight: 800;
+            color: #f0f8fa;
+            margin: 0 0 0.4rem 0;
+        }
+        .welcome-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        .badge-access {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 700;
+        }
+        .badge-course { background: rgba(236,201,75,0.2); color: #f6e05e; border: 1px solid rgba(236,201,75,0.35); }
+        .badge-free   { background: rgba(160,174,192,0.15); color: #a0aec0; border: 1px solid rgba(160,174,192,0.25); }
+        .welcome-since { font-size: 0.85em; color: #718096; }
+
+        /* ═══ SECTION 2 — COURSE ════════════════════════════════════════ */
+        .course-progress-bar-wrap {
+            background: rgba(255,255,255,0.08);
+            border-radius: 8px;
+            height: 8px;
+            margin-bottom: 1.25rem;
+            overflow: hidden;
+        }
+        .course-progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2a9d8f, #38b2ac);
+            border-radius: 8px;
+            transition: width 0.8s ease;
+        }
+        .course-progress-label {
+            font-size: 0.83em;
+            color: #a0aec0;
+            margin-bottom: 0.75rem;
+        }
+        .chapters-scroll {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.75rem;
+        }
+        .chapter-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 0.85rem 0.6rem;
+            text-align: center;
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.2s ease, background 0.2s ease;
+            position: relative;
+            display: block;
+        }
+        .chapter-card:hover { transform: translateY(-2px); background: rgba(255,255,255,0.08); }
+        .chapter-card.done { border-color: rgba(72,187,120,0.4); }
+        .chapter-card.locked { opacity: 0.5; pointer-events: none; }
+        .chapter-icon { font-size: 1.5em; margin-bottom: 0.35rem; }
+        .chapter-label { font-size: 0.78em; font-weight: 700; color: #f0f8fa; line-height: 1.3; }
+        .chapter-sub { font-size: 0.68em; color: #a0aec0; margin-top: 0.2rem; }
+        .chapter-done-badge {
+            position: absolute;
+            top: 6px; left: 6px;
+            font-size: 0.75em;
+        }
+        .chapter-time { font-size: 0.65em; color: #718096; margin-top: 0.3rem; }
+
+        /* ═══ SECTION 3 — QUIZZES ═══════════════════════════════════════ */
+        .quiz-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88em;
+        }
+        .quiz-table th {
+            text-align: right;
+            padding: 0.5rem 0.75rem;
+            color: #718096;
+            font-weight: 600;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .quiz-table td {
+            padding: 0.55rem 0.75rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            color: #e2e8f0;
+        }
+        .quiz-score-pill {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.82em;
+            font-weight: 700;
+        }
+        .score-high  { background: rgba(72,187,120,0.2);  color: #9ae6b4; }
+        .score-mid   { background: rgba(246,224,94,0.15); color: #f6e05e; }
+        .score-low   { background: rgba(252,129,129,0.15); color: #fc8181; }
+        .quiz-avg {
+            font-size: 0.85em;
+            color: #a0aec0;
+            margin-top: 0.75rem;
+            text-align: left;
+        }
+        .empty-state {
+            text-align: center;
+            color: #718096;
+            font-size: 0.9em;
+            padding: 1rem 0;
+        }
+
+        /* ═══ SECTION 4 — GAME ══════════════════════════════════════════ */
+        .game-main {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 1.25rem;
+            align-items: start;
+        }
+        .belt-display {
+            border-radius: 12px;
+            padding: 0.85rem 1.1rem;
+            text-align: center;
+            min-width: 110px;
+        }
+        .belt-emoji { font-size: 2em; display: block; margin-bottom: 0.3rem; }
+        .belt-name { font-size: 0.82em; font-weight: 700; line-height: 1.2; }
+        .game-stats { display: flex; gap: 1.25rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
+        .game-stat { text-align: center; }
+        .game-stat-val { font-size: 1.4em; font-weight: 800; color: #f0f8fa; }
+        .game-stat-lbl { font-size: 0.72em; color: #718096; }
+        .principle-dots {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 0.5rem;
+        }
+        .principle-dot {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            cursor: default;
+            position: relative;
+            flex-shrink: 0;
+        }
+        .principle-dot[title]:hover::after {
+            content: attr(title);
+            position: absolute;
+            bottom: 130%;
+            right: 50%;
+            transform: translateX(50%);
+            white-space: nowrap;
+            background: #1a2e38;
+            color: #f0f8fa;
+            font-size: 0.7em;
+            padding: 3px 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.15);
+            z-index: 100;
+            pointer-events: none;
+        }
+        .game-no-data { color: #718096; font-size: 0.9em; }
+        .db-link {
+            display: inline-block;
+            margin-top: 0.75rem;
+            font-size: 0.85em;
+            color: #63b3ed;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .db-link:hover { color: #90cdf4; }
+
+        /* ═══ SECTION 5 — CALCULATOR ════════════════════════════════════ */
+        .calc-count { font-size: 0.85em; color: #a0aec0; margin-bottom: 0.85rem; }
+        .calc-analyses {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+        .calc-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255,255,255,0.04);
+            border-radius: 10px;
+            padding: 0.6rem 0.85rem;
+            font-size: 0.88em;
+        }
+        .calc-name { font-weight: 600; color: #f0f8fa; }
+        .calc-meta { font-size: 0.78em; color: #718096; margin-top: 1px; }
+        .score-pill {
+            padding: 0.2rem 0.65rem;
+            border-radius: 12px;
+            font-size: 0.82em;
+            font-weight: 700;
+        }
+
+        /* ═══ SECTION 6 — ACHIEVEMENTS ══════════════════════════════════ */
+        .ach-summary {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            flex-wrap: wrap;
+        }
+        .ach-count { font-size: 1.4em; font-weight: 800; color: #f0f8fa; }
+        .ach-count-lbl { font-size: 0.75em; color: #718096; margin-top: 1px; }
+        .ach-badges-preview {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .ach-badge-mini {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(42,157,143,0.15);
+            border: 1px solid rgba(42,157,143,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4em;
+        }
+
+        /* ═══ SECTION 7 — QUICK ACTIONS ═════════════════════════════════ */
+        .quick-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+        .quick-card {
+            display: block;
+            text-decoration: none;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.09);
+            border-radius: 14px;
+            padding: 1.25rem 1rem;
+            text-align: center;
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+        .quick-card:hover { transform: translateY(-3px); background: rgba(255,255,255,0.08); }
+        .quick-icon { font-size: 2em; margin-bottom: 0.5rem; display: block; }
+        .quick-title { font-size: 0.9em; font-weight: 700; color: #f0f8fa; }
+        .quick-sub { font-size: 0.75em; color: #718096; margin-top: 0.25rem; }
+
+        /* ═══ ERROR STATE ════════════════════════════════════════════════ */
+        .db-error-card {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #718096;
+        }
+        .db-error-icon { font-size: 2.5em; margin-bottom: 0.75rem; }
+        .db-retry-btn {
+            margin-top: 1rem;
+            background: rgba(42,157,143,0.2);
+            border: 1px solid rgba(42,157,143,0.4);
+            color: #81e6d9;
+            padding: 0.6rem 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        /* ═══ RESPONSIVE ════════════════════════════════════════════════ */
+        @media (max-width: 720px) {
+            .chapters-scroll { grid-template-columns: repeat(3, 1fr); }
+            .quick-grid { grid-template-columns: 1fr 1fr; }
+            .game-main { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 480px) {
+            .chapters-scroll { grid-template-columns: repeat(2, 1fr); }
+            .quick-grid { grid-template-columns: 1fr; }
+            .welcome-greeting { font-size: 1.4em; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ═══ NAVBAR ══════════════════════════════════════════════════════════ -->
+<nav class="course-nav">
+    <div class="course-nav-brand">
+        <button class="hbnav-btn" id="hbnav-toggle" aria-label="תפריט פרקים" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+        <a href="/" class="course-nav-logo">
+            <img src="/assets/images/logo.png" alt="NewGen Finance לוגו">
+            <span>NewGen Finance</span>
+        </a>
+    </div>
+    <div class="course-nav-links">
+        <a href="/members/" class="course-nav-link">אזור החברים</a>
+        <button class="course-nav-signout" id="dashboard-signout-btn">התנתקות</button>
+    </div>
+</nav>
+
+<!-- Hamburger overlay + panel -->
+<div class="hbnav-overlay" id="hbnav-overlay"></div>
+<nav class="hbnav-panel" id="hbnav-panel" aria-label="ניווט פרקים">
+    <div class="hbnav-panel-title">אתר</div>
+    <a href="/" class="hbnav-site-link">ראשי</a>
+    <a href="/#tools" class="hbnav-site-link">כלים</a>
+    <a href="/#course" class="hbnav-site-link">קורסים</a>
+    <a href="/members/" class="hbnav-site-link">אזור החברים</a>
+    <div class="hbnav-divider"></div>
+    <div class="hbnav-panel-title">הקורס — פרקים</div>
+    <a href="/investor-academy/lessons/intro.html" class="hbnav-item">
+        <div class="hbnav-icon">&#128640;</div>
+        <div class="hbnav-text"><span class="hbnav-name">הקדמה</span><span class="hbnav-sub">למסע שלך</span></div>
+    </a>
+    <a href="/investor-academy/lessons/chapter-1.html" class="hbnav-item">
+        <div class="hbnav-icon">&#128273;</div>
+        <div class="hbnav-text"><span class="hbnav-name">פרק 1</span><span class="hbnav-sub">שלב הכניסה</span></div>
+    </a>
+    <a href="/investor-academy/lessons/chapter-2.html" class="hbnav-item">
+        <div class="hbnav-icon">&#129517;</div>
+        <div class="hbnav-text"><span class="hbnav-name">פרק 2</span><span class="hbnav-sub">שלב האסטרטגיה</span></div>
+    </a>
+    <a href="/investor-academy/lessons/chapter-3.html" class="hbnav-item">
+        <div class="hbnav-icon">&#128295;</div>
+        <div class="hbnav-text"><span class="hbnav-name">פרק 3</span><span class="hbnav-sub">שלב הכלים</span></div>
+    </a>
+    <a href="/investor-academy/lessons/chapter-4.html" class="hbnav-item">
+        <div class="hbnav-icon">&#128200;</div>
+        <div class="hbnav-text"><span class="hbnav-name">פרק 4</span><span class="hbnav-sub">שלב הניהול</span></div>
+    </a>
+    <div class="hbnav-divider"></div>
+    <a href="/investor-academy/dashboard/" class="hbnav-item active">
+        <div class="hbnav-icon">&#128202;</div>
+        <div class="hbnav-text"><span class="hbnav-name">לוח בקרה</span><span class="hbnav-sub">ההתקדמות שלי</span></div>
+    </a>
+    <a href="/investor-academy/game/" class="hbnav-item">
+        <div class="hbnav-icon">&#127918;</div>
+        <div class="hbnav-text"><span class="hbnav-name">משחק השקעות</span><span class="hbnav-sub">בחן את עצמך</span></div>
+    </a>
+</nav>
+
+<!-- ═══ MAIN ══════════════════════════════════════════════════════════════ -->
+<div class="db-container">
+
+    <!-- Loading skeleton -->
+    <div id="db-loading">
+        <div class="db-card">
+            <div class="skeleton sk-block sk-w40" style="height:26px;margin-bottom:12px"></div>
+            <div class="skeleton sk-block sk-w60"></div>
+        </div>
+        <div class="db-card">
+            <div class="skeleton sk-block sk-w40" style="height:20px;margin-bottom:16px"></div>
+            <div class="skeleton sk-block sk-h80"></div>
+        </div>
+        <div class="sk-row">
+            <div class="skeleton sk-card"></div>
+            <div class="skeleton sk-card"></div>
+        </div>
+        <div class="sk-row-3">
+            <div class="skeleton" style="height:100px;border-radius:14px"></div>
+            <div class="skeleton" style="height:100px;border-radius:14px"></div>
+            <div class="skeleton" style="height:100px;border-radius:14px"></div>
+        </div>
+    </div>
+
+    <!-- Dashboard content (hidden until data loads) -->
+    <div id="db-content" class="db-content db-hidden">
+
+        <!-- §1 Welcome -->
+        <div class="db-card welcome-card">
+            <div class="welcome-greeting" id="w-greeting"></div>
+            <div class="welcome-meta">
+                <span id="w-badge" class="badge-access"></span>
+                <span id="w-since" class="welcome-since"></span>
+            </div>
+        </div>
+
+        <!-- §2 Course Progress -->
+        <div class="db-card">
+            <div class="db-card-title">📚 הקורס שלי</div>
+            <div class="course-progress-label" id="cp-label">0/5 שיעורים הושלמו</div>
+            <div class="course-progress-bar-wrap">
+                <div class="course-progress-bar-fill" id="cp-bar" style="width:0%"></div>
+            </div>
+            <div class="chapters-scroll" id="chapters-grid"></div>
+        </div>
+
+        <!-- §3 Quiz Results -->
+        <div class="db-card">
+            <div class="db-card-title">📝 מבחנים</div>
+            <div id="quiz-section"></div>
+        </div>
+
+        <!-- §4 Game Mastery -->
+        <div class="db-card">
+            <div class="db-card-title">🎮 משחק ההשקעות</div>
+            <div id="game-section"></div>
+        </div>
+
+        <!-- §5 Calculator -->
+        <div class="db-card">
+            <div class="db-card-title">📊 ניתוח חברות</div>
+            <div id="calc-section"></div>
+        </div>
+
+        <!-- §6 Achievements -->
+        <div class="db-card">
+            <div class="db-card-title">🏆 הישגים</div>
+            <div id="ach-section"></div>
+        </div>
+
+        <!-- §7 Quick Actions -->
+        <div class="db-card">
+            <div class="db-card-title">⚡ פעולות מהירות</div>
+            <div class="quick-grid" id="quick-actions"></div>
+        </div>
+    </div>
+
+    <!-- Error state -->
+    <div id="db-error" class="db-hidden">
+        <div class="db-card db-error-card">
+            <div class="db-error-icon">⚠️</div>
+            <div>לא הצלחנו לטעון את הנתונים</div>
+            <button class="db-retry-btn" id="db-retry-btn">נסה שוב</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════
+// DASHBOARD SCRIPT
+// ════════════════════════════════════════════════════════
+(async function () {
+    'use strict';
+
+    // ── Supabase client (auth-guard.js already set window.__supabase) ──────
+    const sb = window.__supabase ||
+        (window.supabase && window.SUPABASE_URL &&
+            window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY));
+    if (!sb) { showError(); return; }
+
+    // ── Signout ────────────────────────────────────────────────────────────
+    document.getElementById('dashboard-signout-btn').addEventListener('click', async () => {
+        await sb.auth.signOut();
+        window.location.replace('/auth/login/');
+    });
+
+    // ── Hamburger panel ────────────────────────────────────────────────────
+    (function () {
+        var btn = document.getElementById('hbnav-toggle');
+        var panel = document.getElementById('hbnav-panel');
+        var overlay = document.getElementById('hbnav-overlay');
+        function open()  { btn.classList.add('open'); panel.classList.add('open'); overlay.classList.add('open'); btn.setAttribute('aria-expanded','true'); }
+        function close() { btn.classList.remove('open'); panel.classList.remove('open'); overlay.classList.remove('open'); btn.setAttribute('aria-expanded','false'); }
+        btn.addEventListener('click', () => panel.classList.contains('open') ? close() : open());
+        overlay.addEventListener('click', close);
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+    })();
+
+    // ── Cache ──────────────────────────────────────────────────────────────
+    const CACHE_KEY = 'db_cache_v1';
+    const CACHE_TTL = 5 * 60 * 1000;
+    function saveCache(d) { try { localStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), d })); } catch(e) {} }
+    function loadCache() {
+        try {
+            const c = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
+            if (c && Date.now() - c.t < CACHE_TTL) return c.d;
+        } catch(e) {}
+        return null;
+    }
+
+    // ── Helpers ────────────────────────────────────────────────────────────
+    function heDate(iso) {
+        const d = new Date(iso);
+        const months = ['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
+        return `${months[d.getMonth()]} ${d.getFullYear()}`;
+    }
+    function fmtDate(iso) {
+        const d = new Date(iso);
+        return d.toLocaleDateString('he-IL', { day: 'numeric', month: 'short' });
+    }
+    function fmtTime(secs) {
+        if (!secs || secs < 60) return null;
+        const m = Math.round(secs / 60);
+        if (m < 60) return `${m} דק׳`;
+        const h = Math.floor(m / 60), r = m % 60;
+        return r ? `${h}ש׳ ${r}ד׳` : `${h} שעות`;
+    }
+    function scoreClass(pct) {
+        if (pct >= 70) return 'score-high';
+        if (pct >= 45) return 'score-mid';
+        return 'score-low';
+    }
+    function calcScoreClass(score) {
+        if (score >= 75) return 'score-high';
+        if (score >= 50) return 'score-mid';
+        return 'score-low';
+    }
+
+    // ── Chapter metadata ───────────────────────────────────────────────────
+    const CHAPTERS = [
+        { id: 'intro',     label: 'הקדמה',  sub: 'למסע שלך',       icon: '🚀', href: '/investor-academy/lessons/intro.html',     quizCh: null },
+        { id: 'chapter-1', label: 'פרק 1',  sub: 'שלב הכניסה',     icon: '🔑', href: '/investor-academy/lessons/chapter-1.html',  quizCh: 1    },
+        { id: 'chapter-2', label: 'פרק 2',  sub: 'שלב האסטרטגיה',  icon: '🧪', href: '/investor-academy/lessons/chapter-2.html',  quizCh: 2    },
+        { id: 'chapter-3', label: 'פרק 3',  sub: 'שלב הכלים',      icon: '🔧', href: '/investor-academy/lessons/chapter-3.html',  quizCh: 3    },
+        { id: 'chapter-4', label: 'פרק 4',  sub: 'שלב הניהול',     icon: '📈', href: '/investor-academy/lessons/chapter-4.html',  quizCh: 4    },
+    ];
+
+    // ── Belt metadata ──────────────────────────────────────────────────────
+    const BELTS = {
+        white:  { name: 'חגורה לבנה',  color: '#e0e0e0', textColor: '#333',    emoji: '⬜' },
+        yellow: { name: 'חגורה צהובה', color: '#f6e05e', textColor: '#744210', emoji: '🟨' },
+        orange: { name: 'חגורה כתומה', color: '#f6ad55', textColor: '#7b341e', emoji: '🟧' },
+        green:  { name: 'חגורה ירוקה', color: '#68d391', textColor: '#1c4532', emoji: '🟩' },
+        blue:   { name: 'חגורה כחולה', color: '#63b3ed', textColor: '#1a365d', emoji: '🟦' },
+        brown:  { name: 'חגורה חומה',  color: '#c05621', textColor: '#fff5e6', emoji: '🟫' },
+        black:  { name: 'חגורה שחורה', color: '#1a1a2e', textColor: '#f6e05e', emoji: '⬛' },
+    };
+
+    // ── Achievement icons reference ────────────────────────────────────────
+    const ACH_ICONS = {
+        first_steps:'⭐', moat_master:'🏰', fcf_expert:'💰', value_hunter:'🎯',
+        all_principles:'🎓', hot_streak:'🔥', perfect_game:'💎', combo_king:'⚡',
+        vs_champion:'⚔️', sell_hold_pro:'🧠', orange_belt:'🟧', green_belt:'🟩',
+        black_belt:'⬛', hundred_rounds:'💯', multi_difficulty:'🏆', daily_player:'📅',
+        ten_games:'🎮', comeback_kid:'💪', marathon:'🏃', hint_avoider:'🦅',
+        night_owl:'🦉', early_bird:'🐦', expert_debut:'🚀', speed_demon:'⚡',
+        glossary_master:'📖', principle_spotter:'🔍', principle_streak_5:'🎯',
+    };
+
+    // ── UI helpers ─────────────────────────────────────────────────────────
+    function showLoading() {
+        document.getElementById('db-loading').style.display = '';
+        document.getElementById('db-content').classList.add('db-hidden');
+        document.getElementById('db-error').classList.add('db-hidden');
+    }
+    function showContent() {
+        document.getElementById('db-loading').style.display = 'none';
+        const content = document.getElementById('db-content');
+        content.classList.remove('db-hidden');
+        setTimeout(() => content.classList.add('visible'), 20);
+    }
+    function showError() {
+        document.getElementById('db-loading').style.display = 'none';
+        document.getElementById('db-content').classList.add('db-hidden');
+        document.getElementById('db-error').classList.remove('db-hidden');
+    }
+
+    // ── One-time localStorage → Supabase migration ─────────────────────────
+    async function migrateLocalStorage(userId, existingProgress) {
+        if (existingProgress) return; // already have server data
+        const mRaw = localStorage.getItem('buffett_mastery');
+        const aRaw = localStorage.getItem('buffett_achievements');
+        if (!mRaw && !aRaw) return;
+        try {
+            const mastery = mRaw ? JSON.parse(mRaw) : {};
+            const achievements = aRaw ? JSON.parse(aRaw) : {};
+            const hasData = (mastery.overall?.totalGames > 0) || (achievements.unlocked?.length > 0);
+            if (!hasData) return;
+            await sb.from('user_progress').upsert({
+                user_id: userId,
+                mastery_data: mastery,
+                achievements: achievements
+            }, { onConflict: 'user_id' });
+        } catch(e) {}
+    }
+
+    // ── Load all data ─────────────────────────────────────────────────────
+    async function loadData() {
+        const { data: { user } } = await sb.auth.getUser();
+        if (!user) { window.location.replace('/auth/login/'); return; }
+
+        // Check cache
+        const cached = loadCache();
+        if (cached && cached.userId === user.id) {
+            render(cached);
+            return;
+        }
+
+        showLoading();
+
+        try {
+            const [profileRes, courseRes, quizRes, gameRes, calcRes] = await Promise.all([
+                sb.from('profiles').select('*').eq('id', user.id).maybeSingle(),
+                sb.from('course_progress').select('*').eq('user_id', user.id),
+                sb.from('quiz_results').select('chapter, score, max_score').eq('user_id', user.id).order('chapter'),
+                sb.from('user_progress').select('*').eq('user_id', user.id).maybeSingle(),
+                sb.from('calculator_analyses')
+                    .select('company_name, total_score, mode, updated_at')
+                    .eq('user_id', user.id)
+                    .order('updated_at', { ascending: false })
+                    .limit(5),
+            ]);
+
+            const gameProgress = gameRes.data;
+            await migrateLocalStorage(user.id, gameProgress);
+
+            // Re-fetch game progress if migration may have just inserted it
+            let finalGameProgress = gameProgress;
+            if (!gameProgress) {
+                const refetch = await sb.from('user_progress').select('*').eq('user_id', user.id).maybeSingle();
+                finalGameProgress = refetch.data;
+            }
+
+            const data = {
+                userId: user.id,
+                profile:   profileRes.data  || { full_name: '', has_access: false, created_at: new Date().toISOString() },
+                course:    courseRes.data   || [],
+                quizzes:   quizRes.data     || [],
+                game:      finalGameProgress,
+                calc:      calcRes.data     || [],
+            };
+
+            saveCache(data);
+            render(data);
+        } catch(e) {
+            console.error('Dashboard load error:', e);
+            showError();
+        }
+    }
+
+    // ── Render all sections ────────────────────────────────────────────────
+    function render(data) {
+        renderWelcome(data.profile);
+        renderCourse(data.course, data.profile.has_access);
+        renderQuizzes(data.quizzes);
+        renderGame(data.game);
+        renderCalc(data.calc);
+        renderAchievements(data.game);
+        renderQuickActions(data.course, data.profile.has_access);
+        showContent();
+    }
+
+    // §1 Welcome
+    function renderWelcome(p) {
+        const name = p.full_name || 'תלמיד';
+        document.getElementById('w-greeting').textContent = `שלום, ${name}! 👋`;
+        const badge = document.getElementById('w-badge');
+        if (p.has_access) {
+            badge.textContent = 'תלמיד קורס 🎓';
+            badge.className = 'badge-access badge-course';
+        } else {
+            badge.textContent = 'חשבון חינמי';
+            badge.className = 'badge-access badge-free';
+        }
+        if (p.created_at) {
+            document.getElementById('w-since').textContent = `חבר מאז ${heDate(p.created_at)}`;
+        }
+    }
+
+    // §2 Course Progress
+    function renderCourse(courseRows, hasAccess) {
+        const doneIds = new Set(courseRows.map(r => r.chapter));
+        const timeMap = {};
+        courseRows.forEach(r => { timeMap[r.chapter] = r.time_spent_seconds || 0; });
+
+        const completed = CHAPTERS.filter(c => doneIds.has(c.id)).length;
+        document.getElementById('cp-label').textContent = `${completed}/${CHAPTERS.length} שיעורים הושלמו`;
+        document.getElementById('cp-bar').style.width = `${Math.round(completed / CHAPTERS.length * 100)}%`;
+
+        const grid = document.getElementById('chapters-grid');
+        grid.innerHTML = CHAPTERS.map(ch => {
+            const done = doneIds.has(ch.id);
+            const locked = !hasAccess && ch.id !== 'intro';
+            const timeStr = fmtTime(timeMap[ch.id] || 0);
+            return `
+                <a href="${locked ? '#' : ch.href}" class="chapter-card${done ? ' done' : ''}${locked ? ' locked' : ''}">
+                    ${done ? '<span class="chapter-done-badge">✅</span>' : ''}
+                    ${locked ? '<span class="chapter-done-badge">🔒</span>' : ''}
+                    <div class="chapter-icon">${ch.icon}</div>
+                    <div class="chapter-label">${ch.label}</div>
+                    <div class="chapter-sub">${ch.sub}</div>
+                    ${timeStr ? `<div class="chapter-time">${timeStr}</div>` : ''}
+                </a>`;
+        }).join('');
+    }
+
+    // §3 Quiz Results
+    function renderQuizzes(rows) {
+        const el = document.getElementById('quiz-section');
+        if (!rows.length) {
+            el.innerHTML = '<div class="empty-state">עדיין לא עשית מבחנים</div>';
+            return;
+        }
+
+        // Aggregate: best score per chapter
+        const best = {};
+        rows.forEach(r => {
+            const key = r.chapter;
+            if (!best[key] || r.score > best[key].score) best[key] = r;
+        });
+
+        const totalScore = rows.reduce((s, r) => s + r.score, 0);
+        const totalMax   = rows.reduce((s, r) => s + (r.max_score || 1), 0);
+        const avgPct = totalMax > 0 ? Math.round(totalScore / totalMax * 100) : 0;
+
+        const chapterLabel = (n) => {
+            if (n === null || n === undefined) return 'הקדמה';
+            const found = CHAPTERS.find(c => c.quizCh === parseInt(n));
+            return found ? `${found.label} — ${found.sub}` : `פרק ${n}`;
+        };
+
+        const rows_html = Object.values(best).map(r => {
+            const pct = r.max_score ? Math.round(r.score / r.max_score * 100) : 0;
+            return `<tr>
+                <td>${chapterLabel(r.chapter)}</td>
+                <td><span class="quiz-score-pill ${scoreClass(pct)}">${r.score}/${r.max_score} (${pct}%)</span></td>
+            </tr>`;
+        }).join('');
+
+        el.innerHTML = `
+            <table class="quiz-table">
+                <thead><tr><th>פרק</th><th>ציון</th></tr></thead>
+                <tbody>${rows_html}</tbody>
+            </table>
+            <div class="quiz-avg">ממוצע כללי: <strong>${avgPct}%</strong> · ${rows.length} ניסיונות</div>`;
+    }
+
+    // §4 Game Mastery
+    function renderGame(gameData) {
+        const el = document.getElementById('game-section');
+        // Try Supabase data first, then localStorage fallback
+        let mastery = gameData?.mastery_data || null;
+        if (!mastery || !mastery.overall) {
+            try {
+                const raw = localStorage.getItem('buffett_mastery');
+                if (raw) mastery = JSON.parse(raw);
+            } catch(e) {}
+        }
+
+        if (!mastery || !mastery.overall || mastery.overall.totalGames === 0) {
+            el.innerHTML = `
+                <div class="game-no-data">עדיין לא שיחקת — בוא ננסה!</div>
+                <a class="db-link" href="/investor-academy/game/">שחק עכשיו →</a>`;
+            return;
+        }
+
+        const beltId = mastery.overall.currentBelt || 'white';
+        const belt = BELTS[beltId] || BELTS.white;
+
+        // Principle dots
+        const principles = mastery.principles || {};
+        const dotsHtml = Object.entries(principles).map(([id, p]) => {
+            const rate = p.attempts > 0 ? p.correct / p.attempts : -1;
+            let bg;
+            if (rate < 0)     bg = 'rgba(160,174,192,0.3)';
+            else if (rate >= 0.7) bg = '#68d391';
+            else if (rate >= 0.45) bg = '#f6e05e';
+            else bg = '#fc8181';
+            const pctStr = rate >= 0 ? `${Math.round(rate * 100)}%` : '—';
+            return `<div class="principle-dot" style="background:${bg}" title="${id}: ${pctStr}"></div>`;
+        }).join('');
+
+        el.innerHTML = `
+            <div class="game-main">
+                <div class="belt-display" style="background:${belt.color};color:${belt.textColor}">
+                    <span class="belt-emoji">${belt.emoji}</span>
+                    <div class="belt-name">${belt.name}</div>
+                </div>
+                <div>
+                    <div class="game-stats">
+                        <div class="game-stat">
+                            <div class="game-stat-val">${mastery.overall.totalCorrect || 0}</div>
+                            <div class="game-stat-lbl">תשובות נכונות</div>
+                        </div>
+                        <div class="game-stat">
+                            <div class="game-stat-val">${mastery.overall.totalGames || 0}</div>
+                            <div class="game-stat-lbl">משחקים</div>
+                        </div>
+                    </div>
+                    ${dotsHtml ? `<div class="principle-dots">${dotsHtml}</div>` : ''}
+                    <a class="db-link" href="/investor-academy/game/">שחק עכשיו →</a>
+                </div>
+            </div>`;
+    }
+
+    // §5 Calculator
+    function renderCalc(rows) {
+        const el = document.getElementById('calc-section');
+        if (!rows.length) {
+            el.innerHTML = `
+                <div class="empty-state">עדיין לא ניתחת חברות</div>
+                <a class="db-link" href="/calculator/">נסה את המחשבון →</a>`;
+            return;
+        }
+        const analyses = `
+            <div class="calc-count">ניתחת ${rows.length} חברות לאחרונה</div>
+            <div class="calc-analyses">
+                ${rows.map(r => {
+                    const cls = calcScoreClass(r.total_score || 0);
+                    return `<div class="calc-row">
+                        <div>
+                            <div class="calc-name">${r.company_name || '—'}</div>
+                            <div class="calc-meta">${r.mode || ''} · ${fmtDate(r.updated_at)}</div>
+                        </div>
+                        <span class="score-pill ${cls}">${r.total_score || 0}</span>
+                    </div>`;
+                }).join('')}
+            </div>
+            <a class="db-link" href="/calculator/">פתח מחשבון →</a>`;
+        el.innerHTML = analyses;
+    }
+
+    // §6 Achievements
+    function renderAchievements(gameData) {
+        const el = document.getElementById('ach-section');
+        let ach = gameData?.achievements || null;
+        if (!ach) {
+            try { const raw = localStorage.getItem('buffett_achievements'); if (raw) ach = JSON.parse(raw); } catch(e) {}
+        }
+        const unlocked = ach?.unlocked || [];
+        const total = Object.keys(ACH_ICONS).length;
+
+        const lastThree = unlocked.slice(-3).reverse();
+        const badgesHtml = lastThree.map(id => {
+            const icon = ACH_ICONS[id] || '🏅';
+            return `<div class="ach-badge-mini" title="${id}">${icon}</div>`;
+        }).join('');
+
+        el.innerHTML = `
+            <div class="ach-summary">
+                <div>
+                    <div class="ach-count">${unlocked.length}<span style="font-size:0.55em;color:#718096">/${total}</span></div>
+                    <div class="ach-count-lbl">הישגים</div>
+                </div>
+                ${badgesHtml ? `<div class="ach-badges-preview">${badgesHtml}</div>` : ''}
+                <a class="db-link" href="/investor-academy/game/" style="margin-top:0">
+                    ${unlocked.length > 0 ? 'ראה הכל →' : 'התחל לצבור הישגים →'}
+                </a>
+            </div>`;
+    }
+
+    // §7 Quick Actions
+    function renderQuickActions(courseRows, hasAccess) {
+        const doneIds = new Set(courseRows.map(r => r.chapter));
+        const nextChapter = CHAPTERS.find(ch => !doneIds.has(ch.id) && (ch.id === 'intro' || hasAccess));
+        const nextHref = nextChapter ? nextChapter.href : '/investor-academy/';
+
+        document.getElementById('quick-actions').innerHTML = `
+            <a href="${nextHref}" class="quick-card">
+                <span class="quick-icon">📚</span>
+                <div class="quick-title">המשך ללמוד</div>
+                <div class="quick-sub">${nextChapter ? nextChapter.label + ' — ' + nextChapter.sub : 'חזור לקורס'}</div>
+            </a>
+            <a href="/investor-academy/game/" class="quick-card">
+                <span class="quick-icon">🎮</span>
+                <div class="quick-title">תרגול במשחק</div>
+                <div class="quick-sub">בחן את כישורי ההשקעה שלך</div>
+            </a>
+            <a href="/calculator/" class="quick-card">
+                <span class="quick-icon">📊</span>
+                <div class="quick-title">נתח חברה</div>
+                <div class="quick-sub">מחשבון ניתוח מניות</div>
+            </a>`;
+    }
+
+    // ── Retry button ──────────────────────────────────────────────────────
+    document.getElementById('db-retry-btn').addEventListener('click', loadData);
+
+    // ── Kick off ──────────────────────────────────────────────────────────
+    loadData();
+
+})();
+</script>
+
+</body>
+</html>
