@@ -14,10 +14,15 @@ window.BuffettAccess = (function () {
     function _getClient() {
         // Reuse shared client if available (e.g. set by auth-guard.js), else create one
         if (window.__supabase) return window.__supabase;
-        if (window.supabase?.createClient && window.SUPABASE_URL && window.SUPABASE_ANON_KEY) {
-            window.__supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-            return window.__supabase;
-        }
+        // Note: SUPABASE_URL/KEY are const — not on window — so check typeof, not window.X
+        try {
+            if (window.supabase?.createClient &&
+                typeof SUPABASE_URL !== 'undefined' &&
+                typeof SUPABASE_ANON_KEY !== 'undefined') {
+                window.__supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                return window.__supabase;
+            }
+        } catch (e) {}
         return null;
     }
 

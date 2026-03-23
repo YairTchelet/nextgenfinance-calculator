@@ -277,6 +277,10 @@
   <!-- Config -->
   <script src="/assets/js/supabase-config.js"></script>
   <script>
+    // Support both ?redirect= URL param and sessionStorage (set by auth-guard.js)
+    const _urlRedirect = new URLSearchParams(window.location.search).get('redirect');
+    if (_urlRedirect) sessionStorage.setItem('redirectAfterLogin', _urlRedirect);
+
     if (sessionStorage.getItem('redirectAfterLogin')) {
       document.getElementById('redirect-notice').classList.add('visible');
     }

@@ -297,8 +297,18 @@
   <!-- Config -->
   <script src="/assets/js/supabase-config.js"></script>
   <script>
+    // Support ?redirect= URL param — store so login page can use it too
+    const _urlRedirect = new URLSearchParams(window.location.search).get('redirect');
+    if (_urlRedirect) sessionStorage.setItem('redirectAfterLogin', _urlRedirect);
+
     if (sessionStorage.getItem('redirectAfterLogin')) {
       document.getElementById('redirect-notice').classList.add('visible');
+    }
+
+    // Update "already have an account" link to preserve redirect
+    if (_urlRedirect) {
+      const loginLink = document.querySelector('.card-footer-link a[href="/auth/login/"]');
+      if (loginLink) loginLink.href = '/auth/login/?redirect=' + encodeURIComponent(_urlRedirect);
     }
 
     const _client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -355,11 +365,13 @@
       submitBtn.disabled = true;
       submitBtn.textContent = 'יוצר חשבון...';
 
+      const _storedRedirect = sessionStorage.getItem('redirectAfterLogin');
       const { error } = await _client.auth.signUp({
         email,
         password,
         options: {
-          data: { full_name: fullName }
+          data: { full_name: fullName },
+          emailRedirectTo: window.location.origin + (_storedRedirect || '/members/')
         }
       });
 
@@ -379,7 +391,10 @@
 
       // Hide form, show confirmation
       form.style.display = 'none';
-      successMsg.textContent = 'נשלח אליך אימייל לאימות — בדוק את תיבת הדואר שלך';
+      const _afterConfirm = sessionStorage.getItem('redirectAfterLogin');
+      successMsg.textContent = _afterConfirm
+        ? 'נשלח אליך אימייל לאימות — לאחר האישור תועבר חזרה לדף'
+        : 'נשלח אליך אימייל לאימות — בדוק את תיבת הדואר שלך';
       successMsg.classList.add('visible');
     });
   </script>
