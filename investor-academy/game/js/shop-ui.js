@@ -404,6 +404,22 @@ BuffettShopUI.injectStyles = function() {
             border-radius: 5px;
             font-weight: 600;
         }
+
+        /* Achievement Badge */
+        .shop-item-ach-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: linear-gradient(135deg, #b7791f, #ecc94b);
+            color: #1a1a2e;
+            font-size: 0.68em;
+            padding: 3px 7px;
+            border-radius: 5px;
+            font-weight: 700;
+        }
+        .shop-item.ach-locked {
+            opacity: 0.65;
+        }
         
         /* Purchase Animation */
         .shop-item.purchasing {
@@ -621,11 +637,17 @@ BuffettShopUI.renderItems = function(categoryId) {
         const isEquipped = isDecoCategory ? isOwned : (equipped[equipKey] === item.id);
         const canAfford = currentPoints >= item.price;
         const rarity = BuffettShop.rarities[item.rarity];
-        
+
+        // Achievement-locked: item has unlockedBy field and achievement not yet earned
+        const achLocked = item.unlockedBy && window.BuffettAchievements
+            && !BuffettAchievements.isUnlocked(item.unlockedBy) && !isOwned;
+
         let buttonHtml = '';
         let priceClass = item.price === 0 ? 'free' : (canAfford ? '' : 'cant-afford');
-        
-        if (isDecoCategory) {
+
+        if (achLocked) {
+            buttonHtml = `<button class="shop-item-btn buy" disabled style="background:#4a5568;color:#718096;cursor:not-allowed;">🔒 השלם הישג</button>`;
+        } else if (isDecoCategory) {
             // Office decorations: no equip, just buy or "displayed in office"
             if (isOwned) {
                 buttonHtml = `<button class="shop-item-btn equipped">במשרד ✓</button>`;
@@ -658,8 +680,9 @@ BuffettShopUI.renderItems = function(categoryId) {
         }
 
         html += `
-            <div class="shop-item ${isOwned ? 'owned' : ''} ${isEquipped ? 'equipped' : ''}" data-rarity="${item.rarity}" data-id="${item.id}">
+            <div class="shop-item ${isOwned ? 'owned' : ''} ${isEquipped ? 'equipped' : ''} ${achLocked ? 'ach-locked' : ''}" data-rarity="${item.rarity}" data-id="${item.id}">
                 ${isOwned && !item.isDefault ? '<div class="shop-item-owned-badge">ברשותך</div>' : ''}
+                ${item.unlockedBy ? `<div class="shop-item-ach-badge">${achLocked ? '🔒' : '🏆'} הישג</div>` : ''}
                 <div class="shop-item-header">
                     <div class="shop-item-preview">${item.preview}</div>
                     <div class="shop-item-rarity ${item.rarity}">${rarity.name}</div>

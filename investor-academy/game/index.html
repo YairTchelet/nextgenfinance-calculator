@@ -170,9 +170,12 @@ document.getElementById('game-signout-btn').addEventListener('click', async func
                 <button class="difficulty-button locked" id="hard-button" data-difficulty="hard">קשה</button>
             </div>
             <div class="difficulty-description" id="difficulty-description">בחר רמת קושי כדי להתחיל</div>
-            <div style="margin-top: 20px; display: flex; justify-content: center; gap: 12px; align-items: center;">
+            <div style="margin-top: 20px; display: flex; justify-content: center; gap: 12px; align-items: center; flex-wrap: wrap;">
                 <button id="menu-shop-button" style="background: linear-gradient(135deg, #d69e2e, #ecc94b); color: #1a1a2e; padding: 10px 20px; border-radius: 10px; font-weight: 600; cursor: pointer; border: none; font-family: inherit; font-size: 0.95em; display: flex; align-items: center; gap: 8px; transition: transform 0.2s ease, opacity 0.2s ease;">
                     <span>🏪</span> חנות
+                </button>
+                <button id="menu-mastery-button" style="background: linear-gradient(135deg, #2a9d8f, #21867a); color: #f0f8fa; padding: 10px 20px; border-radius: 10px; font-weight: 600; cursor: pointer; border: none; font-family: inherit; font-size: 0.95em; display: flex; align-items: center; gap: 8px; transition: transform 0.2s ease, opacity 0.2s ease;">
+                    <span>📊</span> התקדמות
                 </button>
                 <div id="menu-points-display" style="background: rgba(0,0,0,0.1); padding: 8px 15px; border-radius: 8px; font-size: 0.9em; color: var(--text-secondary);">
                     💰 <span id="menu-points-value">0</span> נקודות
@@ -301,7 +304,9 @@ document.getElementById('game-signout-btn').addEventListener('click', async func
     <script src="js/mascot-system.js"></script>
     <!-- 7. Investor office dashboard -->
     <script src="js/office-system.js"></script>
-    <!-- 8. Core game engine -->
+    <!-- 8. Mastery & achievements system -->
+    <script src="js/achievements-system.js"></script>
+    <!-- 9. Core game engine -->
     <script src="js/game-engine.js"></script>
 </body>
 </html>

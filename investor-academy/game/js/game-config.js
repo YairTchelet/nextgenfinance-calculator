@@ -34,7 +34,9 @@ window.BuffettGame.config = {
         difficulties: 'buffettGameUnlockedDifficulties',
         lifetimeScore: 'buffettGameLifetimeScore',
         highScores: 'buffettGameHighScores',
-        achievements: 'buffettGameAchievements'
+        achievements: 'buffettGameAchievements', // legacy key
+        mastery: 'buffett_mastery',              // System 1
+        newAchievements: 'buffett_achievements'  // System 2
     }
 };
 

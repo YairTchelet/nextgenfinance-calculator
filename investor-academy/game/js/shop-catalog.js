@@ -223,6 +223,31 @@ BuffettShop.items = {
             }
         },
         {
+            id: 'theme-perfect-investor',
+            name: 'משקיע מושלם',
+            description: '🏆 הישג: קבל 10/10 במשחק אחד',
+            price: 0,
+            rarity: 'legendary',
+            unlockedBy: 'perfect_game',
+            preview: '🌟',
+            css: {
+                '--bg-primary': '#f0faf5',
+                '--bg-secondary': '#d8f4e8',
+                '--accent-start': '#1a7a4a',
+                '--accent-end': '#2ecc71',
+                '--text-primary': '#0d3320',
+                '--text-secondary': '#1a5c38',
+                '--text-muted': '#3a8c5e',
+                '--card-bg': 'rgba(240, 250, 245, 0.98)',
+                '--card-border': 'rgba(46, 204, 113, 0.4)',
+                '--border-color': 'rgba(46, 204, 113, 0.15)',
+                '--surface-dim': '#b3eacf',
+                '--surface-bg': '#d8f4e8',
+                '--metric-bg': '#d8f4e8',
+                '--metric-border': '#a0ddbf'
+            }
+        },
+        {
             id: 'theme-berkshire',
             name: 'ברקשייר האת׳ווי',
             description: 'בהשראת משרדי וורן באפט באומהה',
@@ -620,6 +645,26 @@ BuffettShop.items = {
             rarity: 'legendary',
             preview: '🧙',
             displayText: 'החכם מאומהה'
+        },
+        {
+            id: 'title-black-belt',
+            name: 'בעל חגורה שחורה',
+            description: '🏆 הישג: הגע לחגורה השחורה',
+            price: 0,
+            rarity: 'legendary',
+            unlockedBy: 'black_belt',
+            preview: '⬛',
+            displayText: '⬛ בעל חגורה שחורה'
+        },
+        {
+            id: 'title-streak-master',
+            name: 'מאסטר הרצף',
+            description: '🏆 הישג: הגע ל-5 נכונות ברצף',
+            price: 0,
+            rarity: 'epic',
+            unlockedBy: 'hot_streak',
+            preview: '🔥',
+            displayText: '🔥 מאסטר הרצף'
         }
     ],
 
@@ -737,6 +782,16 @@ BuffettShop.items = {
             emoji: '🧓💼',
             special: true,
             unlockMessage: 'השגת את האווטאר הנדיר ביותר!'
+        },
+        {
+            id: 'avatar-sensei',
+            name: 'הסנסיי',
+            description: '🏆 הישג: למד את כל 12 העקרונות',
+            price: 0,
+            rarity: 'legendary',
+            unlockedBy: 'all_principles',
+            preview: '🥋',
+            emoji: '🥋'
         }
     ],
 

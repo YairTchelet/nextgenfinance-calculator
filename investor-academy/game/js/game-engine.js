@@ -139,7 +139,10 @@ const GameState = {
     phase: 'MENU', difficulty: null, currentRound: 0, totalRounds: 10,
     score: 0, correctDecisions: 0, consecutiveCorrect: 0, comboMultiplier: 1,
     decisionMade: false, projectionsUnlocked: false, hintUsed: false,
-    gameRounds: [], roundOutcomes: [], lastDecision: null
+    gameRounds: [], roundOutcomes: [], lastDecision: null,
+    // Mastery & achievement tracking
+    startTime: 0, maxStreak: 0, maxCombo: 0,
+    hintUsedThisGame: false, versusCorrect: 0, sellHoldCorrect: 0
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -297,6 +300,12 @@ function openGlossary() {
     const glossary = window.BuffettGame?.glossary || [];
     DOM.glossaryList.innerHTML = glossary.map(item => `<li class="glossary-item"><div class="glossary-term">${item.term}</div><div>${item.definition}</div></li>`).join('');
     DOM.glossaryOverlay.classList.remove('hidden'); DOM.glossaryOverlay.classList.add('show');
+    // Track for glossary_master achievement
+    if (window.BuffettMastery) {
+        const m = BuffettMastery.loadMastery();
+        m.overall.glossaryOpened = (m.overall.glossaryOpened || 0) + 1;
+        BuffettMastery.saveMastery(m);
+    }
 }
 function closeGlossary() { DOM.glossaryOverlay.classList.remove('show'); DOM.glossaryOverlay.classList.add('hidden'); }
 
@@ -354,8 +363,10 @@ function updateProgressStageDisplay() {
 // ─────────────────────────────────────────────────────────────────────────────
 function handleCorrectDecisionCombo() {
     GameState.consecutiveCorrect++;
+    GameState.maxStreak = Math.max(GameState.maxStreak, GameState.consecutiveCorrect);
     if (GameState.consecutiveCorrect >= 2) {
         GameState.comboMultiplier = Math.min(GameState.consecutiveCorrect, 5);
+        GameState.maxCombo = Math.max(GameState.maxCombo, GameState.comboMultiplier);
         DOM.comboDisplay.textContent = `x${GameState.comboMultiplier} רצף!`;
         DOM.comboDisplay.classList.remove('hidden');
     }
@@ -905,6 +916,7 @@ function handleHintPurchase() {
     const hintCost = Math.round(data.pointValue * 0.5);
     showConfirmModal('רכישת רמז', `האם לרכוש רמז תמורת ${hintCost} נקודות?`, () => {
         GameState.hintUsed = true;
+        GameState.hintUsedThisGame = true;
         const hints = data.hints || [{ text: data.hint }];
         const hintText = hints[0]?.text || data.hint || 'אין רמז זמין';
         if (isSpecial) { DOM.specialHintText.textContent = hintText; DOM.specialHintDisplay.classList.remove('hidden'); DOM.specialHintButton.disabled = true; }
@@ -986,6 +998,9 @@ function handleInvestmentDecision(decision) {
         try { if (isCorrect) BuffettMascot.onCorrect(GameState.consecutiveCorrect); else BuffettMascot.onIncorrect(); } catch (e) { }
     }
 
+    // Mastery tracking (System 1A)
+    if (window.BuffettMastery) BuffettMastery.recordRound(feedback.principle?.id, isCorrect);
+
     // Phase 3 + 7: inject extras (counterSignal, workedExample, sellTriggers, dueDiligence)
     const extrasData = { ...feedback };
     if (company.sellTriggers) extrasData.sellTriggers = company.sellTriggers;
@@ -1043,6 +1058,9 @@ function handleImpactDecision(impact) {
     if (feedback.principle) { DOM.specialPrincipleBadge.textContent = feedback.principle.name; DOM.specialPrincipleBadge.classList.remove('hidden'); }
     else DOM.specialPrincipleBadge.classList.add('hidden');
 
+    // Mastery tracking (System 1A)
+    if (window.BuffettMastery) BuffettMastery.recordRound(feedback.principle?.id, isCorrect);
+
     DOM.correctDecisionsEl.textContent = GameState.correctDecisions;
     DOM.scoreEl.textContent = GameState.score;
     GameState.roundOutcomes[GameState.currentRound] = isCorrect ? 'passed' : 'failed';
@@ -1087,6 +1105,10 @@ function handleVersusDecision(choice) {
     const fb = round.feedback || {};
     if (fb.principle) { DOM.versusPrincipleBadge.textContent = fb.principle.name; DOM.versusPrincipleBadge.classList.remove('hidden'); }
     DOM.versusExplanation.textContent = fb.explanation || '';
+
+    // Mastery tracking (System 1A)
+    if (window.BuffettMastery) BuffettMastery.recordRound(fb.principle?.id, isCorrect);
+    if (isCorrect) GameState.versusCorrect++;
 
     DOM.correctDecisionsEl.textContent = GameState.correctDecisions;
     DOM.scoreEl.textContent = GameState.score;
@@ -1146,6 +1168,10 @@ function handleSellHoldDecision(decision) {
     if (fb.principle) { DOM.sellHoldPrincipleBadge.textContent = fb.principle.name; DOM.sellHoldPrincipleBadge.classList.remove('hidden'); }
     DOM.sellHoldExplanation.textContent = fb.explanation || '';
 
+    // Mastery tracking (System 1A)
+    if (window.BuffettMastery) BuffettMastery.recordRound(fb.principle?.id, isCorrect);
+    if (isCorrect) GameState.sellHoldCorrect++;
+
     // Bias warning (Phase 5) — insert before continue button
     if (fb.biasWarning) {
         const bw = document.createElement('div');
@@ -1181,7 +1207,11 @@ function generateGameRounds() {
     const tierMap = { easy: 1, medium: 2, hard: 3, expert: 4 };
     const tier = tierMap[diff] || 1;
 
-    const companies = [...(window.BuffettGame?.companies?.[diff] || [])].sort(() => Math.random() - 0.5);
+    // System 1D: adaptive weighted selection by principle mastery
+    const rawCompanies = window.BuffettGame?.companies?.[diff] || [];
+    const companies = window.BuffettMastery
+        ? BuffettMastery.weightedShuffle([...rawCompanies], BuffettMastery.getCompanyWeight)
+        : [...rawCompanies].sort(() => Math.random() - 0.5);
     const events = [...(window.BuffettGame?.specialEvents?.[diff] || [])].sort(() => Math.random() - 0.5);
     // Filter versus/sellhold by exact tier; fall back to any tier <= current if empty
     let versus = (window.BuffettGame?.versusRounds || []).filter(r => r.tier === tier);
@@ -1264,6 +1294,11 @@ function startGame() {
 
     if (window.BuffettMascot) { try { BuffettMascot.show(); } catch (e) { } }
 
+    GameState.startTime = Date.now();
+    GameState.maxStreak = 0; GameState.maxCombo = 0;
+    GameState.hintUsedThisGame = false;
+    GameState.versusCorrect = 0; GameState.sellHoldCorrect = 0;
+
     initializeProgressStages();
     generateGameRounds();
     if (GameState.gameRounds.length > 0) loadCurrentRound();
@@ -1297,6 +1332,31 @@ function endGame() {
 
     if (window.BuffettShop && pct >= 60) BuffettShop.effects.playCurrentEffect();
     if (window.BuffettMascot) { try { BuffettMascot.onGameEnd(pct); } catch (e) { } }
+
+    // System 1 + 2: mastery & achievements
+    if (window.BuffettMastery) {
+        const prevHistory = BuffettMastery.loadMastery().history;
+        const previousLow = prevHistory.length > 0 && prevHistory[0].total > 0
+            && (prevHistory[0].correct / prevHistory[0].total) < 0.4;
+        const gameData = {
+            difficulty: GameState.difficulty,
+            correct: GameState.correctDecisions,
+            total: GameState.totalRounds,
+            score: GameState.score,
+            hintUsed: GameState.hintUsedThisGame,
+            maxStreak: GameState.maxStreak,
+            maxCombo: GameState.maxCombo,
+            versusCorrect: GameState.versusCorrect,
+            sellHoldCorrect: GameState.sellHoldCorrect,
+            durationMs: Date.now() - (GameState.startTime || Date.now()),
+            previousLow
+        };
+        const mastery = BuffettMastery.onGameEnd(gameData);
+        if (window.BuffettAchievements) {
+            const newAch = BuffettAchievements.checkAll(gameData, mastery);
+            if (newAch.length > 0) setTimeout(() => BuffettAchievements.showToastsSequentially(newAch), 2000);
+        }
+    }
 }
 
 function endGameWithError(errorMessage) {
@@ -1312,6 +1372,8 @@ function initGame() {
     GameState.currentRound = 0; GameState.correctDecisions = 0; GameState.score = 0;
     GameState.gameRounds = []; GameState.decisionMade = false;
     GameState.projectionsUnlocked = false; GameState.hintUsed = false; GameState.lastDecision = null;
+    GameState.startTime = 0; GameState.maxStreak = 0; GameState.maxCombo = 0;
+    GameState.hintUsedThisGame = false; GameState.versusCorrect = 0; GameState.sellHoldCorrect = 0;
     resetCombo();
 
     DOM.correctDecisionsEl.textContent = "0";
@@ -1392,6 +1454,9 @@ if (openShopButton) openShopButton.addEventListener('click', () => { if (window.
 
 const menuShopButton = document.getElementById('menu-shop-button');
 if (menuShopButton) menuShopButton.addEventListener('click', () => { if (window.BuffettShopUI) BuffettShopUI.open(); });
+
+const menuMasteryButton = document.getElementById('menu-mastery-button');
+if (menuMasteryButton) menuMasteryButton.addEventListener('click', () => { if (window.BuffettMastery) BuffettMastery.showMasteryDashboard(); });
 
 function updateMenuPointsDisplay() {
     const pointsEl = document.getElementById('menu-points-value');
