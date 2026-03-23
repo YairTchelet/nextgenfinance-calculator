@@ -319,8 +319,30 @@ function updateDifficultyButtonsState() {
     const unlocked = Storage.getUnlockedDifficulties();
     [DOM.easyButton, DOM.mediumButton, DOM.hardButton].forEach(btn => {
         const diff = btn.dataset.difficulty;
-        btn.classList.toggle('locked', !unlocked.includes(diff));
-        btn.disabled = !unlocked.includes(diff);
+        const lockedByProgress = !unlocked.includes(diff);
+        const lockedByAccess = window.BuffettAccess ? !BuffettAccess.canPlay(diff) : false;
+        const isLocked = lockedByProgress || lockedByAccess;
+
+        btn.classList.toggle('locked', isLocked);
+        btn.disabled = false; // keep clickable so handlers can show the right modal
+
+        // Subtitle under button label
+        let subtitle = btn.querySelector('.diff-btn-subtitle');
+        if (isLocked) {
+            if (!subtitle) {
+                subtitle = document.createElement('div');
+                subtitle.className = 'diff-btn-subtitle';
+                btn.appendChild(subtitle);
+            }
+            if (lockedByAccess) {
+                const level = window.BuffettAccess ? BuffettAccess.getAccessLevel() : 'guest';
+                subtitle.textContent = (diff === 'medium' && level === 'guest') ? 'הרשמה חינמית' : 'דורש קורס';
+            } else {
+                subtitle.textContent = 'השלם 60%+';
+            }
+        } else {
+            subtitle?.remove();
+        }
     });
 }
 function updateDifficultyDescription(difficulty) {
@@ -329,6 +351,15 @@ function updateDifficultyDescription(difficulty) {
 }
 function selectDifficulty(difficulty) {
     const btn = document.querySelector(`.difficulty-button[data-difficulty="${difficulty}"]`);
+    // Check access tier first
+    if (window.BuffettAccess && !BuffettAccess.canPlay(difficulty)) {
+        if (!BuffettAccess.isLoggedIn()) {
+            BuffettAccess.showLoginModal();
+        } else {
+            BuffettAccess.showAccessModal();
+        }
+        return;
+    }
     if (btn.classList.contains('locked')) { showInfoModal("רמה נעולה", "השלם רמות קודמות (60%+)"); return; }
     GameState.difficulty = difficulty;
     [DOM.easyButton, DOM.mediumButton, DOM.hardButton].forEach(b => b.classList.remove('selected'));
@@ -1733,4 +1764,5 @@ window.addEventListener('load', () => {
     if (window.BuffettMascot) { BuffettMascot.init(); }
     updateMenuPointsDisplay();
     initGame();
+    if (window.BuffettAccess) { BuffettAccess.init(); }
 });

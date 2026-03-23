@@ -1003,3 +1003,133 @@
     .principles-grid { grid-template-columns: repeat(3, 1fr); }
     .achievements-badge-grid { grid-template-columns: repeat(3, 1fr); }
 }
+
+/* ══════════════════════════════════════════════════════════════════════
+   ACCESS / PAYWALL SYSTEM
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* ── Access level indicator ──────────────────────────────────────── */
+.access-level-indicator {
+    display: inline-block;
+    padding: 0.35rem 0.9rem;
+    border-radius: 20px;
+    font-size: 0.82em;
+    font-weight: 600;
+    margin-bottom: 0.85rem;
+}
+.access-guest  { background: rgba(255,255,255,0.12); color: #a0aec0; border: 1px solid rgba(255,255,255,0.15); }
+.access-member { background: rgba(42,157,143,0.15);  color: #81e6d9; border: 1px solid rgba(42,157,143,0.3); }
+.access-course { background: rgba(236,201,75,0.15);  color: #f6e05e; border: 1px solid rgba(236,201,75,0.3); }
+
+/* ── Access CTA below difficulty grid ────────────────────────────── */
+.access-cta {
+    margin-top: 0.65rem;
+    font-size: 0.85em;
+    color: var(--text-secondary);
+}
+.access-cta-link {
+    color: #63b3ed;
+    text-decoration: underline;
+    font-weight: 600;
+}
+.access-cta-link:hover { color: #90cdf4; }
+
+/* ── Difficulty button subtitle ──────────────────────────────────── */
+.diff-btn-subtitle {
+    display: block;
+    font-size: 0.7em;
+    font-weight: 400;
+    margin-top: 3px;
+    color: var(--text-muted);
+    line-height: 1.2;
+}
+.difficulty-button.locked .diff-btn-subtitle { color: #718096; }
+
+/* ── Access modals ───────────────────────────────────────────────── */
+.access-modal-overlay {
+    position: fixed; inset: 0; z-index: 30000;
+    background: rgba(0,0,0,0.65);
+    display: flex; align-items: center; justify-content: center;
+    padding: 1rem;
+}
+.access-modal-overlay.hidden { display: none; }
+.access-modal-card {
+    position: relative;
+    background: #1a2e38;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px;
+    padding: 2rem 1.75rem 1.75rem;
+    max-width: 400px; width: 100%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    direction: rtl;
+}
+.access-modal-close {
+    position: absolute; top: 0.75rem; left: 0.75rem;
+    background: none; border: none; cursor: pointer;
+    color: #718096; font-size: 1.1em; padding: 4px 8px;
+    border-radius: 6px; transition: color 0.2s;
+}
+.access-modal-close:hover { color: #f0f8fa; }
+.access-modal-icon { font-size: 2.5em; margin-bottom: 0.5rem; }
+.access-modal-title {
+    font-size: 1.25em; font-weight: 700;
+    color: #f0f8fa; margin-bottom: 0.6rem;
+}
+.access-modal-body {
+    font-size: 0.92em; color: #a0aec0; margin-bottom: 1rem; line-height: 1.55;
+}
+.access-modal-benefits {
+    text-align: right;
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px; padding: 0.8rem 1rem;
+    margin-bottom: 1.25rem;
+}
+.access-benefit-item {
+    font-size: 0.88em; color: #e2e8f0;
+    padding: 0.25rem 0; border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.access-benefit-item:last-child { border-bottom: none; }
+.access-modal-actions {
+    display: flex; flex-direction: column; gap: 0.6rem;
+}
+.access-btn-primary {
+    display: block; padding: 0.75rem 1.25rem;
+    background: linear-gradient(135deg, #2a9d8f, #21867a);
+    color: #f0f8fa; border-radius: 10px;
+    font-weight: 700; font-size: 0.95em; text-decoration: none;
+    border: none; cursor: pointer; font-family: inherit;
+    transition: opacity 0.2s;
+}
+.access-btn-primary:hover { opacity: 0.9; }
+.access-btn-secondary {
+    display: block; padding: 0.6rem 1.25rem;
+    background: rgba(255,255,255,0.07);
+    color: #a0aec0; border-radius: 10px;
+    font-size: 0.88em; text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.12);
+    cursor: pointer; font-family: inherit;
+    transition: background 0.2s;
+}
+.access-btn-secondary:hover { background: rgba(255,255,255,0.12); color: #f0f8fa; }
+.access-confirm-msg { color: #9ae6b4 !important; font-weight: 600; }
+
+/* ── Course-access callout in mastery dashboard ───────────────────── */
+.mastery-course-callout {
+    background: rgba(99,179,237,0.1);
+    border: 1px solid rgba(99,179,237,0.3);
+    border-radius: 10px;
+    padding: 0.6rem 0.9rem;
+    font-size: 0.85em;
+    color: #90cdf4;
+    margin-bottom: 0.85rem;
+    text-align: right;
+}
+.mastery-course-link {
+    color: #63b3ed; font-weight: 700; text-decoration: underline;
+}
+.mastery-course-link:hover { color: #90cdf4; }
+
+@media (max-width: 480px) {
+    .access-modal-card { padding: 1.5rem 1.25rem; }
+}

@@ -16,10 +16,9 @@
     <meta property="og:locale" content="he_IL">
     <link rel="canonical" href="https://www.newgenfinance.co.il/investor-academy/game/">
 
-    <!-- Auth protection -->
+    <!-- Supabase (auth, not guarded — guest access allowed) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
     <script src="/assets/js/supabase-config.js"></script>
-    <script src="/assets/js/auth-guard.js"></script>
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800&family=Assistant:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -163,6 +162,7 @@ document.getElementById('game-signout-btn').addEventListener('click', async func
             <span id="player-title" style="font-weight: 600; color: var(--text-primary); font-size: 0.95em;"></span>
         </div>
         <div class="difficulty-select" id="difficulty-select">
+            <div id="access-level-indicator" class="access-level-indicator access-guest">🎮 מצב חינמי — רמה קלה בלבד</div>
             <div class="difficulty-title">בחר רמת קושי:</div>
             <div class="difficulty-options">
                 <button class="difficulty-button" id="easy-button" data-difficulty="easy">קל</button>
@@ -170,6 +170,7 @@ document.getElementById('game-signout-btn').addEventListener('click', async func
                 <button class="difficulty-button locked" id="hard-button" data-difficulty="hard">קשה</button>
             </div>
             <div class="difficulty-description" id="difficulty-description">בחר רמת קושי כדי להתחיל</div>
+            <div id="access-cta" class="access-cta"></div>
             <div style="margin-top: 20px; display: flex; justify-content: center; gap: 12px; align-items: center; flex-wrap: wrap;">
                 <button id="menu-shop-button" style="background: linear-gradient(135deg, #d69e2e, #ecc94b); color: #1a1a2e; padding: 10px 20px; border-radius: 10px; font-weight: 600; cursor: pointer; border: none; font-family: inherit; font-size: 0.95em; display: flex; align-items: center; gap: 8px; transition: transform 0.2s ease, opacity 0.2s ease;">
                     <span>🏪</span> חנות
@@ -287,6 +288,87 @@ document.getElementById('game-signout-btn').addEventListener('click', async func
     </div>
     
     <!-- ╔══════════════════════════════════════╗
+         ║  Access modals                        ║
+         ╚══════════════════════════════════════╝ -->
+
+    <!-- Login modal (for guests trying to play medium+) -->
+    <div class="access-modal-overlay hidden" id="access-login-overlay">
+        <div class="access-modal-card">
+            <button class="access-modal-close" id="access-login-close">✕</button>
+            <div class="access-modal-icon">🔓</div>
+            <div class="access-modal-title">פתחו רמות נוספות</div>
+            <div class="access-modal-body">הצטרפו בחינם כדי לשחק גם ברמה הבינונית ולשמור את ההתקדמות שלכם.</div>
+            <div class="access-modal-benefits">
+                <div class="access-benefit-item">✅ גישה לרמה הבינונית</div>
+                <div class="access-benefit-item">✅ שמירת התקדמות</div>
+                <div class="access-benefit-item">✅ לוח הישגים אישי</div>
+            </div>
+            <div class="access-modal-actions">
+                <a href="/auth/register/?redirect=/investor-academy/game/" class="access-btn-primary">הצטרפות חינמית</a>
+                <a href="/auth/login/?redirect=/investor-academy/game/" class="access-btn-secondary">יש לי חשבון — התחברות</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Access request modal (for members without course access trying to play hard/expert) -->
+    <div class="access-modal-overlay hidden" id="access-request-overlay">
+        <div class="access-modal-card">
+            <button class="access-modal-close" id="access-request-close">✕</button>
+            <div class="access-modal-icon">🎓</div>
+            <div class="access-modal-title">הרמות הקשה ומומחה</div>
+            <div id="access-request-form">
+                <div class="access-modal-body">רמות אלו זמינות לתלמידי קורס Investor Academy בלבד.</div>
+                <div class="access-modal-benefits">
+                    <div class="access-benefit-item">🏆 גישה לרמות קשה ומומחה</div>
+                    <div class="access-benefit-item">📈 תרחישים מורכבים ואמיתיים</div>
+                    <div class="access-benefit-item">⬛ פתיחת חגורות גבוהות</div>
+                </div>
+                <div class="access-modal-actions">
+                    <a href="/investor-academy/" class="access-btn-primary">למידע על הקורס</a>
+                    <button class="access-btn-secondary" id="access-request-submit-btn">בקש גישה</button>
+                </div>
+            </div>
+            <div id="access-request-confirm" style="display:none">
+                <div class="access-modal-body access-confirm-msg">✅ הבקשה נשלחה! ניצור איתך קשר בקרוב.</div>
+                <div class="access-modal-actions">
+                    <button class="access-btn-secondary" id="access-confirm-close-btn">סגור</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // ── Access modal event handlers ──
+    document.getElementById('access-login-close').addEventListener('click', () => {
+        if (window.BuffettAccess) BuffettAccess.hideLoginModal();
+    });
+    document.getElementById('access-login-overlay').addEventListener('click', function(e) {
+        if (e.target === this && window.BuffettAccess) BuffettAccess.hideLoginModal();
+    });
+    document.getElementById('access-request-close').addEventListener('click', () => {
+        if (window.BuffettAccess) BuffettAccess.hideAccessModal();
+    });
+    document.getElementById('access-request-overlay').addEventListener('click', function(e) {
+        if (e.target === this && window.BuffettAccess) BuffettAccess.hideAccessModal();
+    });
+    document.getElementById('access-request-submit-btn').addEventListener('click', async function() {
+        this.disabled = true;
+        this.textContent = 'שולח...';
+        const ok = window.BuffettAccess ? await BuffettAccess.submitAccessRequest() : false;
+        if (ok) {
+            document.getElementById('access-request-form').style.display = 'none';
+            document.getElementById('access-request-confirm').style.display = '';
+        } else {
+            this.disabled = false;
+            this.textContent = 'בקש גישה';
+        }
+    });
+    document.getElementById('access-confirm-close-btn').addEventListener('click', () => {
+        if (window.BuffettAccess) BuffettAccess.hideAccessModal();
+    });
+    </script>
+
+    <!-- ╔══════════════════════════════════════╗
          ║  Game modules — load order matters!  ║
          ╚══════════════════════════════════════╝ -->
 
@@ -306,7 +388,9 @@ document.getElementById('game-signout-btn').addEventListener('click', async func
     <script src="js/office-system.js"></script>
     <!-- 8. Mastery & achievements system -->
     <script src="js/achievements-system.js"></script>
-    <!-- 9. Core game engine -->
+    <!-- 9. Access / paywall tier system -->
+    <script src="js/access-system.js"></script>
+    <!-- 10. Core game engine -->
     <script src="js/game-engine.js"></script>
 </body>
 </html>

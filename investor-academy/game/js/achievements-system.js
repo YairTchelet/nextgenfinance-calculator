@@ -142,6 +142,21 @@ window.BuffettMastery = (function () {
         for (const b of BELT_DEFS) {
             if (totalCorrect >= b.minCorrect && principlesTried >= b.minPrinciples) belt = b;
         }
+        // Blue+ requires course access
+        const courseRequired = ['blue', 'brown', 'black'];
+        if (courseRequired.includes(belt.id) && window.BuffettAccess && !BuffettAccess.canPlay('hard')) {
+            belt = BELT_DEFS.find(b => b.id === 'green') || belt;
+        }
+        return belt;
+    }
+
+    function _computeRawBelt(mastery) {
+        const totalCorrect = mastery.overall.totalCorrect || 0;
+        const principlesTried = Object.values(mastery.principles).filter(p => p.attempts > 0).length;
+        let belt = BELT_DEFS[0];
+        for (const b of BELT_DEFS) {
+            if (totalCorrect >= b.minCorrect && principlesTried >= b.minPrinciples) belt = b;
+        }
         return belt;
     }
 
@@ -366,6 +381,14 @@ window.BuffettMastery = (function () {
             ? `<div class="mastery-weak-callout">⚡ אזור לשיפור: <strong>${weakest.name}</strong> — ${Math.round(weakest.stats.correct / weakest.stats.attempts * 100)}% הצלחה</div>`
             : '';
 
+        // Course-access callout: show if player is being capped at green
+        const rawBelt = _computeRawBelt(mastery);
+        const courseRequired = ['blue', 'brown', 'black'];
+        const isCapped = courseRequired.includes(rawBelt.id) && window.BuffettAccess && !BuffettAccess.canPlay('hard');
+        const courseCallout = isCapped
+            ? `<div class="mastery-course-callout">🔒 אתה ברמת <strong>${rawBelt.name}</strong> — <a href="/investor-academy/" class="mastery-course-link">הצטרף לקורס</a> כדי לפתוח חגורות גבוהות יותר</div>`
+            : '';
+
         // Progress text
         let progressText = '';
         if (progress.nextBelt) {
@@ -412,6 +435,7 @@ window.BuffettMastery = (function () {
                 </div>` : `<div class="mastery-progress-text">${progressText}</div>`}
 
                 ${weakCallout}
+                ${courseCallout}
 
                 <div class="mastery-section-title">עקרונות (${principlesTried}/12)</div>
                 <div class="principles-grid">${principleCards}</div>
