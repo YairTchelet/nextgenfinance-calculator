@@ -446,7 +446,9 @@ function _renderGameWidget(mastery, achievements) {
     var last = history[history.length - 1];
     var dateStr = '';
     try { dateStr = new Date(last.date).toLocaleDateString('he-IL', { day: 'numeric', month: 'short' }); } catch(e) {}
-    var tierName = TIERS[last.tier] || last.tier || '';
+    var TIERS_EXT = { easy: 'קל', medium: 'בינוני', hard: 'קשה', expert: 'מומחה', 1: 'קל', 2: 'בינוני', 3: 'קשה', 4: 'מומחה' };
+    var tierRaw = last.difficulty || last.tier;
+    var tierName = TIERS_EXT[tierRaw] || tierRaw || '';
     lastGameHtml = '<p style="font-size:0.82rem;color:#6b7280;margin:0 0 0;padding-top:0.75rem;border-top:1px solid #e5e7eb;">'
       + 'משחק אחרון: ' + dateStr + ' &nbsp;|&nbsp; רמה: ' + tierName + ' &nbsp;|&nbsp; ניקוד: ' + (last.score || 0)
       + '</p>';
