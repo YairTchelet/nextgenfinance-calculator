@@ -1094,6 +1094,29 @@ function displaySpecialRound(event) {
     const hintCost = Math.round(event.pointValue * 0.5);
     DOM.specialHintButton.textContent = `רמז (-${hintCost} נק')`; DOM.specialHintButton.disabled = false;
     DOM.specialHintDisplay.classList.add('hidden'); DOM.specialFeedback.classList.add('hidden');
+
+    // Remove any dynamic option buttons from previous special round
+    DOM.impactButtons.querySelectorAll('.dynamic-option-btn').forEach(b => b.remove());
+
+    if (event.options && event.options.length) {
+        // v2 format: custom options — hide static positive/negative/neutral buttons
+        DOM.positiveImpactButton.style.display = 'none';
+        DOM.neutralImpactButton.style.display = 'none';
+        DOM.negativeImpactButton.style.display = 'none';
+        event.options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'button dynamic-option-btn';
+            btn.textContent = opt.text;
+            btn.addEventListener('click', () => handleImpactDecision(opt.value));
+            DOM.impactButtons.appendChild(btn);
+        });
+    } else {
+        // v1 format: positive/negative/neutral
+        DOM.positiveImpactButton.style.display = '';
+        DOM.neutralImpactButton.style.display = '';
+        DOM.negativeImpactButton.style.display = '';
+    }
+
     DOM.impactButtons.style.display = 'flex';
     hideAllRoundDisplays();
     DOM.specialRoundDisplay.classList.remove('hidden');
@@ -1296,7 +1319,8 @@ function handleImpactDecision(impact) {
     DOM.specialHintButton.disabled = true;
 
     const event = GameState.gameRounds[GameState.currentRound].data;
-    const isCorrect = impact === event.correctImpact;
+    const correctAnswer = event.correctOption || event.correctImpact;
+    const isCorrect = impact === correctAnswer;
     const potentialPoints = calculatePotentialPoints(event);
     let pointsAwarded = isCorrect ? potentialPoints : 0;
 
@@ -1536,6 +1560,11 @@ function loadCurrentRound() {
 
     DOM.currentRoundDisplay.textContent = `${GameState.currentRound + 1}/${GameState.totalRounds}`;
     updateProgressStageDisplay();
+
+    // Clear principle result pills accumulated from previous rounds
+    [DOM.decisionFeedback, DOM.versusFeedback, DOM.sellHoldFeedback].forEach(el => {
+        if (el) el.querySelectorAll('.principle-result').forEach(p => p.remove());
+    });
 
     const round = GameState.gameRounds[GameState.currentRound];
     if (round.type === 'special') displaySpecialRound(round.data);

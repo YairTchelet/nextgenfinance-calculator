@@ -215,6 +215,16 @@
             flex-grow: 1; box-shadow: 0 6px 62, 0.25);
         }
         .impact-button-positive:hover, .impact-button-neutral:hover, .impact-button-negative:hover { transform: translateY(-2px); }
+        .dynamic-option-btn {
+            background: linear-gradient(135deg, #4a5568, #2d3748); color: white;
+            flex-grow: 1; flex-basis: 0; min-width: 0;
+            font-size: 0.9em; font-weight: 600; padding: 10px 12px;
+            border-radius: var(--radius-xs); border: none; cursor: pointer;
+            font-family: 'Rubik', sans-serif; text-align: center; line-height: 1.4;
+            transition: transform 0.2s ease, background 0.2s ease;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+        }
+        .dynamic-option-btn:hover { background: linear-gradient(135deg, #2d3748, #1a202c); transform: translateY(-2px); }
         .continue-button {
             background: var(--accent-gradient); color: white; padding: 12px 32px;
             border-radius: var(--radius-xs); font-weight: 600; cursor: pointer; border: none;
@@ -926,7 +936,7 @@
 }
 .principle-selection-title {
     font-size: 0.92em; font-weight: 700;
-    color: #90e0d8; margin-bottom: 0.7rem;
+    color: #1a6b5e; margin-bottom: 0.7rem;
     text-align: center;
 }
 .principle-options {
@@ -935,12 +945,12 @@
     gap: 0.5rem;
 }
 .principle-btn {
-    background: rgba(255,255,255,0.06);
-    border: 1.5px solid rgba(255,255,255,0.12);
+    background: rgba(42,157,143,0.07);
+    border: 1.5px solid rgba(42,157,143,0.2);
     border-radius: 9px;
     padding: 0.7rem 0.6rem;
     font-size: 0.88em; font-weight: 600;
-    color: #e2e8f0;
+    color: var(--text-primary);
     cursor: pointer; text-align: center;
     font-family: inherit;
     min-height: 44px;
@@ -953,10 +963,11 @@
     transform: translateY(-1px);
 }
 .principle-btn.principle-selected {
-    background: linear-gradient(135deg, rgba(42,157,143,0.35), rgba(42,157,143,0.2));
+    background: linear-gradient(135deg, rgba(42,157,143,0.25), rgba(42,157,143,0.12));
     border-color: #2a9d8f;
-    color: #90e0d8;
-    box-shadow: 0 0 10px rgba(42,157,143,0.25);
+    color: #1a6b5e;
+    font-weight: 700;
+    box-shadow: 0 0 10px rgba(42,157,143,0.2);
 }
 .principle-btn:disabled { cursor: default; }
 
@@ -976,19 +987,19 @@
     line-height: 1.5;
 }
 .principle-result-correct {
-    background: rgba(72,187,120,0.12);
-    border: 1px solid rgba(72,187,120,0.35);
-    color: #9ae6b4;
+    background: rgba(72,187,120,0.15);
+    border: 1px solid rgba(72,187,120,0.4);
+    color: #276749;
 }
 .principle-result-partial {
-    background: rgba(246,224,94,0.1);
-    border: 1px solid rgba(246,224,94,0.3);
-    color: #f6e05e;
+    background: rgba(214,158,46,0.12);
+    border: 1px solid rgba(214,158,46,0.35);
+    color: #744210;
 }
 .principle-result-wrong {
-    background: rgba(252,129,129,0.1);
-    border: 1px solid rgba(252,129,129,0.3);
-    color: #fc8181;
+    background: rgba(229,62,62,0.1);
+    border: 1px solid rgba(229,62,62,0.3);
+    color: #9b2c2c;
 }
 
 /* ── Responsive: mastery dashboard ───────────────────────────────── */
