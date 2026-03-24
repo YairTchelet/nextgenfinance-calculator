@@ -917,89 +917,102 @@
     font-size: 0.58em; color: #63b3ed; margin-top: 1px;
 }
 
-/* ══════════════════════════════════════════════════════════════════════
-   PRINCIPLE PRE-SELECTION
-   ══════════════════════════════════════════════════════════════════════ */
-
-.principle-selection {
-    background: linear-gradient(135deg, rgba(42,157,143,0.08), rgba(42,157,143,0.04));
-    border: 1px solid rgba(42,157,143,0.25);
-    border-radius: var(--radius-sm, 12px);
-    padding: 1rem;
-    margin: 0.9rem 0 0.6rem;
-    animation: principleSlideDown 0.28s ease;
-    direction: rtl;
-}
-@keyframes principleSlideDown {
-    from { opacity: 0; transform: translateY(-6px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-.principle-selection-title {
-    font-size: 0.92em; font-weight: 700;
-    color: #1a6b5e; margin-bottom: 0.7rem;
-    text-align: center;
-}
-.principle-options {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
-}
-.principle-btn {
-    background: rgba(42,157,143,0.07);
-    border: 1.5px solid rgba(42,157,143,0.2);
-    border-radius: 9px;
-    padding: 0.7rem 0.6rem;
-    font-size: 0.88em; font-weight: 600;
-    color: var(--text-primary);
-    cursor: pointer; text-align: center;
-    font-family: inherit;
-    min-height: 44px;
-    transition: background 0.15s, border-color 0.15s, transform 0.1s;
-    direction: rtl;
-}
-.principle-btn:hover:not(:disabled) {
+/* ── Metric Tooltip ──────────────────────────────────────────────── */
+.metric-tooltip-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px; height: 16px;
+    border-radius: 50%;
     background: rgba(42,157,143,0.15);
-    border-color: rgba(42,157,143,0.45);
-    transform: translateY(-1px);
+    border: 1px solid rgba(42,157,143,0.3);
+    color: #2a9d8f;
+    font-size: 10px;
+    font-style: normal;
+    cursor: pointer;
+    margin-right: 4px;
+    vertical-align: middle;
+    line-height: 1;
+    padding: 0;
+    font-family: inherit;
+    transition: background 0.15s;
+    flex-shrink: 0;
 }
-.principle-btn.principle-selected {
-    background: linear-gradient(135deg, rgba(42,157,143,0.25), rgba(42,157,143,0.12));
-    border-color: #2a9d8f;
-    color: #1a6b5e;
-    font-weight: 700;
-    box-shadow: 0 0 10px rgba(42,157,143,0.2);
+.metric-tooltip-icon:hover { background: rgba(42,157,143,0.3); }
+.metric-tooltip {
+    position: fixed;
+    z-index: 9999;
+    background: #1a2a3a;
+    color: #e2e8f0;
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 0.82rem;
+    line-height: 1.55;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    pointer-events: none;
+    animation: tooltipFadeIn 0.15s ease;
+    direction: rtl;
+    border: 1px solid rgba(42,157,143,0.2);
 }
-.principle-btn:disabled { cursor: default; }
+@keyframes tooltipFadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+.metric-tooltip-short { font-weight: 600; color: #f0f8fa; margin-bottom: 7px; }
+.metric-tooltip-row { color: #a0aec0; margin-top: 4px; font-size: 0.78rem; }
+.metric-tooltip-label { color: #7dd8d2; font-weight: 600; margin-left: 4px; }
+.metric-tooltip-arrow {
+    position: absolute;
+    width: 0; height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+}
+.metric-tooltip.tip-above .metric-tooltip-arrow {
+    bottom: -6px; left: 50%; transform: translateX(-50%);
+    border-top: 6px solid #1a2a3a;
+}
+.metric-tooltip.tip-below .metric-tooltip-arrow {
+    top: -6px; left: 50%; transform: translateX(-50%);
+    border-bottom: 6px solid #1a2a3a;
+}
 
-/* Decision buttons locked until principle is selected */
-.principle-pending {
-    opacity: 0.4 !important;
-    pointer-events: none !important;
-    cursor: not-allowed !important;
+/* ══════════════════════════════════════════════════════════════════════
+   PRINCIPLE IDENTIFICATION ROUND
+   ══════════════════════════════════════════════════════════════════════ */
+.principle-round-card {
+    background: linear-gradient(135deg, #eef6fb, #e8f4f0);
+    border: 2px solid #2a9d8f;
+    border-radius: var(--radius-sm); padding: 1.5rem; position: relative; margin-bottom: 1.5rem;
 }
-
-/* Principle result row in feedback */
-.principle-result {
-    border-radius: 8px;
-    padding: 0.55rem 0.85rem;
-    margin: 0.6rem 0;
-    font-size: 0.9em;
-    line-height: 1.5;
+.principle-round-scenario {
+    font-size: 1.05rem; line-height: 1.75; color: var(--text-primary);
+    margin-bottom: 1.25rem; font-weight: 500;
 }
-.principle-result-correct {
-    background: rgba(72,187,120,0.15);
-    border: 1px solid rgba(72,187,120,0.4);
-    color: #276749;
+.principle-round-question {
+    font-size: 0.95rem; font-weight: 700; color: var(--text-primary);
+    margin-bottom: 1rem;
 }
-.principle-result-partial {
-    background: rgba(214,158,46,0.12);
-    border: 1px solid rgba(214,158,46,0.35);
-    color: #744210;
+.principle-round-options {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 0.5rem;
 }
-.principle-result-wrong {
-    background: rgba(229,62,62,0.1);
-    border: 1px solid rgba(229,62,62,0.3);
-    color: #9b2c2c;
+.principle-round-btn {
+    background: #ffffff; border: 2px solid #c8d4d0;
+    border-radius: 10px; padding: 0.85rem 0.75rem;
+    font-size: 0.92rem; font-weight: 600; color: var(--text-primary);
+    cursor: pointer; text-align: center; font-family: inherit;
+    min-height: 52px; transition: all 0.18s ease; direction: rtl;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+.principle-round-btn:hover:not(:disabled) {
+    background: #e8f4f0; border-color: #2a9d8f; transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(42,157,143,0.15);
+}
+.principle-round-btn:disabled { cursor: default; }
+.principle-round-btn.principle-round-correct {
+    background: #d1fae5; border-color: #059669; color: #065f46; font-weight: 700;
+}
+.principle-round-btn.principle-round-wrong {
+    background: #fee2e2; border-color: #dc2626; color: #991b1b;
+}
+@media (max-width: 480px) {
+    .principle-round-options { grid-template-columns: 1fr; }
 }
 
 /* ── Responsive: mastery dashboard ───────────────────────────────── */
@@ -1007,8 +1020,6 @@
     .principles-grid { grid-template-columns: repeat(3, 1fr); }
     .achievements-badge-grid { grid-template-columns: repeat(4, 1fr); }
     .mastery-dashboard-card { padding: 1.2rem; }
-    .principle-options { grid-template-columns: 1fr; }
-    .principle-btn { min-height: 48px; }
 }
 @media (max-width: 400px) {
     .principles-grid { grid-template-columns: repeat(3, 1fr); }

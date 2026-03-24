@@ -130,6 +130,22 @@ function resolveYearLabel(y) {
             <button class="continue-button" id="sellhold-continue-button">המשך לסיבוב הבא</button>
         </div>`;
     gc.appendChild(sd);
+
+    // ── Principle Identification Round ────────────────────────────────────
+    const pd = document.createElement('div');
+    pd.id = 'principle-round-display';
+    pd.className = 'principle-round-card hidden';
+    pd.innerHTML = `
+        <div class="round-type-badge">🎯 זהה את העיקרון</div>
+        <div class="principle-round-scenario" id="principle-scenario"></div>
+        <div class="principle-round-question" id="principle-question"></div>
+        <div class="principle-round-options" id="principle-options"></div>
+        <div class="decision-feedback hidden" id="principle-feedback">
+            <div class="decision-title" id="principle-feedback-title"></div>
+            <div class="decision-explanation" id="principle-explanation"></div>
+            <button class="continue-button" id="principle-continue-button">המשך לסיבוב הבא</button>
+        </div>`;
+    gc.appendChild(pd);
 })();
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -143,8 +159,7 @@ const GameState = {
     // Mastery & achievement tracking
     startTime: 0, maxStreak: 0, maxCombo: 0,
     hintUsedThisGame: false, versusCorrect: 0, sellHoldCorrect: 0,
-    // Principle pre-selection
-    principleSelected: null, principleCorrect: false,
+    // Principle streak tracking
     principleStreak: 0, maxPrincipleStreak: 0
 };
 
@@ -254,7 +269,9 @@ const DOM = {
     sellHoldPrincipleBadge: document.getElementById('sellhold-principle-badge'),
     sellHoldFeedbackTitle: document.getElementById('sellhold-feedback-title'),
     sellHoldExplanation: document.getElementById('sellhold-explanation'),
-    sellHoldContinueButton: document.getElementById('sellhold-continue-button')
+    sellHoldContinueButton: document.getElementById('sellhold-continue-button'),
+    // Principle round elements (injected above)
+    principleRoundDisplay: document.getElementById('principle-round-display')
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -667,142 +684,6 @@ function _normToAffinityKey(rawId, roundType) {
     return roundType === 'sellhold' ? 'sunk-cost' : 'moat';
 }
 
-function _buildPrincipleOptions(rawPrincipleId, roundType) {
-    const isSellHold = roundType === 'sellhold';
-    const pool = isSellHold ? SELLHOLD_PRINCIPLE_NAMES : PRINCIPLE_NAMES;
-    const correctId = _normToAffinityKey(rawPrincipleId, roundType);
-    // Ensure correctId is in pool; if not, pick first
-    const validId = pool[correctId] ? correctId : Object.keys(pool)[0];
-    // Build distractor list
-    let distractors = (PRINCIPLE_AFFINITIES[validId] || []).filter(d => pool[d]);
-    // Fill from remaining pool if needed
-    if (distractors.length < 3) {
-        const rest = Object.keys(pool).filter(k => k !== validId && !distractors.includes(k));
-        while (distractors.length < 3 && rest.length) {
-            distractors.push(rest.splice(Math.floor(Math.random() * rest.length), 1)[0]);
-        }
-    }
-    const options = [
-        { id: validId, name: pool[validId], correct: true },
-        ...distractors.slice(0, 3).map(d => ({ id: d, name: pool[d] || d, correct: false }))
-    ];
-    // Fisher-Yates shuffle
-    for (let i = options.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [options[i], options[j]] = [options[j], options[i]];
-    }
-    return { options, correctId: validId };
-}
-
-// Tracks which buttons to un-lock after principle is selected
-let _principleDecisiveButtons = [];
-
-function _renderPrincipleSelection(roundType, rawPrincipleId) {
-    // Clean up any previous instance and unlock buttons
-    const prev = document.getElementById('principle-selection');
-    if (prev) prev.remove();
-    _principleDecisiveButtons.forEach(b => b && b.classList.remove('principle-pending'));
-    _principleDecisiveButtons = [];
-
-    const { options, correctId } = _buildPrincipleOptions(rawPrincipleId, roundType);
-
-    // Determine the parent container and anchor element (insert before this)
-    let anchors;
-    if (roundType === 'company') {
-        anchors = { parent: DOM.companyDisplay, before: DOM.decisionButtons };
-        _principleDecisiveButtons = [DOM.buyButton, DOM.passButton];
-    } else if (roundType === 'versus') {
-        anchors = { parent: DOM.versusDisplay, before: DOM.versusButtons };
-        _principleDecisiveButtons = [DOM.chooseAButton, DOM.chooseBButton];
-    } else if (roundType === 'sellhold') {
-        anchors = { parent: DOM.sellHoldDisplay, before: DOM.sellHoldButtons };
-        _principleDecisiveButtons = [DOM.sellButton, DOM.holdButton];
-    } else return;
-
-    // Disable decision buttons until principle picked
-    _principleDecisiveButtons.forEach(b => b && b.classList.add('principle-pending'));
-
-    const sel = document.createElement('div');
-    sel.id = 'principle-selection';
-    sel.className = 'principle-selection';
-    sel.innerHTML = `
-        <div class="principle-selection-title">🎯 מה העיקרון המרכזי שצריך להנחות אותך כאן?</div>
-        <div class="principle-options">
-            ${options.map(o =>
-                `<button class="principle-btn" data-pid="${o.id}" data-correct="${o.correct}">${o.name}</button>`
-            ).join('')}
-        </div>`;
-
-    // Wire up button clicks
-    sel.querySelectorAll('.principle-btn').forEach(btn => {
-        btn.addEventListener('click', () => _handlePrincipleSelect(btn.dataset.pid, correctId));
-    });
-
-    anchors.parent.insertBefore(sel, anchors.before);
-}
-
-function _handlePrincipleSelect(selectedId, correctId) {
-    if (GameState.principleSelected !== null) return; // already picked
-    GameState.principleSelected = selectedId;
-    GameState.principleCorrect = (selectedId === correctId);
-
-    // Highlight selected (no reveal of correct/wrong yet — just selection state)
-    document.querySelectorAll('#principle-selection .principle-btn').forEach(btn => {
-        btn.disabled = true;
-        if (btn.dataset.pid === selectedId) btn.classList.add('principle-selected');
-    });
-
-    // Unlock decision buttons
-    _principleDecisiveButtons.forEach(b => b && b.classList.remove('principle-pending'));
-    _principleDecisiveButtons = [];
-}
-
-// Inject principle result into a feedback container (call after decision)
-function _injectPrincipleResult(feedbackEl, rawPrincipleId, roundType, decisionWasCorrect) {
-    if (GameState.principleSelected === null) return 0;
-    const correctAffinityId = _normToAffinityKey(rawPrincipleId, roundType);
-    const pool = roundType === 'sellhold' ? { ...PRINCIPLE_NAMES, ...SELLHOLD_PRINCIPLE_NAMES } : PRINCIPLE_NAMES;
-    const correctName  = pool[correctAffinityId] || correctAffinityId;
-    const selectedName = pool[GameState.principleSelected] || GameState.principleSelected;
-
-    let bonus = 0, html = '', cssClass = '';
-    if (GameState.principleCorrect && decisionWasCorrect) {
-        bonus = 50;
-        html = `🎯 <strong>+50 נק'</strong> — זיהית נכון: ${correctName}!`;
-        cssClass = 'principle-result-correct';
-    } else if (GameState.principleCorrect && !decisionWasCorrect) {
-        bonus = 25;
-        html = `🎯 <strong>+25 נק'</strong> — זיהית נכון: ${correctName} (אבל ההחלטה שגויה)`;
-        cssClass = 'principle-result-partial';
-    } else {
-        html = `🎯 העיקרון היה: <strong>${correctName}</strong> (בחרת: ${selectedName})`;
-        cssClass = 'principle-result-wrong';
-    }
-
-    const div = document.createElement('div');
-    div.className = `principle-result ${cssClass}`;
-    div.innerHTML = html;
-    const continueBtn = feedbackEl.querySelector('.continue-button');
-    continueBtn ? feedbackEl.insertBefore(div, continueBtn) : feedbackEl.appendChild(div);
-
-    // Update principle streak tracking
-    if (GameState.principleCorrect) {
-        GameState.principleStreak++;
-        GameState.maxPrincipleStreak = Math.max(GameState.maxPrincipleStreak, GameState.principleStreak);
-    } else {
-        GameState.principleStreak = 0;
-    }
-
-    // Score the bonus
-    if (bonus > 0) { GameState.score += bonus; DOM.scoreEl.textContent = GameState.score; }
-
-    // Record identification in mastery (System 1A extension)
-    if (window.BuffettMastery && typeof BuffettMastery.recordPrincipleIdentification === 'function') {
-        BuffettMastery.recordPrincipleIdentification(correctAffinityId, GameState.principleCorrect);
-    }
-
-    return bonus;
-}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // PHASE 2 — CHART RENDERING
@@ -1040,6 +921,21 @@ function createDualAxisLinePlot(containerEl, companyData, showProjected = false)
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// METRIC TOOLTIP HELPER
+// ─────────────────────────────────────────────────────────────────────────────
+function _metricNameHTML(rawName) {
+    const glossary = window.BuffettGame?.metricGlossary;
+    if (!glossary) return rawName;
+    // Strip parenthetical suffixes: "FCF (מיליון ₪)" → "FCF"
+    const cleaned = rawName.replace(/\s*\(.*\)$/, '').trim();
+    // Try exact match first, then cleaned
+    const entry = glossary[rawName] || glossary[cleaned];
+    if (!entry) return rawName;
+    const key = glossary[rawName] ? rawName : cleaned;
+    return `${rawName}<button type="button" class="metric-tooltip-icon" data-metric-key="${key}" aria-label="הסבר על ${rawName}" tabindex="-1">ℹ</button>`;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // DISPLAY HELPERS
 // ─────────────────────────────────────────────────────────────────────────────
 function hideAllRoundDisplays() {
@@ -1047,6 +943,7 @@ function hideAllRoundDisplays() {
     DOM.specialRoundDisplay.classList.add('hidden');
     if (DOM.versusDisplay) DOM.versusDisplay.classList.add('hidden');
     if (DOM.sellHoldDisplay) DOM.sellHoldDisplay.classList.add('hidden');
+    if (DOM.principleRoundDisplay) DOM.principleRoundDisplay.classList.add('hidden');
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1064,8 +961,8 @@ function displayCompany(company) {
 
     const basicMetrics = (company.metrics?.basic || company.basicMetrics || []).filter(m => m && typeof m.name === 'string' && m.value !== undefined);
     const advMetrics = (company.metrics?.advanced || company.advancedMetrics || []).filter(m => m && typeof m.name === 'string' && m.value !== undefined);
-    DOM.basicMetricsGrid.innerHTML = basicMetrics.map(m => `<div class="metric"><div class="metric-name">${m.name}</div><div class="metric-value">${m.value}</div></div>`).join('');
-    DOM.advancedMetricsGrid.innerHTML = advMetrics.map(m => `<div class="metric"><div class="metric-name">${m.name}</div><div class="metric-value">${m.value}</div></div>`).join('');
+    DOM.basicMetricsGrid.innerHTML = basicMetrics.map(m => `<div class="metric"><div class="metric-name">${_metricNameHTML(m.name)}</div><div class="metric-value">${m.value}</div></div>`).join('');
+    DOM.advancedMetricsGrid.innerHTML = advMetrics.map(m => `<div class="metric"><div class="metric-name">${_metricNameHTML(m.name)}</div><div class="metric-value">${m.value}</div></div>`).join('');
 
     const hintCost = Math.round(company.pointValue * 0.5);
     DOM.companyHintButton.textContent = `רמז (-${hintCost} נק')`; DOM.companyHintButton.disabled = false;
@@ -1082,7 +979,6 @@ function displayCompany(company) {
     hideAllRoundDisplays();
     DOM.companyDisplay.classList.remove('hidden');
     requestAnimationFrame(() => renderChart(DOM.linePlotContainer, company, false));
-    _renderPrincipleSelection('company', company.feedback?.principle?.id);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1132,7 +1028,7 @@ function buildVersusCompanyHTML(companyData, idPrefix) {
     document.getElementById(`${idPrefix}-desc`).textContent = companyData.description || '';
     const metricsEl = document.getElementById(`${idPrefix}-metrics`);
     metricsEl.innerHTML = (companyData.metrics || []).map(m =>
-        `<div class="versus-metric-row"><span class="versus-metric-name">${m.name}</span><span class="versus-metric-value">${m.value}</span></div>`
+        `<div class="versus-metric-row"><span class="versus-metric-name">${_metricNameHTML(m.name)}</span><span class="versus-metric-value">${m.value}</span></div>`
     ).join('');
     const sparkEl = document.getElementById(`${idPrefix}-sparkline`);
     sparkEl.innerHTML = createSparklineSVG(companyData.historicalFCF);
@@ -1155,7 +1051,6 @@ function displayVersusRound(round) {
 
     hideAllRoundDisplays();
     DOM.versusDisplay.classList.remove('hidden');
-    _renderPrincipleSelection('versus', round.feedback?.principle?.id);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1186,12 +1081,78 @@ function displaySellHoldRound(round) {
     DOM.portfolioHoldingPeriod.textContent = pc.holdingPeriod || '';
     DOM.sellHoldNewInfo.textContent = round.newInformation || '';
     DOM.sellHoldMetricsGrid.innerHTML = (round.currentMetrics || []).map(m =>
-        `<div class="metric"><div class="metric-name">${m.name}</div><div class="metric-value">${m.value}</div></div>`
+        `<div class="metric"><div class="metric-name">${_metricNameHTML(m.name)}</div><div class="metric-value">${m.value}</div></div>`
     ).join('');
 
     hideAllRoundDisplays();
     DOM.sellHoldDisplay.classList.remove('hidden');
-    _renderPrincipleSelection('sellhold', round.feedback?.principle?.id);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PRINCIPLE IDENTIFICATION ROUND
+// ─────────────────────────────────────────────────────────────────────────────
+function displayPrincipleRound(data) {
+    document.getElementById('principle-scenario').textContent = data.scenario || '';
+    document.getElementById('principle-question').textContent = data.question || '';
+    document.getElementById('principle-feedback').classList.add('hidden');
+
+    const optionsEl = document.getElementById('principle-options');
+    optionsEl.innerHTML = data.options.map(opt =>
+        `<button class="principle-round-btn" data-value="${opt}">${opt}</button>`
+    ).join('');
+
+    optionsEl.querySelectorAll('.principle-round-btn').forEach(btn => {
+        btn.addEventListener('click', () => handlePrincipleRoundAnswer(btn.dataset.value, data));
+    });
+
+    hideAllRoundDisplays();
+    DOM.principleRoundDisplay.classList.remove('hidden');
+}
+
+function handlePrincipleRoundAnswer(selected, data) {
+    if (GameState.decisionMade) return;
+    GameState.decisionMade = true;
+
+    // Disable all buttons
+    document.querySelectorAll('.principle-round-btn').forEach(b => b.disabled = true);
+
+    const correctName = PRINCIPLE_NAMES[data.correctPrinciple] || data.correctPrinciple;
+    const isCorrect = selected === correctName;
+    const points = 75;
+
+    if (isCorrect) {
+        GameState.correctDecisions++;
+        GameState.score += points;
+        handleCorrectDecisionCombo();
+        document.querySelector(`.principle-round-btn[data-value="${selected}"]`)?.classList.add('principle-round-correct');
+        document.getElementById('principle-feedback-title').textContent = `נכון! +${points} נק'`;
+        document.getElementById('principle-feedback-title').className = 'decision-title correct';
+    } else {
+        resetCombo();
+        document.querySelector(`.principle-round-btn[data-value="${selected}"]`)?.classList.add('principle-round-wrong');
+        document.querySelector(`.principle-round-btn[data-value="${correctName}"]`)?.classList.add('principle-round-correct');
+        document.getElementById('principle-feedback-title').textContent = 'לא בדיוק...';
+        document.getElementById('principle-feedback-title').className = 'decision-title incorrect';
+    }
+
+    document.getElementById('principle-explanation').textContent = data.explanation || '';
+    document.getElementById('principle-feedback').classList.remove('hidden');
+
+    GameState.roundOutcomes[GameState.currentRound] = isCorrect ? 'passed' : 'failed';
+    DOM.correctDecisionsEl.textContent = GameState.correctDecisions;
+    DOM.scoreEl.textContent = GameState.score;
+    updateProgressStageDisplay();
+
+    // Mastery tracking
+    if (window.BuffettMastery && typeof BuffettMastery.recordPrincipleIdentification === 'function') {
+        BuffettMastery.recordPrincipleIdentification(data.correctPrinciple, isCorrect);
+    }
+
+    if (window.BuffettMascot) {
+        try { if (isCorrect) BuffettMascot.onCorrect(GameState.consecutiveCorrect); else BuffettMascot.onIncorrect(); } catch(e) {}
+    }
+
+    document.getElementById('principle-feedback').scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1289,9 +1250,6 @@ function handleInvestmentDecision(decision) {
 
     // Mastery tracking (System 1A)
     if (window.BuffettMastery) BuffettMastery.recordRound(feedback.principle?.id, isCorrect);
-
-    // Principle pre-selection result + bonus
-    _injectPrincipleResult(DOM.decisionFeedback, feedback.principle?.id, 'company', isCorrect);
 
     // Phase 3 + 7: inject extras (counterSignal, workedExample, sellTriggers, dueDiligence)
     const extrasData = { ...feedback };
@@ -1419,9 +1377,6 @@ function handleVersusDecision(choice) {
     if (aEl) aEl.classList.add(correctIsA ? 'versus-winner' : 'versus-loser');
     if (bEl) bEl.classList.add(correctIsA ? 'versus-loser' : 'versus-winner');
 
-    // Principle pre-selection result
-    _injectPrincipleResult(DOM.versusFeedback, fb.principle?.id, 'versus', isCorrect);
-
     // Inject extras (counterArgument as counterSignalExplanation, workedExample)
     injectFeedbackExtras({
         counterSignalExplanation: fb.counterArgument,
@@ -1467,9 +1422,6 @@ function handleSellHoldDecision(decision) {
     // Mastery tracking (System 1A)
     if (window.BuffettMastery) BuffettMastery.recordRound(fb.principle?.id, isCorrect);
     if (isCorrect) GameState.sellHoldCorrect++;
-
-    // Principle pre-selection result
-    _injectPrincipleResult(DOM.sellHoldFeedback, fb.principle?.id, 'sellhold', isCorrect);
 
     // Bias warning (Phase 5) — insert before continue button
     if (fb.biasWarning) {
@@ -1541,6 +1493,22 @@ function generateGameRounds() {
             GameState.gameRounds.push({ type: 'company', data: companies[cIdx++] });
         }
     }
+
+    // Inject 1 principle identification round at random position 1-3
+    const tierMap2 = { easy: 1, medium: 2, hard: 3, expert: 3 };
+    const maxTier = tierMap2[diff] || 1;
+    const allPR = (window.BuffettGame?.principleRounds || []).filter(p => p.tier <= maxTier);
+    if (allPR.length > 0) {
+        const pr = allPR[Math.floor(Math.random() * allPR.length)];
+        const insertPos = 1 + Math.floor(Math.random() * 3); // positions 1, 2, or 3
+        if (insertPos < GameState.gameRounds.length) {
+            GameState.gameRounds.splice(insertPos, 0, { type: 'principle', data: pr });
+            // Keep total rounds at 10 by removing the last round if over
+            if (GameState.gameRounds.length > GameState.totalRounds) {
+                GameState.gameRounds.pop();
+            }
+        }
+    }
 }
 
 function loadCurrentRound() {
@@ -1550,7 +1518,6 @@ function loadCurrentRound() {
 
     GameState.decisionMade = false; GameState.projectionsUnlocked = false; GameState.hintUsed = false;
     GameState.lastDecision = null;
-    GameState.principleSelected = null; GameState.principleCorrect = false;
 
     selectedReasonings = [];
     reasoningSubmitted = false;
@@ -1561,15 +1528,11 @@ function loadCurrentRound() {
     DOM.currentRoundDisplay.textContent = `${GameState.currentRound + 1}/${GameState.totalRounds}`;
     updateProgressStageDisplay();
 
-    // Clear principle result pills accumulated from previous rounds
-    [DOM.decisionFeedback, DOM.versusFeedback, DOM.sellHoldFeedback].forEach(el => {
-        if (el) el.querySelectorAll('.principle-result').forEach(p => p.remove());
-    });
-
     const round = GameState.gameRounds[GameState.currentRound];
     if (round.type === 'special') displaySpecialRound(round.data);
     else if (round.type === 'versus') displayVersusRound(round.data);
     else if (round.type === 'sellhold') displaySellHoldRound(round.data);
+    else if (round.type === 'principle') displayPrincipleRound(round.data);
     else displayCompany(round.data);
 
     if (window.BuffettMascot) {
@@ -1680,7 +1643,6 @@ function initGame() {
     GameState.projectionsUnlocked = false; GameState.hintUsed = false; GameState.lastDecision = null;
     GameState.startTime = 0; GameState.maxStreak = 0; GameState.maxCombo = 0;
     GameState.hintUsedThisGame = false; GameState.versusCorrect = 0; GameState.sellHoldCorrect = 0;
-    GameState.principleSelected = null; GameState.principleCorrect = false;
     GameState.principleStreak = 0; GameState.maxPrincipleStreak = 0;
     resetCombo();
 
@@ -1701,6 +1663,7 @@ function initGame() {
     // Also hide new round displays
     if (DOM.versusDisplay) DOM.versusDisplay.classList.add('hidden');
     if (DOM.sellHoldDisplay) DOM.sellHoldDisplay.classList.add('hidden');
+    if (DOM.principleRoundDisplay) DOM.principleRoundDisplay.classList.add('hidden');
 
     DOM.resultOverlay.classList.remove('show');
 
@@ -1747,6 +1710,9 @@ if (DOM.sellHoldContinueButton) DOM.sellHoldContinueButton.addEventListener('cli
 if (DOM.sellButton) DOM.sellButton.addEventListener('click', () => handleSellHoldDecision('sell'));
 if (DOM.holdButton) DOM.holdButton.addEventListener('click', () => handleSellHoldDecision('hold'));
 
+// Principle round continue
+document.getElementById('principle-continue-button')?.addEventListener('click', continueToNextRound);
+
 DOM.submitReasoningButton.addEventListener('click', () => {
     const company = GameState.gameRounds[GameState.currentRound]?.data;
     if (company && GameState.lastDecision) evaluateReasoning(company, GameState.lastDecision);
@@ -1780,6 +1746,66 @@ DOM.modalOkButton.addEventListener('click', closeModal);
 DOM.modalCancelButton.addEventListener('click', closeModal);
 DOM.modalConfirmButton.addEventListener('click', () => { if (typeof currentConfirmCallback === 'function') currentConfirmCallback(); closeModal(); });
 DOM.modalOverlay.addEventListener('click', (e) => { if (e.target === DOM.modalOverlay) closeModal(); });
+
+// ── Metric Tooltip System ─────────────────────────────────────────────────────
+(function initMetricTooltips() {
+    let _activeTooltip = null;
+
+    function _removeTooltip() {
+        if (_activeTooltip) { _activeTooltip.remove(); _activeTooltip = null; }
+    }
+
+    function _showTooltip(btn) {
+        _removeTooltip();
+        const glossary = window.BuffettGame?.metricGlossary;
+        if (!glossary) return;
+        const key = btn.dataset.metricKey;
+        const entry = glossary[key];
+        if (!entry) return;
+
+        const tip = document.createElement('div');
+        tip.className = 'metric-tooltip';
+        tip.innerHTML = `
+            <div class="metric-tooltip-short">${entry.short}</div>
+            <div class="metric-tooltip-row"><span class="metric-tooltip-label">✅ טווח טוב:</span> ${entry.good}</div>
+            <div class="metric-tooltip-row"><span class="metric-tooltip-label">📌 דוגמה:</span> ${entry.example}</div>
+            <div class="metric-tooltip-arrow"></div>`;
+        document.body.appendChild(tip);
+        _activeTooltip = tip;
+
+        // Position: above the button if space, else below
+        const rect = btn.getBoundingClientRect();
+        const tipW = 280;
+        let left = rect.left + rect.width / 2 - tipW / 2 + window.scrollX;
+        left = Math.max(8, Math.min(left, window.innerWidth - tipW - 8));
+        const spaceAbove = rect.top;
+        if (spaceAbove > 180) {
+            tip.style.top = (rect.top + window.scrollY - tip.offsetHeight - 10) + 'px';
+            tip.classList.add('tip-above');
+        } else {
+            tip.style.top = (rect.bottom + window.scrollY + 10) + 'px';
+            tip.classList.add('tip-below');
+        }
+        tip.style.left = left + 'px';
+        tip.style.width = tipW + 'px';
+    }
+
+    document.addEventListener('click', function (e) {
+        const btn = e.target.closest('.metric-tooltip-icon');
+        if (btn) {
+            e.stopPropagation();
+            if (_activeTooltip && _activeTooltip._src === btn) { _removeTooltip(); return; }
+            _showTooltip(btn);
+            if (_activeTooltip) _activeTooltip._src = btn;
+            return;
+        }
+        _removeTooltip();
+    });
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') _removeTooltip();
+    });
+})();
 
 // ─────────────────────────────────────────────────────────────────────────────
 // INITIALIZATION
