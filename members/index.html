@@ -294,6 +294,16 @@
     </div>
   </div>
 
+  <!-- GAME PROGRESS SECTION -->
+  <div style="margin-bottom:1.25rem;">
+    <p style="font-size:0.74rem;font-weight:700;letter-spacing:0.9px;text-transform:uppercase;color:#7dd8d2;margin-bottom:1rem;">משחק ההשקעות 🎮</p>
+    <div style="background:rgba(236,232,229,0.97);border-radius:16px;padding:1.5rem 1.25rem;box-shadow:0 4px 24px rgba(0,0,0,0.18);color:#1a2e38;" id="game-widget-card">
+      <div id="game-widget-content">
+        <p style="font-size:0.88rem;color:#9ca3af;margin:0;">טוען...</p>
+      </div>
+    </div>
+  </div>
+
   <!-- READING RECOMMENDATION -->
   <div style="margin-bottom:1.25rem;">
     <p style="font-size:0.74rem;font-weight:700;letter-spacing:0.9px;text-transform:uppercase;color:#7dd8d2;margin-bottom:1rem;">קריאה מומלצת</p>
@@ -336,6 +346,119 @@
 </div>
 
 <script>
+function _renderGameWidget(mastery, achievements) {
+  var el = document.getElementById('game-widget-content');
+  if (!el) return;
+
+  var BELTS = {
+    white:  { color: '#e0e0e0', name: 'חגורה לבנה' },
+    yellow: { color: '#ffd700', name: 'חגורה צהובה' },
+    orange: { color: '#ff8c00', name: 'חגורה כתומה' },
+    green:  { color: '#2ecc71', name: 'חגורה ירוקה' },
+    blue:   { color: '#3498db', name: 'חגורה כחולה' },
+    brown:  { color: '#8b4513', name: 'חגורה חומה' },
+    black:  { color: '#1a1a2e', name: 'חגורה שחורה' }
+  };
+  var PRINCIPLES = [
+    ['moat',                  'חפיר כלכלי'],
+    ['owner-earnings',        'רווחי בעלים'],
+    ['value-trap',            'מלכודת ערך'],
+    ['margin-of-safety',      'מרווח ביטחון'],
+    ['growth-trap',           'מלכודת צמיחה'],
+    ['circle-of-competence',  'מעגל כשירות'],
+    ['leverage-risk',         'סיכון מינוף'],
+    ['too-hard',              'קשה מדי'],
+    ['cyclical-trap',         'מלכודת מחזוריות'],
+    ['turnaround',            'שיקום'],
+    ['dividend-sustainability','קיימות דיבידנד'],
+    ['management-quality',    'איכות הנהלה']
+  ];
+  var TIERS = { easy: 'קל', medium: 'בינוני', hard: 'קשה', expert: 'מומחה' };
+
+  var overall = mastery && mastery.overall;
+  var hasData = overall && (overall.totalGames > 0 || overall.totalAttempts > 0);
+
+  var ctaBtn = '<a href="/investor-academy/game/" style="display:inline-flex;align-items:center;justify-content:center;padding:0.65rem 1.1rem;border-radius:10px;font-family:\'Rubik\',sans-serif;font-size:0.9rem;font-weight:700;text-decoration:none;background:#2a9d8f;color:#fff;margin-top:1rem;transition:background 0.15s ease;" onmouseover="this.style.background=\'#21867a\'" onmouseout="this.style.background=\'#2a9d8f\'">שחק עכשיו →</a>';
+
+  if (!hasData) {
+    el.innerHTML = '<p style="font-size:0.9rem;color:#4a6472;margin:0 0 0.75rem;line-height:1.6;">עדיין לא שיחקת במשחק ההשקעות — בואו נתחיל!</p>' + ctaBtn;
+    return;
+  }
+
+  // Belt
+  var beltKey = overall.currentBelt || 'white';
+  var belt = BELTS[beltKey] || BELTS.white;
+  var shadowColor = belt.color.replace('#', '');
+  var beltHtml = '<div style="display:flex;align-items:center;gap:0.9rem;margin-bottom:1rem;">'
+    + '<div style="width:40px;height:40px;border-radius:50%;background:' + belt.color + ';box-shadow:0 2px 10px ' + belt.color + 'aa;flex-shrink:0;border:2px solid rgba(0,0,0,0.08);"></div>'
+    + '<div>'
+    + '<p style="font-size:0.88rem;font-weight:700;color:#1a2e38;margin:0;">' + belt.name + '</p>'
+    + '<p style="font-size:0.8rem;color:#4a6472;margin:0.2rem 0 0;">'
+    + (overall.totalCorrect || 0) + ' תשובות נכונות מתוך ' + (overall.totalAttempts || 0)
+    + ' &nbsp;·&nbsp; ' + (overall.totalGames || 0) + ' משחקים'
+    + '</p>'
+    + '</div>'
+    + '</div>';
+
+  // Principle dots
+  var principles = (mastery && mastery.principles) || {};
+  var learnedCount = 0;
+  var dots = PRINCIPLES.map(function(pair) {
+    var id = pair[0], name = pair[1];
+    var p = principles[id] || {};
+    var attempts = p.attempts || 0;
+    var correct  = p.correct  || 0;
+    var color = '#d1d5db';
+    if (attempts >= 5) {
+      learnedCount++;
+      var rate = correct / attempts;
+      if (rate > 0.7)      color = '#2ecc71';
+      else if (rate >= 0.5) color = '#f6c23e';
+      else                  color = '#e74c3c';
+    }
+    return '<span title="' + name + '" style="display:inline-block;width:14px;height:14px;border-radius:50%;background:' + color + ';flex-shrink:0;cursor:default;"></span>';
+  }).join('');
+
+  // Achievements
+  var achieveHtml = '';
+  if (achievements && typeof achievements === 'object') {
+    var keys = Object.keys(achievements);
+    if (keys.length > 0) {
+      var earned = keys.filter(function(k) {
+        var v = achievements[k];
+        return v === true || (v && typeof v === 'object' && v.earned === true);
+      }).length;
+      achieveHtml = '<p style="font-size:0.8rem;color:#4a6472;margin:0.3rem 0 0;">🏆 ' + earned + '/27 הישגים</p>';
+    }
+  }
+
+  var dotsHtml = '<div style="margin-bottom:0.85rem;">'
+    + '<p style="font-size:0.8rem;font-weight:600;color:#4a6472;margin:0 0 0.5rem;">עקרונות השקעה</p>'
+    + '<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:0.3rem;">' + dots + '</div>'
+    + '<p style="font-size:0.8rem;color:#4a6472;margin:0;">' + learnedCount + '/12 עקרונות נלמדו</p>'
+    + achieveHtml
+    + '</div>';
+
+  // Last game
+  var lastGameHtml = '';
+  var history = mastery && mastery.history;
+  if (history && history.length > 0) {
+    var last = history[history.length - 1];
+    var dateStr = '';
+    try { dateStr = new Date(last.date).toLocaleDateString('he-IL', { day: 'numeric', month: 'short' }); } catch(e) {}
+    var tierName = TIERS[last.tier] || last.tier || '';
+    lastGameHtml = '<p style="font-size:0.82rem;color:#6b7280;margin:0 0 0;padding-top:0.75rem;border-top:1px solid #e5e7eb;">'
+      + 'משחק אחרון: ' + dateStr + ' &nbsp;|&nbsp; רמה: ' + tierName + ' &nbsp;|&nbsp; ניקוד: ' + (last.score || 0)
+      + '</p>';
+  }
+
+  el.innerHTML = '<p style="font-size:1rem;font-weight:800;color:#1a2e38;margin:0 0 1rem;">🎮 ביצועים במשחק</p>'
+    + beltHtml
+    + dotsHtml
+    + lastGameHtml
+    + ctaBtn;
+}
+
 (async () => {
   const _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   const { data: { session } } = await _sb.auth.getSession();
@@ -378,13 +501,13 @@
   }
   courseBtn.style.visibility = '';
 
-  // Quiz progress
-  const { data: quizRows } = await _sb
-    .from('quiz_results')
-    .select('chapter, score, max_score')
-    .eq('user_id', user.id)
-    .in('chapter', [1, 2]);
+  // Parallel fetch: quiz results + game mastery
+  const [{ data: quizRows }, { data: upData }] = await Promise.all([
+    _sb.from('quiz_results').select('chapter, score, max_score').eq('user_id', user.id).in('chapter', [1, 2]),
+    _sb.from('user_progress').select('mastery_data, achievements').eq('user_id', user.id).maybeSingle(),
+  ]);
 
+  // Quiz progress
   const bestByChapter = { 1: null, 2: null };
   if (quizRows) {
     quizRows.forEach(row => {
@@ -407,6 +530,16 @@
       barEl.style.width = pct + '%';
     }
   });
+
+  // Game mastery widget
+  let mastery = upData?.mastery_data || null;
+  try {
+    if (!mastery) {
+      const raw = localStorage.getItem('buffett_mastery');
+      if (raw) mastery = JSON.parse(raw);
+    }
+  } catch (e) {}
+  _renderGameWidget(mastery, upData?.achievements || null);
 
   // Sign out
   document.getElementById('members-signout-btn').addEventListener('click', async () => {
