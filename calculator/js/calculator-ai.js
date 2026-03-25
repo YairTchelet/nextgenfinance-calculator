@@ -1407,7 +1407,8 @@ After the CSV, list the source for each metric like:
         parsePastedText,
         checkAccess,
         showUpgradeModal,
-        _saveAnalysisToNotes
+        _saveAnalysisToNotes,
+        _buildPrompt: buildAutoFillPrompt
     };
 })();
 

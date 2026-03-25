@@ -369,6 +369,215 @@ body.wz-state-advanced .wz-ai-cta-btn { display: none !important; }
     50% { box-shadow: 0 0 0 8px var(--primary-glow), var(--shadow-lg); }
 }
 
+/* ═══ STAGE 1 SHORTCUTS ═══ */
+.wz-shortcuts {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+.wz-shortcut-btn {
+    padding: 9px 18px;
+    background: none;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    font-weight: 500;
+    font-family: var(--font);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all .2s;
+}
+.wz-shortcut-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: var(--primary-bg);
+}
+
+/* ═══ STAGE 3: 2-TAB LAYOUT ═══ */
+
+/* Tab bar */
+.wz-tabs {
+    display: flex;
+    gap: 4px;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 18px;
+}
+.wz-tab {
+    padding: 10px 18px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: var(--font);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all .2s;
+}
+.wz-tab:hover { color: var(--text); }
+.wz-tab.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+}
+
+/* Tab panels */
+.wz-tab-panel { display: none; }
+.wz-tab-panel.active { display: block; }
+
+/* AI option boxes */
+.wz-ai-option-box {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    margin-bottom: 4px;
+}
+.wz-ai-option-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+}
+.wz-ai-option-hint {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-align: center;
+    margin-top: 6px;
+}
+.wz-ai-or {
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin: 10px 0;
+}
+
+/* How-to instructions */
+.wz-ai-howto {
+    background: var(--primary-bg);
+    border: 1px solid var(--primary-light);
+    border-radius: var(--radius-md);
+    padding: 12px 14px;
+    margin-bottom: 12px;
+}
+.wz-ai-howto-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--primary-dark);
+    margin-bottom: 6px;
+}
+.wz-ai-howto-list {
+    margin: 0;
+    padding-right: 18px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.9;
+}
+
+/* Prompt textarea (readonly) */
+.wz-prompt-textarea {
+    width: 100%;
+    min-height: 120px;
+    max-height: 200px;
+    resize: vertical;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 10px 12px;
+    font-size: 11px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    line-height: 1.5;
+    background: var(--bg);
+    color: var(--text);
+    direction: ltr;
+    text-align: left;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+.wz-prompt-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+    margin-bottom: 14px;
+}
+.wz-prompt-action-btn {
+    flex: 1;
+    justify-content: center;
+    font-size: 12px !important;
+    padding: 8px 10px !important;
+}
+
+/* Paste divider */
+.wz-paste-divider {
+    text-align: center;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin: 4px 0 10px;
+}
+
+/* Paste textarea */
+.wz-paste-textarea {
+    width: 100%;
+    min-height: 90px;
+    max-height: 180px;
+    resize: vertical;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 10px 12px;
+    font-size: 12px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    line-height: 1.5;
+    background: var(--bg);
+    color: var(--text);
+    direction: ltr;
+    text-align: left;
+    box-sizing: border-box;
+    transition: border-color .2s;
+}
+.wz-paste-textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-glow);
+}
+.wz-paste-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+.wz-paste-action-btn {
+    flex: 1;
+    justify-content: center;
+    font-size: 13px !important;
+    padding: 10px 12px !important;
+}
+.wz-ai-hint {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Success feedback */
+.wz-ai-success {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: var(--radius-md);
+    margin-top: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #10b981;
+}
+.wz-ai-success-icon { font-size: 18px; }
+
 /* ═══ RESPONSIVE ═══ */
 @media (max-width: 640px) {
     .wz-overlay { padding: 20px 12px 40px; }
@@ -384,4 +593,6 @@ body.wz-state-advanced .wz-ai-cta-btn { display: none !important; }
     .wz-action-label { display: none; }
     .wz-action-btns { justify-content: center; }
     .wz-entry-bar-inner { flex-direction: column; text-align: center; }
+    .wz-shortcuts { flex-direction: column; }
+    .wz-prompt-actions, .wz-paste-actions { flex-direction: column; }
 }

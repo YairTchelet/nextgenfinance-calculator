@@ -76,6 +76,11 @@ window.CalcWizard = (() => {
                             <div></div>
                             <button class="wz-btn primary" id="wz-next-0" disabled>הבא ←</button>
                         </div>
+                        <div class="wz-shortcuts">
+                            <button class="wz-shortcut-btn" id="wz-load-saved-btn">טען ניתוח שמור 📂</button>
+                            <button class="wz-shortcut-btn" id="wz-import-csv-btn">ייבא CSV 📄</button>
+                            <input type="file" id="wz-csv-file-input" accept=".csv" style="display:none">
+                        </div>
                         <button class="wz-skip-link" onclick="CalcWizard.goAdvanced()">אני מכיר את הכלי — מצב מתקדם</button>
                     </div>
 
@@ -97,34 +102,80 @@ window.CalcWizard = (() => {
                         </div>
                     </div>
 
-                    <!-- Step 2: Data Method -->
+                    <!-- Step 2: Data Method (2 tabs) -->
                     <div class="wz-panel" data-step="2" style="display:none">
                         <div class="wz-step-header">
                             <h2>איך נכניס את הנתונים?</h2>
                             <p>בחר דרך — תמיד אפשר לערוך ידנית אח"כ</p>
                         </div>
-                        <div class="wz-method-grid">
-                            <div class="wz-method-card" data-method="ai">
-                                <div class="wz-method-icon">🤖</div>
-                                <div class="wz-method-name">שליפה אוטומטית</div>
-                                <div class="wz-method-desc">AI ימלא את כל 13 המדדים מהאינטרנט</div>
-                                <span class="ai-pro-badge" style="margin-top:4px;">PRO</span>
-                            </div>
-                            <div class="wz-method-card" data-method="paste">
-                                <div class="wz-method-icon">📋</div>
-                                <div class="wz-method-name">הדבקת טקסט</div>
-                                <div class="wz-method-desc">העתק מ-ChatGPT, Gemini או כל AI</div>
-                                <span class="ai-pro-badge" style="margin-top:4px;">PRO</span>
-                            </div>
-                            <div class="wz-method-card" data-method="manual">
-                                <div class="wz-method-icon">✏️</div>
-                                <div class="wz-method-name">הזנה ידנית</div>
-                                <div class="wz-method-desc">מלא את המדדים בעצמך</div>
+
+                        <!-- Tab bar -->
+                        <div class="wz-tabs" id="wz-tabs">
+                            <button class="wz-tab active" data-tab="manual">הזנה ידנית ✏️</button>
+                            <button class="wz-tab" data-tab="ai">שליפה באמצעות AI 🤖</button>
+                        </div>
+
+                        <!-- Tab: Manual -->
+                        <div class="wz-tab-panel active" id="wz-tab-manual">
+                            <div class="wz-method-grid" style="grid-template-columns:1fr;">
+                                <div class="wz-method-card selected" data-method="manual">
+                                    <div class="wz-method-icon">✏️</div>
+                                    <div class="wz-method-name">הזנה ידנית</div>
+                                    <div class="wz-method-desc">מלא את המדדים בעצמך לפי הדוחות הפיננסיים</div>
+                                </div>
                             </div>
                         </div>
-                        <div class="wz-nav">
+
+                        <!-- Tab: AI -->
+                        <div class="wz-tab-panel" id="wz-tab-ai" style="display:none">
+                            <!-- Option 1: Auto-fetch -->
+                            <div class="wz-ai-option-box">
+                                <div class="wz-ai-option-label">אופציה 1: שליפה אוטומטית</div>
+                                <button class="wz-btn primary" id="wz-autofetch-btn" style="width:100%;justify-content:center;margin-bottom:6px;">
+                                    🔍 שלוף נתונים אוטומטית
+                                </button>
+                                <div class="wz-ai-option-hint">שולף נתונים מהאינטרנט — לוקח כ-15-30 שניות</div>
+                            </div>
+
+                            <div class="wz-ai-or">─── או ───</div>
+
+                            <!-- Option 2: Prompt + Paste -->
+                            <div class="wz-ai-option-box">
+                                <div class="wz-ai-option-label">אופציה 2: פרומפט + הדבקה</div>
+                                <div class="wz-ai-howto">
+                                    <div class="wz-ai-howto-title">📋 איך להשתמש:</div>
+                                    <ol class="wz-ai-howto-list">
+                                        <li>העתק את הפרומפט למטה</li>
+                                        <li>הדבק ב-Gemini, ChatGPT, או Claude</li>
+                                        <li>קבל CSV מוכן + מקורות לכל מדד</li>
+                                        <li>הדבק את התוצאה בתיבה למטה</li>
+                                    </ol>
+                                </div>
+                                <textarea id="wz-prompt-textarea" class="wz-prompt-textarea" readonly dir="ltr"></textarea>
+                                <div class="wz-prompt-actions">
+                                    <button class="wz-btn ghost wz-prompt-action-btn" id="wz-copy-prompt-btn">העתק פרומפט 📋</button>
+                                    <button class="wz-btn ghost wz-prompt-action-btn" id="wz-download-prompt-btn">הורד txt. ⬇️</button>
+                                </div>
+                                <div class="wz-paste-divider">─── קיבלת תוצאה? הדבק כאן: ───</div>
+                                <textarea id="wz-paste-textarea" class="wz-paste-textarea" placeholder="הדבק כאן את הפלט מה-AI... (טבלאות, CSV, JSON, טקסט חופשי — הכל עובד)" dir="ltr"></textarea>
+                                <div class="wz-paste-actions">
+                                    <button class="wz-btn primary wz-paste-action-btn" id="wz-fill-data-btn">🧠 מלא נתונים</button>
+                                    <button class="wz-btn ghost wz-paste-action-btn" id="wz-import-csv-tab-btn">📄 ייבוא CSV</button>
+                                    <input type="file" id="wz-csv-tab-input" accept=".csv" style="display:none">
+                                </div>
+                                <div class="wz-ai-hint">💡 אפשר להדביק: טבלאות, CSV, JSON, טקסט חופשי</div>
+                            </div>
+
+                            <!-- Success feedback + continue button (hidden until data filled) -->
+                            <div class="wz-ai-success" id="wz-ai-success" style="display:none">
+                                <span class="wz-ai-success-icon">✅</span>
+                                <span id="wz-ai-success-msg">הנתונים מולאו בהצלחה!</span>
+                            </div>
+                        </div>
+
+                        <div class="wz-nav" style="margin-top:16px;">
                             <button class="wz-btn ghost" onclick="CalcWizard.goStep(1)">→ חזור</button>
-                            <button class="wz-btn primary" id="wz-go-btn" disabled>בואו נתחיל ←</button>
+                            <button class="wz-btn primary" id="wz-go-btn">בואו נתחיל ←</button>
                         </div>
                     </div>
 
@@ -257,6 +308,11 @@ window.CalcWizard = (() => {
         }
         renderProgress();
         if (n === 1) { renderModeGrid(); renderTemplateGrid(); }
+        if (n === 2) {
+            // Refresh prompt if AI tab is already active
+            const aiTab = document.querySelector('.wz-tab[data-tab="ai"]');
+            if (aiTab && aiTab.classList.contains('active')) refreshWizardPrompt();
+        }
     }
 
     // ── Apply selections WITHOUT filling values ──
@@ -275,11 +331,16 @@ window.CalcWizard = (() => {
         if (typeof activeTemplate !== 'undefined') window.activeTemplate = selectedTemplate;
     }
 
+    // ── Determine current data method from active tab ──
+    function getActiveDataMethod() {
+        const activeTabPanel = document.querySelector('.wz-tab-panel.active');
+        if (!activeTabPanel) return 'manual';
+        if (activeTabPanel.id === 'wz-tab-ai') return 'ai-tab';
+        return 'manual';
+    }
+
     // ── Start data entry phase ──
     function startEntry() {
-        dataMethod = document.querySelector('.wz-method-card.selected')?.dataset?.method;
-        if (!dataMethod) return;
-
         // Apply company + mode (no values)
         applySettings();
 
@@ -291,18 +352,6 @@ window.CalcWizard = (() => {
             const first = document.getElementById('cat-profitability');
             if (first) first.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }, 200);
-
-        // Trigger AI/paste if selected
-        if (dataMethod === 'ai') {
-            const companyName = document.getElementById('company-name')?.value || '';
-            if (typeof CalcAI !== 'undefined' && CalcAI.autoFill) {
-                setTimeout(() => CalcAI.autoFill(companyName), 400);
-            }
-        } else if (dataMethod === 'paste') {
-            if (typeof CalcAI !== 'undefined' && CalcAI.openPasteModal) {
-                setTimeout(() => CalcAI.openPasteModal(), 400);
-            }
-        }
     }
 
     // ── Finish entry → processing → results ──
@@ -472,19 +521,296 @@ window.CalcWizard = (() => {
             nextBtn.addEventListener('click', () => goStep(1));
         }
 
-        // Method cards
-        document.querySelectorAll('.wz-method-card').forEach(card => {
-            card.onclick = () => {
-                document.querySelectorAll('.wz-method-card').forEach(c => c.classList.remove('selected'));
-                card.classList.add('selected');
-                const goBtn = document.getElementById('wz-go-btn');
-                if (goBtn) goBtn.disabled = false;
-            };
+        // ── Stage 1 shortcuts ──
+
+        // Button: Load saved analysis
+        document.getElementById('wz-load-saved-btn')?.addEventListener('click', openLoadSavedModal);
+
+        // Button: Import CSV from stage 1
+        const wzCsvBtn = document.getElementById('wz-import-csv-btn');
+        const wzCsvInput = document.getElementById('wz-csv-file-input');
+        if (wzCsvBtn && wzCsvInput) {
+            wzCsvBtn.addEventListener('click', () => wzCsvInput.click());
+            wzCsvInput.addEventListener('change', e => {
+                const file = e.target.files[0];
+                if (!file) return;
+                e.target.value = null;
+                if (typeof importCSV === 'function') {
+                    // Apply settings so mode is correct, then import
+                    applySettings();
+                    importCSV(file);
+                    // Give importCSV time to populate inputs, then go to results
+                    setTimeout(() => showProcessing(), 700);
+                } else {
+                    showToast('שגיאה: פונקציית ייבוא CSV לא נמצאה', 'error');
+                }
+            });
+        }
+
+        // ── Stage 3: Tab switching ──
+        document.querySelectorAll('.wz-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.dataset.tab;
+                document.querySelectorAll('.wz-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.wz-tab-panel').forEach(p => {
+                    p.classList.remove('active');
+                    p.style.display = 'none';
+                });
+                tab.classList.add('active');
+                const panel = document.getElementById('wz-tab-' + tabId);
+                if (panel) { panel.classList.add('active'); panel.style.display = ''; }
+
+                // When AI tab opens, inject the prompt if company name exists
+                if (tabId === 'ai') {
+                    refreshWizardPrompt();
+                }
+            });
         });
 
-        // Go button → start entry
+        // ── Stage 3: Auto-fetch button ──
+        document.getElementById('wz-autofetch-btn')?.addEventListener('click', () => {
+            const company = document.getElementById('wz-company-input')?.value?.trim() || '';
+            if (!company) { showToast('הקלד שם חברה קודם', 'warning'); return; }
+            applySettings();
+            if (typeof CalcAI !== 'undefined' && CalcAI.autoFill) {
+                // Auto-fetch: open the autofill prompt modal, then proceed to entry
+                CalcAI.autoFill(company);
+                // After modal opens, also start entry so user can see the metrics being filled
+                setTimeout(() => {
+                    setState('entry');
+                }, 400);
+            } else {
+                showToast('מודול AI לא נמצא', 'error');
+            }
+        });
+
+        // ── Stage 3: Copy prompt button ──
+        document.getElementById('wz-copy-prompt-btn')?.addEventListener('click', () => {
+            const prompt = document.getElementById('wz-prompt-textarea')?.value;
+            if (!prompt) { refreshWizardPrompt(); return; }
+            navigator.clipboard.writeText(prompt).then(() => {
+                showToast('הפרומפט הועתק! 📋 הדבק ב-Gemini או ChatGPT');
+            }).catch(() => {
+                showToast('שגיאה בהעתקה — נסה הורדה', 'error');
+            });
+        });
+
+        // ── Stage 3: Download prompt button ──
+        document.getElementById('wz-download-prompt-btn')?.addEventListener('click', () => {
+            const prompt = document.getElementById('wz-prompt-textarea')?.value;
+            const company = document.getElementById('wz-company-input')?.value?.trim() || 'company';
+            if (!prompt) { refreshWizardPrompt(); return; }
+            const blob = new Blob([prompt], { type: 'text/plain;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `ai_prompt_${company.replace(/\s+/g, '_')}.txt`;
+            link.click();
+            showToast('הפרומפט הורד!');
+        });
+
+        // ── Stage 3: Fill data (parse paste) button ──
+        document.getElementById('wz-fill-data-btn')?.addEventListener('click', async () => {
+            const text = document.getElementById('wz-paste-textarea')?.value?.trim();
+            if (!text || text.length < 20) {
+                showToast('הדבק טקסט ארוך יותר', 'warning');
+                return;
+            }
+
+            // Check access (PRO feature)
+            if (typeof CalcAI !== 'undefined' && CalcAI.checkAccess) {
+                const hasAccess = await CalcAI.checkAccess();
+                if (!hasAccess) {
+                    if (CalcAI.showUpgradeModal) CalcAI.showUpgradeModal('הדבקת נתונים חכמה');
+                    return;
+                }
+            }
+
+            const btn = document.getElementById('wz-fill-data-btn');
+            if (btn) { btn.textContent = '⏳ מנתח...'; btn.disabled = true; }
+
+            // Apply settings first (so company name / mode is set in the main calculator)
+            applySettings();
+
+            try {
+                // Mirror the text into the ai-paste-textarea that parsePastedText() reads
+                let pasteTA = document.getElementById('ai-paste-textarea');
+                if (!pasteTA) {
+                    pasteTA = document.createElement('textarea');
+                    pasteTA.id = 'ai-paste-textarea';
+                    pasteTA.style.display = 'none';
+                    document.body.appendChild(pasteTA);
+                }
+                pasteTA.value = text;
+
+                if (typeof CalcAI !== 'undefined' && CalcAI.parsePastedText) {
+                    await CalcAI.parsePastedText();
+                    // Show success inline, then after a moment jump straight to results
+                    showWizardAISuccess('הנתונים מולאו מהטקסט!');
+                    setTimeout(() => showProcessing(), 1200);
+                } else {
+                    showToast('מודול AI לא נמצא', 'error');
+                    setState('entry');
+                }
+            } catch (err) {
+                showToast('שגיאה בניתוח: ' + err.message, 'error');
+                setState('entry');
+            } finally {
+                if (btn) { btn.textContent = '🧠 מלא נתונים'; btn.disabled = false; }
+            }
+        });
+
+        // ── Stage 3: CSV import in AI tab ──
+        const wzCsvTabBtn = document.getElementById('wz-import-csv-tab-btn');
+        const wzCsvTabInput = document.getElementById('wz-csv-tab-input');
+        if (wzCsvTabBtn && wzCsvTabInput) {
+            wzCsvTabBtn.addEventListener('click', () => wzCsvTabInput.click());
+            wzCsvTabInput.addEventListener('change', e => {
+                const file = e.target.files[0];
+                if (!file) return;
+                e.target.value = null;
+                applySettings();
+                if (typeof importCSV === 'function') {
+                    importCSV(file);
+                    showWizardAISuccess('הנתונים יובאו מה-CSV!');
+                    setTimeout(() => showProcessing(), 1200);
+                } else {
+                    showToast('שגיאה: פונקציית ייבוא CSV לא נמצאה', 'error');
+                }
+            });
+        }
+
+        // ── Go button → start entry ──
         const goBtn = document.getElementById('wz-go-btn');
         if (goBtn) goBtn.addEventListener('click', startEntry);
+
+        // Inject prompt when AI tab is clicked (refresh on company name change too)
+        companyInput?.addEventListener('input', () => {
+            if (document.querySelector('.wz-tab[data-tab="ai"].active')) {
+                refreshWizardPrompt();
+            }
+        });
+    }
+
+    // ── Refresh prompt textarea with current company ──
+    function refreshWizardPrompt() {
+        const company = document.getElementById('wz-company-input')?.value?.trim() || '';
+        const ta = document.getElementById('wz-prompt-textarea');
+        if (!ta) return;
+        if (typeof CalcAI !== 'undefined' && typeof CalcAI._buildPrompt === 'function') {
+            ta.value = CalcAI._buildPrompt(company || 'חברה');
+        } else {
+            ta.value = company ? `[הקלד שם חברה ובחר "שלוף נתונים" כדי לקבל פרומפט מלא עבור: ${company}]` : '[הקלד שם חברה בשלב 1 כדי לקבל פרומפט מותאם]';
+        }
+    }
+
+    // ── Show AI success message in wizard step 2 ──
+    function showWizardAISuccess(msg) {
+        const el = document.getElementById('wz-ai-success');
+        const msgEl = document.getElementById('wz-ai-success-msg');
+        if (el) {
+            if (msgEl) msgEl.textContent = msg || 'הנתונים מולאו בהצלחה!';
+            el.style.display = 'flex';
+        }
+    }
+
+    // ── Load saved analysis modal ──
+    async function openLoadSavedModal() {
+        // Check if user is logged in
+        if (typeof CalcDB === 'undefined') {
+            showToast('יש להתחבר כדי לטעון ניתוחים שמורים', 'warning');
+            return;
+        }
+        const userId = await CalcDB.getUserIdAsync();
+        if (!userId) {
+            showToast('יש להתחבר כדי לטעון ניתוחים שמורים', 'warning');
+            return;
+        }
+
+        // Remove existing modal
+        document.getElementById('wz-load-modal')?.remove();
+
+        const modal = document.createElement('div');
+        modal.id = 'wz-load-modal';
+        modal.className = 'modal-overlay';
+        modal.innerHTML = `
+            <div class="modal-box" style="max-width:540px">
+                <button class="modal-close" onclick="document.getElementById('wz-load-modal').classList.remove('open');document.body.style.overflow='';">&times;</button>
+                <div class="modal-header">
+                    <h2>📂 טען ניתוח שמור</h2>
+                    <p>בחר ניתוח לטעינה — הנתונים יועברו ישירות לתוצאות</p>
+                </div>
+                <div id="wz-load-list" style="max-height:380px;overflow-y:auto;">
+                    <div style="text-align:center;padding:24px;color:var(--text-muted);">טוען... ☁️</div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        requestAnimationFrame(() => modal.classList.add('open'));
+        document.body.style.overflow = 'hidden';
+        modal.addEventListener('click', e => {
+            if (e.target === modal) { modal.classList.remove('open'); document.body.style.overflow = ''; }
+        });
+
+        // Load analyses
+        try {
+            const analyses = await CalcDB.getAnalyses(20);
+            const list = document.getElementById('wz-load-list');
+            if (!list) return;
+
+            if (!analyses || analyses.length === 0) {
+                list.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text-muted);">לא נמצאו ניתוחים שמורים</div>';
+                return;
+            }
+
+            list.innerHTML = '';
+            analyses.forEach(a => {
+                const date = new Date(a.ts);
+                const dateStr = date.toLocaleDateString('he-IL', { day: 'numeric', month: 'short', year: 'numeric' });
+                const item = document.createElement('div');
+                item.className = 'history-item';
+                item.style.cssText = 'cursor:pointer;padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;';
+                item.innerHTML = `
+                    <div style="flex:1;">
+                        <div style="font-weight:700;color:var(--text);font-size:15px;">${a.company}</div>
+                        <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">${dateStr}${a.totalScore ? ` · ציון: ${a.totalScore}%` : ''} · ${a.mode}</div>
+                    </div>
+                    <button class="wz-btn primary" style="padding:8px 16px;font-size:13px;">טען →</button>
+                `;
+                item.querySelector('button').addEventListener('click', () => {
+                    loadSavedAnalysisIntoWizard(a);
+                    modal.classList.remove('open');
+                    document.body.style.overflow = '';
+                });
+                list.appendChild(item);
+            });
+        } catch (err) {
+            const list = document.getElementById('wz-load-list');
+            if (list) list.innerHTML = `<div style="text-align:center;padding:24px;color:var(--text-muted);">שגיאה בטעינה: ${err.message}</div>`;
+        }
+    }
+
+    // ── Load a saved analysis and jump to results ──
+    function loadSavedAnalysisIntoWizard(analysis) {
+        // Set company name in wizard input so applySettings copies it
+        const wzInput = document.getElementById('wz-company-input');
+        if (wzInput) wzInput.value = analysis.company || '';
+
+        // Switch to entry state first so the app DOM is visible for loadAnalysisBridge
+        setState('entry');
+
+        // Use the existing loadAnalysisBridge function if available
+        if (typeof loadAnalysisBridge === 'function') {
+            // Small delay to let entry state render
+            setTimeout(() => {
+                loadAnalysisBridge(analysis._supabaseId || analysis.id);
+                // Jump to results after data is populated
+                setTimeout(() => showResults(), 400);
+            }, 100);
+        } else {
+            // Fallback: apply settings and stay in entry
+            applySettings();
+            showToast(`"${analysis.company}" נטען — מלא נתונים ולחץ "סיימתי"`, 'info');
+        }
     }
 
     if (document.readyState === 'loading') {
@@ -493,5 +819,5 @@ window.CalcWizard = (() => {
         init();
     }
 
-    return { goStep, goAdvanced, startNew, finishEntry };
+    return { goStep, goAdvanced, startNew, finishEntry, showResults, openLoadSavedModal };
 })();
