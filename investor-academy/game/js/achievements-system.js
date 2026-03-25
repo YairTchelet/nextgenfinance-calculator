@@ -327,12 +327,171 @@ window.BuffettMastery = (function () {
         setTimeout(() => _dashEl.classList.add('show'), 20);
         _dashEl.querySelector('.mastery-close-btn').addEventListener('click', hideMasteryDashboard);
         _dashEl.addEventListener('click', e => { if (e.target === _dashEl) hideMasteryDashboard(); });
+
+        // SVG tree click listener
+        const svgEl = _dashEl.querySelector('.ach-tree-svg');
+        if (svgEl) {
+            svgEl.addEventListener('click', function(e) {
+                const hitTarget = e.target.closest('.tree-hit-target');
+                const popover = _dashEl.querySelector('#ach-tree-popover');
+                if (!hitTarget) {
+                    if (popover) popover.style.display = 'none';
+                    return;
+                }
+                const achId = hitTarget.getAttribute('data-ach');
+                const achDefs = window.BuffettAchievements?.ACHIEVEMENT_DEFS || [];
+                const ach = achDefs.find(a => a.id === achId);
+                if (!ach || !popover) return;
+                const achievements = loadAchievements();
+                const earned = (achievements.unlocked || []).includes(achId);
+                popover.innerHTML = `
+                    <div class="ach-pop-icon">${ach.icon}</div>
+                    <div class="ach-pop-name">${ach.name}</div>
+                    <div class="ach-pop-desc">${ach.description}</div>
+                    <span class="ach-pop-status ${earned ? 'earned' : 'locked'}">${earned ? '✓ הושג' : '🔒 נעול'}</span>
+                `;
+                // Position popover relative to .ach-tree-wrap
+                const wrapEl = _dashEl.querySelector('.ach-tree-wrap');
+                const svgRect = svgEl.getBoundingClientRect();
+                const wrapRect = wrapEl.getBoundingClientRect();
+                const scaleX = svgRect.width / 580;
+                const scaleY = svgRect.height / 520;
+                const domX = parseFloat(hitTarget.getAttribute('cx')) * scaleX + (svgRect.left - wrapRect.left);
+                const domY = parseFloat(hitTarget.getAttribute('cy')) * scaleY + (svgRect.top - wrapRect.top);
+                popover.style.left = Math.max(0, Math.min(domX - 85, wrapRect.width - 200)) + 'px';
+                popover.style.top = Math.max(0, domY - 130) + 'px';
+                popover.style.display = 'block';
+            });
+        }
     }
 
     function hideMasteryDashboard() {
         if (!_dashEl) return;
         _dashEl.classList.remove('show');
         setTimeout(() => { if (_dashEl) { _dashEl.remove(); _dashEl = null; } }, 350);
+    }
+
+    function _buildAchievementTree(achData) {
+        const achDefs = window.BuffettAchievements?.ACHIEVEMENT_DEFS || [];
+        const unlocked = achData.unlocked || [];
+        const earnedCount = unlocked.length;
+        const totalCount = achDefs.length;
+        const pct = totalCount > 0 ? Math.round(earnedCount / totalCount * 100) : 0;
+
+        const PATHS = [
+            { name: 'שומר החפיר',  color: '#2a9d8f', angle: 90,  nodes: ['first_steps','moat_master','fcf_expert','value_hunter','all_principles'], spacing: 45 },
+            { name: 'בלש הרווחים', color: '#f6c23e', angle: 18,  nodes: ['vs_champion','sell_hold_pro','principle_spotter','principle_streak_5','glossary_master'], spacing: 45 },
+            { name: 'אש על המגרש', color: '#e76f51', angle: 306, nodes: ['hot_streak','perfect_game','combo_king','speed_demon','hint_avoider'], spacing: 45 },
+            { name: 'מטפס הדרגות', color: '#3498db', angle: 234, nodes: ['orange_belt','green_belt','black_belt','hundred_rounds','multi_difficulty'], spacing: 45 },
+            { name: 'המתמיד',       color: '#9b59b6', angle: 162, nodes: ['daily_player','ten_games','comeback_kid','marathon','expert_debut','night_owl','early_bird'], spacing: 37 }
+        ];
+
+        const cx = 290, cy = 310;
+        let svgContent = '';
+
+        // Draw lines first (behind nodes)
+        PATHS.forEach(path => {
+            const rad = path.angle * Math.PI / 180;
+            const dx = Math.cos(rad), dy = -Math.sin(rad);
+            let prevX = cx, prevY = cy;
+            path.nodes.forEach((achId, i) => {
+                const nx = Math.round(cx + dx * path.spacing * (i + 1));
+                const ny = Math.round(cy + dy * path.spacing * (i + 1));
+                const prevEarned = i === 0 ? true : unlocked.includes(path.nodes[i - 1]);
+                const thisEarned = unlocked.includes(achId);
+                const isAvailable = prevEarned && !thisEarned;
+                const isConnEarned = (i === 0 ? true : unlocked.includes(path.nodes[i - 1])) && thisEarned;
+
+                let lineOpacity, lineDash;
+                if (isConnEarned) { lineOpacity = '0.9'; lineDash = ''; }
+                else if (isAvailable) { lineOpacity = '0.45'; lineDash = 'stroke-dasharray="4 3"'; }
+                else if (prevEarned && !thisEarned) { lineOpacity = '0.45'; lineDash = 'stroke-dasharray="4 3"'; }
+                else { lineOpacity = '0.15'; lineDash = 'stroke-dasharray="4 3"'; }
+
+                svgContent += `<line x1="${prevX}" y1="${prevY}" x2="${nx}" y2="${ny}" stroke="${path.color}" stroke-width="2" opacity="${lineOpacity}" ${lineDash}/>`;
+                prevX = nx; prevY = ny;
+            });
+        });
+
+        // Draw center node
+        svgContent += `<circle cx="${cx}" cy="${cy}" r="26" fill="#1a2e38" stroke="#4a9d8f" stroke-width="2.5"/>`;
+        svgContent += `<text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" font-size="18">⭐</text>`;
+
+        // Draw path nodes
+        PATHS.forEach(path => {
+            const rad = path.angle * Math.PI / 180;
+            const dx = Math.cos(rad), dy = -Math.sin(rad);
+            const NR = 19;
+
+            path.nodes.forEach((achId, i) => {
+                const nx = Math.round(cx + dx * path.spacing * (i + 1));
+                const ny = Math.round(cy + dy * path.spacing * (i + 1));
+                const thisEarned = unlocked.includes(achId);
+                const prevEarned = i === 0 ? true : unlocked.includes(path.nodes[i - 1]);
+                const isAvailable = prevEarned && !thisEarned;
+                const ach = achDefs.find(a => a.id === achId);
+                const icon = ach ? ach.icon : '?';
+
+                let circleFill, circleStroke, circleFilter, pulseClass;
+                if (thisEarned) {
+                    circleFill = path.color;
+                    circleStroke = '';
+                    circleFilter = `filter="url(#glow-${path.color.replace('#','')})"`;
+                    pulseClass = '';
+                } else if (isAvailable) {
+                    circleFill = 'rgba(255,255,255,0.06)';
+                    circleStroke = `stroke="${path.color}" stroke-width="2.5"`;
+                    circleFilter = '';
+                    pulseClass = 'class="ach-node-pulse"';
+                } else {
+                    circleFill = 'rgba(255,255,255,0.03)';
+                    circleStroke = 'stroke="rgba(255,255,255,0.12)" stroke-width="1.5"';
+                    circleFilter = '';
+                    pulseClass = '';
+                }
+
+                const displayIcon = (thisEarned || isAvailable) ? icon : '🔒';
+                const iconSize = (thisEarned || isAvailable) ? 14 : 11;
+
+                svgContent += `<circle cx="${nx}" cy="${ny}" r="${NR}" fill="${circleFill}" ${circleStroke} ${circleFilter} ${pulseClass}/>`;
+                svgContent += `<text x="${nx}" y="${ny}" text-anchor="middle" dominant-baseline="central" font-size="${iconSize}">${displayIcon}</text>`;
+            });
+
+            // Path label (reuse rad/dx/dy already computed above)
+            const nc = path.nodes.length;
+            const labelX = Math.round(cx + dx * (path.spacing * nc + 26));
+            const labelY = Math.round(cy + dy * (path.spacing * nc + 26));
+            svgContent += `<text x="${labelX}" y="${labelY}" text-anchor="middle" dominant-baseline="central" font-size="10" fill="${path.color}" font-weight="700" font-family="Heebo,sans-serif">${path.name}</text>`;
+        });
+
+        // Hit targets (on top, after all visual elements)
+        PATHS.forEach(path => {
+            const rad = path.angle * Math.PI / 180;
+            const dx = Math.cos(rad), dy = -Math.sin(rad);
+            path.nodes.forEach((achId, i) => {
+                const nx = Math.round(cx + dx * path.spacing * (i + 1));
+                const ny = Math.round(cy + dy * path.spacing * (i + 1));
+                svgContent += `<circle fill="transparent" r="25" cx="${nx}" cy="${ny}" data-ach="${achId}" class="tree-hit-target" style="cursor:pointer"/>`;
+            });
+        });
+
+        // Glow filters
+        const glowColors = [...new Set(PATHS.map(p => p.color))];
+        const defs = `<defs>${glowColors.map(c => `<filter id="glow-${c.replace('#','')}" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>`).join('')}</defs>`;
+
+        return `
+            <div class="ach-tree-counter">
+                🏆 ${earnedCount}/${totalCount} הישגים
+                <div class="ach-tree-bar"><div class="ach-tree-bar-fill" style="width:${pct}%"></div></div>
+            </div>
+            <div class="ach-tree-wrap">
+                <svg class="ach-tree-svg" viewBox="0 0 580 520" style="width:100%;display:block;" xmlns="http://www.w3.org/2000/svg">
+                    ${defs}
+                    ${svgContent}
+                </svg>
+                <div id="ach-tree-popover" class="ach-tree-popover" style="display:none;"></div>
+            </div>
+        `;
     }
 
     function _buildDashboardHTML() {
@@ -400,17 +559,8 @@ window.BuffettMastery = (function () {
             progressText = '🏆 הגעת לרמה הגבוהה ביותר!';
         }
 
-        // Achievements badge grid
-        const achDefs = window.BuffettAchievements?.ACHIEVEMENT_DEFS || [];
-        const achGrid = achDefs.map(a => {
-            const unlocked = (achievements.unlocked || []).includes(a.id);
-            return `<div class="achievement-badge ${unlocked ? 'earned' : 'locked'}" title="${a.name}: ${a.description}">
-                <span class="achievement-badge-icon">${unlocked ? a.icon : '🔒'}</span>
-                <span class="achievement-badge-name">${a.name}</span>
-            </div>`;
-        }).join('');
-        const earnedCount = (achievements.unlocked || []).length;
-        const totalCount  = achDefs.length;
+        // Achievement skill tree
+        const treeHTML = _buildAchievementTree(achievements);
         const principlesTried = Object.values(mastery.principles).filter(p => p.attempts > 0).length;
 
         return `
@@ -440,8 +590,7 @@ window.BuffettMastery = (function () {
                 <div class="mastery-section-title">עקרונות (${principlesTried}/12)</div>
                 <div class="principles-grid">${principleCards}</div>
 
-                <div class="mastery-section-title">הישגים (${earnedCount}/${totalCount})</div>
-                <div class="achievements-badge-grid">${achGrid}</div>
+                ${treeHTML}
             </div>`;
     }
 

@@ -457,6 +457,83 @@ BuffettShopUI.injectStyles = function() {
             margin-top: 2px;
         }
         
+        /* Shop Item Preview Modal */
+        .shop-item-preview-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.75);
+            z-index: 20000;
+            display: flex; align-items: center; justify-content: center;
+            padding: 20px;
+        }
+        .shop-item-preview-card {
+            background: linear-gradient(145deg, #1a1a2e, #16213e);
+            border: 2px solid rgba(214,158,46,0.4);
+            border-radius: 20px;
+            padding: 28px 24px 20px;
+            max-width: 380px; width: 100%;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+            text-align: center;
+            direction: rtl;
+        }
+        .shop-item-preview-close {
+            position: absolute; top: 12px; left: 14px;
+            background: rgba(255,255,255,0.1); border: none;
+            color: #fff; width: 32px; height: 32px; border-radius: 50%;
+            font-size: 1.1em; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s;
+        }
+        .shop-item-preview-close:hover { background: rgba(255,255,255,0.2); }
+        .shop-item-preview-body { margin-bottom: 20px; }
+        .shop-preview-icon-wrap {
+            font-size: 4em; margin: 10px 0 16px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .shop-preview-item-name {
+            font-size: 1.3em; font-weight: 700; color: #fff; margin-bottom: 8px;
+        }
+        .shop-preview-item-desc {
+            font-size: 0.88em; color: #a0aec0; line-height: 1.5;
+        }
+        .shop-preview-theme-compare {
+            display: flex; gap: 14px; margin: 16px 0;
+            justify-content: center; align-items: stretch;
+        }
+        .shop-preview-theme-mini {
+            flex: 1; max-width: 130px; border-radius: 12px;
+            padding: 12px 10px; font-size: 0.8em; text-align: center;
+            border: 2px solid rgba(255,255,255,0.15);
+        }
+        .shop-preview-theme-label {
+            font-size: 0.72em; color: rgba(255,255,255,0.55); margin-bottom: 6px;
+        }
+        .shop-preview-frame-demo {
+            width: 90px; height: 90px; border-radius: 16px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.5em; margin: 12px auto;
+            background: rgba(255,255,255,0.08);
+        }
+        .shop-item-preview-footer {
+            display: flex; justify-content: space-between; align-items: center;
+            padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .shop-item-preview-price-display {
+            font-size: 1.15em; font-weight: 700; color: #ecc94b;
+        }
+        .shop-item-preview-price-display.free { color: #48bb78; }
+        .shop-item-preview-price-display.cant-afford { color: #fc8181; }
+        .shop-item-preview-action-btn {
+            padding: 10px 24px; border-radius: 10px; border: none;
+            font-size: 1em; font-weight: 700; cursor: pointer;
+            font-family: inherit;
+            background: linear-gradient(135deg, #d69e2e, #ecc94b);
+            color: #1a1a2e; transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .shop-item-preview-action-btn:hover { transform: scale(1.04); box-shadow: 0 5px 15px rgba(214,158,46,0.4); }
+        .shop-item-preview-action-btn:disabled { background: #4a5568; color: #718096; cursor: not-allowed; transform: none; }
+        .shop-item-preview-action-btn.equip-btn { background: linear-gradient(135deg, #2b6cb0, #4299e1); color: #fff; }
+        .shop-item-preview-action-btn.equip-btn:hover { box-shadow: 0 5px 15px rgba(66,153,225,0.4); }
+
         /* Mobile Responsive */
         @media (max-width: 600px) {
             .shop-container {
@@ -549,7 +626,28 @@ BuffettShopUI.createShopHTML = function() {
     `;
     
     document.body.appendChild(overlay);
-    
+
+    // Create preview overlay
+    if (!document.getElementById('shop-item-preview')) {
+        const previewEl = document.createElement('div');
+        previewEl.id = 'shop-item-preview';
+        previewEl.className = 'shop-item-preview-overlay';
+        previewEl.style.display = 'none';
+        previewEl.innerHTML = `
+            <div class="shop-item-preview-card">
+                <button class="shop-item-preview-close" id="shop-preview-close">✕</button>
+                <div class="shop-item-preview-body" id="shop-preview-body"></div>
+                <div class="shop-item-preview-footer">
+                    <div class="shop-item-preview-price-display" id="shop-preview-price"></div>
+                    <button class="shop-item-preview-action-btn" id="shop-preview-action-btn"></button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(previewEl);
+        document.getElementById('shop-preview-close').addEventListener('click', () => this.closePreview());
+        previewEl.addEventListener('click', (e) => { if (e.target === previewEl) this.closePreview(); });
+    }
+
     // Event listeners
     document.getElementById('shop-close-btn').addEventListener('click', () => this.close());
     overlay.addEventListener('click', (e) => {
@@ -709,14 +807,128 @@ BuffettShopUI.renderItems = function(categoryId) {
             const action = e.target.dataset.action;
             const category = e.target.dataset.category;
             const id = e.target.dataset.id;
-            
-            if (action === 'buy') {
+
+            const allItems = BuffettShop.items[category] || [];
+            const itemObj = allItems.find(it => it.id === id);
+            if (itemObj) {
+                this.showItemPreview(category, itemObj, action);
+            } else if (action === 'buy') {
                 this.handlePurchase(category, id);
             } else if (action === 'equip') {
                 this.handleEquip(category, id);
             }
         });
     });
+};
+
+// ==============================
+// SHOW ITEM PREVIEW
+// ==============================
+BuffettShopUI.showItemPreview = function(categoryId, item, action) {
+    const previewEl = document.getElementById('shop-item-preview');
+    const bodyEl = document.getElementById('shop-preview-body');
+    const priceEl = document.getElementById('shop-preview-price');
+    const oldBtn = document.getElementById('shop-preview-action-btn');
+    if (!previewEl || !bodyEl || !priceEl || !oldBtn) return;
+
+    // Replace action button to clear old listeners
+    const actionBtn = oldBtn.cloneNode(false);
+    actionBtn.id = 'shop-preview-action-btn';
+    oldBtn.parentNode.replaceChild(actionBtn, oldBtn);
+
+    // Build icon content based on category
+    let iconContent = '';
+    if (categoryId === 'themes' && item.css) {
+        const bg = item.css['--bg-primary'] || '#f7fafc';
+        const accent1 = item.css['--accent-start'] || '#38b2ac';
+        const accent2 = item.css['--accent-end'] || '#3182ce';
+        const txt = item.css['--text-primary'] || '#2d3748';
+        iconContent = `
+            <div class="shop-preview-theme-compare">
+                <div class="shop-preview-theme-mini" style="background:${bg};color:${txt}">
+                    <div class="shop-preview-theme-label">תצוגה מקדימה</div>
+                    <div style="font-size:1.4em">${item.preview}</div>
+                    <div style="display:flex;gap:5px;justify-content:center;margin-top:6px;">
+                        <span style="width:16px;height:16px;border-radius:50%;background:${accent1};display:inline-block;border:1px solid rgba(255,255,255,0.3)"></span>
+                        <span style="width:16px;height:16px;border-radius:50%;background:${accent2};display:inline-block;border:1px solid rgba(255,255,255,0.3)"></span>
+                        <span style="width:16px;height:16px;border-radius:50%;background:${txt};display:inline-block;border:1px solid rgba(255,255,255,0.3)"></span>
+                    </div>
+                </div>
+            </div>
+        `;
+    } else if (categoryId === 'cardFrames') {
+        const borderStyle = item.css ? (item.css.border || '3px solid #888') : '3px solid #888';
+        const shadowStyle = item.css ? (item.css.boxShadow || 'none') : 'none';
+        iconContent = `
+            <div class="shop-preview-frame-demo" style="border:${borderStyle};box-shadow:${shadowStyle}">💳</div>
+        `;
+    } else if (categoryId === 'effects') {
+        iconContent = `<div style="font-size:4em;margin:10px 0 8px">${item.preview}</div>`;
+    } else if (categoryId === 'avatars' || categoryId === 'mascots') {
+        iconContent = `<div style="width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:2.8em;margin:10px auto 8px">${item.preview}</div>`;
+    } else if (categoryId === 'titles') {
+        const display = item.displayText || item.preview;
+        iconContent = `<div style="font-size:1.5em;font-weight:700;color:#ecc94b;margin:12px 0 8px;padding:6px 14px;border:2px solid rgba(236,201,75,0.4);border-radius:8px;display:inline-block">${display}</div>`;
+    } else {
+        iconContent = `<div style="font-size:4em;margin:10px 0 8px">${item.preview}</div>`;
+    }
+
+    bodyEl.innerHTML = `
+        <div class="shop-preview-icon-wrap">${iconContent}</div>
+        <div class="shop-preview-item-name">${item.name}</div>
+        <div class="shop-preview-item-desc">${item.description}</div>
+    `;
+
+    // Price display
+    const currentPoints = BuffettShop.logic.getPoints();
+    const canAfford = currentPoints >= item.price;
+    if (item.price === 0) {
+        priceEl.textContent = 'חינם';
+        priceEl.className = 'shop-item-preview-price-display free';
+    } else if (!canAfford) {
+        priceEl.innerHTML = `💰 ${item.price.toLocaleString()}`;
+        priceEl.className = 'shop-item-preview-price-display cant-afford';
+    } else {
+        priceEl.innerHTML = `💰 ${item.price.toLocaleString()}`;
+        priceEl.className = 'shop-item-preview-price-display';
+    }
+
+    // Action button
+    if (action === 'buy') {
+        actionBtn.textContent = 'קנה';
+        actionBtn.className = 'shop-item-preview-action-btn';
+        actionBtn.setAttribute('data-preview-action', 'buy');
+        actionBtn.setAttribute('data-category', categoryId);
+        actionBtn.setAttribute('data-id', item.id);
+        actionBtn.disabled = !canAfford;
+    } else if (action === 'equip') {
+        actionBtn.textContent = 'צייד';
+        actionBtn.className = 'shop-item-preview-action-btn equip-btn';
+        actionBtn.setAttribute('data-preview-action', 'equip');
+        actionBtn.setAttribute('data-category', categoryId);
+        actionBtn.setAttribute('data-id', item.id);
+        actionBtn.disabled = false;
+    }
+
+    // Action button click
+    actionBtn.addEventListener('click', () => {
+        this.closePreview();
+        if (action === 'buy') {
+            this.handlePurchase(categoryId, item.id);
+        } else if (action === 'equip') {
+            this.handleEquip(categoryId, item.id);
+        }
+    });
+
+    previewEl.style.display = 'flex';
+};
+
+// ==============================
+// CLOSE PREVIEW
+// ==============================
+BuffettShopUI.closePreview = function() {
+    const previewEl = document.getElementById('shop-item-preview');
+    if (previewEl) previewEl.style.display = 'none';
 };
 
 // ==============================

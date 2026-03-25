@@ -891,6 +891,45 @@
 .achievement-badge-name { font-size: 0.58em; color: #a0aec0; line-height: 1.2; }
 .achievement-badge.earned .achievement-badge-name { color: #b0d8d4; }
 
+/* ── Achievement Skill Tree (Feature 1) ──────────────────────────── */
+.ach-tree-counter {
+    text-align: center; font-size: 0.9em; font-weight: 700;
+    color: #b0c4ce; margin-bottom: 0.6rem;
+}
+.ach-tree-bar {
+    height: 5px; background: rgba(255,255,255,0.1);
+    border-radius: 3px; margin: 0.4rem auto 0; max-width: 200px;
+}
+.ach-tree-bar-fill {
+    height: 100%; background: linear-gradient(90deg, #2a9d8f, #ecc94b);
+    border-radius: 3px; transition: width 0.4s ease;
+}
+.ach-tree-wrap {
+    position: relative; margin-bottom: 0.5rem;
+}
+.ach-node-pulse {
+    animation: ach-node-pulse 2s ease-in-out infinite;
+    transform-box: fill-box; transform-origin: center;
+}
+@keyframes ach-node-pulse {
+    0%,100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 0.7; }
+}
+.ach-tree-popover {
+    position: absolute; background: #1a2e38;
+    border: 1px solid rgba(42,157,143,0.5); border-radius: 12px;
+    padding: 10px 14px; min-width: 160px; max-width: 200px;
+    z-index: 100; box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    text-align: center; pointer-events: none;
+    font-family: 'Heebo', sans-serif; direction: rtl;
+}
+.ach-pop-icon { font-size: 1.8em; margin-bottom: 4px; }
+.ach-pop-name { font-size: 0.85em; font-weight: 700; color: #f0f8fa; margin-bottom: 4px; }
+.ach-pop-desc { font-size: 0.72em; color: #8fa8b0; line-height: 1.4; margin-bottom: 6px; }
+.ach-pop-status { font-size: 0.75em; font-weight: 700; padding: 2px 8px; border-radius: 20px; display: inline-block; }
+.ach-pop-status.earned { background: rgba(42,157,143,0.2); color: #68d391; }
+.ach-pop-status.locked { background: rgba(255,255,255,0.08); color: #718096; }
+
 /* ── Achievement Toast (2B) ──────────────────────────────────────── */
 .achievement-toast {
     position: fixed;
