@@ -458,81 +458,63 @@ BuffettShopUI.injectStyles = function() {
         }
         
         /* Shop Item Preview Modal */
-        .shop-item-preview-overlay {
+        .shop-preview-overlay {
             position: fixed; inset: 0;
-            background: rgba(0,0,0,0.75);
+            background: rgba(0,0,0,0.8);
             z-index: 20000;
             display: flex; align-items: center; justify-content: center;
-            padding: 20px;
+            padding: 16px;
         }
-        .shop-item-preview-card {
-            background: linear-gradient(145deg, #1a1a2e, #16213e);
-            border: 2px solid rgba(214,158,46,0.4);
-            border-radius: 20px;
-            padding: 28px 24px 20px;
+        .shop-preview-modal {
+            background: #141b2d;
+            border: 1.5px solid rgba(214,158,46,0.35);
+            border-radius: 18px;
             max-width: 380px; width: 100%;
             position: relative;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-            text-align: center;
-            direction: rtl;
+            box-shadow: 0 24px 60px rgba(0,0,0,0.7);
+            direction: rtl; overflow: hidden;
         }
-        .shop-item-preview-close {
+        .shop-preview-close-btn {
             position: absolute; top: 12px; left: 14px;
-            background: rgba(255,255,255,0.1); border: none;
-            color: #fff; width: 32px; height: 32px; border-radius: 50%;
-            font-size: 1.1em; cursor: pointer; display: flex; align-items: center; justify-content: center;
-            transition: background 0.2s;
-        }
-        .shop-item-preview-close:hover { background: rgba(255,255,255,0.2); }
-        .shop-item-preview-body { margin-bottom: 20px; }
-        .shop-preview-icon-wrap {
-            font-size: 4em; margin: 10px 0 16px;
+            background: rgba(255,255,255,0.08); border: none;
+            color: #fff; width: 30px; height: 30px; border-radius: 50%;
+            font-size: 1em; cursor: pointer; z-index: 1;
             display: flex; align-items: center; justify-content: center;
         }
-        .shop-preview-item-name {
-            font-size: 1.3em; font-weight: 700; color: #fff; margin-bottom: 8px;
+        .shop-preview-close-btn:hover { background: rgba(255,255,255,0.16); }
+        .shop-preview-visual {
+            background: #1e2a3a;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            min-height: 140px; display: flex; align-items: center; justify-content: center;
         }
-        .shop-preview-item-desc {
-            font-size: 0.88em; color: #a0aec0; line-height: 1.5;
-        }
-        .shop-preview-theme-compare {
-            display: flex; gap: 14px; margin: 16px 0;
-            justify-content: center; align-items: stretch;
-        }
-        .shop-preview-theme-mini {
-            flex: 1; max-width: 130px; border-radius: 12px;
-            padding: 12px 10px; font-size: 0.8em; text-align: center;
-            border: 2px solid rgba(255,255,255,0.15);
-        }
-        .shop-preview-theme-label {
-            font-size: 0.72em; color: rgba(255,255,255,0.55); margin-bottom: 6px;
-        }
-        .shop-preview-frame-demo {
-            width: 90px; height: 90px; border-radius: 16px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 2.5em; margin: 12px auto;
-            background: rgba(255,255,255,0.08);
-        }
-        .shop-item-preview-footer {
+        .shop-preview-info { padding: 14px 18px 10px; }
+        .shop-preview-name { font-size: 1.15em; font-weight: 700; color: #f0f8fa; margin-bottom: 4px; }
+        .shop-preview-desc { font-size: 0.85em; color: #a0aec0; line-height: 1.45; }
+        .shop-preview-footer {
             display: flex; justify-content: space-between; align-items: center;
-            padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1);
+            padding: 12px 18px 16px;
+            border-top: 1px solid rgba(255,255,255,0.08);
         }
-        .shop-item-preview-price-display {
-            font-size: 1.15em; font-weight: 700; color: #ecc94b;
+        .shop-preview-price-text { font-size: 1.1em; font-weight: 700; }
+        .shop-preview-cta {
+            padding: 10px 22px; border-radius: 10px; border: none;
+            font-size: 0.95em; font-weight: 700; cursor: pointer; font-family: inherit;
+            transition: transform 0.15s, opacity 0.15s;
         }
-        .shop-item-preview-price-display.free { color: #48bb78; }
-        .shop-item-preview-price-display.cant-afford { color: #fc8181; }
-        .shop-item-preview-action-btn {
-            padding: 10px 24px; border-radius: 10px; border: none;
-            font-size: 1em; font-weight: 700; cursor: pointer;
-            font-family: inherit;
+        .shop-preview-cta.buy-mode {
             background: linear-gradient(135deg, #d69e2e, #ecc94b);
-            color: #1a1a2e; transition: transform 0.2s, box-shadow 0.2s;
+            color: #1a1a2e;
         }
-        .shop-item-preview-action-btn:hover { transform: scale(1.04); box-shadow: 0 5px 15px rgba(214,158,46,0.4); }
-        .shop-item-preview-action-btn:disabled { background: #4a5568; color: #718096; cursor: not-allowed; transform: none; }
-        .shop-item-preview-action-btn.equip-btn { background: linear-gradient(135deg, #2b6cb0, #4299e1); color: #fff; }
-        .shop-item-preview-action-btn.equip-btn:hover { box-shadow: 0 5px 15px rgba(66,153,225,0.4); }
+        .shop-preview-cta.equip-mode {
+            background: linear-gradient(135deg, #2b6cb0, #4299e1);
+            color: #fff;
+        }
+        .shop-preview-cta:hover:not(:disabled) { transform: scale(1.04); }
+        .shop-preview-cta:disabled { background: #4a5568; color: #718096; cursor: not-allowed; }
+        @media (max-width: 420px) {
+            .shop-preview-modal { border-radius: 14px; }
+            .shop-preview-name { font-size: 1em; }
+        }
 
         /* Mobile Responsive */
         @media (max-width: 600px) {
@@ -631,15 +613,19 @@ BuffettShopUI.createShopHTML = function() {
     if (!document.getElementById('shop-item-preview')) {
         const previewEl = document.createElement('div');
         previewEl.id = 'shop-item-preview';
-        previewEl.className = 'shop-item-preview-overlay';
+        previewEl.className = 'shop-preview-overlay';
         previewEl.style.display = 'none';
         previewEl.innerHTML = `
-            <div class="shop-item-preview-card">
-                <button class="shop-item-preview-close" id="shop-preview-close">✕</button>
-                <div class="shop-item-preview-body" id="shop-preview-body"></div>
-                <div class="shop-item-preview-footer">
-                    <div class="shop-item-preview-price-display" id="shop-preview-price"></div>
-                    <button class="shop-item-preview-action-btn" id="shop-preview-action-btn"></button>
+            <div class="shop-preview-modal">
+                <button class="shop-preview-close-btn" id="shop-preview-close">✕</button>
+                <div class="shop-preview-visual" id="shop-preview-visual"></div>
+                <div class="shop-preview-info">
+                    <h3 class="shop-preview-name" id="shop-preview-name"></h3>
+                    <p class="shop-preview-desc" id="shop-preview-desc"></p>
+                </div>
+                <div class="shop-preview-footer">
+                    <span class="shop-preview-price-text" id="shop-preview-price-text"></span>
+                    <button class="shop-preview-cta" id="shop-preview-cta"></button>
                 </div>
             </div>
         `;
@@ -825,110 +811,149 @@ BuffettShopUI.renderItems = function(categoryId) {
 // SHOW ITEM PREVIEW
 // ==============================
 BuffettShopUI.showItemPreview = function(categoryId, item, action) {
-    const previewEl = document.getElementById('shop-item-preview');
-    const bodyEl = document.getElementById('shop-preview-body');
-    const priceEl = document.getElementById('shop-preview-price');
-    const oldBtn = document.getElementById('shop-preview-action-btn');
-    if (!previewEl || !bodyEl || !priceEl || !oldBtn) return;
+    const overlay = document.getElementById('shop-item-preview');
+    if (!overlay) return;
 
-    // Replace action button to clear old listeners
-    const actionBtn = oldBtn.cloneNode(false);
-    actionBtn.id = 'shop-preview-action-btn';
-    oldBtn.parentNode.replaceChild(actionBtn, oldBtn);
-
-    // Build icon content based on category
-    let iconContent = '';
-    if (categoryId === 'themes' && item.css) {
-        const bg = item.css['--bg-primary'] || '#f7fafc';
-        const accent1 = item.css['--accent-start'] || '#38b2ac';
-        const accent2 = item.css['--accent-end'] || '#3182ce';
-        const txt = item.css['--text-primary'] || '#2d3748';
-        iconContent = `
-            <div class="shop-preview-theme-compare">
-                <div class="shop-preview-theme-mini" style="background:${bg};color:${txt}">
-                    <div class="shop-preview-theme-label">תצוגה מקדימה</div>
-                    <div style="font-size:1.4em">${item.preview}</div>
-                    <div style="display:flex;gap:5px;justify-content:center;margin-top:6px;">
-                        <span style="width:16px;height:16px;border-radius:50%;background:${accent1};display:inline-block;border:1px solid rgba(255,255,255,0.3)"></span>
-                        <span style="width:16px;height:16px;border-radius:50%;background:${accent2};display:inline-block;border:1px solid rgba(255,255,255,0.3)"></span>
-                        <span style="width:16px;height:16px;border-radius:50%;background:${txt};display:inline-block;border:1px solid rgba(255,255,255,0.3)"></span>
-                    </div>
-                </div>
-            </div>
-        `;
-    } else if (categoryId === 'cardFrames') {
-        const borderStyle = item.css ? (item.css.border || '3px solid #888') : '3px solid #888';
-        const shadowStyle = item.css ? (item.css.boxShadow || 'none') : 'none';
-        iconContent = `
-            <div class="shop-preview-frame-demo" style="border:${borderStyle};box-shadow:${shadowStyle}">💳</div>
-        `;
-    } else if (categoryId === 'effects') {
-        iconContent = `<div style="font-size:4em;margin:10px 0 8px">${item.preview}</div>`;
-    } else if (categoryId === 'avatars' || categoryId === 'mascots') {
-        iconContent = `<div style="width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:2.8em;margin:10px auto 8px">${item.preview}</div>`;
-    } else if (categoryId === 'titles') {
-        const display = item.displayText || item.preview;
-        iconContent = `<div style="font-size:1.5em;font-weight:700;color:#ecc94b;margin:12px 0 8px;padding:6px 14px;border:2px solid rgba(236,201,75,0.4);border-radius:8px;display:inline-block">${display}</div>`;
-    } else {
-        iconContent = `<div style="font-size:4em;margin:10px 0 8px">${item.preview}</div>`;
+    // Build visual preview
+    let visualHTML = '';
+    if (categoryId === 'themes') visualHTML = this._buildThemePreview(item);
+    else if (categoryId === 'cardFrames') visualHTML = this._buildFramePreview(item);
+    else if (categoryId === 'effects') visualHTML = this._buildEffectPreview(item);
+    else if (categoryId === 'avatars' || categoryId === 'mascots') visualHTML = this._buildAvatarPreview(item);
+    else if (categoryId === 'titles') visualHTML = this._buildTitlePreview(item);
+    else {
+        visualHTML = `<div style="display:flex;align-items:center;justify-content:center;padding:24px;font-size:3.5em">${item.preview}</div>`;
     }
 
-    bodyEl.innerHTML = `
-        <div class="shop-preview-icon-wrap">${iconContent}</div>
-        <div class="shop-preview-item-name">${item.name}</div>
-        <div class="shop-preview-item-desc">${item.description}</div>
-    `;
+    document.getElementById('shop-preview-visual').innerHTML = visualHTML;
+    document.getElementById('shop-preview-name').textContent = item.name;
+    document.getElementById('shop-preview-desc').textContent = item.description;
 
     // Price display
-    const currentPoints = BuffettShop.logic.getPoints();
-    const canAfford = currentPoints >= item.price;
-    if (item.price === 0) {
+    const canAfford = BuffettShop.logic.getPoints() >= item.price;
+    const priceEl = document.getElementById('shop-preview-price-text');
+    if (action === 'equip') {
+        priceEl.textContent = 'ברשותך';
+        priceEl.style.color = '#48bb78';
+    } else if (item.price === 0) {
         priceEl.textContent = 'חינם';
-        priceEl.className = 'shop-item-preview-price-display free';
-    } else if (!canAfford) {
-        priceEl.innerHTML = `💰 ${item.price.toLocaleString()}`;
-        priceEl.className = 'shop-item-preview-price-display cant-afford';
+        priceEl.style.color = '#48bb78';
     } else {
         priceEl.innerHTML = `💰 ${item.price.toLocaleString()}`;
-        priceEl.className = 'shop-item-preview-price-display';
+        priceEl.style.color = canAfford ? '#ecc94b' : '#fc8181';
     }
 
-    // Action button
-    if (action === 'buy') {
-        actionBtn.textContent = 'קנה';
-        actionBtn.className = 'shop-item-preview-action-btn';
-        actionBtn.setAttribute('data-preview-action', 'buy');
-        actionBtn.setAttribute('data-category', categoryId);
-        actionBtn.setAttribute('data-id', item.id);
-        actionBtn.disabled = !canAfford;
-    } else if (action === 'equip') {
-        actionBtn.textContent = 'צייד';
-        actionBtn.className = 'shop-item-preview-action-btn equip-btn';
-        actionBtn.setAttribute('data-preview-action', 'equip');
-        actionBtn.setAttribute('data-category', categoryId);
-        actionBtn.setAttribute('data-id', item.id);
-        actionBtn.disabled = false;
+    // CTA button — clone to remove old listeners
+    const ctaBtn = document.getElementById('shop-preview-cta');
+    const newBtn = ctaBtn.cloneNode(true);
+    ctaBtn.parentNode.replaceChild(newBtn, ctaBtn);
+
+    if (action === 'equip') {
+        newBtn.textContent = 'צייד';
+        newBtn.className = 'shop-preview-cta equip-mode';
+        newBtn.disabled = false;
+    } else {
+        newBtn.textContent = 'קנה';
+        newBtn.className = 'shop-preview-cta buy-mode';
+        newBtn.disabled = !canAfford && item.price !== 0;
     }
 
-    // Action button click
-    actionBtn.addEventListener('click', () => {
+    newBtn.addEventListener('click', () => {
         this.closePreview();
-        if (action === 'buy') {
-            this.handlePurchase(categoryId, item.id);
-        } else if (action === 'equip') {
-            this.handleEquip(categoryId, item.id);
-        }
+        if (action === 'buy') this.handlePurchase(categoryId, item.id);
+        else if (action === 'equip') this.handleEquip(categoryId, item.id);
     });
 
-    previewEl.style.display = 'flex';
+    overlay.style.display = 'flex';
+};
+
+// ==============================
+// PREVIEW BUILDERS
+// ==============================
+BuffettShopUI._buildThemePreview = function(item) {
+    const equipped = BuffettShop.getEquipped();
+    const currentThemeId = equipped.theme || 'theme-default';
+    const currentTheme = (BuffettShop.items.themes || []).find(t => t.id === currentThemeId);
+    const currentCss = (currentTheme && currentTheme.css) ? currentTheme.css : {};
+    const previewCss = item.css || {};
+
+    function miniCard(css, label) {
+        const bg = css['--bg-primary'] || '#eef6fb';
+        const card = css['--card-bg'] || '#ffffff';
+        const accent = css['--accent-start'] || '#2a9d8f';
+        const text = css['--text-primary'] || '#1a2e38';
+        const textLight = css['--text-secondary'] || '#5a7280';
+        return `<div style="flex:1;border-radius:10px;padding:10px;background:${bg};border:1px solid rgba(0,0,0,0.1);min-width:0">
+            <div style="font-size:0.6em;color:${textLight};margin-bottom:6px;text-align:center">${label}</div>
+            <div style="background:${card};border-radius:8px;padding:8px;border-top:3px solid ${accent}">
+                <div style="font-size:0.65em;font-weight:700;color:${text};margin-bottom:4px">חברת דוגמה</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:6px">
+                    <div style="background:rgba(0,0,0,0.05);border-radius:4px;padding:3px;text-align:center;font-size:0.55em;color:${textLight}"><span style="display:block;color:${text};font-weight:600">15.2</span>P/E</div>
+                    <div style="background:rgba(0,0,0,0.05);border-radius:4px;padding:3px;text-align:center;font-size:0.55em;color:${textLight}"><span style="display:block;color:${text};font-weight:600">22%</span>ROE</div>
+                </div>
+                <div style="display:flex;gap:4px">
+                    <div style="flex:1;background:${accent};color:#fff;border-radius:5px;padding:4px;text-align:center;font-size:0.6em;font-weight:600">קנייה</div>
+                    <div style="flex:1;background:rgba(0,0,0,0.1);color:${text};border-radius:5px;padding:4px;text-align:center;font-size:0.6em">מעבר</div>
+                </div>
+            </div>
+        </div>`;
+    }
+
+    return `<div style="display:flex;gap:10px;padding:10px">${miniCard(currentCss, 'נוכחי')}${miniCard(previewCss, 'תצוגה מקדימה')}</div>`;
+};
+
+BuffettShopUI._buildFramePreview = function(item) {
+    const css = item.css || {};
+    const equipped = BuffettShop.getEquipped();
+    const currentAvatarId = equipped.avatar;
+    const allAvatars = BuffettShop.items.avatars || [];
+    const avatarItem = allAvatars.find(a => a.id === currentAvatarId);
+    const avatarEmoji = avatarItem ? avatarItem.preview : '🧑‍💼';
+    const borderStyle = css.border ? `border: ${css.border};` : '';
+    const shadowStyle = css.boxShadow ? `box-shadow: ${css.boxShadow};` : '';
+    const radiusStyle = css.borderRadius ? `border-radius: ${css.borderRadius};` : 'border-radius: 50%;';
+    return `<div style="display:flex;align-items:center;justify-content:center;padding:20px">
+        <div style="width:90px;height:90px;${radiusStyle}background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:2.5em;${borderStyle}${shadowStyle}transition:box-shadow 0.3s">${avatarEmoji}</div>
+    </div>`;
+};
+
+BuffettShopUI._buildEffectPreview = function(item) {
+    return `<div style="text-align:center;padding:20px">
+        <div id="effect-demo-target" style="font-size:2em;font-weight:700;color:#ecc94b;margin-bottom:12px;display:inline-block">+100 נק'</div>
+        <div style="font-size:0.85em;color:#a0aec0;margin-bottom:12px">${item.description}</div>
+        <button onclick="document.getElementById('effect-demo-target').style.animation='none';requestAnimationFrame(function(){requestAnimationFrame(function(){document.getElementById('effect-demo-target').style.animation=''})})"
+            style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;padding:6px 16px;border-radius:8px;cursor:pointer;font-family:inherit;font-size:0.85em">▶ הפעל שוב</button>
+    </div>`;
+};
+
+BuffettShopUI._buildAvatarPreview = function(item) {
+    const equipped = BuffettShop.getEquipped();
+    const currentFrameId = equipped.cardFrame;
+    const allFrames = BuffettShop.items.cardFrames || [];
+    const frameItem = allFrames.find(f => f.id === currentFrameId);
+    const frameCSS = frameItem ? (frameItem.css || {}) : {};
+    const borderStyle = frameCSS.border ? `border:${frameCSS.border};` : '';
+    const shadowStyle = frameCSS.boxShadow ? `box-shadow:${frameCSS.boxShadow};` : '';
+    return `<div style="display:flex;align-items:center;justify-content:center;padding:16px">
+        <div style="width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:3em;${borderStyle}${shadowStyle}">${item.preview}</div>
+    </div>`;
+};
+
+BuffettShopUI._buildTitlePreview = function(item) {
+    const displayText = item.displayText || item.name;
+    return `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;gap:8px">
+        <div style="width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:2em">🧑‍💼</div>
+        <div style="font-weight:700;color:#f0f8fa;font-size:1em">שחקן</div>
+        <div style="font-size:0.9em;color:#ecc94b;font-style:italic;font-weight:600">${displayText}</div>
+    </div>`;
 };
 
 // ==============================
 // CLOSE PREVIEW
 // ==============================
 BuffettShopUI.closePreview = function() {
-    const previewEl = document.getElementById('shop-item-preview');
-    if (previewEl) previewEl.style.display = 'none';
+    const overlay = document.getElementById('shop-item-preview');
+    if (overlay) overlay.style.display = 'none';
 };
 
 // ==============================

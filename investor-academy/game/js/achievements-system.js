@@ -328,39 +328,52 @@ window.BuffettMastery = (function () {
         _dashEl.querySelector('.mastery-close-btn').addEventListener('click', hideMasteryDashboard);
         _dashEl.addEventListener('click', e => { if (e.target === _dashEl) hideMasteryDashboard(); });
 
-        // SVG tree click listener
-        const svgEl = _dashEl.querySelector('.ach-tree-svg');
-        if (svgEl) {
-            svgEl.addEventListener('click', function(e) {
-                const hitTarget = e.target.closest('.tree-hit-target');
-                const popover = _dashEl.querySelector('#ach-tree-popover');
-                if (!hitTarget) {
-                    if (popover) popover.style.display = 'none';
-                    return;
-                }
-                const achId = hitTarget.getAttribute('data-ach');
-                const achDefs = window.BuffettAchievements?.ACHIEVEMENT_DEFS || [];
-                const ach = achDefs.find(a => a.id === achId);
-                if (!ach || !popover) return;
-                const achievements = loadAchievements();
-                const earned = (achievements.unlocked || []).includes(achId);
-                popover.innerHTML = `
-                    <div class="ach-pop-icon">${ach.icon}</div>
-                    <div class="ach-pop-name">${ach.name}</div>
-                    <div class="ach-pop-desc">${ach.description}</div>
-                    <span class="ach-pop-status ${earned ? 'earned' : 'locked'}">${earned ? '✓ הושג' : '🔒 נעול'}</span>
-                `;
-                // Position popover relative to .ach-tree-wrap
-                const wrapEl = _dashEl.querySelector('.ach-tree-wrap');
-                const svgRect = svgEl.getBoundingClientRect();
-                const wrapRect = wrapEl.getBoundingClientRect();
-                const scaleX = svgRect.width / 580;
-                const scaleY = svgRect.height / 520;
-                const domX = parseFloat(hitTarget.getAttribute('cx')) * scaleX + (svgRect.left - wrapRect.left);
-                const domY = parseFloat(hitTarget.getAttribute('cy')) * scaleY + (svgRect.top - wrapRect.top);
-                popover.style.left = Math.max(0, Math.min(domX - 85, wrapRect.width - 200)) + 'px';
-                popover.style.top = Math.max(0, domY - 130) + 'px';
+        // Achievement tree click handler
+        const treeWrap = _dashEl.querySelector('.ach-tree-wrap');
+        if (treeWrap) {
+            const popover = treeWrap.querySelector('#ach-tree-popover');
+            const achDefs = window.BuffettAchievements?.ACHIEVEMENT_DEFS || [];
+            const achMap = {};
+            achDefs.forEach(a => { achMap[a.id] = a; });
+            const currentUnlocked = loadAchievements().unlocked || [];
+
+            treeWrap.addEventListener('click', (e) => {
+                const node = e.target.closest('[data-ach-id]');
+                if (!node) { popover.style.display = 'none'; return; }
+
+                const achId = node.dataset.achId;
+                const ach = achMap[achId];
+                if (!ach) return;
+                const isEarned = currentUnlocked.includes(achId);
+
+                popover.querySelector('.ach-pop-icon').textContent = ach.icon;
+                popover.querySelector('.ach-pop-name').textContent = ach.name;
+                popover.querySelector('.ach-pop-desc').textContent = ach.description;
+                const statusEl = popover.querySelector('.ach-pop-status');
+                statusEl.textContent = isEarned ? '✓ הושג' : '🔒 נעול';
+                statusEl.className = 'ach-pop-status ' + (isEarned ? 'earned' : 'locked');
+
+                // Position popover above/beside node
+                const nodeRect = node.getBoundingClientRect();
+                const wrapRect = treeWrap.getBoundingClientRect();
+                let left = nodeRect.left - wrapRect.left - 70;
+                let top = nodeRect.top - wrapRect.top - 130;
+                // Clamp
+                left = Math.max(0, Math.min(left, wrapRect.width - 180));
+                top = Math.max(0, top);
+
+                popover.style.left = left + 'px';
+                popover.style.top = top + 'px';
                 popover.style.display = 'block';
+                e.stopPropagation();
+            });
+
+            // Close popover on click outside tree
+            document.addEventListener('click', function closeTreePop(e) {
+                if (!treeWrap.contains(e.target)) {
+                    popover.style.display = 'none';
+                    document.removeEventListener('click', closeTreePop);
+                }
             });
         }
     }
@@ -373,125 +386,94 @@ window.BuffettMastery = (function () {
 
     function _buildAchievementTree(achData) {
         const achDefs = window.BuffettAchievements?.ACHIEVEMENT_DEFS || [];
+        const achMap = {};
+        achDefs.forEach(a => { achMap[a.id] = a; });
         const unlocked = achData.unlocked || [];
-        const earnedCount = unlocked.length;
-        const totalCount = achDefs.length;
-        const pct = totalCount > 0 ? Math.round(earnedCount / totalCount * 100) : 0;
+        const earned = unlocked.length;
+        const total = achDefs.length;
+        const pct = total > 0 ? Math.round(earned / total * 100) : 0;
 
         const PATHS = [
-            { name: 'שומר החפיר',  color: '#2a9d8f', angle: 90,  nodes: ['first_steps','moat_master','fcf_expert','value_hunter','all_principles'], spacing: 45 },
-            { name: 'בלש הרווחים', color: '#f6c23e', angle: 18,  nodes: ['vs_champion','sell_hold_pro','principle_spotter','principle_streak_5','glossary_master'], spacing: 45 },
-            { name: 'אש על המגרש', color: '#e76f51', angle: 306, nodes: ['hot_streak','perfect_game','combo_king','speed_demon','hint_avoider'], spacing: 45 },
-            { name: 'מטפס הדרגות', color: '#3498db', angle: 234, nodes: ['orange_belt','green_belt','black_belt','hundred_rounds','multi_difficulty'], spacing: 45 },
-            { name: 'המתמיד',       color: '#9b59b6', angle: 162, nodes: ['daily_player','ten_games','comeback_kid','marathon','expert_debut','night_owl','early_bird'], spacing: 37 }
+            { color: '#2a9d8f', label: 'שומר החפיר',   ids: ['first_steps','moat_master','fcf_expert','value_hunter','all_principles'] },
+            { color: '#f6c23e', label: 'בלש הרווחים',  ids: ['vs_champion','sell_hold_pro','principle_spotter','principle_streak_5','glossary_master'] },
+            { color: '#e76f51', label: 'אש על המגרש',  ids: ['hot_streak','perfect_game','combo_king','speed_demon','hint_avoider'] },
+            { color: '#3498db', label: 'מטפס הדרגות',  ids: ['orange_belt','green_belt','black_belt','hundred_rounds','multi_difficulty'] },
+            { color: '#9b59b6', label: 'המתמיד',        ids: ['daily_player','ten_games','comeback_kid','marathon','expert_debut'] }
         ];
+        const BONUS_IDS = ['night_owl', 'early_bird'];
 
-        const cx = 290, cy = 310;
-        let svgContent = '';
+        function nodeState(achId, prevId) {
+            const isEarned = unlocked.includes(achId);
+            const prevEarned = !prevId || unlocked.includes(prevId);
+            if (isEarned) return 'earned';
+            if (prevEarned) return 'available';
+            return 'locked';
+        }
 
-        // Draw lines first (behind nodes)
-        PATHS.forEach(path => {
-            const rad = path.angle * Math.PI / 180;
-            const dx = Math.cos(rad), dy = -Math.sin(rad);
-            let prevX = cx, prevY = cy;
-            path.nodes.forEach((achId, i) => {
-                const nx = Math.round(cx + dx * path.spacing * (i + 1));
-                const ny = Math.round(cy + dy * path.spacing * (i + 1));
-                const prevEarned = i === 0 ? true : unlocked.includes(path.nodes[i - 1]);
-                const thisEarned = unlocked.includes(achId);
-                const isAvailable = prevEarned && !thisEarned;
-                const isConnEarned = (i === 0 ? true : unlocked.includes(path.nodes[i - 1])) && thisEarned;
+        function buildNode(achId, state, pathColor) {
+            const ach = achMap[achId];
+            if (!ach) return '';
+            const icon = state === 'locked' ? '🔒' : ach.icon;
+            return `<div class="ach-tree-node ${state}" data-ach-id="${achId}" style="--path-color:${pathColor}" title="${ach.name}"><span class="ach-node-emoji">${icon}</span></div>`;
+        }
 
-                let lineOpacity, lineDash;
-                if (isConnEarned) { lineOpacity = '0.9'; lineDash = ''; }
-                else if (isAvailable) { lineOpacity = '0.45'; lineDash = 'stroke-dasharray="4 3"'; }
-                else if (prevEarned && !thisEarned) { lineOpacity = '0.45'; lineDash = 'stroke-dasharray="4 3"'; }
-                else { lineOpacity = '0.15'; lineDash = 'stroke-dasharray="4 3"'; }
+        function buildConnector(isEarned, pathColor) {
+            return `<div class="ach-tree-connector ${isEarned ? 'earned' : 'locked'}" style="${isEarned ? '--path-color:' + pathColor : ''}"></div>`;
+        }
 
-                svgContent += `<line x1="${prevX}" y1="${prevY}" x2="${nx}" y2="${ny}" stroke="${path.color}" stroke-width="2" opacity="${lineOpacity}" ${lineDash}/>`;
-                prevX = nx; prevY = ny;
-            });
-        });
+        // Fan SVG lines from center root to each of the 5 columns
+        const fanSvg = `<div class="ach-tree-fan"><svg viewBox="0 0 480 24" preserveAspectRatio="none">
+            ${[0,1,2,3,4].map(i => {
+                const x2 = (i * 96 + 48);
+                const pathColor = PATHS[i].color;
+                const isPathEarned = unlocked.includes(PATHS[i].ids[0]);
+                return `<line x1="240" y1="0" x2="${x2}" y2="24" stroke="${pathColor}" stroke-width="1.5" stroke-opacity="${isPathEarned ? '0.7' : '0.25'}" stroke-dasharray="${isPathEarned ? 'none' : '3 2'}"/>`;
+            }).join('')}
+        </svg></div>`;
 
-        // Draw center node
-        svgContent += `<circle cx="${cx}" cy="${cy}" r="26" fill="#1a2e38" stroke="#4a9d8f" stroke-width="2.5"/>`;
-        svgContent += `<text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" font-size="18">⭐</text>`;
-
-        // Draw path nodes
-        PATHS.forEach(path => {
-            const rad = path.angle * Math.PI / 180;
-            const dx = Math.cos(rad), dy = -Math.sin(rad);
-            const NR = 19;
-
-            path.nodes.forEach((achId, i) => {
-                const nx = Math.round(cx + dx * path.spacing * (i + 1));
-                const ny = Math.round(cy + dy * path.spacing * (i + 1));
-                const thisEarned = unlocked.includes(achId);
-                const prevEarned = i === 0 ? true : unlocked.includes(path.nodes[i - 1]);
-                const isAvailable = prevEarned && !thisEarned;
-                const ach = achDefs.find(a => a.id === achId);
-                const icon = ach ? ach.icon : '?';
-
-                let circleFill, circleStroke, circleFilter, pulseClass;
-                if (thisEarned) {
-                    circleFill = path.color;
-                    circleStroke = '';
-                    circleFilter = `filter="url(#glow-${path.color.replace('#','')})"`;
-                    pulseClass = '';
-                } else if (isAvailable) {
-                    circleFill = 'rgba(255,255,255,0.06)';
-                    circleStroke = `stroke="${path.color}" stroke-width="2.5"`;
-                    circleFilter = '';
-                    pulseClass = 'class="ach-node-pulse"';
-                } else {
-                    circleFill = 'rgba(255,255,255,0.03)';
-                    circleStroke = 'stroke="rgba(255,255,255,0.12)" stroke-width="1.5"';
-                    circleFilter = '';
-                    pulseClass = '';
+        // Build each path column
+        const pathCols = PATHS.map(path => {
+            let colHtml = `<div class="ach-tree-path" style="--path-color:${path.color}"><div class="ach-tree-path-label">${path.label}</div>`;
+            path.ids.forEach((achId, i) => {
+                const prevId = i === 0 ? null : path.ids[i - 1];
+                const state = nodeState(achId, prevId);
+                if (i > 0) {
+                    const connEarned = unlocked.includes(path.ids[i - 1]);
+                    colHtml += buildConnector(connEarned, path.color);
                 }
-
-                const displayIcon = (thisEarned || isAvailable) ? icon : '🔒';
-                const iconSize = (thisEarned || isAvailable) ? 14 : 11;
-
-                svgContent += `<circle cx="${nx}" cy="${ny}" r="${NR}" fill="${circleFill}" ${circleStroke} ${circleFilter} ${pulseClass}/>`;
-                svgContent += `<text x="${nx}" y="${ny}" text-anchor="middle" dominant-baseline="central" font-size="${iconSize}">${displayIcon}</text>`;
+                colHtml += buildNode(achId, state, path.color);
             });
+            colHtml += '</div>';
+            return colHtml;
+        }).join('');
 
-            // Path label (reuse rad/dx/dy already computed above)
-            const nc = path.nodes.length;
-            const labelX = Math.round(cx + dx * (path.spacing * nc + 26));
-            const labelY = Math.round(cy + dy * (path.spacing * nc + 26));
-            svgContent += `<text x="${labelX}" y="${labelY}" text-anchor="middle" dominant-baseline="central" font-size="10" fill="${path.color}" font-weight="700" font-family="Heebo,sans-serif">${path.name}</text>`;
-        });
-
-        // Hit targets (on top, after all visual elements)
-        PATHS.forEach(path => {
-            const rad = path.angle * Math.PI / 180;
-            const dx = Math.cos(rad), dy = -Math.sin(rad);
-            path.nodes.forEach((achId, i) => {
-                const nx = Math.round(cx + dx * path.spacing * (i + 1));
-                const ny = Math.round(cy + dy * path.spacing * (i + 1));
-                svgContent += `<circle fill="transparent" r="25" cx="${nx}" cy="${ny}" data-ach="${achId}" class="tree-hit-target" style="cursor:pointer"/>`;
-            });
-        });
-
-        // Glow filters
-        const glowColors = [...new Set(PATHS.map(p => p.color))];
-        const defs = `<defs>${glowColors.map(c => `<filter id="glow-${c.replace('#','')}" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>`).join('')}</defs>`;
+        // Build bonus row
+        const bonusNodes = BONUS_IDS.map(id => {
+            const ach = achMap[id];
+            if (!ach) return '';
+            const state = unlocked.includes(id) ? 'earned' : 'available';
+            return `<div class="ach-tree-node ${state}" data-ach-id="${id}" style="--path-color:#718096" title="${ach.name}"><span class="ach-node-emoji">${state === 'locked' ? '🔒' : ach.icon}</span></div>`;
+        }).join('');
 
         return `
-            <div class="ach-tree-counter">
-                🏆 ${earnedCount}/${totalCount} הישגים
-                <div class="ach-tree-bar"><div class="ach-tree-bar-fill" style="width:${pct}%"></div></div>
-            </div>
             <div class="ach-tree-wrap">
-                <svg class="ach-tree-svg" viewBox="0 0 580 520" style="width:100%;display:block;" xmlns="http://www.w3.org/2000/svg">
-                    ${defs}
-                    ${svgContent}
-                </svg>
-                <div id="ach-tree-popover" class="ach-tree-popover" style="display:none;"></div>
-            </div>
-        `;
+                <div class="ach-tree-counter">🏆 ${earned}/${total} הישגים
+                    <div class="ach-tree-bar"><div class="ach-tree-bar-fill" style="width:${pct}%"></div></div>
+                </div>
+                <div class="ach-tree-root-row"><div class="ach-tree-root-node" title="התחלת לשחק">⭐</div></div>
+                ${fanSvg}
+                <div class="ach-tree-grid">${pathCols}</div>
+                <div class="ach-tree-bonus-section">
+                    <div class="ach-tree-bonus-label">בונוסים</div>
+                    <div class="ach-tree-bonus-row">${bonusNodes}</div>
+                </div>
+                <div id="ach-tree-popover" class="ach-tree-popover" style="display:none">
+                    <div class="ach-pop-icon"></div>
+                    <div class="ach-pop-name"></div>
+                    <div class="ach-pop-desc"></div>
+                    <div class="ach-pop-status"></div>
+                </div>
+            </div>`;
     }
 
     function _buildDashboardHTML() {
