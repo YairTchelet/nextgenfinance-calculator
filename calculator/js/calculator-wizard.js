@@ -36,6 +36,7 @@ window.CalcWizard = (() => {
     // body.wz-state-advanced = full calculator (power user)
 
     function setState(state) {
+        document.body.classList.remove('wz-editing'); // clear edit mode on any state change
         document.body.className = document.body.className
             .replace(/wz-state-\w+/g, '').trim();
         document.body.classList.add(`wz-state-${state}`);
@@ -232,6 +233,9 @@ window.CalcWizard = (() => {
                     </button>
                     <button class="wz-action-btn" onclick="if(typeof CalcPDF!=='undefined')CalcPDF.generatePDF()">
                         <span>📄</span> ייצוא PDF
+                    </button>
+                    <button class="wz-action-btn wz-edit-toggle-btn" id="wz-edit-toggle" onclick="CalcWizard.toggleEditMode()">
+                        <span>✏️</span> ערוך מדדים
                     </button>
                     <button class="wz-action-btn" onclick="CalcWizard.goAdvanced()">
                         <span>🔧</span> מצב מתקדם
@@ -825,5 +829,21 @@ window.CalcWizard = (() => {
         init();
     }
 
-    return { goStep, goAdvanced, startNew, finishEntry, showResults, openLoadSavedModal };
+    function toggleEditMode() {
+        const isEditing = document.body.classList.toggle('wz-editing');
+        const btn = document.getElementById('wz-edit-toggle');
+        if (btn) {
+            btn.innerHTML = isEditing
+                ? '<span>✓</span> סיים עריכה'
+                : '<span>✏️</span> ערוך מדדים';
+            btn.classList.toggle('active', isEditing);
+        }
+        if (isEditing) {
+            // Scroll to first metric card so user sees the inputs
+            const firstCard = document.querySelector('.metric-card');
+            if (firstCard) firstCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
+    return { goStep, goAdvanced, startNew, finishEntry, showResults, openLoadSavedModal, toggleEditMode };
 })();

@@ -63,6 +63,16 @@ body.wz-state-results .delete-metric-btn { display: none !important; }
 body.wz-state-results .optional-metrics-section { display: none !important; }
 body.wz-state-results #add-custom-btn { display: none !important; }
 
+/* ── Inline edit mode: show inputs on results page ── */
+body.wz-state-results.wz-editing .metric-input-area { display: block !important; }
+body.wz-state-results.wz-editing .metric-card { padding: 14px 16px; }
+/* Edit toggle button active state */
+.wz-edit-toggle-btn.active {
+    background: var(--primary-light, #e8f4f8);
+    color: var(--primary, #2a7d9c);
+    border-color: var(--primary, #2a7d9c);
+}
+
 /* Metric card compact read-only style */
 body.wz-state-results .metric-card {
     padding: 12px 16px;
