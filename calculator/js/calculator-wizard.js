@@ -9,6 +9,7 @@ window.CalcWizard = (() => {
     let selectedTemplate = 'tech';
     let selectedMode = 'balanced';
     let dataMethod = null;
+    let _skipToResults = false; // set when data is pre-loaded (CSV/saved) from stage 1
 
     // ── Template + mode display data ──
     const templateInfo = {
@@ -308,6 +309,13 @@ window.CalcWizard = (() => {
         }
         renderProgress();
         if (n === 1) { renderModeGrid(); renderTemplateGrid(); }
+        if (n === 2 && _skipToResults) {
+            // Data already loaded from stage 1 shortcut — apply profile and go to results
+            applySettings();
+            _skipToResults = false;
+            showProcessing();
+            return;
+        }
         if (n === 2) {
             // Refresh prompt if AI tab is already active
             const aiTab = document.querySelector('.wz-tab[data-tab="ai"]');
@@ -536,11 +544,10 @@ window.CalcWizard = (() => {
                 if (!file) return;
                 e.target.value = null;
                 if (typeof importCSV === 'function') {
-                    // Apply settings so mode is correct, then import
-                    applySettings();
                     importCSV(file);
-                    // Give importCSV time to populate inputs, then go to results
-                    setTimeout(() => showProcessing(), 700);
+                    // Data is loaded — go to profile selection (stage 2), then results
+                    _skipToResults = true;
+                    setTimeout(() => goStep(1), 300);
                 } else {
                     showToast('שגיאה: פונקציית ייבוא CSV לא נמצאה', 'error');
                 }
@@ -791,25 +798,24 @@ window.CalcWizard = (() => {
 
     // ── Load a saved analysis and jump to results ──
     function loadSavedAnalysisIntoWizard(analysis) {
-        // Set company name in wizard input so applySettings copies it
+        // Set company name in wizard input
         const wzInput = document.getElementById('wz-company-input');
         if (wzInput) wzInput.value = analysis.company || '';
 
-        // Switch to entry state first so the app DOM is visible for loadAnalysisBridge
-        setState('entry');
-
-        // Use the existing loadAnalysisBridge function if available
         if (typeof loadAnalysisBridge === 'function') {
-            // Small delay to let entry state render
+            // Switch to entry state temporarily so app DOM is visible for loadAnalysisBridge
+            setState('entry');
             setTimeout(() => {
                 loadAnalysisBridge(analysis._supabaseId || analysis.id);
-                // Jump to results after data is populated
-                setTimeout(() => showResults(), 400);
+                // Data loaded — go back to wizard at profile selection step, then results
+                setState('wizard');
+                _skipToResults = true;
+                setTimeout(() => goStep(1), 150);
             }, 100);
         } else {
-            // Fallback: apply settings and stay in entry
-            applySettings();
-            showToast(`"${analysis.company}" נטען — מלא נתונים ולחץ "סיימתי"`, 'info');
+            // Fallback
+            _skipToResults = true;
+            goStep(1);
         }
     }
 
