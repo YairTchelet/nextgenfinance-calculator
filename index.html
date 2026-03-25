@@ -1131,6 +1131,9 @@
       '<a href="/auth/login/" style="background:rgba(179,224,220,0.1);color:#f0f8fa;">התחברות</a>' +
       '<a href="/auth/register/" style="background:#b3e0dc;color:#0c3d52;">הרשמה חינם</a>';
   } else {
+    // Redirect hero CTA to members area for logged-in users
+    const heroBtn = document.querySelector('a.btn-hero-primary[href="/auth/register/"]');
+    if (heroBtn) { heroBtn.href = '/members/'; heroBtn.textContent = 'אזור החברים'; }
     navAuth.innerHTML =
       '<a href="/members/" class="hp-nav-link">אזור החברים</a>' +
       '<button class="hp-nav-pill hp-nav-pill-outline" id="hp-signout">יציאה</button>';
