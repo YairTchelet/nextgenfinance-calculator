@@ -21,7 +21,19 @@
       "Bash(for f:*)",
       "Bash(do)",
       "Bash(echo \"=== $f ===\")",
-      "Bash(python3:*)"
+      "Bash(python3:*)",
+      "Read(//c/Users/yairt/Downloads/game_refactored/game/**)",
+      "Read(//c/Users/yairt/Downloads/game_refactored/game/css/**)",
+      "Read(//c/Users/yairt/Downloads/game_refactored/game/js/**)",
+      "Bash(cp \"C:/Users/yairt/Downloads/game_refactored/game/index.html\" \"C:/Users/yairt/newgenfinance/investor-academy/game/index.html\")",
+      "Bash(cp \"C:/Users/yairt/Downloads/game_refactored/game/css/game.css\" \"C:/Users/yairt/newgenfinance/investor-academy/game/css/game.css\")",
+      "Bash(cp \"C:/Users/yairt/Downloads/game_refactored/game/js/\"* \"C:/Users/yairt/newgenfinance/investor-academy/game/js/\")",
+      "Bash(ls /tmp/*.js)",
+      "Bash(cp /tmp/original_game_data.js /c/Users/yairt/AppData/Local/Temp/original_game_data.js)",
+      "Bash(cp /tmp/batch1.js /c/Users/yairt/AppData/Local/Temp/batch1.js)",
+      "Bash(cp /tmp/batch2.js /c/Users/yairt/AppData/Local/Temp/batch2.js)",
+      "Bash(cp /tmp/batch3.js /c/Users/yairt/AppData/Local/Temp/batch3.js)",
+      "mcp__claude_ai_Supabase__list_projects"
     ]
   }
 }
