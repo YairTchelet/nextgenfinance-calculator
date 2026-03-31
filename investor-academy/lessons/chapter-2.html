@@ -69,7 +69,7 @@
         .toc-widget .subchapter-list li { margin-bottom: 0.5rem; list-style-type: none !important; }
         .toc-widget .subchapter-list li:last-child { margin-bottom: 0; }
         .toc-widget .item { font-size: 0.98rem; font-weight: 500; text-decoration: none; display: inline-block; color: #1a202c; background: var(--toc-accent); background-size: 200% auto; -webkit-background-clip: text; background-position: 100%; -webkit-text-fill-color: #1a202c; transition: background-position 0.4s ease; }
-        .toc-widget .item:hover { background-position: 0%; -webkit-text-fill-color: transparent; }
+        .toc-widget .item:hover { cursor: default; }
         @media (max-width: 600px) { .toc-widget .main-title { font-size: 1.6rem; } .toc-widget .section-title { font-size: 1.1rem; } }
 
         /* ===== QUOTE WIDGET ===== */
@@ -503,6 +503,22 @@
                 <button class="carousel-button next" aria-label="הסרטון הבא"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg></button>
             </div>
             <div class="carousel-nav"></div>
+        </div>
+
+        <!-- הידעת: שחיקת רווח גולמי -->
+        <div class="did-you-know-widget" id="dyk-gross-margin">
+            <div class="card-inner-wrapper">
+                <div class="card-teaser">
+                    <h2 class="teaser-title">&#128161; ?הידעת</h2>
+                    <p class="teaser-subtitle">שחיקת רווח גולמי לא תמיד רעה</p>
+                    <p class="teaser-prompt">לחץ למידע נוסף</p>
+                </div>
+                <div class="card-content">
+                    <button class="dyk-close-btn" aria-label="סגור">&times;</button>
+                    <h3 class="content-title">שחיקת רווח גולמי לא תמיד רעה</h3>
+                    <p class="content-text">לפעמים ירידה ברווח הגולמי (Gross Margin) יכולה להיות סימן חיובי. אם חברה משיקה מוצר חדש עם מרווח נמוך יותר, אבל המוצר מוכר בכמויות גדולות — הרווח הכולל עולה. <span class="highlight">שחיקת הרווח הגולמי</span> כאן מעידה שמוצר אחר של החברה, עם מרווח נמוך יותר, מתחיל למכור יותר. תמיד בדקו את הרווח הגולמי בהקשר של <span class="highlight">תמהיל המוצרים הכולל</span>.</p>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1272,6 +1288,53 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   document.addEventListener('DOMContentLoaded', init);
+})();
+</script>
+
+<script>
+// ===== הידעת: שחיקת רווח גולמי =====
+(function () {
+    var widget = document.getElementById('dyk-gross-margin');
+    if (!widget) return;
+    var teaser = widget.querySelector('.card-teaser');
+    var content = widget.querySelector('.card-content');
+    var closeBtn = widget.querySelector('.dyk-close-btn');
+    content.style.display = 'none';
+
+    function expand() {
+        var startH = widget.offsetHeight;
+        content.style.display = 'block';
+        teaser.style.display = 'none';
+        var endH = widget.scrollHeight;
+        widget.style.minHeight = startH + 'px';
+        requestAnimationFrame(function () {
+            widget.classList.add('is-expanded');
+            widget.style.minHeight = endH + 'px';
+        });
+        widget.addEventListener('transitionend', function onEnd() {
+            widget.style.minHeight = 'auto';
+            widget.removeEventListener('transitionend', onEnd);
+        });
+    }
+
+    function collapse() {
+        var endH = widget.offsetHeight;
+        content.style.display = 'none';
+        teaser.style.display = 'block';
+        var startH = widget.scrollHeight;
+        widget.style.minHeight = endH + 'px';
+        requestAnimationFrame(function () {
+            widget.classList.remove('is-expanded');
+            widget.style.minHeight = startH + 'px';
+        });
+        widget.addEventListener('transitionend', function onEnd() {
+            widget.style.minHeight = 'auto';
+            widget.removeEventListener('transitionend', onEnd);
+        });
+    }
+
+    widget.addEventListener('click', function () { if (!widget.classList.contains('is-expanded')) expand(); });
+    closeBtn.addEventListener('click', function (e) { e.stopPropagation(); collapse(); });
 })();
 </script>
 
