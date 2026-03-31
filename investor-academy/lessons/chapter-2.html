@@ -72,6 +72,39 @@
         .toc-widget .item:hover { cursor: default; }
         @media (max-width: 600px) { .toc-widget .main-title { font-size: 1.6rem; } .toc-widget .section-title { font-size: 1.1rem; } }
 
+        /* ===== הידעת WIDGET ===== */
+        .did-you-know-widget {
+            --dyk-card-bg: rgba(255,255,255,0.8);
+            --dyk-border: rgba(0,0,0,0.08);
+            --dyk-text: #1a202c;
+            --dyk-sub: #4a5568;
+            --dyk-accent: linear-gradient(135deg,#38b2ac,#3182ce);
+            --dyk-hl: rgba(56,178,172,0.1);
+            font-family: 'Rubik', sans-serif; width: 100%;
+            background: var(--dyk-card-bg); border: 1px solid var(--dyk-border);
+            border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.1);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            padding: 2.5rem; box-sizing: border-box;
+            cursor: pointer; transition: min-height 0.6s cubic-bezier(0.19,1,0.22,1);
+            position: relative; overflow: hidden; margin-top: 1.25rem;
+        }
+        .did-you-know-widget .card-teaser { text-align: center; transition: opacity 0.4s ease; }
+        .did-you-know-widget .teaser-title { font-size: 2.25rem; font-weight: 700; margin: 0; background: var(--dyk-accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .did-you-know-widget .teaser-subtitle { font-size: 1.5rem; font-weight: 700; color: var(--dyk-text); margin: 0.5rem 0; }
+        .did-you-know-widget .teaser-prompt { font-size: 1rem; font-weight: 500; color: var(--dyk-sub); margin: 0; }
+        .did-you-know-widget .card-content { position: absolute; top: 2.5rem; left: 2.5rem; right: 2.5rem; opacity: 0; transform: translateY(20px); transition: opacity 0.5s 0.2s ease, transform 0.5s 0.2s ease; text-align: center; }
+        .did-you-know-widget .content-title { font-size: 2rem; font-weight: 700; margin: 0 0 1.5rem 0; background: var(--dyk-accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .did-you-know-widget .content-text { font-size: 1.2rem; line-height: 1.8; color: var(--dyk-text); margin: 0 0 1.5rem 0; text-align: right; }
+        .did-you-know-widget .content-text .highlight { background-color: var(--dyk-hl); padding: 0.1em 0.4em; border-radius: 6px; font-weight: 700; color: var(--dyk-text); }
+        .did-you-know-widget .content-image { width: 100%; max-width: 500px; height: auto; border-radius: 12px; margin: 0 auto; box-shadow: 0 10px 20px -5px rgba(0,0,0,0.1); }
+        .did-you-know-widget.is-expanded { cursor: default; }
+        .did-you-know-widget.is-expanded .card-teaser { opacity: 0; pointer-events: none; }
+        .did-you-know-widget.is-expanded .card-content { position: relative; top: auto; left: auto; right: auto; opacity: 1; transform: translateY(0); }
+        .dyk-close-btn { position: absolute; top: 0.75rem; left: 0.75rem; width: 32px; height: 32px; background: rgba(0,0,0,0.05); border: none; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 24px; color: var(--dyk-sub); opacity: 0; transform: scale(0.5); transition: opacity 0.3s 0.2s ease, transform 0.3s 0.2s ease, background-color 0.2s ease; z-index: 10; }
+        .dyk-close-btn:hover { background: rgba(0,0,0,0.1); }
+        .did-you-know-widget.is-expanded .dyk-close-btn { opacity: 1; transform: scale(1); pointer-events: auto; }
+        @media (max-width: 600px) { .did-you-know-widget { padding: 2rem; } .did-you-know-widget .teaser-title { font-size: 2rem; } .did-you-know-widget .teaser-subtitle { font-size: 1.25rem; } .did-you-know-widget .content-title { font-size: 1.75rem; } .did-you-know-widget .content-text { font-size: 1.05rem; } .dyk-close-btn { top: 0.4rem; left: 0.4rem; } }
+
         /* ===== QUOTE WIDGET ===== */
         .warren-buffett-quote-widget-container * { box-sizing: border-box; }
         .warren-buffett-quote-widget-container { font-family: 'Assistant', sans-serif; width: 100%; max-width: 800px; margin: 0 auto; background-color: transparent; padding: 8px 20px; }
