@@ -7,24 +7,19 @@
 window.CalcPDF = (() => {
 
     async function requireAccess() {
-        if (typeof CalcAI !== 'undefined' && CalcAI.checkAccess) {
-            const has = await CalcAI.checkAccess();
-            if (!has) {
-                if (CalcAI.showUpgradeModal) CalcAI.showUpgradeModal('ייצוא PDF');
-                else if (typeof showToast === 'function') showToast('פיצ׳ר זמין לתלמידי הקורס בלבד', 'warning');
-                return false;
-            }
-            return true;
+        const client = (typeof CalcDB !== 'undefined' && CalcDB.getClient)
+            ? CalcDB.getClient()
+            : window.__supabase;
+        if (!client) {
+            if (typeof showToast === 'function') showToast('ייצוא PDF זמין למשתמשים רשומים — התחברו כדי להמשיך', 'warning');
+            return false;
         }
-        if (typeof CalcDB !== 'undefined' && CalcDB.hasAccess) {
-            const has = await CalcDB.hasAccess();
-            if (!has) {
-                if (typeof showToast === 'function') showToast('ייצוא PDF זמין לתלמידי הקורס בלבד', 'warning');
-                return false;
-            }
-            return true;
+        const { data: { session } } = await client.auth.getSession();
+        if (!session) {
+            if (typeof showToast === 'function') showToast('ייצוא PDF זמין למשתמשים רשומים — התחברו כדי להמשיך', 'warning');
+            return false;
         }
-        return false;
+        return true;
     }
 
     // ── Gather data using ACTUAL DOM element IDs ──
@@ -350,7 +345,7 @@ table{width:100%;border-collapse:collapse}
         const btn = document.createElement('button');
         btn.id = 'pdf-export-btn';
         btn.className = 'tool-btn ai-tool-btn';
-        btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg><span>PDF</span><span class="ai-pro-badge">PRO</span>`;
+        btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg><span>PDF</span>`;
         btn.onclick = generatePDF;
         analysisGroup.appendChild(btn);
     }
