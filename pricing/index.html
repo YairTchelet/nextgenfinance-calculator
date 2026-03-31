@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>מסלולים ומחירים — NewGen Finance</title>
+  <meta name="description" content="השוו בין המסלולים של NewGen Finance — חינם, רשום ומורשה. כלים, קורס ומשחק להשקעות ערך">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="מסלולים ומחירים — NewGen Finance">
+  <meta property="og:description" content="השוו בין המסלולים של NewGen Finance — חינם, רשום ומורשה">
+  <meta property="og:url" content="https://www.newgenfinance.co.il/pricing/">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://www.newgenfinance.co.il/assets/og-image.jpg">
+  <meta property="og:locale" content="he_IL">
+  <link rel="canonical" href="https://www.newgenfinance.co.il/pricing/">
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="/assets/js/supabase-config.js"></script>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&family=Assistant:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ══════════════════════════════════════
+       RESET & BASE
+    ══════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    a { text-decoration: none; color: inherit; }
+    button { border: none; background: none; cursor: pointer; font-family: inherit; }
+
+    body {
+      font-family: 'Rubik', sans-serif;
+      direction: rtl;
+      background: #071e2b;
+      color: #f0f8fa;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ══════════════════════════════════════
+       NAVBAR (matches site pattern)
+    ══════════════════════════════════════ */
+    .hp-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem clamp(1.25rem, 5vw, 3rem);
+      background: rgba(7, 30, 43, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(179, 224, 220, 0.08);
+    }
+    .hp-nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: #b3e0dc;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+    .hp-nav-logo img {
+      height: 38px; width: 38px;
+      object-fit: contain;
+      border-radius: 10px;
+      background: rgba(179,224,220,0.12);
+      padding: 4px;
+      flex-shrink: 0;
+    }
+    .hp-nav-center {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex: 1;
+      justify-content: center;
+    }
+    .hp-nav-link {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: rgba(240,248,250,0.75);
+      transition: color 0.18s;
+    }
+    .hp-nav-link:hover, .hp-nav-link.active { color: #f0f8fa; }
+    .hp-nav-auth {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .hp-nav-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.42rem 1.1rem;
+      border-radius: 20px;
+      font-size: 0.875rem;
+      font-weight: 700;
+      font-family: 'Rubik', sans-serif;
+      cursor: pointer;
+      border: 1.5px solid transparent;
+      transition: transform 0.15s, box-shadow 0.15s, background 0.15s, border-color 0.15s;
+    }
+    .hp-nav-pill:hover { transform: translateY(-1px); }
+    .hp-nav-pill-mint { background: #b3e0dc; color: #0c3d52; }
+    .hp-nav-pill-mint:hover { background: #8fc9c4; box-shadow: 0 4px 14px rgba(179,224,220,0.4); }
+    .hp-nav-pill-outline { background: transparent; color: rgba(240,248,250,0.8); border-color: rgba(240,248,250,0.35); }
+    .hp-nav-pill-outline:hover { border-color: rgba(240,248,250,0.7); color: #f0f8fa; background: rgba(255,255,255,0.06); }
+    .nav-link-plain {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: rgba(240,248,250,0.75);
+      transition: color 0.18s;
+    }
+    .nav-link-plain:hover { color: #f0f8fa; }
+    .nav-pill { padding: 0.42rem 1.1rem; border-radius: 20px; font-size: 0.875rem; font-weight: 700; color: rgba(240,248,250,0.8); border: 1.5px solid rgba(240,248,250,0.35); transition: all 0.15s; }
+    .nav-pill:hover { border-color: rgba(240,248,250,0.7); color: #f0f8fa; background: rgba(255,255,255,0.06); }
+    .nav-pill-mint { background: #b3e0dc; color: #0c3d52; border-color: transparent; }
+    .nav-pill-mint:hover { background: #8fc9c4; }
+
+    /* Hamburger */
+    .hp-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      padding: 6px;
+      cursor: pointer;
+      z-index: 110;
+      background: none;
+      border: none;
+    }
+    .hp-hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: #f0f8fa;
+      border-radius: 2px;
+      transition: transform 0.28s, opacity 0.22s;
+    }
+    .hp-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hp-hamburger.open span:nth-child(2) { opacity: 0; }
+    .hp-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* Mobile menu */
+    .hp-mobile-menu {
+      display: none;
+      flex-direction: column;
+      position: fixed;
+      top: 0; right: 0;
+      width: min(320px, 85vw);
+      height: 100dvh;
+      background: #0c3d52;
+      z-index: 105;
+      padding: 5rem 0 2rem;
+      transform: translateX(100%);
+      transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+      border-left: 1px solid rgba(179,224,220,0.1);
+      overflow-y: auto;
+    }
+    .hp-mobile-menu.open { transform: translateX(0); }
+    .hp-mobile-menu a {
+      display: block;
+      padding: 0.85rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      color: rgba(240, 248, 250, 0.82);
+      border-right: 3px solid transparent;
+      transition: color 0.18s, border-color 0.18s, background 0.18s;
+    }
+    .hp-mobile-menu a:hover {
+      color: #f0f8fa;
+      background: rgba(179, 224, 220, 0.07);
+      border-right-color: #7dd8d2;
+    }
+    .hp-mobile-auth {
+      padding: 0.75rem 1.5rem 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .hp-mobile-auth a, .hp-mobile-auth button {
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      font-family: 'Rubik', sans-serif;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    @media (max-width: 768px) {
+      .hp-nav-center { display: none; }
+      .hp-hamburger { display: flex; }
+      .hp-mobile-menu { display: flex; }
+    }
+
+    /* ══════════════════════════════════════
+       HERO SECTION
+    ══════════════════════════════════════ */
+    .pricing-hero {
+      background:
+        radial-gradient(ellipse 80% 50% at 50% 0%, rgba(42, 157, 143, 0.14) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 85% 80%, rgba(22, 128, 160, 0.1) 0%, transparent 60%),
+        #071e2b;
+      padding: clamp(3.5rem, 8vw, 6rem) clamp(1.25rem, 6vw, 4rem) clamp(2rem, 4vw, 3rem);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .pricing-hero::before {
+      content: '';
+      position: absolute;
+      top: -120px; left: 50%;
+      transform: translateX(-50%);
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(42,157,143,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.9px;
+      text-transform: uppercase;
+      color: #7dd8d2;
+      background: rgba(42, 157, 143, 0.15);
+      border: 1px solid rgba(42, 157, 143, 0.3);
+      border-radius: 20px;
+      padding: 0.35rem 1rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      z-index: 2;
+    }
+    .pricing-hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 900;
+      line-height: 1.15;
+      letter-spacing: -0.5px;
+      color: #f0f8fa;
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 2;
+    }
+    .pricing-hero h1 .accent {
+      background: linear-gradient(135deg, #b3e0dc 0%, #2a9d8f 50%, #7dd8d2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .pricing-hero p {
+      font-family: 'Assistant', sans-serif;
+      font-size: clamp(1rem, 2vw, 1.15rem);
+      color: rgba(240, 248, 250, 0.6);
+      line-height: 1.75;
+      max-width: 520px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Hero animations */
+    @keyframes heroFadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .pricing-hero .hero-badge { opacity: 0; animation: heroFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards; }
+    .pricing-hero h1 { opacity: 0; animation: heroFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.25s forwards; }
+    .pricing-hero p { opacity: 0; animation: heroFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.42s forwards; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .pricing-hero .hero-badge,
+      .pricing-hero h1,
+      .pricing-hero p,
+      .pricing-card { opacity: 1 !important; animation: none !important; }
+    }
+
+    /* ══════════════════════════════════════
+       PRICING CARDS SECTION
+    ══════════════════════════════════════ */
+    .pricing-section {
+      background: #071e2b;
+      padding: clamp(2rem, 4vw, 3.5rem) clamp(1rem, 4vw, 3rem) clamp(3rem, 6vw, 5rem);
+    }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      max-width: 1060px;
+      margin: 0 auto;
+      align-items: stretch;
+    }
+
+    /* ── Card base ── */
+    .pricing-card {
+      position: relative;
+      background: linear-gradient(165deg, #0c3d52 0%, #0a3446 100%);
+      border: 1.5px solid rgba(179, 224, 220, 0.12);
+      border-radius: 24px;
+      padding: 2.25rem 1.75rem 2rem;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s;
+      opacity: 0;
+      animation: heroFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .pricing-card:nth-child(1) { animation-delay: 0.3s; }
+    .pricing-card:nth-child(2) { animation-delay: 0.45s; }
+    .pricing-card:nth-child(3) { animation-delay: 0.6s; }
+
+    .pricing-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+    }
+
+    /* ── Featured card (middle) ── */
+    .pricing-card.featured {
+      border-color: rgba(42, 157, 143, 0.45);
+      background: linear-gradient(165deg, #0e4862 0%, #0c3d52 100%);
+      box-shadow: 0 8px 40px rgba(42, 157, 143, 0.12);
+    }
+    .pricing-card.featured::before {
+      content: '';
+      position: absolute;
+      inset: -1.5px;
+      border-radius: 25px;
+      background: linear-gradient(135deg, rgba(42,157,143,0.4) 0%, rgba(22,128,160,0.15) 50%, rgba(42,157,143,0.25) 100%);
+      z-index: -1;
+      opacity: 0.6;
+    }
+
+    /* ── Popular badge ── */
+    .popular-ribbon {
+      position: absolute;
+      top: -1px; left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #2a9d8f 0%, #1a8070 100%);
+      color: #f0f8fa;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      padding: 0.35rem 1.25rem;
+      border-radius: 0 0 12px 12px;
+      box-shadow: 0 4px 16px rgba(42, 157, 143, 0.35);
+    }
+
+    /* ── Tier icon ── */
+    .tier-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      margin-bottom: 1.25rem;
+    }
+    .tier-free .tier-icon { background: rgba(179, 224, 220, 0.1); border: 1px solid rgba(179,224,220,0.2); }
+    .tier-registered .tier-icon { background: rgba(42, 157, 143, 0.15); border: 1px solid rgba(42,157,143,0.3); }
+    .tier-licensed .tier-icon { background: linear-gradient(135deg, rgba(42,157,143,0.2) 0%, rgba(22,128,160,0.2) 100%); border: 1px solid rgba(42,157,143,0.4); }
+    .tier-licensed .early-note {
+      display: inline-block;
+      font-family: 'Assistant', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #2a9d8f;
+      background: rgba(42, 157, 143, 0.1);
+      border: 1px solid rgba(42, 157, 143, 0.2);
+      border-radius: 8px;
+      padding: 0.4rem 0.85rem;
+      margin-bottom: 1.75rem;
+      line-height: 1.5;
+    }
+
+    /* ── Tier name & price ── */
+    .tier-name {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #f0f8fa;
+      margin-bottom: 0.3rem;
+    }
+    .tier-price {
+      font-family: 'Assistant', sans-serif;
+      font-size: 0.92rem;
+      color: rgba(240, 248, 250, 0.5);
+      margin-bottom: 0.2rem;
+    }
+    .tier-price .amount {
+      font-family: 'Rubik', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: #b3e0dc;
+      letter-spacing: -1px;
+    }
+    .tier-price .free-label {
+      font-family: 'Rubik', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: #b3e0dc;
+      letter-spacing: -1px;
+    }
+    .tier-desc {
+      font-family: 'Assistant', sans-serif;
+      font-size: 0.9rem;
+      color: rgba(240, 248, 250, 0.5);
+      line-height: 1.6;
+      margin-bottom: 1.75rem;
+    }
+
+    /* ── Divider ── */
+    .card-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(179,224,220,0.15), transparent);
+      margin-bottom: 1.5rem;
+    }
+
+    /* ── Feature list ── */
+    .features-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      flex: 1;
+      margin-bottom: 2rem;
+    }
+    .features-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      font-family: 'Assistant', sans-serif;
+      font-size: 0.92rem;
+      color: rgba(240, 248, 250, 0.78);
+      line-height: 1.5;
+    }
+    .features-list .check {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+    }
+    .check-green { background: rgba(42, 157, 143, 0.18); color: #2a9d8f; }
+    .check-mint { background: rgba(125, 216, 210, 0.15); color: #7dd8d2; }
+    .check-dim { background: rgba(240, 248, 250, 0.06); color: rgba(240,248,250,0.25); }
+
+    .features-list .label-new {
+      display: inline-block;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: #2a9d8f;
+      background: rgba(42, 157, 143, 0.12);
+      border: 1px solid rgba(42,157,143,0.25);
+      border-radius: 6px;
+      padding: 0.1rem 0.45rem;
+      margin-right: 0.3rem;
+      vertical-align: middle;
+    }
+
+    /* ── CTA button ── */
+    .tier-cta {
+      display: block;
+      width: 100%;
+      padding: 0.9rem 1.5rem;
+      border-radius: 14px;
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: 'Rubik', sans-serif;
+      text-align: center;
+      transition: all 0.22s;
+      margin-top: auto;
+    }
+    .cta-outline {
+      color: rgba(240, 248, 250, 0.82);
+      border: 1.5px solid rgba(179, 224, 220, 0.25);
+      background: transparent;
+    }
+    .cta-outline:hover {
+      border-color: rgba(179,224,220,0.5);
+      background: rgba(179,224,220,0.06);
+      transform: translateY(-2px);
+    }
+    .cta-primary {
+      color: #0c3d52;
+      background: linear-gradient(135deg, #b3e0dc 0%, #8fc9c4 100%);
+      border: 1.5px solid transparent;
+      box-shadow: 0 4px 20px rgba(179, 224, 220, 0.25);
+    }
+    .cta-primary:hover {
+      background: linear-gradient(135deg, #c4ebe8 0%, #a0d5cf 100%);
+      box-shadow: 0 8px 32px rgba(179, 224, 220, 0.35);
+      transform: translateY(-2px);
+    }
+    .cta-gradient {
+      color: #f0f8fa;
+      background: linear-gradient(135deg, #2a9d8f 0%, #1680a0 100%);
+      border: 1.5px solid rgba(42, 157, 143, 0.4);
+      box-shadow: 0 4px 20px rgba(42, 157, 143, 0.3);
+    }
+    .cta-gradient:hover {
+      background: linear-gradient(135deg, #30b39f 0%, #1a8fb0 100%);
+      box-shadow: 0 8px 32px rgba(42, 157, 143, 0.4);
+      transform: translateY(-2px);
+    }
+
+    /* ── Current tier indicator ── */
+    .cta-current {
+      color: rgba(240, 248, 250, 0.45);
+      border: 1.5px solid rgba(179, 224, 220, 0.12);
+      background: rgba(179, 224, 220, 0.04);
+      cursor: default;
+    }
+    .cta-current:hover {
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* ══════════════════════════════════════
+       COMPARISON TABLE
+    ══════════════════════════════════════ */
+    .comparison-section {
+      background: linear-gradient(180deg, #071e2b 0%, #0c3d52 100%);
+      padding: clamp(3rem, 6vw, 5rem) clamp(1rem, 4vw, 3rem);
+    }
+    .comparison-section h2 {
+      font-size: clamp(1.4rem, 3vw, 1.8rem);
+      font-weight: 800;
+      color: #f0f8fa;
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+    .comparison-table-wrap {
+      max-width: 920px;
+      margin: 0 auto;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid rgba(179, 224, 220, 0.1);
+      background: rgba(12, 61, 82, 0.5);
+      backdrop-filter: blur(8px);
+    }
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'Assistant', sans-serif;
+    }
+    .comparison-table thead th {
+      background: rgba(179, 224, 220, 0.06);
+      padding: 1rem 1.25rem;
+      font-family: 'Rubik', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #f0f8fa;
+      text-align: center;
+      border-bottom: 1px solid rgba(179, 224, 220, 0.1);
+    }
+    .comparison-table thead th:first-child {
+      text-align: right;
+      color: rgba(240, 248, 250, 0.6);
+      font-weight: 600;
+    }
+    .comparison-table thead th.highlight {
+      background: rgba(42, 157, 143, 0.1);
+      color: #7dd8d2;
+    }
+    .comparison-table tbody td {
+      padding: 0.85rem 1.25rem;
+      text-align: center;
+      font-size: 0.9rem;
+      color: rgba(240, 248, 250, 0.72);
+      border-bottom: 1px solid rgba(179, 224, 220, 0.06);
+    }
+    .comparison-table tbody td:first-child {
+      text-align: right;
+      font-weight: 600;
+      color: rgba(240, 248, 250, 0.85);
+    }
+    .comparison-table tbody td.highlight {
+      background: rgba(42, 157, 143, 0.04);
+    }
+    .comparison-table tbody tr:last-child td { border-bottom: none; }
+    .comparison-table tbody tr:hover td { background: rgba(179, 224, 220, 0.03); }
+    .comparison-table tbody tr:hover td.highlight { background: rgba(42, 157, 143, 0.07); }
+
+    /* Category row */
+    .comparison-table .category-row td {
+      background: rgba(179, 224, 220, 0.04);
+      font-family: 'Rubik', sans-serif;
+      font-weight: 700;
+      font-size: 0.82rem;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: #7dd8d2;
+      padding: 0.6rem 1.25rem;
+      border-bottom: 1px solid rgba(179, 224, 220, 0.08);
+    }
+    .comparison-table .category-row td.highlight {
+      background: rgba(42, 157, 143, 0.08);
+    }
+
+    .tbl-check { color: #2a9d8f; font-size: 1.1rem; }
+    .tbl-x { color: rgba(240, 248, 250, 0.2); font-size: 0.95rem; }
+    .tbl-partial { color: rgba(179, 224, 220, 0.5); font-size: 0.85rem; }
+
+    /* ══════════════════════════════════════
+       FAQ SECTION
+    ══════════════════════════════════════ */
+    .faq-section {
+      background: #0c3d52;
+      padding: clamp(3rem, 6vw, 5rem) clamp(1.25rem, 6vw, 4rem);
+      border-top: 1px solid rgba(179, 224, 220, 0.08);
+    }
+    .faq-section h2 {
+      font-size: clamp(1.4rem, 3vw, 1.8rem);
+      font-weight: 800;
+      color: #f0f8fa;
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+    .faq-list {
+      max-width: 680px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .faq-item {
+      background: rgba(236, 232, 229, 0.97);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: box-shadow 0.22s;
+    }
+    .faq-item:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
+    .faq-question {
+      width: 100%;
+      padding: 1.1rem 1.5rem;
+      font-family: 'Rubik', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #0c3d52;
+      text-align: right;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      transition: background 0.18s;
+    }
+    .faq-question:hover { background: rgba(12,61,82,0.05); }
+    .faq-chevron {
+      color: #1680a0;
+      font-size: 1.1rem;
+      transition: transform 0.28s ease;
+      flex-shrink: 0;
+    }
+    .faq-item.open .faq-chevron { transform: rotate(180deg); }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.32s ease, padding 0.28s;
+      padding: 0 1.5rem;
+    }
+    .faq-item.open .faq-answer { max-height: 300px; padding: 0 1.5rem 1.1rem; }
+    .faq-answer p {
+      font-family: 'Assistant', sans-serif;
+      font-size: 0.97rem;
+      color: #394140;
+      line-height: 1.75;
+    }
+
+    /* ══════════════════════════════════════
+       CTA BANNER
+    ══════════════════════════════════════ */
+    .cta-banner {
+      background: linear-gradient(135deg, #0c3d52 0%, #0f5068 50%, #0c3d52 100%);
+      padding: clamp(3rem, 5vw, 4.5rem) clamp(1.25rem, 6vw, 4rem);
+      text-align: center;
+      border-top: 1px solid rgba(179, 224, 220, 0.08);
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(42,157,143,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta-banner h2 {
+      font-size: clamp(1.4rem, 3.5vw, 2rem);
+      font-weight: 900;
+      color: #f0f8fa;
+      margin-bottom: 0.6rem;
+      position: relative;
+    }
+    .cta-banner p {
+      font-family: 'Assistant', sans-serif;
+      font-size: 1.05rem;
+      color: rgba(240, 248, 250, 0.6);
+      margin-bottom: 2rem;
+      position: relative;
+    }
+    .cta-banner-btns {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      position: relative;
+    }
+    .btn-banner {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.9rem 2.2rem;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: 'Rubik', sans-serif;
+      transition: all 0.22s;
+    }
+    .btn-banner-primary {
+      background: linear-gradient(135deg, #2a9d8f 0%, #1a8070 100%);
+      color: #f0f8fa;
+      border: 1px solid rgba(179, 224, 220, 0.3);
+      box-shadow: 0 4px 24px rgba(42, 157, 143, 0.35);
+    }
+    .btn-banner-primary:hover { background: linear-gradient(135deg, #30b39f 0%, #1a9080 100%); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(42,157,143,0.5); }
+    .btn-banner-outline {
+      background: transparent;
+      color: #f0f8fa;
+      border: 2px solid rgba(240, 248, 250, 0.3);
+    }
+    .btn-banner-outline:hover { border-color: rgba(240,248,250,0.6); background: rgba(255,255,255,0.05); transform: translateY(-2px); }
+
+    /* ══════════════════════════════════════
+       FOOTER
+    ══════════════════════════════════════ */
+    footer {
+      background: #071e2b;
+      border-top: 1px solid rgba(179, 224, 220, 0.08);
+      padding: 2.5rem clamp(1.25rem, 6vw, 4rem);
+    }
+    .footer-inner {
+      max-width: 1060px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .footer-logo {
+      font-family: 'Rubik', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #b3e0dc;
+    }
+    .footer-logo span { color: #f0f8fa; }
+    .footer-tagline {
+      font-family: 'Assistant', sans-serif;
+      font-size: 0.82rem;
+      color: rgba(240, 248, 250, 0.4);
+      margin-top: 0.2rem;
+    }
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem 1.5rem;
+      justify-content: center;
+    }
+    .footer-links a {
+      font-family: 'Assistant', sans-serif;
+      font-size: 0.88rem;
+      color: rgba(240, 248, 250, 0.55);
+      transition: color 0.18s;
+    }
+    .footer-links a:hover { color: #f0f8fa; }
+    .footer-credit {
+      font-family: 'Assistant', sans-serif;
+      font-size: 0.8rem;
+      color: rgba(240, 248, 250, 0.3);
+      text-align: left;
+    }
+
+    /* ══════════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════════ */
+    @media (max-width: 860px) {
+      .pricing-grid {
+        grid-template-columns: 1fr;
+        max-width: 420px;
+        margin: 0 auto;
+        gap: 1.5rem;
+      }
+      /* Re-order so featured is first on mobile */
+      .pricing-card.featured { order: -1; }
+
+      .comparison-table-wrap { border-radius: 14px; }
+      .comparison-table thead th,
+      .comparison-table tbody td { padding: 0.7rem 0.65rem; font-size: 0.82rem; }
+    }
+
+    @media (max-width: 600px) {
+      .footer-inner { grid-template-columns: 1fr; text-align: center; }
+      .footer-credit { text-align: center; }
+      .footer-links { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════
+     NAVBAR
+═══════════════════════════════════════ -->
+<nav class="hp-nav">
+  <a href="/" class="hp-nav-logo">
+    <img src="/assets/images/logo.png" alt="NewGen Finance לוגו">
+    <span>NewGen Finance</span>
+  </a>
+  <div class="hp-nav-center">
+    <a href="/about/" class="hp-nav-link">אודות</a>
+    <a href="/blog/" class="hp-nav-link">בלוג</a>
+    <a href="/pricing/" class="hp-nav-link active">מסלולים</a>
+  </div>
+  <div class="hp-nav-auth" id="nav-auth"></div>
+  <button class="hp-hamburger" id="hp-hamburger" aria-label="תפריט" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile drawer -->
+<div class="hp-mobile-menu" id="hp-mobile-menu" aria-hidden="true">
+  <a href="/about/">אודות</a>
+  <a href="/blog/">בלוג</a>
+  <a href="/investor-academy/game/">משחק ההשקעות</a>
+  <a href="/calculator/">מחשבון פיננסי</a>
+  <a href="/investor-academy/">קורס Investor Academy</a>
+  <a href="/portfolio-tracker/">מעקב תיק</a>
+  <a href="/pricing/">מסלולים</a>
+  <div class="hp-mobile-auth" id="hp-mobile-auth"></div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     HERO
+═══════════════════════════════════════ -->
+<section class="pricing-hero">
+  <div class="hero-badge">💎 מסלולים</div>
+  <h1>בחרו את <span class="accent">המסלול שלכם</span></h1>
+  <p>התחילו בחינם, התקדמו בקצב שלכם — כל הכלים לחשיבה כמו משקיע ערך</p>
+</section>
+
+<!-- ═══════════════════════════════════════
+     PRICING CARDS
+═══════════════════════════════════════ -->
+<section class="pricing-section">
+  <div class="pricing-grid">
+
+    <!-- ── TIER 1: חינם ── -->
+    <div class="pricing-card tier-free">
+      <div class="tier-icon">👁️</div>
+      <div class="tier-name">חינם</div>
+      <div class="tier-price"><span class="free-label">₪0</span></div>
+      <div class="tier-desc">גישה בסיסית — טעימה מהעולם של השקעות ערך</div>
+      <div class="card-divider"></div>
+      <ul class="features-list">
+        <li>
+          <span class="check check-green"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6.5L4.5 9L10 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          מאמרים ומדריכים בבלוג
+        </li>
+        <li>
+          <span class="check check-green"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6.5L4.5 9L10 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          מחשבון פיננסי — שימוש בסיסי
+        </li>
+        <li>
+          <span class="check check-green"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6.5L4.5 9L10 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          משחק ההשקעות — שלב ראשון
+        </li>
+        <li>
+          <span class="check check-dim"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 3L9 9M9 3L3 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+          <span style="color: rgba(240,248,250,0.4);">ייצוא PDF מהמחשבון</span>
+        </li>
+        <li>
+          <span class="check check-dim"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 3L9 9M9 3L3 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+          <span style="color: rgba(240,248,250,0.4);">כלי AI חכמים</span>
+        </li>
+        <li>
+          <span class="check check-dim"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 3L9 9M9 3L3 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+          <span style="color: rgba(240,248,250,0.4);">גישה לקורס המלא</span>
+        </li>
+      </ul>
+      <a href="/calculator/" class="tier-cta cta-outline">התחל עכשיו</a>
+    </div>
+
+    <!-- ── TIER 2: רשום (Featured) ── -->
+    <div class="pricing-card featured tier-registered">
+      <div class="popular-ribbon">הכי פופולרי</div>
+      <div class="tier-icon">🚀</div>
+      <div class="tier-name">רשום</div>
+      <div class="tier-price"><span class="free-label">₪0</span></div>
+      <div class="tier-desc">הרשמה חינמית — גישה מורחבת לכלים ולתוכן</div>
+      <div class="card-divider"></div>
+      <ul class="features-list">
+        <li>
+          <span class="check check-mint"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6.5L4.5 9L10 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          הכל מ-״חינם״ — ועוד:
+        </li>
+        <li>
+          <span class="check check-mint"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6.5L4.5 9L10 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          אזור החברים האישי
+        </li>
+        <li>
+          <span class="check check-mint"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6.5L4.5 9L10 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          הקדמה לקורס Investor Academy
+        </li>
+        <li>
+          <span class="check check-mint"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6.5L4.5 9L10 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          משחק ההשקעות — שלב שני
+        </li>
+        <li>
+          <span class="check check-mint"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6.5L4.5 9L10 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          ייצוא דוחות PDF מהמחשבון
+        </li>
+        <li>
+          <span class="check check-dim"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 3L9 9M9 3L3 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+          <span style="color: rgba(240,248,250,0.4);">כלי AI חכמים</span>
+        </li>
+        <li>
+          <span class="check check-dim"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 3L9 9M9 3L3 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+          <span style="color: rgba(240,248,250,0.4);">גישה לקורס המלא</span>
+        </li>
+      </ul>
+      <a href="/auth/register/" class="tier-cta cta-primary" id="cta-registered">הרשמה חינם</a>
+    </div>
+
+    <!-- ── TIER 3: מורשה ── -->
+    <div class="pricing-card tier-licensed">
+      <div class="tier-icon">👑</div>
+      <div class="tier-name">מורשה</div>
+      <div class="tier-price"><span class="free-label">₪0</span> <span style="font-size:0.85rem;color:rgba(179,224,220,0.55);margin-right:0.3rem;">כרגע חינם</span></div>
+      <div class="tier-desc">חוויה מלאה — כל הכלים, כל התוכן, כל ה-AI. בקשו הרשאה באזור החברים</div>
+      <div class="early-note">⏳ כרגע חינם לגמרי — בעתיד יהפוך לבתשלום למצטרפים חדשים</div>
+      <div class="card-divider"></div>
+      <ul class="features-list">
+        <li>
+          <span class="check check-green"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6.5L4.5 9L10 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          הכל מ-״רשום״ — ועוד:
+        </li>
+        <li>
+          <span class="check check-green"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6.5L4.5 9L10 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          קורס Investor Academy המלא <span class="label-new">4 פרקים</span>
+        </li>
+        <li>
+          <span class="check check-green"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6.5L4.5 9L10 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          משחק ההשקעות — כל השלבים
+        </li>
+        <li>
+          <span class="check check-green"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6.5L4.5 9L10 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          ניתוח AI חכם במחשבון <span class="label-new">AI</span>
+        </li>
+        <li>
+          <span class="check check-green"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6.5L4.5 9L10 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          מילוי אוטומטי של נתונים <span class="label-new">AI</span>
+        </li>
+        <li>
+          <span class="check check-green"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6.5L4.5 9L10 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          עדכונים ותכנים עתידיים
+        </li>
+      </ul>
+      <a href="/members/" class="tier-cta cta-gradient" id="cta-licensed">בקשו הרשאה באזור החברים</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     COMPARISON TABLE
+═══════════════════════════════════════ -->
+<section class="comparison-section">
+  <h2>השוואה מלאה בין המסלולים</h2>
+  <div class="comparison-table-wrap">
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>תכונה</th>
+          <th>חינם</th>
+          <th class="highlight">רשום</th>
+          <th>מורשה</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Category: Content -->
+        <tr class="category-row">
+          <td colspan="1">תוכן</td>
+          <td></td>
+          <td class="highlight"></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>מאמרים בבלוג</td>
+          <td><span class="tbl-check">✓</span></td>
+          <td class="highlight"><span class="tbl-check">✓</span></td>
+          <td><span class="tbl-check">✓</span></td>
+        </tr>
+        <tr>
+          <td>קורס — הקדמה</td>
+          <td><span class="tbl-x">—</span></td>
+          <td class="highlight"><span class="tbl-check">✓</span></td>
+          <td><span class="tbl-check">✓</span></td>
+        </tr>
+        <tr>
+          <td>קורס — כל הפרקים (4)</td>
+          <td><span class="tbl-x">—</span></td>
+          <td class="highlight"><span class="tbl-x">—</span></td>
+          <td><span class="tbl-check">✓</span></td>
+        </tr>
+
+        <!-- Category: Calculator -->
+        <tr class="category-row">
+          <td colspan="1">מחשבון פיננסי</td>
+          <td></td>
+          <td class="highlight"></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>הזנת נתונים וניתוח</td>
+          <td><span class="tbl-check">✓</span></td>
+          <td class="highlight"><span class="tbl-check">✓</span></td>
+          <td><span class="tbl-check">✓</span></td>
+        </tr>
+        <tr>
+          <td>13 מדדים + תובנות</td>
+          <td><span class="tbl-check">✓</span></td>
+          <td class="highlight"><span class="tbl-check">✓</span></td>
+          <td><span class="tbl-check">✓</span></td>
+        </tr>
+        <tr>
+          <td>ייצוא דוח PDF</td>
+          <td><span class="tbl-x">—</span></td>
+          <td class="highlight"><span class="tbl-check">✓</span></td>
+          <td><span class="tbl-check">✓</span></td>
+        </tr>
+        <tr>
+          <td>מילוי אוטומטי (AI)</td>
+          <td><span class="tbl-x">—</span></td>
+          <td class="highlight"><span class="tbl-x">—</span></td>
+          <td><span class="tbl-check">✓</span></td>
+        </tr>
+        <tr>
+          <td>ניתוח AI חכם</td>
+          <td><span class="tbl-x">—</span></td>
+          <td class="highlight"><span class="tbl-x">—</span></td>
+          <td><span class="tbl-check">✓</span></td>
+        </tr>
+
+        <!-- Category: Game -->
+        <tr class="category-row">
+          <td colspan="1">משחק ההשקעות</td>
+          <td></td>
+          <td class="highlight"></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>שלב ראשון</td>
+          <td><span class="tbl-check">✓</span></td>
+          <td class="highlight"><span class="tbl-check">✓</span></td>
+          <td><span class="tbl-check">✓</span></td>
+        </tr>
+        <tr>
+          <td>שלב שני</td>
+          <td><span class="tbl-x">—</span></td>
+          <td class="highlight"><span class="tbl-check">✓</span></td>
+          <td><span class="tbl-check">✓</span></td>
+        </tr>
+        <tr>
+          <td>כל השלבים</td>
+          <td><span class="tbl-x">—</span></td>
+          <td class="highlight"><span class="tbl-x">—</span></td>
+          <td><span class="tbl-check">✓</span></td>
+        </tr>
+
+        <!-- Category: Platform -->
+        <tr class="category-row">
+          <td colspan="1">פלטפורמה</td>
+          <td></td>
+          <td class="highlight"></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>אזור חברים אישי</td>
+          <td><span class="tbl-x">—</span></td>
+          <td class="highlight"><span class="tbl-check">✓</span></td>
+          <td><span class="tbl-check">✓</span></td>
+        </tr>
+        <tr>
+          <td>שמירת התקדמות</td>
+          <td><span class="tbl-x">—</span></td>
+          <td class="highlight"><span class="tbl-check">✓</span></td>
+          <td><span class="tbl-check">✓</span></td>
+        </tr>
+        <tr>
+          <td>עדכונים ותכנים חדשים</td>
+          <td><span class="tbl-x">—</span></td>
+          <td class="highlight"><span class="tbl-x">—</span></td>
+          <td><span class="tbl-check">✓</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     FAQ
+═══════════════════════════════════════ -->
+<section class="faq-section">
+  <h2>שאלות נפוצות</h2>
+  <div class="faq-list">
+    <div class="faq-item">
+      <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+        <span>מה ההבדל בין ״חינם״ ל-״רשום״?</span>
+        <span class="faq-chevron">▼</span>
+      </button>
+      <div class="faq-answer">
+        <p>מסלול ״חינם״ לא דורש הרשמה בכלל — אפשר להיכנס ישירות לבלוג, למחשבון הבסיסי ולשלב הראשון של המשחק. מסלול ״רשום״ דורש הרשמה חינמית (אימייל וסיסמה), ופותח גישה לאזור החברים, ייצוא PDF מהמחשבון, השלב השני של המשחק, ופרק ההקדמה של הקורס.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+        <span>איך מקבלים גישת ״מורשה״?</span>
+        <span class="faq-chevron">▼</span>
+      </button>
+      <div class="faq-answer">
+        <p>כרגע, גישת ״מורשה״ חינמית — פשוט הירשמו לאתר וגשו לאזור החברים, שם תוכלו לבקש הרשאה. בעתיד, מסלול זה יהפוך לבתשלום עבור משתמשים חדשים, אבל מי שקיבל גישה לפני כן ימשיך ליהנות ממנה ללא עלות.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+        <span>האם אצטרך לשלם בעתיד על מה שחינמי היום?</span>
+        <span class="faq-chevron">▼</span>
+      </button>
+      <div class="faq-answer">
+        <p>לא. כל מה שחינמי ופתוח היום — ישאר חינמי. מסלול ״מורשה״ כרגע חינמי גם הוא, אבל בעתיד יהפוך לבתשלום עבור משתמשים חדשים. אם כבר קיבלתם הרשאה — הגישה שלכם נשמרת לצמיתות.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+        <span>מה זה ״כלי AI חכמים״ במחשבון?</span>
+        <span class="faq-chevron">▼</span>
+      </button>
+      <div class="faq-answer">
+        <p>המחשבון כולל מערכת AI שמנתחת את הנתונים הפיננסיים שהזנתם ומייצרת תובנות בסגנון וורן באפט — כולל מילוי אוטומטי של נתונים ממקורות באינטרנט וניתוח מעמיק שכולל חוזקות, חולשות, סיכונים ודירוג כולל.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     CTA BANNER
+═══════════════════════════════════════ -->
+<section class="cta-banner">
+  <h2>מוכנים להתחיל?</h2>
+  <p>הצטרפו ל-NewGen Finance — הבית של משקיע הערך המתחיל</p>
+  <div class="cta-banner-btns" id="cta-banner-btns">
+    <a href="/auth/register/" class="btn-banner btn-banner-primary">הרשמה חינם</a>
+    <a href="/calculator/" class="btn-banner btn-banner-outline">נסו את המחשבון</a>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">NewGen <span>Finance</span></div>
+      <div class="footer-tagline">הבית של משקיע הערך המתחיל</div>
+    </div>
+    <nav class="footer-links" aria-label="קישורים">
+      <a href="/">דף הבית</a>
+      <a href="/investor-academy/">הקורס</a>
+      <a href="/calculator/">המחשבון</a>
+      <a href="/investor-academy/game/">המשחק</a>
+      <a href="/portfolio-tracker/">מעקב תיק</a>
+      <a href="/blog/">בלוג</a>
+      <a href="/about/">אודות</a>
+      <a href="/contact/">יצירת קשר</a>
+      <a href="/terms/">תנאי שימוש</a>
+    </nav>
+    <div class="footer-credit">נבנה עם ❤️ על ידי יאיר תכלת</div>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════
+     AUTH & DYNAMIC STATE
+═══════════════════════════════════════ -->
+<script>
+(async () => {
+  const _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const { data: { session } } = await _sb.auth.getSession();
+  const navAuth = document.getElementById('nav-auth');
+  const mobileAuth = document.getElementById('hp-mobile-auth');
+  const ctaRegistered = document.getElementById('cta-registered');
+  const ctaBanner = document.getElementById('cta-banner-btns');
+
+  if (!session) {
+    // Logged out
+    navAuth.innerHTML =
+      '<a href="/auth/login/" class="nav-link-plain">התחברות</a>' +
+      '<a href="/auth/register/" class="nav-pill nav-pill-mint">הרשמה חינם</a>';
+    mobileAuth.innerHTML =
+      '<a href="/auth/login/" style="background:rgba(179,224,220,0.1);color:#f0f8fa;">התחברות</a>' +
+      '<a href="/auth/register/" style="background:#b3e0dc;color:#0c3d52;">הרשמה חינם</a>';
+  } else {
+    // Logged in — check access level
+    const { data: profile } = await _sb
+      .from('profiles')
+      .select('has_access')
+      .eq('id', session.user.id)
+      .single();
+
+    const hasAccess = profile?.has_access || false;
+
+    // Navbar
+    navAuth.innerHTML =
+      '<a href="/members/" class="nav-link-plain">אזור החברים</a>' +
+      '<button class="nav-pill" id="pricing-signout">יציאה</button>';
+    document.getElementById('pricing-signout').addEventListener('click', async () => {
+      await _sb.auth.signOut();
+      window.location.reload();
+    });
+    mobileAuth.innerHTML =
+      '<a href="/members/" style="background:rgba(179,224,220,0.1);color:#f0f8fa;">אזור החברים</a>' +
+      '<button id="hp-mobile-signout" style="background:rgba(240,248,250,0.1);color:rgba(240,248,250,0.7);border:1px solid rgba(240,248,250,0.2);">יציאה</button>';
+    document.getElementById('hp-mobile-signout').addEventListener('click', async () => {
+      await _sb.auth.signOut();
+      window.location.reload();
+    });
+
+    // Update registered CTA to show current tier
+    if (ctaRegistered) {
+      ctaRegistered.textContent = 'המסלול הנוכחי שלך ✓';
+      ctaRegistered.classList.remove('cta-primary');
+      ctaRegistered.classList.add('cta-current');
+      ctaRegistered.href = '/members/';
+    }
+
+    // If user has_access, update licensed CTA too
+    if (hasAccess) {
+      const licensedCta = document.getElementById('cta-licensed');
+      if (licensedCta) {
+        licensedCta.textContent = 'המסלול הנוכחי שלך ✓';
+        licensedCta.href = '/members/';
+        licensedCta.classList.remove('cta-gradient');
+        licensedCta.classList.add('cta-current');
+      }
+      // Also update the registered card since they're above it
+      if (ctaRegistered) {
+        ctaRegistered.textContent = 'כלול במסלול שלך ✓';
+      }
+    } else {
+      // Registered but not licensed — keep the "request access" CTA
+      const licensedCta = document.getElementById('cta-licensed');
+      if (licensedCta) {
+        licensedCta.textContent = 'בקשו הרשאה באזור החברים';
+        licensedCta.href = '/members/';
+      }
+    }
+
+    // Update bottom CTA
+    ctaBanner.innerHTML =
+      '<a href="/members/" class="btn-banner btn-banner-primary">אזור החברים</a>' +
+      '<a href="/calculator/" class="btn-banner btn-banner-outline">למחשבון הפיננסי</a>';
+  }
+})();
+
+// Hamburger toggle
+(function() {
+  var btn = document.getElementById('hp-hamburger');
+  var menu = document.getElementById('hp-mobile-menu');
+  if (!btn || !menu) return;
+  btn.addEventListener('click', function() {
+    var isOpen = menu.classList.toggle('open');
+    btn.classList.toggle('open', isOpen);
+    btn.setAttribute('aria-expanded', isOpen);
+    menu.setAttribute('aria-hidden', !isOpen);
+  });
+  menu.querySelectorAll('a').forEach(function(link) {
+    link.addEventListener('click', function() {
+      menu.classList.remove('open');
+      btn.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+      menu.setAttribute('aria-hidden', 'true');
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
