@@ -153,7 +153,7 @@
         .dpt-head-left { display: flex; align-items: center; gap: 0.85rem; }
         .dpt-head-logo { width: 48px; height: 48px; border-radius: 12px; background: white; display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; }
         .dpt-head-logo img { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .dpt-head-logo-fb { font-size: 0.95rem; font-weight: 800; background: linear-gradient(135deg,#38b2ac,#3182ce); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: none; }
+        .dpt-head-logo-fb { font-size: 0.95rem; font-weight: 800; background: linear-gradient(135deg,#38b2ac,#3182ce); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: block; }
         .dpt-head-badge { display: inline-block; background: rgba(179,224,220,.15); color: #b3e0dc; font-size: .72rem; font-weight: 700; padding: .2rem .7rem; border-radius: 20px; border: 1px solid rgba(179,224,220,.3); margin-bottom: .3rem; }
         .dpt-head-title { font-size: 1.2rem; font-weight: 700; color: #fefefe; line-height: 1.2; }
         .dpt-head-sub { font-size: .82rem; color: rgba(255,255,255,.5); font-family: 'Assistant',sans-serif; }
@@ -493,8 +493,6 @@
         <div class="dpt-head">
             <div class="dpt-head-left">
                 <div class="dpt-head-logo">
-                    <img src="https://deeptase.co.il/favicon.ico" alt="Deeptase"
-                         onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
                     <div class="dpt-head-logo-fb">DT</div>
                 </div>
                 <div>
@@ -569,14 +567,14 @@
             <div class="dpt-tour-nav" id="dpt-tour-nav">
                 <button class="dpt-tour-btn dpt-tour-active" data-slide="0">עמוד הבית</button>
                 <button class="dpt-tour-btn" data-slide="1">ניתוח חברה</button>
-                <button class="dpt-tour-btn" data-slide="2">DataHub</button>
-                <button class="dpt-tour-btn" data-slide="3">מעקב</button>
+                <button class="dpt-tour-btn" data-slide="2">פרופיל חברה</button>
+                <button class="dpt-tour-btn" data-slide="3">ניתוחים</button>
             </div>
 
             <div class="dpt-tour-slide dpt-visible" data-i="0">
                 <div class="dpt-tour-frame">
                     <div class="dpt-browser-bar"><div class="dpt-browser-dots"><span></span><span></span><span></span></div><div class="dpt-browser-url">deeptase.co.il/he</div></div>
-                    <div class="dpt-tour-img-wrap"><div class="dpt-tour-img-ph"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>עמוד הבית</div></div>
+                    <div class="dpt-tour-img-wrap"><img src="/assets/images/deeptase/deeptase-homepage.png" alt="עמוד הבית"></div>
                     <div class="dpt-chips-row">
                         <div class="dpt-chip" tabindex="0"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>חיפוש חברות<div class="dpt-chip-tip">חיפוש לפי שם חברה או סמל מניה — 649 חברות ישראליות באינדקס</div></div>
                         <div class="dpt-chip" tabindex="0"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>פיד ניתוחים<div class="dpt-chip-tip">הניתוחים האחרונים שנוספו — כך תמיד יש מה לקרוא על חברות חדשות</div></div>
@@ -588,7 +586,7 @@
             <div class="dpt-tour-slide" data-i="1">
                 <div class="dpt-tour-frame">
                     <div class="dpt-browser-bar"><div class="dpt-browser-dots"><span></span><span></span><span></span></div><div class="dpt-browser-url">deeptase.co.il/he/analysis/2800</div></div>
-                    <div class="dpt-tour-img-wrap"><div class="dpt-tour-img-ph"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>דף ניתוח חברה</div></div>
+                    <div class="dpt-tour-img-wrap"><img src="/assets/images/deeptase/deeptase-analysis.png" alt="ניתוח חברה"></div>
                     <div class="dpt-chips-row">
                         <div class="dpt-chip" tabindex="0"><svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>גרפים פיננסיים<div class="dpt-chip-tip">הכנסות, רווח גולמי, FCF וחוב — בגרפים רב-שנתיים שקל לקרוא</div></div>
                         <div class="dpt-chip" tabindex="0"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>דירוג אוליירי<div class="dpt-chip-tip">ציון כולל מ-1 עד 5 לפי קטגוריות: חפיר, ניהול, פיננסים, צמיחה, תמחור</div></div>
@@ -599,19 +597,20 @@
 
             <div class="dpt-tour-slide" data-i="2">
                 <div class="dpt-tour-frame">
-                    <div class="dpt-browser-bar"><div class="dpt-browser-dots"><span></span><span></span><span></span></div><div class="dpt-browser-url">dash.focusfin.co.il/datahub</div></div>
-                    <div class="dpt-tour-img-wrap"><div class="dpt-tour-img-ph"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>DataHub</div></div>
+                    <div class="dpt-browser-bar"><div class="dpt-browser-dots"><span></span><span></span><span></span></div><div class="dpt-browser-url">deeptase.co.il/he</div></div>
+                    <div class="dpt-tour-img-wrap"><img src="/assets/images/deeptase/deeptase-company.png" alt="פרופיל חברה"></div>
                     <div class="dpt-chips-row">
-                        <div class="dpt-chip" tabindex="0"><svg viewBox="0 0 24 24"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>דיווחים מיידיים<div class="dpt-chip-tip">כל דיווח לבורסה מופיע ב-DataHub מיד עם פרסומו — בלי לרדוף אחרי מגנ"א</div></div>
-                        <div class="dpt-chip" tabindex="0"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>חיפוש וסינון<div class="dpt-chip-tip">סנן לפי חברה, תאריך, סוג דיווח — מוצאים בדיוק מה שמחפשים</div></div>
+                        <div class="dpt-chip" tabindex="0"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>פרופיל החברה<div class="dpt-chip-tip">מידע מלא על החברה — תיאור עסקי, נתוני מפתח ודירוג כולל</div></div>
+                        <div class="dpt-chip" tabindex="0"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>ניתוחים קודמים<div class="dpt-chip-tip">כל הניתוחים הקודמים של החברה — ראו איך העסק השתנה לאורך זמן</div></div>
+                        <div class="dpt-chip" tabindex="0"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>חברות בסקטור<div class="dpt-chip-tip">השוו לחברות דומות באותו סקטור — הקשר חיוני לניתוח נכון</div></div>
                     </div>
                 </div>
             </div>
 
             <div class="dpt-tour-slide" data-i="3">
                 <div class="dpt-tour-frame">
-                    <div class="dpt-browser-bar"><div class="dpt-browser-dots"><span></span><span></span><span></span></div><div class="dpt-browser-url">dash.focusfin.co.il/follow</div></div>
-                    <div class="dpt-tour-img-wrap"><div class="dpt-tour-img-ph"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>דף המעקב</div></div>
+                    <div class="dpt-browser-bar"><div class="dpt-browser-dots"><span></span><span></span><span></span></div><div class="dpt-browser-url">deeptase.co.il/he</div></div>
+                    <div class="dpt-tour-img-wrap"><img src="/assets/images/deeptase/deeptase-company.png" alt="ניתוחים"></div>
                     <div class="dpt-chips-row">
                         <div class="dpt-chip" tabindex="0"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>שמירה לווטצ'ליסט<div class="dpt-chip-tip">סמנו כל חברה ישראלית למעקב — תקבלו עדכון אוטומטי כשמשהו משמעותי קורה</div></div>
                         <div class="dpt-chip" tabindex="0"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>התראות<div class="dpt-chip-tip">קבלו email כשיוצא ניתוח חדש, דוח רבעוני, או שינוי משמעותי במניה שאתם עוקבים</div></div>
@@ -640,35 +639,35 @@
 
                 <div id="dpt-step-panels">
                     <div class="dpt-step-panel dpt-visible" data-step="0">
-                        <div class="dpt-step-panel-img"><div class="dpt-step-panel-img-ph"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>חיפוש בעמוד הבית</div></div>
+                        <div class="dpt-step-panel-img"><img src="/assets/images/deeptase/deeptase-homepage.png" alt="עמוד הבית"></div>
                         <div class="dpt-step-panel-title">חפשו חברה שמעניינת אתכם</div>
                         <p class="dpt-step-panel-text">לפי שם, סמל מניה, או גלישה בפיד הניתוחים האחרונים. לא יודעים מאיפה להתחיל? בחרו סקטור שאתם מכירים.</p>
                         <span class="dpt-step-tag">גילוי ראשוני</span>
                         <div class="dpt-step-next"><button class="dpt-step-next-btn" data-go="1">הצעד הבא ←</button><span class="dpt-step-counter">1 / 5</span></div>
                     </div>
                     <div class="dpt-step-panel" data-step="1">
-                        <div class="dpt-step-panel-img"><div class="dpt-step-panel-img-ph"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>"מה השתנה" בדף ניתוח</div></div>
+                        <div class="dpt-step-panel-img"><img src="/assets/images/deeptase/deeptase-analysis.png" alt="ניתוח חברה"></div>
                         <div class="dpt-step-panel-title">קראו "מה השתנה" ו"בין השורות"</div>
                         <p class="dpt-step-panel-text">הניתוח הנרטיבי מסביר מה קרה בחברה בשפה נגישה — לא רק מספרים. זה ה"למה" שמאחורי הנתונים.</p>
                         <span class="dpt-step-tag">הבנה עסקית</span>
                         <div class="dpt-step-next"><button class="dpt-step-next-btn" data-go="2">הצעד הבא ←</button><span class="dpt-step-counter">2 / 5</span></div>
                     </div>
                     <div class="dpt-step-panel" data-step="2">
-                        <div class="dpt-step-panel-img"><div class="dpt-step-panel-img-ph"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>גרפים בדף הניתוח</div></div>
+                        <div class="dpt-step-panel-img"><img src="/assets/images/deeptase/deeptase-analysis.png" alt="גרפים פיננסיים"></div>
                         <div class="dpt-step-panel-title">בדקו מגמות — לא מספר בודד</div>
                         <p class="dpt-step-panel-text">שנה אחת טובה לא מספיקה. חפשו עלייה עקבית ב-3–4 שנים בהכנסות, רווח גולמי, ותזרים. מגמה עולה ← עסק משתפר.</p>
                         <span class="dpt-step-tag">ניתוח כמותי</span>
                         <div class="dpt-step-next"><button class="dpt-step-next-btn" data-go="3">הצעד הבא ←</button><span class="dpt-step-counter">3 / 5</span></div>
                     </div>
                     <div class="dpt-step-panel" data-step="3">
-                        <div class="dpt-step-panel-img"><div class="dpt-step-panel-img-ph"><svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 2 17"/></svg>עמודת שורטיסטים</div></div>
+                        <div class="dpt-step-panel-img"><img src="/assets/images/deeptase/deeptase-analysis.png" alt="שורטיסטים"></div>
                         <div class="dpt-step-panel-title">בדקו Short Interest</div>
                         <p class="dpt-step-panel-text">מעל 5%? סימן שמוסדיים מהמרים כנגד המניה. לא בהכרח לפסול — אבל חובה להבין למה לפני שקונים.</p>
                         <span class="dpt-step-tag">אנליזה מתקדמת</span>
                         <div class="dpt-step-next"><button class="dpt-step-next-btn" data-go="4">הצעד הבא ←</button><span class="dpt-step-counter">4 / 5</span></div>
                     </div>
                     <div class="dpt-step-panel" data-step="4">
-                        <div class="dpt-step-panel-img"><div class="dpt-step-panel-img-ph"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>דירוג סיכום</div></div>
+                        <div class="dpt-step-panel-img"><img src="/assets/images/deeptase/deeptase-analysis.png" alt="דירוג סיכום"></div>
                         <div class="dpt-step-panel-title">קבלו החלטה: Buy / Pass / Watch</div>
                         <p class="dpt-step-panel-text">הבנתם את העסק? המספרים בריאים? המחיר הגיוני? שלושה "כן" = שווה לחקור עמוק יותר. אחד "לא" = Watch או Pass.</p>
                         <span class="dpt-step-tag">החלטת השקעה</span>
