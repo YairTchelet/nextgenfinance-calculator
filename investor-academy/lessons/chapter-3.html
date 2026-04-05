@@ -163,6 +163,7 @@
         .dpt-section-label { font-size: .72rem; font-weight: 700; letter-spacing: .07em; background: linear-gradient(135deg,#38b2ac,#3182ce); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: .4rem; }
         .dpt-section-title { font-size: 1.3rem; font-weight: 700; color: #1a202c; margin-bottom: .4rem; line-height: 1.3; }
         .dpt-section-sub { font-family: 'Assistant',sans-serif; font-size: .95rem; color: #4a5568; line-height: 1.65; margin-bottom: 1.5rem; }
+        .dpt-demo-note { font-family: 'Assistant',sans-serif; font-size: .75rem; color: #a0aec0; margin-bottom: .65rem; }
         .dpt-gap { margin-bottom: 1.25rem; }
         .dpt-company-btns { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1rem; }
         .dpt-co-btn { padding: .35rem .9rem; border-radius: 20px; border: 1px solid rgba(0,0,0,.12); background: none; font-family: 'Rubik',sans-serif; font-size: .82rem; color: #4a5568; cursor: pointer; transition: all .15s; }
@@ -492,7 +493,7 @@
     <!-- SECTION: Deeptase Widget -->
     <div class="course-card" id="s5b-deeptase" style="background: rgba(236,232,229,0.97);">
         <h2 class="course-section-title">המלצת אתר לניתוח חברות ישראליות</h2>
-        <p class="dpt-intro-desc">Deeptase הוא כלי האנליזה הפונדמנטלי המוביל לבורסת תל אביב. בעוד שכלים בינלאומיים כמו Finviz ו-Macrotrends כמעט לא מכסים מניות ישראליות — Deeptase מספקת לכל חברה ניתוח נרטיבי מפורט, גרפים פיננסיים רב-שנתיים, ודירוג אובייקטיבי. בפרק הזה תלמדו להשתמש בו.</p>
+        <p class="dpt-intro-desc">Deeptase הוא כלי האנליזה הפונדמנטלי המוביל לבורסת תל אביב. בעוד שכלים בינלאומיים כמו Finviz ו-Macrotrends כמעט לא מכסים מניות ישראליות — Deeptase מספקת לכל חברה ניתוח נרטיבי מפורט, גרפים פיננסיים רב-שנתיים, ודירוג אובייקטיבי.</p>
         <div class="dpt-root">
 
         <div class="dpt-head">
@@ -511,6 +512,7 @@
 
         <!-- PART 1 — THE GAP -->
         <div class="dpt-gap">
+            <p class="dpt-demo-note">* הנתונים הבאים הם להמחשה בלבד ואינם משקפים מספרים אמיתיים</p>
             <div class="dpt-company-btns" id="dpt-co-btns">
                 <button class="dpt-co-btn dpt-co-active" data-co="nyx">נייקס</button>
                 <button class="dpt-co-btn" data-co="namco">נמקו ריאלטי</button>
@@ -563,7 +565,6 @@
                 <button class="dpt-tour-btn dpt-tour-active" data-slide="0">עמוד הבית</button>
                 <button class="dpt-tour-btn" data-slide="1">ניתוח חברה</button>
                 <button class="dpt-tour-btn" data-slide="2">פרופיל חברה</button>
-                <button class="dpt-tour-btn" data-slide="3">ניתוחים</button>
             </div>
 
             <div class="dpt-tour-slide dpt-visible" data-i="0">
@@ -602,17 +603,6 @@
                 </div>
             </div>
 
-            <div class="dpt-tour-slide" data-i="3">
-                <div class="dpt-tour-frame">
-                    <div class="dpt-browser-bar"><div class="dpt-browser-dots"><span></span><span></span><span></span></div><div class="dpt-browser-url">deeptase.co.il/he</div></div>
-                    <div class="dpt-tour-img-wrap"><img src="/assets/images/deeptase/deeptase-company.png" alt="ניתוחים"></div>
-                    <div class="dpt-chips-row">
-                        <div class="dpt-chip" tabindex="0"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>שמירה לווטצ'ליסט<div class="dpt-chip-tip">סמנו כל חברה ישראלית למעקב — תקבלו עדכון אוטומטי כשמשהו משמעותי קורה</div></div>
-                        <div class="dpt-chip" tabindex="0"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>התראות<div class="dpt-chip-tip">קבלו email כשיוצא ניתוח חדש, דוח רבעוני, או שינוי משמעותי במניה שאתם עוקבים</div></div>
-                        <div class="dpt-chip" tabindex="0"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>עדכון שבועי<div class="dpt-chip-tip">סיכום שבועי של כל הניתוחים החדשים לחברות שאתם עוקבים אחריהן</div></div>
-                    </div>
-                </div>
-            </div>
         </div>
 
         <!-- PART 3 — STEPPER -->
