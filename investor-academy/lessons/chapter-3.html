@@ -162,7 +162,7 @@
         .dpt-section-label { font-size: .72rem; font-weight: 700; letter-spacing: .07em; background: linear-gradient(135deg,#38b2ac,#3182ce); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: .4rem; }
         .dpt-section-title { font-size: 1.3rem; font-weight: 700; color: #1a202c; margin-bottom: .4rem; line-height: 1.3; }
         .dpt-section-sub { font-family: 'Assistant',sans-serif; font-size: .95rem; color: #4a5568; line-height: 1.65; margin-bottom: 1.5rem; }
-        .dpt-gap { margin-bottom: 2.5rem; }
+        .dpt-gap { margin-bottom: 1.25rem; }
         .dpt-company-btns { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1rem; }
         .dpt-co-btn { padding: .35rem .9rem; border-radius: 20px; border: 1px solid rgba(0,0,0,.12); background: none; font-family: 'Rubik',sans-serif; font-size: .82rem; color: #4a5568; cursor: pointer; transition: all .15s; }
         .dpt-co-btn.dpt-co-active { background: rgba(56,178,172,.1); border-color: #38b2ac; color: #0f6e56; font-weight: 600; }
@@ -192,7 +192,7 @@
         .dpt-result-row:last-child { border-bottom: none; }
         .dpt-result-val { font-weight: 600; color: #1a202c; }
         .dpt-result-val--up { color: #0f6e56; }
-        .dpt-tour { margin-bottom: 2.5rem; }
+        .dpt-tour { margin-bottom: 1.25rem; }
         .dpt-tour-nav { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1rem; }
         .dpt-tour-btn { padding: .35rem .9rem; border-radius: 20px; border: 1px solid rgba(0,0,0,.12); background: none; font-family: 'Rubik',sans-serif; font-size: .82rem; color: #4a5568; cursor: pointer; transition: all .15s; }
         .dpt-tour-btn.dpt-tour-active { background: #0c3d52; border-color: #0c3d52; color: #b3e0dc; font-weight: 600; }
@@ -202,7 +202,10 @@
         .dpt-browser-dots span { width: 8px; height: 8px; border-radius: 50%; background: rgba(0,0,0,.15); display: block; }
         .dpt-browser-url { flex: 1; background: white; border-radius: 6px; padding: .2rem .6rem; font-size: .72rem; color: #718096; font-family: 'Assistant',sans-serif; border: 1px solid rgba(0,0,0,.08); }
         .dpt-tour-img-wrap { position: relative; }
-        .dpt-tour-img-wrap img { width: 100%; display: block; max-height: 340px; object-fit: cover; object-position: top; }
+        .dpt-tour-img-wrap img { width: 100%; display: block; max-height: 340px; object-fit: cover; object-position: top; cursor: zoom-in; }
+        #dpt-lb { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.88); z-index: 9999; align-items: center; justify-content: center; cursor: zoom-out; padding: 1rem; }
+        #dpt-lb.dpt-lb-open { display: flex; }
+        #dpt-lb img { max-width: 95vw; max-height: 92vh; border-radius: 10px; object-fit: contain; box-shadow: 0 8px 48px rgba(0,0,0,.6); }
         .dpt-tour-img-ph { aspect-ratio: 16/9; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: #a0aec0; padding: 2rem; font-family: 'Assistant',sans-serif; font-size: .85rem; text-align: center; }
         .dpt-tour-img-ph svg { width: 40px; height: 40px; opacity: .35; stroke: currentColor; fill: none; stroke-width: 1.5; }
         .dpt-chips-row { display: flex; flex-wrap: wrap; gap: 8px; padding: .85rem; background: rgba(255,255,255,.9); border-top: 1px solid rgba(0,0,0,.06); }
@@ -213,7 +216,7 @@
         .dpt-chip:hover .dpt-chip-tip, .dpt-chip:focus .dpt-chip-tip { display: block; }
         .dpt-tour-slide { display: none; }
         .dpt-tour-slide.dpt-visible { display: block; }
-        .dpt-stepper { margin-bottom: 2rem; }
+        .dpt-stepper { margin-bottom: 1rem; }
         .dpt-stepper-layout { display: grid; grid-template-columns: 220px 1fr; gap: 1.25rem; align-items: start; }
         @media (max-width: 560px) { .dpt-stepper-layout { grid-template-columns: 1fr; } }
         .dpt-step-list { display: flex; flex-direction: column; gap: 4px; }
@@ -506,10 +509,6 @@
 
         <!-- PART 1 — THE GAP -->
         <div class="dpt-gap">
-            <div class="dpt-section-label">הבעיה שDeeptase פותר</div>
-            <h3 class="dpt-section-title">נסו לחפש חברה ישראלית</h3>
-            <p class="dpt-section-sub">לחצו על חברה ישראלית וראו מה קורה בכלים הבינלאומיים לעומת Deeptase</p>
-
             <div class="dpt-company-btns" id="dpt-co-btns">
                 <button class="dpt-co-btn dpt-co-active" data-co="nyx">נייקס</button>
                 <button class="dpt-co-btn" data-co="namco">נמקו ריאלטי</button>
@@ -556,14 +555,8 @@
             </div>
         </div>
 
-        <hr class="dpt-divider">
-
         <!-- PART 2 — ANNOTATED TOUR -->
         <div class="dpt-tour">
-            <div class="dpt-section-label">סיור בממשק</div>
-            <h3 class="dpt-section-title">מה תמצאו בכל מסך</h3>
-            <p class="dpt-section-sub">בחרו מסך ולחצו על הסימונים כדי ללמוד מה כל חלק עושה</p>
-
             <div class="dpt-tour-nav" id="dpt-tour-nav">
                 <button class="dpt-tour-btn dpt-tour-active" data-slide="0">עמוד הבית</button>
                 <button class="dpt-tour-btn" data-slide="1">ניתוח חברה</button>
@@ -620,14 +613,8 @@
             </div>
         </div>
 
-        <hr class="dpt-divider">
-
         <!-- PART 3 — STEPPER -->
         <div class="dpt-stepper">
-            <div class="dpt-section-label">שיטת עבודה</div>
-            <h3 class="dpt-section-title">5 צעדים — מגילוי להחלטה</h3>
-            <p class="dpt-section-sub">לחצו על כל צעד כדי לראות מה עושים ואיפה בDeeptase</p>
-
             <div class="dpt-stepper-layout">
                 <div class="dpt-step-list" id="dpt-step-list">
                     <div class="dpt-step-item dpt-step-on" data-step="0"><div class="dpt-step-num">1</div><div class="dpt-step-item-title">מצאו חברה מעניינת</div></div>
@@ -639,35 +626,30 @@
 
                 <div id="dpt-step-panels">
                     <div class="dpt-step-panel dpt-visible" data-step="0">
-                        <div class="dpt-step-panel-img"><img src="/assets/images/deeptase/deeptase-homepage.png" alt="עמוד הבית"></div>
                         <div class="dpt-step-panel-title">חפשו חברה שמעניינת אתכם</div>
                         <p class="dpt-step-panel-text">לפי שם, סמל מניה, או גלישה בפיד הניתוחים האחרונים. לא יודעים מאיפה להתחיל? בחרו סקטור שאתם מכירים.</p>
                         <span class="dpt-step-tag">גילוי ראשוני</span>
                         <div class="dpt-step-next"><button class="dpt-step-next-btn" data-go="1">הצעד הבא ←</button><span class="dpt-step-counter">1 / 5</span></div>
                     </div>
                     <div class="dpt-step-panel" data-step="1">
-                        <div class="dpt-step-panel-img"><img src="/assets/images/deeptase/deeptase-analysis.png" alt="ניתוח חברה"></div>
                         <div class="dpt-step-panel-title">קראו "מה השתנה" ו"בין השורות"</div>
                         <p class="dpt-step-panel-text">הניתוח הנרטיבי מסביר מה קרה בחברה בשפה נגישה — לא רק מספרים. זה ה"למה" שמאחורי הנתונים.</p>
                         <span class="dpt-step-tag">הבנה עסקית</span>
                         <div class="dpt-step-next"><button class="dpt-step-next-btn" data-go="2">הצעד הבא ←</button><span class="dpt-step-counter">2 / 5</span></div>
                     </div>
                     <div class="dpt-step-panel" data-step="2">
-                        <div class="dpt-step-panel-img"><img src="/assets/images/deeptase/deeptase-analysis.png" alt="גרפים פיננסיים"></div>
                         <div class="dpt-step-panel-title">בדקו מגמות — לא מספר בודד</div>
                         <p class="dpt-step-panel-text">שנה אחת טובה לא מספיקה. חפשו עלייה עקבית ב-3–4 שנים בהכנסות, רווח גולמי, ותזרים. מגמה עולה ← עסק משתפר.</p>
                         <span class="dpt-step-tag">ניתוח כמותי</span>
                         <div class="dpt-step-next"><button class="dpt-step-next-btn" data-go="3">הצעד הבא ←</button><span class="dpt-step-counter">3 / 5</span></div>
                     </div>
                     <div class="dpt-step-panel" data-step="3">
-                        <div class="dpt-step-panel-img"><img src="/assets/images/deeptase/deeptase-analysis.png" alt="שורטיסטים"></div>
                         <div class="dpt-step-panel-title">בדקו Short Interest</div>
                         <p class="dpt-step-panel-text">מעל 5%? סימן שמוסדיים מהמרים כנגד המניה. לא בהכרח לפסול — אבל חובה להבין למה לפני שקונים.</p>
                         <span class="dpt-step-tag">אנליזה מתקדמת</span>
                         <div class="dpt-step-next"><button class="dpt-step-next-btn" data-go="4">הצעד הבא ←</button><span class="dpt-step-counter">4 / 5</span></div>
                     </div>
                     <div class="dpt-step-panel" data-step="4">
-                        <div class="dpt-step-panel-img"><img src="/assets/images/deeptase/deeptase-analysis.png" alt="דירוג סיכום"></div>
                         <div class="dpt-step-panel-title">קבלו החלטה: Buy / Pass / Watch</div>
                         <p class="dpt-step-panel-text">הבנתם את העסק? המספרים בריאים? המחיר הגיוני? שלושה "כן" = שווה לחקור עמוק יותר. אחד "לא" = Watch או Pass.</p>
                         <span class="dpt-step-tag">החלטת השקעה</span>
@@ -677,8 +659,6 @@
             </div>
         </div>
 
-        <hr class="dpt-divider">
-
         <div class="dpt-cta">
             <p>נסו עכשיו — חפשו חברה ישראלית שמכירים ויישמו את שיטת הניתוח מפרק 2</p>
             <a href="https://deeptase.co.il" target="_blank" rel="noopener" class="dpt-cta-btn">כנסו ל-Deeptase ←</a>
@@ -686,6 +666,7 @@
         </div>
 
         </div><!-- /dpt-root -->
+        <div id="dpt-lb"><img id="dpt-lb-img" src="" alt=""></div>
     </div>
 
     <!-- SECTION 8: צעד 3 -->
@@ -1264,6 +1245,18 @@ initExplainerWidget('more-tools-explainer', 'more-tools-lightbox', [
     document.querySelectorAll('#dpt-step-panels .dpt-step-next-btn').forEach(function (btn) {
         btn.addEventListener('click', function () { activateStep(parseInt(btn.dataset.go)); });
     });
+
+    var lb = document.getElementById('dpt-lb');
+    var lbImg = document.getElementById('dpt-lb-img');
+    document.querySelectorAll('.dpt-tour-img-wrap img').forEach(function (img) {
+        img.addEventListener('click', function () {
+            lbImg.src = img.src;
+            lbImg.alt = img.alt;
+            lb.classList.add('dpt-lb-open');
+        });
+    });
+    lb.addEventListener('click', function () { lb.classList.remove('dpt-lb-open'); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') lb.classList.remove('dpt-lb-open'); });
 })();
 </script>
 
