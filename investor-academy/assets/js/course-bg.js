@@ -123,7 +123,7 @@
             ctx.lineTo(lastX, H);
             ctx.lineTo(0, H);
             ctx.closePath();
-            ctx.fillStyle = line.color.replace('ALPHA', '0.02');
+            ctx.fillStyle = line.color.replace('ALPHA', '0.05');
             ctx.fill();
 
             // draw line
@@ -133,7 +133,7 @@
                 var y = toScreenY(v);
                 if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
             });
-            ctx.strokeStyle = line.color.replace('ALPHA', '0.06');
+            ctx.strokeStyle = line.color.replace('ALPHA', '0.13');
             ctx.lineWidth = 1.5;
             ctx.stroke();
         });
