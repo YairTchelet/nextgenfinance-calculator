@@ -298,8 +298,9 @@
   <script src="/assets/js/supabase-config.js"></script>
   <script>
     // Support ?redirect= URL param — store so login page can use it too
+    // Security: only accept same-origin paths (must start with /)
     const _urlRedirect = new URLSearchParams(window.location.search).get('redirect');
-    if (_urlRedirect) sessionStorage.setItem('redirectAfterLogin', _urlRedirect);
+    if (_urlRedirect && _urlRedirect.startsWith('/')) sessionStorage.setItem('redirectAfterLogin', _urlRedirect);
 
     if (sessionStorage.getItem('redirectAfterLogin')) {
       document.getElementById('redirect-notice').classList.add('visible');

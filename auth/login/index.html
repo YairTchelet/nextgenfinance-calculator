@@ -278,8 +278,9 @@
   <script src="/assets/js/supabase-config.js"></script>
   <script>
     // Support both ?redirect= URL param and sessionStorage (set by auth-guard.js)
+    // Security: only accept same-origin paths (must start with /)
     const _urlRedirect = new URLSearchParams(window.location.search).get('redirect');
-    if (_urlRedirect) sessionStorage.setItem('redirectAfterLogin', _urlRedirect);
+    if (_urlRedirect && _urlRedirect.startsWith('/')) sessionStorage.setItem('redirectAfterLogin', _urlRedirect);
 
     if (sessionStorage.getItem('redirectAfterLogin')) {
       document.getElementById('redirect-notice').classList.add('visible');
@@ -336,7 +337,8 @@
 
       const redirect = sessionStorage.getItem('redirectAfterLogin');
       sessionStorage.removeItem('redirectAfterLogin');
-      window.location.replace(redirect || '/members/');
+      // Safety: only redirect to same-origin paths
+      window.location.replace((redirect && redirect.startsWith('/')) ? redirect : '/members/');
     });
   </script>
 

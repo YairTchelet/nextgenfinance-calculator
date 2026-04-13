@@ -818,8 +818,8 @@ simStart();
 
   if (!user) {
     btns.innerHTML =
-      '<a href="/auth/login/" style="' + btnPrimary + '">התחבר לחשבון</a>' +
-      '<a href="/auth/register/" style="' + btnSecondary + '">הרשמה</a>';
+      '<a href="/auth/login/?redirect=/blog/how-to-buy-stocks/" style="' + btnPrimary + '">התחבר לחשבון</a>' +
+      '<a href="/auth/register/?redirect=/blog/how-to-buy-stocks/" style="' + btnSecondary + '">הרשמה</a>';
   } else {
     btns.innerHTML =
       '<a href="/profile/?access=denied" style="' + btnPrimary + '">בקש גישה לקורס</a>' +
