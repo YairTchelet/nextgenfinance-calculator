@@ -323,6 +323,15 @@
         return;
       }
 
+      // Capture redirect destination NOW — before the await, because Supabase may call
+      // window.history.replaceState during signInWithPassword (detectSessionInUrl cleanup),
+      // which would wipe window.location.search before we can read it post-await.
+      const _ssRedirect  = sessionStorage.getItem('redirectAfterLogin');
+      const _paramRedirect = new URLSearchParams(window.location.search).get('redirect');
+      const _dest = (_ssRedirect   && _ssRedirect.startsWith('/'))   ? _ssRedirect
+                  : (_paramRedirect && _paramRedirect.startsWith('/')) ? _paramRedirect
+                  : null;
+
       submitBtn.disabled = true;
       submitBtn.textContent = 'מתחבר...';
 
@@ -335,14 +344,8 @@
         return;
       }
 
-      // Prefer sessionStorage; fall back to the ?redirect= param still in the current URL
-      let redirect = sessionStorage.getItem('redirectAfterLogin');
-      if (!redirect || !redirect.startsWith('/')) {
-        redirect = new URLSearchParams(window.location.search).get('redirect');
-      }
       sessionStorage.removeItem('redirectAfterLogin');
-      // Safety: only redirect to same-origin paths
-      window.location.replace((redirect && redirect.startsWith('/')) ? redirect : '/members/');
+      window.location.replace(_dest || '/members/');
     });
   </script>
 
