@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>איך קונים מניה בפועל – המדריך המעשי למערכת Spark של מיטב | NewGen Finance</title>
+  <meta name="description" content="המדריך הפשוט והמעשי לרכישת מניות דרך מערכת Spark של מיטב: חיפוש מניה, הבנת פקודת LMT ו-MKT, ביקוש והיצע, קנייה, מכירה, עמלות, מיסוי ו-FIFO.">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="canonical" href="https://newgenfinance.co.il/blog/how-to-buy-stocks/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="איך קונים מניה בפועל – המדריך למערכת Spark">
+  <meta property="og:url" content="https://newgenfinance.co.il/blog/how-to-buy-stocks/">
+  <meta property="og:site_name" content="NewGen Finance">
+  <meta property="og:locale" content="he_IL">
+  <meta property="article:author" content="יאיר תכלת">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"איך קונים מניה בפועל – המדריך המעשי","author":{"@type":"Person","name":"יאיר תכלת"},"publisher":{"@type":"Organization","name":"NewGen Finance"},"inLanguage":"he","isAccessibleForFree":false}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"דף הבית","item":"https://newgenfinance.co.il/"},{"@type":"ListItem","position":2,"name":"בלוג","item":"https://newgenfinance.co.il/blog/"},{"@type":"ListItem","position":3,"name":"איך קונים מניה בפועל"}]}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800;900&family=Assistant:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg-gradient-start:#0b4a64;--bg-gradient-mid:#1680a0;--bg-gradient-end:#0d6a82;--card-light:#f7f9fa;--card-dark:#0c3d52;--text-main:#22333b;--text-light:#4a6472;--text-white:#f0f8fa;--accent-mint:#2a9d8f;--accent-light:#b3e0dc;--green:#2a9d8f;--red:#c44e44;--orange:#e8914f;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Rubik',sans-serif;background:linear-gradient(155deg,var(--bg-gradient-start) 0%,var(--bg-gradient-mid) 48%,var(--bg-gradient-end) 100%) fixed;color:var(--text-white);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+    a{text-decoration:none;color:inherit;}
+    strong{font-weight:700;color:var(--text-main);}
+    .card-dark strong{color:var(--accent-light);}
+
+    .hp-nav{position:sticky;top:0;z-index:100;height:62px;background:var(--card-dark);border-bottom:1px solid rgba(179,224,220,0.12);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(1rem,5vw,3.5rem);}
+    .hp-nav-logo{display:flex;align-items:center;gap:0.6rem;font-weight:700;font-size:1.1rem;color:var(--accent-light);}
+    .hp-nav-logo img{height:38px;width:38px;border-radius:10px;background:rgba(179,224,220,0.12);padding:4px;}
+    .hp-nav-center{display:flex;align-items:center;gap:1.5rem;flex:1;justify-content:center;}
+    .hp-nav-link{font-size:0.9rem;font-weight:500;color:rgba(240,248,250,0.75);transition:color 0.18s;}
+    .hp-nav-link:hover{color:var(--text-white);}
+    .course-only-banner{background:linear-gradient(135deg,#1c6b61,#0c3d52);text-align:center;padding:0.6rem 1rem;font-size:0.85rem;font-weight:700;color:var(--accent-light);border-bottom:1px solid rgba(179,224,220,0.2);}
+    .course-only-banner span{opacity:0.7;}
+    #reading-progress{position:sticky;top:62px;z-index:99;height:4px;background:rgba(255,255,255,0.08);}
+    #reading-progress-bar{height:100%;width:0%;background:var(--accent-light);transition:width 0.1s linear;}
+
+    .article-header{background:var(--card-dark);padding:clamp(3rem,6vw,5rem) clamp(1.25rem,6vw,4rem);text-align:center;border-bottom:1px solid rgba(179,224,220,0.1);}
+    .article-meta-top{display:flex;align-items:center;justify-content:center;gap:0.75rem;margin-bottom:1.25rem;flex-wrap:wrap;}
+    .article-category{font-size:0.75rem;font-weight:700;padding:0.3rem 0.8rem;border-radius:20px;background:rgba(42,157,143,0.2);color:#7dd8d2;border:1px solid rgba(42,157,143,0.35);}
+    .article-reading-time{font-size:0.85rem;color:rgba(240,248,250,0.6);font-family:'Assistant',sans-serif;}
+    .article-header h1{font-size:clamp(1.8rem,4vw,3.2rem);font-weight:900;letter-spacing:-0.5px;color:var(--text-white);margin-bottom:1.2rem;line-height:1.2;max-width:900px;margin-inline:auto;}
+    .article-header .subtitle{font-size:1.2rem;font-family:'Assistant',sans-serif;color:rgba(240,248,250,0.8);max-width:700px;margin:0 auto;line-height:1.7;}
+    .ep-link{display:inline-block;margin-top:1.2rem;padding:0.5rem 1.5rem;border-radius:8px;background:rgba(42,157,143,0.2);border:1px solid rgba(42,157,143,0.4);color:#7dd8d2;font-size:0.95rem;font-weight:700;transition:all 0.2s;}
+    .ep-link:hover{background:rgba(42,157,143,0.35);transform:translateY(-2px);}
+
+    .article-layout{max-width:1320px;margin:0 auto;padding:3rem 1.25rem 5rem;display:grid;grid-template-columns:240px minmax(0,1fr);gap:2.5rem;align-items:start;}
+    .toc-sidebar{position:sticky;top:90px;}
+    .toc-card{background:var(--card-light);border-radius:14px;padding:1.2rem;box-shadow:0 4px 24px rgba(0,0,0,0.15);color:var(--text-main);}
+    .toc-title{font-size:0.8rem;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-light);margin-bottom:1rem;padding-bottom:0.6rem;border-bottom:2px solid rgba(0,0,0,0.06);}
+    .toc-list{list-style:none;display:flex;flex-direction:column;gap:0.15rem;}
+    .toc-list li a{display:block;font-size:0.82rem;color:var(--text-light);padding:0.4rem 0.5rem;border-radius:5px;transition:all 0.2s;font-family:'Assistant',sans-serif;font-weight:600;line-height:1.35;}
+    .toc-list li a:hover{background:rgba(42,157,143,0.08);color:var(--accent-mint);padding-right:0.8rem;}
+    .toc-list li a.toc-active{background:rgba(42,157,143,0.12);color:#1c6b61;font-weight:800;border-right:3px solid var(--accent-mint);}
+
+    .article-body{min-width:0;}
+    .card-light{background:var(--card-light);border-radius:18px;padding:3rem 2.5rem;box-shadow:0 8px 32px rgba(0,0,0,0.15);color:var(--text-main);margin-bottom:2.5rem;overflow:hidden;}
+    .card-dark{background:var(--card-dark);border-radius:18px;padding:3rem 2.5rem;box-shadow:0 8px 32px rgba(0,0,0,0.25);color:var(--text-white);border:1px solid rgba(179,224,220,0.12);margin-bottom:2.5rem;overflow:hidden;}
+    .section-h2{font-size:1.8rem;font-weight:800;margin-bottom:1.5rem;letter-spacing:-0.3px;line-height:1.3;}
+    .section-h2-gradient{background:linear-gradient(135deg,#1c6b61,#0c3d52);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .section-h2-mint{color:var(--accent-light);}
+    .section-h3{font-size:1.35rem;font-weight:700;color:var(--text-main);margin:2.5rem 0 1rem;border-bottom:2px solid rgba(42,157,143,0.15);padding-bottom:0.5rem;display:inline-block;}
+    .card-dark .section-h3{color:var(--accent-light);border-bottom-color:rgba(179,224,220,0.2);}
+    .article-p{font-size:1.15rem;font-family:'Assistant',sans-serif;color:#3a4f5c;line-height:1.85;margin-bottom:1.5rem;}
+    .card-dark .article-p{color:rgba(240,248,250,0.85);}
+    .article-ul{margin-bottom:1.5rem;padding-right:1.5rem;font-family:'Assistant',sans-serif;font-size:1.15rem;line-height:1.85;color:#3a4f5c;}
+    .article-ul li{margin-bottom:0.75rem;}
+    .article-ul li::marker{color:var(--accent-mint);font-weight:bold;}
+    .card-dark .article-ul{color:rgba(240,248,250,0.85);}
+    .hook-p{font-size:1.25rem;font-family:'Assistant',sans-serif;color:var(--text-main);line-height:1.8;margin-bottom:2rem;font-weight:600;border-right:4px solid var(--accent-mint);padding-right:1.25rem;background:linear-gradient(to left,rgba(42,157,143,0.05),transparent);padding-block:0.75rem;}
+    .card-dark .hook-p{color:rgba(240,248,250,0.9);}
+    .note-box-light{background:rgba(42,157,143,0.06);border:1px solid rgba(42,157,143,0.2);border-radius:12px;padding:1.5rem;font-size:1.1rem;color:var(--text-main);font-family:'Assistant',sans-serif;line-height:1.7;margin:2rem 0;border-right:5px solid var(--accent-mint);}
+    .note-box-dark{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.15);border-radius:12px;padding:1.5rem;font-size:1.1rem;color:#f0f8fa;font-family:'Assistant',sans-serif;line-height:1.7;margin:2rem 0;border-right:5px solid var(--accent-light);}
+    .code-block{background:var(--card-dark);color:var(--accent-light);padding:0.15rem 0.55rem;border-radius:4px;font-family:monospace;font-size:1.05rem;font-weight:bold;letter-spacing:1px;}
+    .card-dark .code-block{background:rgba(255,255,255,0.1);}
+    .sc-fig{margin:2rem 0;}
+    .sc-img{width:100%;border-radius:12px;border:1px solid rgba(0,0,0,0.08);box-shadow:0 4px 20px rgba(0,0,0,0.1);display:block;}
+    .card-dark .sc-img{border-color:rgba(179,224,220,0.15);box-shadow:0 4px 20px rgba(0,0,0,0.3);}
+    .sc-caption{font-size:0.85rem;font-family:'Assistant',sans-serif;color:var(--text-light);text-align:center;margin-top:0.6rem;font-weight:600;}
+    .card-dark .sc-caption{color:rgba(240,248,250,0.5);}
+
+    /* ── INFOGRAPHICS ── */
+    .ig{border-radius:14px;overflow:hidden;margin:2rem 0;}
+    .ig-header{padding:1.2rem 1.5rem;font-size:1.1rem;font-weight:800;text-align:center;}
+    .ig-header small{display:block;font-size:0.85rem;font-weight:500;opacity:0.7;margin-top:0.3rem;}
+    .ob-wrap{background:#f8fafb;border:1px solid #e0e8ec;}
+    .ob-header{background:linear-gradient(135deg,#0c3d52,#0b4a64);color:#f0f8fa;}
+    .ob-grid{display:grid;grid-template-columns:1fr 1fr;}
+    .ob-side-title{padding:0.7rem;text-align:center;font-size:0.85rem;font-weight:800;color:#fff;}
+    .ob-side-bid .ob-side-title{background:var(--green);}
+    .ob-side-ask .ob-side-title{background:var(--red);}
+    .ob-row{display:grid;grid-template-columns:1fr 1fr;padding:0.45rem 0.8rem;font-family:'Assistant',sans-serif;font-size:0.95rem;border-bottom:1px solid rgba(0,0,0,0.04);}
+    .ob-row-header{font-weight:700;font-size:0.78rem;color:var(--text-light);text-transform:uppercase;background:rgba(0,0,0,0.02);padding:0.35rem 0.8rem;}
+    .ob-price-green{font-weight:800;color:var(--green);}
+    .ob-price-red{font-weight:800;color:var(--red);}
+    .ob-qty{color:var(--text-main);font-weight:600;}
+    .ob-spread{text-align:center;padding:0.7rem;background:var(--card-dark);color:var(--accent-light);font-weight:800;font-size:0.9rem;}
+    .ob-legend{padding:1.2rem 1.5rem;display:flex;flex-direction:column;gap:0.5rem;}
+    .ob-legend-item{display:flex;align-items:flex-start;gap:0.6rem;font-family:'Assistant',sans-serif;font-size:0.95rem;color:var(--text-main);line-height:1.5;}
+    .ob-legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+
+    .vs-wrap{background:#f8fafb;border:1px solid #e0e8ec;}
+    .vs-header{background:linear-gradient(135deg,#0c3d52,#1c6b61);color:#f0f8fa;}
+    .vs-cards{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;padding:1.5rem;}
+    .vs-card{border-radius:12px;padding:1.3rem;}
+    .vs-card-lmt{background:linear-gradient(135deg,#0c3d52,#0b4a64);color:#f0f8fa;}
+    .vs-card-mkt{background:linear-gradient(135deg,#1c6b61,#155a52);color:#f0f8fa;}
+    .vs-badge{display:inline-block;padding:0.2rem 0.6rem;border-radius:8px;font-size:0.8rem;font-weight:900;margin-bottom:0.4rem;letter-spacing:1px;}
+    .vs-card-lmt .vs-badge{background:rgba(179,224,220,0.25);color:var(--accent-light);}
+    .vs-card-mkt .vs-badge{background:rgba(244,162,97,0.3);color:#f4dfc0;}
+    .vs-card-title{font-size:1.1rem;font-weight:800;margin-bottom:0.7rem;}
+    .vs-card ul{list-style:none;font-family:'Assistant',sans-serif;font-size:0.9rem;line-height:1.65;}
+    .vs-card li{padding:0.25rem 0;padding-right:1rem;position:relative;opacity:0.9;}
+    .vs-card li::before{content:'•';position:absolute;right:0;font-weight:900;}
+    .vs-card-lmt li::before{color:var(--accent-light);}
+    .vs-card-mkt li::before{color:#f4a261;}
+    .vs-example{margin-top:0.7rem;padding:0.5rem 0.7rem;border-radius:8px;font-size:0.82rem;font-weight:700;text-align:center;}
+    .vs-card-lmt .vs-example{background:rgba(42,157,143,0.2);color:var(--accent-light);}
+    .vs-card-mkt .vs-example{background:rgba(244,162,97,0.2);color:#f4dfc0;}
+    .vs-table{width:100%;border-collapse:collapse;font-family:'Assistant',sans-serif;font-size:0.9rem;}
+    .vs-table th{background:var(--card-dark);color:#fff;padding:0.7rem;font-weight:700;text-align:center;}
+    .vs-table td{padding:0.6rem;text-align:center;color:var(--text-main);border-bottom:1px solid rgba(0,0,0,0.06);background:#fff;}
+    .vs-table td:first-child{font-weight:700;background:#f0f4f5;text-align:right;}
+    .vs-rec{padding:0.7rem;text-align:center;background:rgba(42,157,143,0.08);font-size:0.88rem;font-weight:700;color:#1c6b61;}
+
+    .status-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin:1.5rem 0;}
+    .status-card{border-radius:12px;padding:1.2rem;text-align:center;}
+    .status-card .status-icon{font-size:2rem;margin-bottom:0.4rem;}
+    .status-card .status-name{font-size:1rem;font-weight:800;margin-bottom:0.3rem;}
+    .status-card .status-desc{font-size:0.88rem;font-family:'Assistant',sans-serif;line-height:1.5;opacity:0.85;}
+    .status-filled{background:rgba(42,157,143,0.1);border:1px solid rgba(42,157,143,0.3);color:var(--text-main);}
+    .status-partial{background:rgba(232,145,79,0.1);border:1px solid rgba(232,145,79,0.3);color:var(--text-main);}
+    .status-open{background:rgba(42,120,180,0.08);border:1px solid rgba(42,120,180,0.25);color:var(--text-main);}
+    .status-cancelled{background:rgba(196,78,68,0.08);border:1px solid rgba(196,78,68,0.25);color:var(--text-main);}
+
+    .fifo-timeline{display:flex;flex-direction:column;margin:1rem 0;}
+    .fifo-row{display:grid;grid-template-columns:80px 1fr 100px;align-items:center;padding:0.7rem 0.8rem;border:1px solid rgba(0,0,0,0.06);border-top:none;background:#fff;font-family:'Assistant',sans-serif;font-size:0.9rem;}
+    .fifo-row:first-child{border-top:1px solid rgba(0,0,0,0.06);border-radius:10px 10px 0 0;}
+    .fifo-row:last-child{border-radius:0 0 10px 10px;}
+    .fifo-date{font-weight:700;color:var(--text-light);font-size:0.82rem;}
+    .fifo-action{font-weight:600;color:var(--text-main);}
+    .fifo-tag{text-align:center;font-weight:800;font-size:0.75rem;padding:0.15rem 0.5rem;border-radius:6px;}
+    .fifo-buy{background:rgba(42,157,143,0.12);color:var(--green);}
+    .fifo-sell{background:rgba(196,78,68,0.12);color:var(--red);}
+    .fifo-arrow{text-align:center;font-size:1.1rem;color:var(--accent-mint);padding:0.4rem 0;}
+
+    /* Commission infographic */
+    .comm-model{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin:1.5rem 0;}
+    .comm-box{border-radius:12px;padding:1.3rem;font-family:'Assistant',sans-serif;}
+    .comm-box-il{background:rgba(42,157,143,0.08);border:1px solid rgba(42,157,143,0.25);}
+    .comm-box-us{background:rgba(232,145,79,0.08);border:1px solid rgba(232,145,79,0.25);}
+    .comm-box-title{font-size:1.05rem;font-weight:800;margin-bottom:0.5rem;font-family:'Rubik',sans-serif;}
+    .comm-box-il .comm-box-title{color:var(--green);}
+    .comm-box-us .comm-box-title{color:var(--orange);}
+    .comm-line{font-size:0.95rem;line-height:1.7;color:var(--text-main);margin-bottom:0.3rem;}
+    .comm-example{margin-top:0.6rem;padding:0.6rem;border-radius:8px;font-size:0.88rem;font-weight:600;}
+    .comm-box-il .comm-example{background:rgba(42,157,143,0.1);}
+    .comm-box-us .comm-example{background:rgba(232,145,79,0.1);}
+
+    /* FIFO scenario cards */
+    .fifo-scenarios{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin:1.5rem 0;}
+    .fifo-sc{border-radius:12px;padding:1.3rem;font-family:'Assistant',sans-serif;}
+    .fifo-sc-good{background:rgba(42,157,143,0.08);border:1px solid rgba(42,157,143,0.25);}
+    .fifo-sc-bad{background:rgba(196,78,68,0.06);border:1px solid rgba(196,78,68,0.2);}
+    .fifo-sc-title{font-size:1rem;font-weight:800;margin-bottom:0.4rem;font-family:'Rubik',sans-serif;}
+    .fifo-sc-good .fifo-sc-title{color:var(--green);}
+    .fifo-sc-bad .fifo-sc-title{color:var(--red);}
+    .fifo-sc-text{font-size:0.93rem;line-height:1.6;color:var(--text-main);}
+
+    .steps-list{display:flex;flex-direction:column;gap:0.8rem;margin-top:1.5rem;}
+    .step-item{border:1px solid rgba(0,0,0,0.1);border-radius:12px;background:#fff;overflow:hidden;}
+    .step-header{display:flex;align-items:center;gap:0.8rem;padding:1rem 1.2rem;cursor:pointer;transition:background 0.2s;user-select:none;}
+    .step-header:hover{background:#f8fcfb;}
+    .step-number{width:34px;height:34px;background:var(--accent-mint);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1rem;flex-shrink:0;}
+    .step-title{font-size:1.05rem;font-weight:800;color:var(--text-main);flex:1;}
+    .step-arrow{color:var(--accent-mint);font-size:0.9rem;transition:transform 0.3s;}
+    .step-item.open .step-arrow{transform:rotate(180deg);}
+    .step-body{max-height:0;overflow:hidden;transition:max-height 0.5s ease;}
+    .step-item.open .step-body{max-height:2000px;}
+    .step-content{padding:1rem 1.2rem;font-size:1rem;font-family:'Assistant',sans-serif;color:var(--text-light);line-height:1.7;border-top:1px solid rgba(0,0,0,0.05);background:#fafafa;}
+
+    /* ── SIMULATOR ── */
+    .sim-container{background:linear-gradient(135deg,#091f2c 0%,#0c3148 50%,#0a2838 100%);border-radius:14px;overflow:hidden;border:1px solid rgba(179,224,220,0.15);}
+    .sim-topbar{display:flex;justify-content:space-between;align-items:center;padding:0.8rem 1.2rem;background:rgba(0,0,0,0.3);border-bottom:1px solid rgba(179,224,220,0.1);flex-wrap:wrap;gap:0.5rem;}
+    .sim-title-bar{font-size:0.95rem;font-weight:800;color:var(--accent-light);}
+    .sim-stats{display:flex;gap:1.2rem;font-family:'Assistant',sans-serif;font-size:0.85rem;color:rgba(240,248,250,0.7);}
+    .sim-stats strong{color:var(--accent-light);font-family:'Rubik',sans-serif;}
+    .sim-body{padding:1.2rem;}
+    .sim-mission-box{background:rgba(42,157,143,0.12);border:1px solid rgba(42,157,143,0.3);border-radius:10px;padding:1rem 1.2rem;margin-bottom:1.2rem;}
+    .sim-mission-label{font-size:0.7rem;font-weight:800;text-transform:uppercase;color:#7dd8d2;letter-spacing:0.5px;margin-bottom:0.2rem;}
+    .sim-mission-text{font-size:1.05rem;font-weight:700;color:#f0f8fa;font-family:'Assistant',sans-serif;line-height:1.5;}
+    .sim-mission-hint{font-size:0.82rem;color:rgba(240,248,250,0.45);font-family:'Assistant',sans-serif;margin-top:0.3rem;}
+    .sim-interface{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+    .sim-panel{background:rgba(255,255,255,0.04);border:1px solid rgba(179,224,220,0.1);border-radius:10px;padding:1rem;}
+    .sim-panel-title{font-size:0.75rem;font-weight:800;color:rgba(240,248,250,0.45);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.6rem;}
+    .sim-search{display:flex;gap:0.4rem;margin-bottom:0.8rem;position:relative;}
+    .sim-search input{flex:1;background:rgba(255,255,255,0.07);border:1px solid rgba(179,224,220,0.2);border-radius:7px;padding:0.5rem 0.7rem;color:#f0f8fa;font-family:'Rubik',sans-serif;font-size:0.9rem;outline:none;}
+    .sim-search input:focus{border-color:var(--accent-light);}
+    .sim-search input::placeholder{color:rgba(240,248,250,0.25);}
+    .sim-search-btn{background:var(--accent-mint);color:#fff;border:none;border-radius:7px;padding:0.5rem 0.8rem;font-weight:800;cursor:pointer;font-family:'Rubik',sans-serif;font-size:0.82rem;white-space:nowrap;}
+    .sim-search-btn:hover{background:#239080;}
+    /* Autocomplete dropdown */
+    .sim-ac{position:absolute;top:100%;right:0;left:0;background:#0c3148;border:1px solid rgba(179,224,220,0.2);border-radius:0 0 7px 7px;max-height:200px;overflow-y:auto;z-index:10;display:none;}
+    .sim-ac.show{display:block;}
+    .sim-ac-item{padding:0.45rem 0.7rem;font-size:0.85rem;font-family:'Assistant',sans-serif;color:rgba(240,248,250,0.8);cursor:pointer;display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.04);}
+    .sim-ac-item:hover{background:rgba(42,157,143,0.15);}
+    .sim-ac-item .ac-ticker{font-weight:800;color:var(--accent-light);font-family:'Rubik',sans-serif;}
+    .sim-ac-item .ac-name{opacity:0.6;font-size:0.8rem;}
+    .sim-search-result{background:rgba(42,157,143,0.1);border-radius:7px;padding:0.5rem 0.7rem;font-size:0.85rem;color:#f0f8fa;display:none;font-family:'Assistant',sans-serif;margin-bottom:0.6rem;}
+    .sim-search-result.show{display:block;}
+    .sim-ob{margin-bottom:0.5rem;}
+    .sim-ob-title-row{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-bottom:2px;}
+    .sim-ob-title-cell{text-align:center;padding:0.3rem;font-size:0.7rem;font-weight:800;color:#fff;border-radius:4px 4px 0 0;}
+    .sim-ob-bid-title{background:var(--green);}
+    .sim-ob-ask-title{background:var(--red);}
+    .sim-ob-rows{display:grid;grid-template-columns:1fr 1fr;gap:2px;}
+    .sim-ob-cell{display:flex;justify-content:space-between;padding:0.3rem 0.5rem;font-size:0.8rem;font-family:'Assistant',sans-serif;cursor:pointer;transition:background 0.15s;}
+    .sim-ob-cell:hover{filter:brightness(1.4);}
+    .sim-ob-cell-bid{background:rgba(42,157,143,0.1);color:#f0f8fa;}
+    .sim-ob-cell-ask{background:rgba(196,78,68,0.1);color:#f0f8fa;}
+    .sim-ob-cell .ob-p{font-weight:700;}
+    .sim-ob-cell-bid .ob-p{color:var(--green);}
+    .sim-ob-cell-ask .ob-p{color:var(--red);}
+    /* Sim live price indicator */
+    .sim-live-price{text-align:center;padding:0.4rem;margin:0.3rem 0;font-size:0.82rem;font-weight:800;border-radius:6px;background:rgba(255,255,255,0.05);color:var(--accent-light);}
+    .sim-live-price .lp-up{color:var(--green);}
+    .sim-live-price .lp-down{color:var(--red);}
+    .sim-form-row{display:flex;gap:0.4rem;margin-bottom:0.5rem;align-items:center;}
+    .sim-form-label{font-size:0.75rem;font-weight:700;color:rgba(240,248,250,0.55);width:55px;flex-shrink:0;font-family:'Assistant',sans-serif;}
+    .sim-form-input{flex:1;background:rgba(255,255,255,0.07);border:1px solid rgba(179,224,220,0.2);border-radius:6px;padding:0.4rem 0.6rem;color:#f0f8fa;font-family:'Rubik',sans-serif;font-size:0.85rem;outline:none;}
+    .sim-form-input:focus{border-color:var(--accent-light);}
+    .sim-form-select{flex:1;background:rgba(255,255,255,0.07);border:1px solid rgba(179,224,220,0.2);border-radius:6px;padding:0.4rem;color:#f0f8fa;font-family:'Rubik',sans-serif;font-size:0.85rem;outline:none;}
+    .sim-direction-btns{display:flex;gap:3px;flex:1;}
+    .sim-dir-btn{flex:1;padding:0.4rem;border:1px solid rgba(179,224,220,0.2);border-radius:6px;background:rgba(255,255,255,0.04);color:rgba(240,248,250,0.4);font-weight:800;font-size:0.8rem;cursor:pointer;text-align:center;transition:all 0.15s;font-family:'Rubik',sans-serif;}
+    .sim-dir-btn.active-buy{background:rgba(42,157,143,0.25);color:#7dd8d2;border-color:var(--green);}
+    .sim-dir-btn.active-sell{background:rgba(196,78,68,0.25);color:#f09090;border-color:var(--red);}
+    .sim-submit-btn{width:100%;padding:0.6rem;border:none;border-radius:7px;font-weight:900;font-size:0.9rem;cursor:pointer;font-family:'Rubik',sans-serif;margin-top:0.4rem;transition:all 0.2s;}
+    .sim-submit-buy{background:var(--green);color:#fff;}
+    .sim-submit-sell{background:var(--red);color:#fff;}
+    .sim-submit-btn:hover{transform:translateY(-1px);filter:brightness(1.1);}
+    .sim-feedback{padding:0.6rem 0.8rem;border-radius:7px;font-family:'Assistant',sans-serif;font-size:0.88rem;margin-top:0.6rem;display:none;line-height:1.5;}
+    .sim-feedback.show{display:block;}
+    .sim-feedback-success{background:rgba(42,157,143,0.15);border:1px solid rgba(42,157,143,0.3);color:#7dd8d2;}
+    .sim-feedback-error{background:rgba(196,78,68,0.15);border:1px solid rgba(196,78,68,0.3);color:#f09090;}
+    .sim-portfolio-row{display:flex;justify-content:space-between;padding:0.4rem 0;border-bottom:1px solid rgba(255,255,255,0.05);font-family:'Assistant',sans-serif;font-size:0.85rem;color:rgba(240,248,250,0.8);}
+    .sim-portfolio-empty{text-align:center;padding:1rem;font-size:0.85rem;color:rgba(240,248,250,0.25);font-family:'Assistant',sans-serif;}
+    .sim-results{background:rgba(0,0,0,0.3);border-radius:12px;padding:1.5rem;text-align:center;display:none;margin-top:1rem;}
+    .sim-results.show{display:block;}
+    .sim-results h3{font-size:1.3rem;color:var(--accent-light);margin-bottom:1.2rem;}
+    .sim-results-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.8rem;margin-bottom:1rem;}
+    .sim-result-box{background:rgba(255,255,255,0.05);border-radius:10px;padding:0.8rem;}
+    .sim-result-val{font-size:1.4rem;font-weight:900;color:var(--accent-light);}
+    .sim-result-label{font-size:0.75rem;color:rgba(240,248,250,0.5);font-family:'Assistant',sans-serif;margin-top:0.2rem;}
+    .sim-restart-btn{padding:0.6rem 1.5rem;border:1px solid rgba(179,224,220,0.3);background:rgba(42,157,143,0.2);color:var(--accent-light);border-radius:7px;font-weight:800;cursor:pointer;font-family:'Rubik',sans-serif;font-size:0.9rem;}
+    .sim-restart-btn:hover{background:rgba(42,157,143,0.35);}
+
+    .author-card{background:var(--card-light);border-radius:16px;padding:2rem;display:flex;align-items:center;gap:1.5rem;box-shadow:0 4px 24px rgba(0,0,0,0.12);margin-bottom:1.5rem;color:var(--text-main);}
+    .author-avatar{width:70px;height:70px;background:var(--accent-mint);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:900;color:#fff;flex-shrink:0;}
+    .share-section{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:1.5rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:2rem;flex-wrap:wrap;}
+    .share-btn{padding:0.8rem 1.5rem;border-radius:8px;background:rgba(179,224,220,0.15);border:1px solid rgba(179,224,220,0.3);color:var(--accent-light);font-size:1rem;font-weight:700;cursor:pointer;transition:all 0.2s;font-family:inherit;}
+    .share-btn:hover{background:rgba(179,224,220,0.25);}
+
+    @media(max-width:900px){.article-layout{grid-template-columns:1fr;}.toc-sidebar{display:none;}.card-light,.card-dark{padding:2rem 1.5rem;}.vs-cards,.sim-interface,.sim-results-grid,.comm-model,.fifo-scenarios{grid-template-columns:1fr;}}
+    @media(max-width:600px){.card-light,.card-dark{padding:1.5rem 1rem;}.ob-grid{grid-template-columns:1fr;}.status-grid{grid-template-columns:1fr;}.fifo-row{grid-template-columns:60px 1fr 80px;font-size:0.82rem;}}
+  </style>
+</head>
+<body>
+
+<nav class="hp-nav"><a href="/" class="hp-nav-logo"><img src="/assets/images/logo.png" alt="NewGen Finance לוגו"><span>NewGen Finance</span></a><div class="hp-nav-center"><a href="/blog/" class="hp-nav-link">חזרה לבלוג</a><a href="/investor-academy/" class="hp-nav-link">חזרה לקורס</a></div></nav>
+<div class="course-only-banner">🔒 תוכן בלעדי לתלמידי הקורס <span>| מופיע כחלק מפרק 4</span></div>
+<div id="reading-progress"><div id="reading-progress-bar"></div></div>
+
+<div class="article-header">
+  <div class="article-meta-top"><span class="article-category">מדריך מעשי לתלמידים</span><span class="article-reading-time">⏱ כ-15 דקות + סימולטור</span></div>
+  <h1>איך קונים (ומוכרים) מניה בפועל</h1>
+  <p class="subtitle">המדריך שיכסה 90% ממה שתצטרכו 90% מהזמן. חיפוש מניה, ביקוש והיצע, פקודות, מימוש, עמלות, מיסוי ו-FIFO — עם סימולטור מסחר חי לתרגול.</p>
+  <a href="/investor-academy/episode4/" class="ep-link">← חזרה לפרק 4</a>
+</div>
+
+<div class="article-layout">
+  <aside class="toc-sidebar"><div class="toc-card"><div class="toc-title">תוכן עניינים</div><ul class="toc-list">
+    <li><a href="#intro" class="toc-link">לפני שמתחילים</a></li>
+    <li><a href="#find-stock" class="toc-link">חיפוש מניה</a></li>
+    <li><a href="#order-book" class="toc-link">ביקוש והיצע</a></li>
+    <li><a href="#order-types" class="toc-link">LMT מול MKT</a></li>
+    <li><a href="#place-buy" class="toc-link">קנייה ומכירה</a></li>
+    <li><a href="#order-status" class="toc-link">בדיקת מימוש</a></li>
+    <li><a href="#commissions" class="toc-link">עמלות מסחר</a></li>
+    <li><a href="#tax-fifo" class="toc-link">מיסוי ו-FIFO</a></li>
+    <li><a href="#simulator" class="toc-link">🎮 סימולטור</a></li>
+    <li><a href="#summary" class="toc-link">סיכום</a></li>
+  </ul></div></aside>
+
+  <main class="article-body">
+
+    <div class="card-light" id="intro">
+      <h2 class="section-h2 section-h2-gradient">לפני שמתחילים</h2>
+      <p class="hook-p">המדריך הזה בנוי לתת לכם את הכלים המעשיים שתצטרכו כמעט תמיד — לחפש מניה, להבין מה המחיר שלה, לקנות אותה, ולמכור כשתרצו.</p>
+      <p class="article-p">כל הדוגמאות מגיעים ממערכת <strong>Spark של מיטב</strong> — חשבון לימודי. הממשק שלכם עשוי להיראות קצת שונה בהתאם לברוקר, אבל העקרונות זהים. ככה נראית המערכת:</p>
+      <figure class="sc-fig"><img class="sc-img" src="/blog/how-to-buy-stocks/images/spark-full-dashboard.png" alt="מסך ראשי של מערכת Spark מיטב — שורת חיפוש, ספר פקודות, תיק השקעות וחדשות"><figcaption class="sc-caption">המסך הראשי של Spark — חיפוש, ספר פקודות, תיק, וחדשות הכל במקום אחד</figcaption></figure>
+      <div class="note-box-light"><strong>💡</strong> המדריך עוסק ב<strong>מניות וקרנות סל (ETF)</strong>. לקרנות מחקות יש פקודת KRN נפרדת — ראו במדריך המדדים.</div>
+    </div>
+
+    <div class="card-dark" id="find-stock">
+      <h2 class="section-h2 section-h2-mint">שלב 1: חיפוש המניה</h2>
+      <p class="article-p">שורת חיפוש בראש המסך — הקלידו שם חברה או סימול. <span class="code-block">AAPL</span> לאפל, <span class="code-block">MSFT</span> למייקרוסופט. לחצו על התוצאה ותגיעו לדף המניה.</p>
+      <figure class="sc-fig"><img class="sc-img" src="/blog/how-to-buy-stocks/images/spark-search-aapl.png" alt="חיפוש AAPL בשורת החיפוש של מיטב — תוצאות דרופדאון עם Apple Inc"><figcaption class="sc-caption">חיפוש AAPL בשורת החיפוש — שימו לב לתוצאות הנוספות (ETF-ים קשורים) שצריך לא להתבלבל איתן</figcaption></figure>
+      <div class="note-box-dark"><strong>🔍</strong> ודאו בורסה נכונה: NASDAQ/NYSE לאמריקאיות, ת"א לישראליות.</div>
+    </div>
+
+    <div class="card-light" id="order-book">
+      <h2 class="section-h2 section-h2-gradient">שלב 2: ביקוש והיצע</h2>
+      <p class="hook-p">ספר הפקודות (Order Book) מראה מי רוצה לקנות ובאיזה מחיר, ומי רוצה למכור.</p>
+      <figure class="sc-fig"><img class="sc-img" src="/blog/how-to-buy-stocks/images/spark-orderbook-clean.png" alt="ספר פקודות ב-Spark — ביקוש בירוק והיצע באדום עם מחירים וכמויות"><figcaption class="sc-caption">ספר הפקודות — ביקוש (ירוק) משמאל, היצע (אדום) מימין. שימו לב למחירי הלימיט ולכמויות</figcaption></figure>
+      <div class="ig ob-wrap">
+        <div class="ig-header ob-header">ספר הפקודות<small>כל שורה = פקודה של מישהו שמחכה לקנות או למכור</small></div>
+        <div class="ob-grid">
+          <div class="ob-side ob-side-bid"><div class="ob-side-title">🟢 ביקוש BID — קונים</div><div class="ob-row ob-row-header"><span>כמות</span><span>מחיר</span></div><div class="ob-row"><span class="ob-qty">500</span><span class="ob-price-green">$182.50</span></div><div class="ob-row"><span class="ob-qty">1,200</span><span class="ob-price-green">$182.45</span></div><div class="ob-row"><span class="ob-qty">800</span><span class="ob-price-green">$182.40</span></div><div class="ob-row"><span class="ob-qty">2,000</span><span class="ob-price-green">$182.35</span></div></div>
+          <div class="ob-side ob-side-ask"><div class="ob-side-title">🔴 היצע ASK — מוכרים</div><div class="ob-row ob-row-header"><span>מחיר</span><span>כמות</span></div><div class="ob-row"><span class="ob-price-red">$182.55</span><span class="ob-qty">300</span></div><div class="ob-row"><span class="ob-price-red">$182.60</span><span class="ob-qty">900</span></div><div class="ob-row"><span class="ob-price-red">$182.65</span><span class="ob-qty">1,500</span></div><div class="ob-row"><span class="ob-price-red">$182.70</span><span class="ob-qty">2,200</span></div></div>
+        </div>
+        <div class="ob-spread">Spread: $0.05 — הפער בין Bid ($182.50) ל-Ask ($182.55)</div>
+        <div class="ob-legend">
+          <div class="ob-legend-item"><div class="ob-legend-dot" style="background:var(--green)"></div><strong>Bid</strong> = המחיר המקסימלי שמישהו מוכן לשלם. כשמוכרים — זה מה שתקבלו.</div>
+          <div class="ob-legend-item"><div class="ob-legend-dot" style="background:var(--red)"></div><strong>Ask</strong> = המחיר המינימלי שמישהו מוכן למכור. כשקונים — זה מה שתשלמו.</div>
+          <div class="ob-legend-item"><div class="ob-legend-dot" style="background:var(--card-dark)"></div><strong>Spread</strong> = הפער. במניות גדולות — סנט בודד. ככל שקטן יותר — נזילות גבוהה.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-dark" id="order-types">
+      <h2 class="section-h2 section-h2-mint">שלב 3: LMT מול MKT</h2>
+      <div class="ig vs-wrap">
+        <div class="ig-header vs-header">שני סוגי פקודות</div>
+        <div class="vs-cards">
+          <div class="vs-card vs-card-lmt"><div class="vs-badge">LMT</div><div class="vs-card-title">הגבלת מחיר</div><ul><li>אתם קובעים מחיר מקסימלי (קנייה) או מינימלי (מכירה)</li><li>תבוצע רק אם המחיר מתאים</li><li>שליטה מלאה</li></ul><div class="vs-example">💡 "קנה AAPL ב-$182.55 או פחות"</div></div>
+          <div class="vs-card vs-card-mkt"><div class="vs-badge">MKT</div><div class="vs-card-title">פקודת שוק</div><ul><li>ביצוע מיידי במחיר הזמין</li><li>כמעט תמיד מתבצעת ברגע</li><li>המחיר עשוי להפתיע</li></ul><div class="vs-example">💡 "קנה AAPL עכשיו בכל מחיר"</div></div>
+        </div>
+        <table class="vs-table"><tr><th style="width:30%">קריטריון</th><th>LMT</th><th>MKT</th></tr><tr><td>שליטה במחיר</td><td style="color:var(--green);font-weight:700">✅ מלאה</td><td style="color:var(--red);font-weight:700">❌ אין</td></tr><tr><td>מהירות ביצוע</td><td>לא מובטח</td><td style="color:var(--green);font-weight:700">✅ מיידי</td></tr><tr><td>סיכון</td><td style="color:var(--green);font-weight:700">✅ נמוך</td><td>בינוני</td></tr></table>
+        <div class="vs-rec">⭐ ברוב המקרים — LMT.</div>
+      </div>
+      <h3 class="section-h3">קיצורי דרך</h3>
+      <p class="article-p">ברוב המערכות אפשר <strong>ללחוץ על שורה בספר הפקודות</strong> והמחיר ימולא אוטומטית. לגבי כמות — אפשר להזין <strong>סכום כספי</strong> והמערכת מחשבת כמות (מעוגל למטה), או להזין כמות מניות והמערכת תראה את העלות.</p>
+      <figure class="sc-fig"><img class="sc-img" src="/blog/how-to-buy-stocks/images/spark-price-autofill.png" alt="לחיצה על מחיר Ask בספר הפקודות שממלאת אוטומטית את שדה המחיר בטופס"><figcaption class="sc-caption">לחצנו על מחיר 1,444 מספר הפקודות — והוא מילא אוטומטית את שדה המחיר. נשאר רק להזין כמות ולשדר</figcaption></figure>
+    </div>
+
+    <div class="card-light" id="place-buy">
+      <h2 class="section-h2 section-h2-gradient">שלב 4: קנייה ומכירה</h2>
+      <p class="article-p">חמישה שדות בטופס:</p>
+      <ul class="article-ul">
+        <li><strong>כיוון</strong> — קנייה או מכירה</li>
+        <li><strong>נייר ערך</strong> — מלא אוטומטית מדף המניה</li>
+        <li><strong>סוג פקודה</strong> — LMT או MKT</li>
+        <li><strong>מחיר</strong> — לחצו על Ask (קנייה) או Bid (מכירה) בספר</li>
+        <li><strong>סכום / כמות</strong> — הזינו סכום (המערכת מחשבת כמות) או כמות (המערכת מחשבת עלות)</li>
+      </ul>
+      <figure class="sc-fig"><img class="sc-img" src="/blog/how-to-buy-stocks/images/spark-buy-ticket-filled.png" alt="טופס הוראת קנייה מלא ב-Spark — קנייה, LMT, מחיר 1435, כמות 36"><figcaption class="sc-caption">טופס הוראה מלא ומוכן לשידור: קנייה, LMT, מחיר 1,435 אגורות, כמות 36. נשאר רק ללחוץ "שלח"</figcaption></figure>
+      <div class="note-box-light"><strong>📌</strong> קנייה → Ask | מכירה → Bid. תמיד הצד "השני".</div>
+      <div class="note-box-light"><strong>⏰</strong> ארה"ב: 16:30-23:00 (קיץ), 17:30-00:00 (חורף). ישראל: א'-ה' 10:00-17:25.</div>
+    </div>
+
+    <div class="card-dark" id="order-status">
+      <h2 class="section-h2 section-h2-mint">שלב 5: בדיקת מימוש</h2>
+      <p class="hook-p">שלחתם פקודה? עכשיו בדקו מה קרה. זה השלב שהכי חשוב לא לדלג עליו.</p>
+      <div class="status-grid">
+        <div class="status-card status-filled"><div class="status-icon">✅</div><div class="status-name">מומשה (Filled)</div><div class="status-desc">הכל בוצע. המניות בתיק.</div></div>
+        <div class="status-card status-partial"><div class="status-icon">⚠️</div><div class="status-name">מימוש חלקי</div><div class="status-desc">חלק בוצע. השאר מחכה.</div></div>
+        <div class="status-card status-open"><div class="status-icon">⏳</div><div class="status-name">פתוחה</div><div class="status-desc">נשלחה. המחיר לא הגיע.</div></div>
+        <div class="status-card status-cancelled"><div class="status-icon">❌</div><div class="status-name">בוטלה / פגה</div><div class="status-desc">לא קרה כלום. הכסף חזר.</div></div>
+      </div>
+      <figure class="sc-fig"><img class="sc-img" src="/blog/how-to-buy-stocks/images/spark-order-filled.png" alt="לשונית ביצועים ב-Spark — ביצוע מלא, קנייה, 220 מניות"><figcaption class="sc-caption">לשונית "ביצועים" — הפקודה קיבלה סטטוס "ביצוע מלא". 220 מניות נקנו במחיר 455.44</figcaption></figure>
+      <figure class="sc-fig"><img class="sc-img" src="/blog/how-to-buy-stocks/images/spark-order-pending.png" alt="לשונית הוראות ב-Spark — פקודות בסטטוס נקלט שעדיין לא בוצעו"><figcaption class="sc-caption">לשונית "הוראות" — פקודות בסטטוס "נקלט": נשלחו לבורסה אבל עדיין לא בוצעו. זה המצב שצריך לעקוב אחריו</figcaption></figure>
+      <h3 class="section-h3">מימוש חלקי</h3>
+      <p class="article-p">רציתם 27 מניות ב-LMT, רק 10 היו זמינות — יש לכם 10 בתיק ופקודה פתוחה על 17. אם לא תבדקו, הפקודה עלולה להתבצע מאוחר או לפוג. <strong>תמיד בדקו בסוף היום.</strong></p>
+      <div class="note-box-dark"><strong>💡</strong> ברגע ששלחתם פקודה — עברו ל"פקודות" ובדקו. "פתוחה" = המחיר לא הגיע. תחליטו: לחכות, לעדכן, או לבטל.</div>
+    </div>
+
+    <!-- ══ COMMISSIONS ══ -->
+    <div class="card-light" id="commissions">
+      <h2 class="section-h2 section-h2-gradient">עמלות מסחר — המודל הישראלי</h2>
+      <p class="hook-p">כל פעולת קנייה או מכירה כרוכה בעמלה. הבנת מבנה העמלות חשובה כדי לא להפסיד כסף על עסקאות קטנות מדי.</p>
+
+      <h3 class="section-h3">המודל: עמלה מינימלית + אחוז מהעסקה</h3>
+      <p class="article-p">ברוב הברוקרים הישראלים, העמלה מחושבת כ<strong>אחוז מסכום העסקה</strong> — אבל יש <strong>עמלה מינימלית</strong> שתשלמו גם אם האחוז נותן סכום נמוך יותר. המשמעות: עסקאות קטנות הן "יקרות" באחוזים, כי העמלה המינימלית מהווה חלק גדול מהסכום.</p>
+
+      <div class="comm-model">
+        <div class="comm-box comm-box-il">
+          <div class="comm-box-title">🇮🇱 מניות ישראליות</div>
+          <div class="comm-line">עמלה: <strong>~0.07%-0.1%</strong> מהעסקה</div>
+          <div class="comm-line">מינימום: <strong>~₪5-10</strong> לפעולה</div>
+          <div class="comm-example">דוגמה: קנייה ב-₪10,000 → עמלה ₪10 (0.1%)<br>קנייה ב-₪1,000 → עמלה ₪5 מינימום (0.5%!)</div>
+        </div>
+        <div class="comm-box comm-box-us">
+          <div class="comm-box-title">🇺🇸 מניות אמריקאיות</div>
+          <div class="comm-line">עמלה: <strong>~0.1%-0.25%</strong> מהעסקה</div>
+          <div class="comm-line">מינימום: <strong>~$3-8</strong> לפעולה</div>
+          <div class="comm-example">דוגמה: קנייה ב-$5,000 → עמלה $6-8 (~0.15%)<br>קנייה ב-$500 → עמלה $5 מינימום (1%!)</div>
+        </div>
+      </div>
+
+      <h3 class="section-h3">למה מניות ישראליות זולות יותר?</h3>
+      <p class="article-p">יש כמה סיבות: <strong>ראשית</strong>, הברוקרים הישראלים הם חברי בורסה ישירים בבורסת תל אביב — הם לא צריכים לשלם לברוקר אמריקאי ביניים כדי לבצע את הפקודה. <strong>שנית</strong>, אין עלויות המרת מט"ח — הפקודה מבוצעת בשקלים. <strong>שלישית</strong>, יש פחות "שכבות" של תשתית בין הברוקר לבורסה, מה שמוזיל את העלות.</p>
+      <p class="article-p">כשאתם קונים מניה אמריקאית דרך ברוקר ישראלי, הברוקר צריך להעביר את הפקודה דרך ברוקר אמריקאי שותף (Prime Broker), לשלם עמלת ביצוע שם, לטפל בהמרת מטבע — וכל זה מתגלגל אליכם כעמלה גבוהה יותר.</p>
+
+      <div class="note-box-light"><strong>💡 טיפ מעשי:</strong> אל תעשו עסקאות קטנות מדי. אם העמלה המינימלית היא $5 וקניתם רק ב-$200 — שילמתם 2.5% עמלה. עדיף לצבור סכום גדול יותר ולקנות בפעולה אחת. כלל אצבע: <strong>מינימום $1,000-2,000 לעסקה אמריקאית</strong> ו-<strong>₪2,000+ לישראלית</strong> כדי שהעמלה תהיה סבירה.</div>
+    </div>
+
+    <!-- ══ TAX & FIFO ══ -->
+    <div class="card-dark" id="tax-fifo">
+      <h2 class="section-h2 section-h2-mint">מיסוי רווחי הון, FIFO וניכוי מס במקור</h2>
+      <p class="hook-p">לפני שמוכרים — חשוב להבין כמה מס תשלמו, מי מנכה אותו, ואיך FIFO משפיע.</p>
+
+      <h3 class="section-h3">מס רווחי הון — 25%</h3>
+      <p class="article-p">כשמוכרים ברווח: <strong>25% מס על הרווח הריאלי</strong> (בניכוי אינפלציה). המס רק על הרווח, לא על כל הסכום. קניתם ב-$100, מכרתם ב-$120 — המס על $20.</p>
+
+      <h3 class="section-h3">ניכוי מס במקור — מי מנכה ומי לא?</h3>
+      <p class="article-p">כאן יש הבדל חשוב בין ברוקרים. יש שני מודלים:</p>
+
+      <ul class="article-ul">
+        <li><strong>ברוקר שמנכה מס במקור</strong> (רוב הברוקרים הישראליים הגדולים — מיטב, אקסלנס, פועלים טרייד): הברוקר מחשב ומנכה 25% מהרווח אוטומטית ברגע המכירה. אתם מקבלים את הכסף אחרי מס. פשוט ונוח — לא צריך לעשות כלום.</li>
+        <li><strong>ברוקר שלא מנכה</strong> (למשל חלק מהברוקרים הזרים, Interactive Brokers): הברוקר לא מנכה מס. אתם מקבלים את כל הכסף — אבל אתם <strong>אחראים לדווח ולשלם</strong> את המס בעצמכם לרשות המסים, בדרך כלל בדו"ח השנתי. אם לא תדווחו — זו עבירה.</li>
+      </ul>
+
+      <div class="note-box-dark"><strong>📌 חשוב:</strong> גם כשהברוקר מנכה מס במקור, כדאי לבדוק את הדו"ח השנתי. לפעמים ניכו מס עודף (למשל לא הפחיתו אינפלציה, או לא קיזזו הפסדים) — ואפשר לקבל החזר.</div>
+
+      <h3 class="section-h3">FIFO — ראשון נכנס, ראשון יוצא</h3>
+      <p class="article-p">אם קניתם אותה מניה כמה פעמים ומכרתם חלק — המניות שנקנו <strong>ראשונות</strong> נמכרות ראשונות. זה משפיע על חישוב הרווח:</p>
+
+      <div class="ig" style="background:rgba(255,255,255,0.04);border:1px solid rgba(179,224,220,0.15);">
+        <div class="ig-header" style="background:rgba(0,0,0,0.25);color:#f0f8fa;">דוגמת FIFO<small>3 קניות, מכירה חלקית</small></div>
+        <div style="padding:1.2rem;">
+          <div class="fifo-timeline">
+            <div class="fifo-row" style="background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.08);color:#f0f8fa;"><div class="fifo-date" style="color:var(--accent-light);">ינואר</div><div class="fifo-action" style="color:#f0f8fa;">קנייה: <strong>5</strong> × $170</div><div><span class="fifo-tag fifo-buy">קנייה #1</span></div></div>
+            <div class="fifo-row" style="background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.08);color:#f0f8fa;"><div class="fifo-date" style="color:var(--accent-light);">מרץ</div><div class="fifo-action" style="color:#f0f8fa;">קנייה: <strong>10</strong> × $180</div><div><span class="fifo-tag fifo-buy">קנייה #2</span></div></div>
+            <div class="fifo-row" style="background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.08);color:#f0f8fa;"><div class="fifo-date" style="color:var(--accent-light);">יוני</div><div class="fifo-action" style="color:#f0f8fa;">קנייה: <strong>5</strong> × $195</div><div><span class="fifo-tag fifo-buy">קנייה #3</span></div></div>
+          </div>
+          <div class="fifo-arrow" style="color:var(--accent-light);">⬇️ מוכרים 10 ב-$200</div>
+          <div class="fifo-timeline">
+            <div class="fifo-row" style="background:rgba(42,157,143,0.1);border-color:rgba(179,224,220,0.1);color:#f0f8fa;"><div class="fifo-date" style="color:var(--red);">נמכרות</div><div class="fifo-action" style="color:#f0f8fa;">5 מ-#1 → רווח <strong style="color:#7dd8d2;">$150</strong></div><div><span class="fifo-tag fifo-sell">FIFO ①</span></div></div>
+            <div class="fifo-row" style="background:rgba(42,157,143,0.1);border-color:rgba(179,224,220,0.1);color:#f0f8fa;"><div class="fifo-date" style="color:var(--red);">נמכרות</div><div class="fifo-action" style="color:#f0f8fa;">5 מ-#2 → רווח <strong style="color:#7dd8d2;">$100</strong></div><div><span class="fifo-tag fifo-sell">FIFO ②</span></div></div>
+          </div>
+          <div style="margin-top:0.8rem;padding:0.7rem;background:rgba(42,157,143,0.1);border-radius:8px;font-family:'Assistant',sans-serif;font-size:0.9rem;color:var(--accent-light);line-height:1.6;">
+            <strong>רווח חייב:</strong> $250 → מס 25% = <strong>$62.50</strong>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-h3">מתי FIFO עובד לטובתכם ומתי נגדכם?</h3>
+
+      <div class="fifo-scenarios">
+        <div class="fifo-sc fifo-sc-good" style="background:rgba(42,157,143,0.1);border-color:rgba(42,157,143,0.3);color:#f0f8fa;">
+          <div class="fifo-sc-title" style="color:#7dd8d2;">✅ FIFO לטובתכם</div>
+          <div class="fifo-sc-text" style="color:rgba(240,248,250,0.85);">כשהמניה <strong>ירדה</strong> מאז הקנייה הראשונה ואתם מוכרים — FIFO ימכור את המניות ה"יקרות" (שנקנו במחיר גבוה), מה שיוצר הפסד גדול יותר לצורכי מס. הפסד = פחות מס, ואפשר לקזז אותו מרווחים אחרים.</div>
+        </div>
+        <div class="fifo-sc fifo-sc-bad" style="background:rgba(196,78,68,0.1);border-color:rgba(196,78,68,0.3);color:#f0f8fa;">
+          <div class="fifo-sc-title" style="color:#f09090;">❌ FIFO נגדכם</div>
+          <div class="fifo-sc-text" style="color:rgba(240,248,250,0.85);">כשהמניה <strong>עלתה בהתמדה</strong> ואתם מוכרים חלק — FIFO ימכור את המניות ה"זולות" (שנקנו ראשונות), מה שמייצר רווח גדול יותר ולכן <strong>מס גבוה יותר</strong>. אילו יכולתם לבחור, הייתם מעדיפים למכור את האחרונות (LIFO) — אבל בישראל FIFO הוא חובה.</div>
+        </div>
+      </div>
+
+      <div class="note-box-dark"><strong>🧠 טיפ:</strong> מכירה של מניה <strong>בהפסד</strong> באותה שנת מס מאפשרת <strong>קיזוז הפסדים</strong> מרווחים אחרים → פחות מס. זה נקרא Tax Loss Harvesting ושווה מאוד להכיר.</div>
+    </div>
+
+    <!-- ══ SIMULATOR ══ -->
+    <div class="card-dark" id="simulator" style="padding:2rem 1.5rem;">
+      <h2 class="section-h2 section-h2-mint" style="text-align:center;">🎮 סימולטור מסחר</h2>
+      <p class="article-p" style="text-align:center;max-width:600px;margin:0 auto 1.5rem;">$50,000 בחשבון. 5 משימות. חפשו, קנו, מכרו. מחירים זזים בזמן אמת.</p>
+      <div class="sim-container" id="simContainer">
+        <div class="sim-topbar">
+          <div class="sim-title-bar">💹 Spark Simulator</div>
+          <div class="sim-stats">
+            <span>💵 <strong id="simCash">$50,000.00</strong></span>
+            <span>⏱ <strong id="simTimer">00:00</strong></span>
+            <span>📋 <strong id="simMissionNum">1</strong>/5</span>
+          </div>
+        </div>
+        <div class="sim-body">
+          <div class="sim-mission-box">
+            <div class="sim-mission-label" id="simMissionLabel">משימה 1 מתוך 5</div>
+            <div class="sim-mission-text" id="simMissionText">חפשו את מניית Apple</div>
+            <div class="sim-mission-hint" id="simMissionHint">הקלידו AAPL ולחצו חפש</div>
+          </div>
+          <div class="sim-interface">
+            <div class="sim-panel">
+              <div class="sim-panel-title">🔍 חיפוש + ספר פקודות</div>
+              <div class="sim-search">
+                <input type="text" id="simSearchInput" placeholder="סימול או שם..." oninput="simAutocomplete()" autocomplete="off">
+                <button class="sim-search-btn" onclick="simSearch()">חפש</button>
+                <div class="sim-ac" id="simAC"></div>
+              </div>
+              <div class="sim-search-result" id="simSearchResult"></div>
+              <div class="sim-live-price" id="simLivePrice" style="display:none;"></div>
+              <div class="sim-ob" id="simOrderBook" style="display:none;">
+                <div class="sim-ob-title-row"><div class="sim-ob-title-cell sim-ob-bid-title">BID</div><div class="sim-ob-title-cell sim-ob-ask-title">ASK</div></div>
+                <div class="sim-ob-rows" id="simOBRows"></div>
+              </div>
+            </div>
+            <div class="sim-panel">
+              <div class="sim-panel-title">📝 הוראה</div>
+              <div class="sim-form-row"><div class="sim-form-label">כיוון</div><div class="sim-direction-btns"><button class="sim-dir-btn active-buy" id="simBuyBtn" onclick="simSetDir('buy')">קנייה</button><button class="sim-dir-btn" id="simSellBtn" onclick="simSetDir('sell')">מכירה</button></div></div>
+              <div class="sim-form-row"><div class="sim-form-label">נייר</div><input class="sim-form-input" id="simFormSymbol" readonly placeholder="—"></div>
+              <div class="sim-form-row"><div class="sim-form-label">סוג</div><select class="sim-form-select" id="simFormType"><option value="LMT">LMT</option><option value="MKT">MKT</option></select></div>
+              <div class="sim-form-row" id="simPriceRow"><div class="sim-form-label">מחיר</div><input class="sim-form-input" id="simFormPrice" type="number" step="0.01" placeholder="לחצו על שורה"></div>
+              <div class="sim-form-row"><div class="sim-form-label">כמות</div><input class="sim-form-input" id="simFormQty" type="number" placeholder="מניות" oninput="simSyncQty()"></div>
+              <div class="sim-form-row"><div class="sim-form-label">סכום $</div><input class="sim-form-input" id="simFormAmount" type="number" placeholder="סכום" oninput="simSyncAmt()"></div>
+              <button class="sim-submit-btn sim-submit-buy" id="simSubmitBtn" onclick="simSubmitOrder()">שדר קנייה ▶</button>
+              <div class="sim-feedback" id="simFeedback"></div>
+              <div style="margin-top:0.8rem;"><div class="sim-panel-title">📊 התיק שלי</div><div id="simPortfolio"><div class="sim-portfolio-empty">התיק ריק</div></div></div>
+            </div>
+          </div>
+          <div class="sim-results" id="simResults">
+            <h3>🎉 כל הכבוד!</h3>
+            <div class="sim-results-grid">
+              <div class="sim-result-box"><div class="sim-result-val" id="simResTime">—</div><div class="sim-result-label">זמן</div></div>
+              <div class="sim-result-box"><div class="sim-result-val" id="simResSpread">—</div><div class="sim-result-label">עלות מרווחים</div></div>
+              <div class="sim-result-box"><div class="sim-result-val" id="simResCash">—</div><div class="sim-result-label">מזומן</div></div>
+            </div>
+            <p style="font-family:'Assistant',sans-serif;color:rgba(240,248,250,0.7);margin-bottom:1rem;font-size:0.9rem;" id="simResMessage"></p>
+            <button class="sim-restart-btn" onclick="simRestart()">🔄 מחדש</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SUMMARY ══ -->
+    <div class="card-light" id="summary">
+      <h2 class="section-h2 section-h2-gradient">סיכום</h2>
+      <div class="steps-list">
+        <div class="step-item open"><div class="step-header" onclick="toggleStep(this)"><div class="step-number">1</div><div class="step-title">חפשו מניה</div><span class="step-arrow">▼</span></div><div class="step-body"><div class="step-content">סימול + בורסה נכונה.</div></div></div>
+        <div class="step-item"><div class="step-header" onclick="toggleStep(this)"><div class="step-number">2</div><div class="step-title">Bid/Ask</div><span class="step-arrow">▼</span></div><div class="step-body"><div class="step-content">קנייה→Ask, מכירה→Bid.</div></div></div>
+        <div class="step-item"><div class="step-header" onclick="toggleStep(this)"><div class="step-number">3</div><div class="step-title">LMT + לחיצה</div><span class="step-arrow">▼</span></div><div class="step-body"><div class="step-content">לחצו על שורה בספר — המחיר ימולא.</div></div></div>
+        <div class="step-item"><div class="step-header" onclick="toggleStep(this)"><div class="step-number">4</div><div class="step-title">סכום/כמות + שדר</div><span class="step-arrow">▼</span></div><div class="step-body"><div class="step-content">הזינו סכום (כמות תחושב) או כמות (עלות תוצג).</div></div></div>
+        <div class="step-item"><div class="step-header" onclick="toggleStep(this)"><div class="step-number">5</div><div class="step-title">בדקו מימוש</div><span class="step-arrow">▼</span></div><div class="step-body"><div class="step-content">מומשה? חלקי? פתוחה? בדקו תמיד.</div></div></div>
+        <div class="step-item"><div class="step-header" onclick="toggleStep(this)"><div class="step-number">6</div><div class="step-title">עמלות + FIFO</div><span class="step-arrow">▼</span></div><div class="step-body"><div class="step-content">מינימום עסקה סבירה. 25% מס. FIFO חובה בישראל.</div></div></div>
+      </div>
+      <div class="note-box-light" style="margin-top:1.5rem;"><strong>🎓 זהו!</strong> תתרגלו בסימולטור ותראו שתוך דקות זה הופך לאוטומטי.</div>
+    </div>
+
+    <div class="author-card"><div class="author-avatar">י״ת</div><div><div style="font-size:1.2rem;font-weight:800;margin-bottom:0.4rem;">יאיר תכלת</div><div style="font-size:1.05rem;color:var(--text-light);font-family:'Assistant',sans-serif;line-height:1.6;">מייסד NewGen Finance, מלמד השקעות ערך בעברית.</div></div></div>
+    <div class="share-section"><span style="color:var(--accent-light);font-weight:700;">📤 שתפו</span><button class="share-btn" onclick="copyLink()">🔗 העתק קישור</button></div>
+  </main>
+</div>
+
+<script>
+// ── Basics ──
+window.addEventListener('scroll',()=>{const h=document.documentElement.scrollHeight-window.innerHeight;document.getElementById('reading-progress-bar').style.width=(window.scrollY/h*100)+'%';});
+const secs=document.querySelectorAll('[id]');const tocObs=new IntersectionObserver(e=>{e.forEach(e=>{const l=document.querySelector('.toc-link[href="#'+e.target.id+'"]');if(l)l.classList.toggle('toc-active',e.isIntersecting);});},{rootMargin:'-20% 0px -70% 0px'});secs.forEach(s=>{if(document.querySelector('.toc-link[href="#'+s.id+'"]'))tocObs.observe(s);});
+function toggleStep(h){h.parentElement.classList.toggle('open');}
+function copyLink(){navigator.clipboard.writeText(window.location.href).then(()=>{const b=document.querySelector('.share-btn');b.textContent='✅ הועתק!';setTimeout(()=>{b.textContent='🔗 העתק קישור';},2500);});}
+
+// ══ SIMULATOR ENGINE ══
+// 25+ stocks with base prices and spread
+const DB = {
+  AAPL:{n:'Apple Inc.',p:182.50,s:0.05},MSFT:{n:'Microsoft Corp.',p:415.20,s:0.10},TSLA:{n:'Tesla Inc.',p:248.30,s:0.20},
+  GOOGL:{n:'Alphabet Inc.',p:176.40,s:0.08},AMZN:{n:'Amazon.com',p:185.60,s:0.07},META:{n:'Meta Platforms',p:510.30,s:0.15},
+  NVDA:{n:'NVIDIA Corp.',p:890.20,s:0.30},JPM:{n:'JPMorgan Chase',p:198.50,s:0.08},V:{n:'Visa Inc.',p:280.10,s:0.10},
+  JNJ:{n:'Johnson & Johnson',p:155.30,s:0.06},WMT:{n:'Walmart Inc.',p:168.80,s:0.05},DIS:{n:'Walt Disney',p:112.40,s:0.08},
+  NFLX:{n:'Netflix Inc.',p:628.50,s:0.25},BA:{n:'Boeing Co.',p:178.90,s:0.15},INTC:{n:'Intel Corp.',p:31.20,s:0.03},
+  AMD:{n:'AMD Inc.',p:162.80,s:0.10},PYPL:{n:'PayPal Holdings',p:68.50,s:0.06},UBER:{n:'Uber Technologies',p:72.30,s:0.05},
+  SQ:{n:'Block Inc.',p:78.40,s:0.08},SPOT:{n:'Spotify Tech.',p:295.60,s:0.15},CRM:{n:'Salesforce',p:272.10,s:0.12},
+  KO:{n:'Coca-Cola Co.',p:62.50,s:0.03},PEP:{n:'PepsiCo Inc.',p:171.80,s:0.06},MCD:{n:'McDonald\'s',p:268.40,s:0.10},
+  NKE:{n:'Nike Inc.',p:98.60,s:0.06},SBUX:{n:'Starbucks',p:94.30,s:0.05}
+};
+
+// Live prices (fluctuate around base)
+let liveDB = {};
+function initLive(){
+  liveDB={};for(const[t,d]of Object.entries(DB)){liveDB[t]={...d,cp:d.p};}
+}
+
+// Fluctuate prices every 1.5s
+function tickPrices(){
+  for(const[t,d]of Object.entries(liveDB)){
+    const change=(Math.random()-0.5)*d.s*4; // random walk within ~2x spread
+    d.cp=Math.round((d.cp+change)*100)/100;
+    if(d.cp<d.p*0.97)d.cp=d.p*0.97; // clamp to ±3%
+    if(d.cp>d.p*1.03)d.cp=d.p*1.03;
+  }
+  // Update display if stock is selected
+  if(S.cur && liveDB[S.cur]) simRenderOB(S.cur);
+}
+
+function getOB(ticker){
+  const d=liveDB[ticker];if(!d)return null;
+  const mid=d.cp;const sp=d.s;
+  const bid=[],ask=[],bq=[],aq=[];
+  for(let i=0;i<5;i++){
+    bid.push(Math.round((mid-sp/2-sp*i)*100)/100);
+    ask.push(Math.round((mid+sp/2+sp*i)*100)/100);
+    bq.push(Math.round(300+Math.random()*2000));
+    aq.push(Math.round(200+Math.random()*1800));
+  }
+  return {bid,ask,bq,aq,bestBid:bid[0],bestAsk:ask[0]};
+}
+
+const MISSIONS=[
+  {type:'search',target:'AAPL',text:'חפשו את מניית Apple',hint:'הקלידו AAPL'},
+  {type:'buy',target:'AAPL',amount:5000,text:'קנו Apple בסכום $5,000',hint:'LMT, לחצו Ask, הזינו 5000 בסכום'},
+  {type:'search',target:'MSFT',text:'חפשו את Microsoft',hint:'הקלידו MSFT'},
+  {type:'buy',target:'MSFT',amount:8000,text:'קנו Microsoft ב-$8,000',hint:'LMT, Ask, 8000 בסכום'},
+  {type:'sell',target:'AAPL',qty:10,text:'מכרו 10 מניות Apple',hint:'"מכירה", Bid, כמות 10'}
+];
+
+let S={cash:50000,pf:{},cur:null,dir:'buy',mi:0,t0:null,ti:null,pi:null,spread:0,on:false};
+
+function simStart(){
+  S={cash:50000,pf:{},cur:null,dir:'buy',mi:0,t0:Date.now(),ti:null,pi:null,spread:0,on:true};
+  initLive();
+  S.ti=setInterval(simTick,1000);
+  S.pi=setInterval(tickPrices,1500);
+  simShowM();simUI();
+  document.getElementById('simResults').classList.remove('show');
+}
+function simTick(){if(!S.t0)return;const e=Math.floor((Date.now()-S.t0)/1000);document.getElementById('simTimer').textContent=String(Math.floor(e/60)).padStart(2,'0')+':'+String(e%60).padStart(2,'0');}
+function simShowM(){const m=MISSIONS[S.mi];document.getElementById('simMissionLabel').textContent='משימה '+(S.mi+1)+'/'+MISSIONS.length;document.getElementById('simMissionText').textContent=m.text;document.getElementById('simMissionHint').textContent=m.hint;document.getElementById('simMissionNum').textContent=S.mi+1;}
+function simUI(){
+  document.getElementById('simCash').textContent='$'+S.cash.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+  const p=document.getElementById('simPortfolio');const k=Object.keys(S.pf);
+  if(!k.length){p.innerHTML='<div class="sim-portfolio-empty">התיק ריק</div>';}
+  else{p.innerHTML=k.map(t=>{const h=S.pf[t];const cur=liveDB[t]?liveDB[t].cp:h.avg;const val=h.qty*cur;const pnl=val-h.qty*h.avg;const c=pnl>=0?'var(--green)':'var(--red)';return'<div class="sim-portfolio-row"><span><strong>'+t+'</strong> × '+h.qty+'</span><span style="color:'+c+'">'+((pnl>=0?'+':'')+pnl.toFixed(2))+'</span></div>';}).join('');}
+  const b=document.getElementById('simSubmitBtn');b.className='sim-submit-btn '+(S.dir==='buy'?'sim-submit-buy':'sim-submit-sell');b.textContent=S.dir==='buy'?'שדר קנייה ▶':'שדר מכירה ▶';
+}
+
+// Autocomplete
+function simAutocomplete(){
+  const q=document.getElementById('simSearchInput').value.trim().toUpperCase();
+  const ac=document.getElementById('simAC');
+  if(q.length<1){ac.classList.remove('show');return;}
+  let matches=[];
+  for(const[t,d]of Object.entries(DB)){
+    if(t.includes(q)||d.n.toUpperCase().includes(q))matches.push(t);
+    if(matches.length>=8)break;
+  }
+  if(!matches.length){ac.classList.remove('show');return;}
+  ac.innerHTML=matches.map(t=>'<div class="sim-ac-item" onclick="simPickAC(\''+t+'\')"><span class="ac-ticker">'+t+'</span><span class="ac-name">'+DB[t].n+'</span></div>').join('');
+  ac.classList.add('show');
+}
+function simPickAC(t){
+  document.getElementById('simSearchInput').value=t;
+  document.getElementById('simAC').classList.remove('show');
+  simSearch();
+}
+document.addEventListener('click',e=>{if(!e.target.closest('.sim-search'))document.getElementById('simAC').classList.remove('show');});
+
+function simSearch(){
+  const q=document.getElementById('simSearchInput').value.trim().toUpperCase();
+  const r=document.getElementById('simSearchResult');const obEl=document.getElementById('simOrderBook');const lp=document.getElementById('simLivePrice');
+  document.getElementById('simAC').classList.remove('show');
+  let found=null;
+  for(const[t,d]of Object.entries(DB)){if(t===q||d.n.toUpperCase().includes(q)){found=t;break;}}
+  if(!found){r.textContent='❌ לא נמצא "'+q+'".';r.classList.add('show');obEl.style.display='none';lp.style.display='none';return;}
+  S.cur=found;
+  document.getElementById('simFormSymbol').value=found;
+  document.getElementById('simFormPrice').value='';
+  document.getElementById('simFormQty').value='';
+  document.getElementById('simFormAmount').value='';
+  simRenderOB(found);
+  obEl.style.display='block';lp.style.display='block';
+  const ob=getOB(found);
+  r.innerHTML='✅ <strong>'+found+'</strong> — '+DB[found].n+' | Ask $'+ob.bestAsk.toFixed(2)+' | Bid $'+ob.bestBid.toFixed(2);r.classList.add('show');
+  const m=MISSIONS[S.mi];if(m.type==='search'&&m.target===found){simFB('success','✅ מצאתם את '+found+'!');S.mi++;setTimeout(simShowM,700);}
+}
+
+function simRenderOB(t){
+  const ob=getOB(t);if(!ob)return;
+  const lp=document.getElementById('simLivePrice');
+  const mid=((ob.bestBid+ob.bestAsk)/2);
+  const prev=liveDB[t]._prevMid||mid;
+  const arrow=mid>prev?'<span class="lp-up">▲</span>':mid<prev?'<span class="lp-down">▼</span>':'';
+  lp.innerHTML=t+' $'+mid.toFixed(2)+' '+arrow;
+  liveDB[t]._prevMid=mid;
+
+  let rows='';
+  for(let i=0;i<5;i++){
+    rows+='<div class="sim-ob-cell sim-ob-cell-bid" onclick="simClickOB(\'bid\','+ob.bid[i]+')"><span class="ob-p">$'+ob.bid[i].toFixed(2)+'</span><span>'+ob.bq[i].toLocaleString()+'</span></div>';
+    rows+='<div class="sim-ob-cell sim-ob-cell-ask" onclick="simClickOB(\'ask\','+ob.ask[i]+')"><span class="ob-p">$'+ob.ask[i].toFixed(2)+'</span><span>'+ob.aq[i].toLocaleString()+'</span></div>';
+  }
+  document.getElementById('simOBRows').innerHTML=rows;
+  simUI(); // update portfolio P&L
+}
+
+function simClickOB(side,price){
+  document.getElementById('simFormPrice').value=price.toFixed(2);
+  if(side==='ask')simSetDir('buy');
+  if(side==='bid')simSetDir('sell');
+  // Recalc qty/amount
+  const amt=parseFloat(document.getElementById('simFormAmount').value);
+  const qty=parseFloat(document.getElementById('simFormQty').value);
+  if(amt&&!qty)simSyncAmt();
+  if(qty&&!amt)simSyncQty();
+}
+
+function simSetDir(d){S.dir=d;document.getElementById('simBuyBtn').className='sim-dir-btn'+(d==='buy'?' active-buy':'');document.getElementById('simSellBtn').className='sim-dir-btn'+(d==='sell'?' active-sell':'');simUI();}
+
+// Bidirectional qty <-> amount
+function simSyncQty(){
+  const pr=parseFloat(document.getElementById('simFormPrice').value);
+  const qty=parseInt(document.getElementById('simFormQty').value);
+  if(pr&&qty)document.getElementById('simFormAmount').value=(qty*pr).toFixed(2);
+}
+function simSyncAmt(){
+  const pr=parseFloat(document.getElementById('simFormPrice').value);
+  const amt=parseFloat(document.getElementById('simFormAmount').value);
+  if(pr&&amt)document.getElementById('simFormQty').value=Math.floor(amt/pr);
+}
+
+function simSubmitOrder(){
+  if(!S.on)return;const m=MISSIONS[S.mi];const ob=getOB(S.cur);
+  if(!ob){simFB('error','❌ חפשו מניה קודם.');return;}
+  const ot=document.getElementById('simFormType').value;
+  const pr=parseFloat(document.getElementById('simFormPrice').value);
+  let qty=parseInt(document.getElementById('simFormQty').value);
+  const amt=parseFloat(document.getElementById('simFormAmount').value);
+
+  if(m.type==='buy'){
+    if(S.dir!=='buy'){simFB('error','❌ המשימה דורשת קנייה.');return;}
+    if(S.cur!==m.target){simFB('error','❌ צריך '+m.target+'.');return;}
+    let ep;
+    if(ot==='MKT'){ep=ob.bestAsk;if(!qty)qty=Math.floor((amt||m.amount)/ep);S.spread+=qty*(ob.bestAsk-ob.bestBid);}
+    else{if(!pr){simFB('error','❌ לחצו על Ask.');return;}if(pr<ob.bestAsk){simFB('error','⏳ $'+pr.toFixed(2)+' < Ask $'+ob.bestAsk.toFixed(2)+'. לא יבוצע.');return;}ep=ob.bestAsk;if(!qty)qty=Math.floor((amt||m.amount)/ep);}
+    if(qty<=0){simFB('error','❌ סכום קטן מדי.');return;}
+    const cost=qty*ep;if(cost>S.cash){simFB('error','❌ אין מספיק מזומן.');return;}
+    S.cash-=cost;if(!S.pf[S.cur])S.pf[S.cur]={qty:0,avg:0};const ex=S.pf[S.cur];const tc=ex.qty*ex.avg+cost;ex.qty+=qty;ex.avg=tc/ex.qty;
+    simFB('success','✅ '+qty+' '+S.cur+' ב-$'+ep.toFixed(2)+' (סה"כ $'+cost.toFixed(2)+')');
+    S.mi++;simUI();if(S.mi<MISSIONS.length)setTimeout(simShowM,800);else setTimeout(simFinish,1000);
+  } else if(m.type==='sell'){
+    if(S.dir!=='sell'){simFB('error','❌ המשימה דורשת מכירה.');return;}
+    if(S.cur!==m.target){simFB('error','❌ צריך '+m.target+'.');return;}
+    if(!qty)qty=m.qty;
+    if(!S.pf[S.cur]||S.pf[S.cur].qty<qty){simFB('error','❌ אין מספיק מניות.');return;}
+    let ep;
+    if(ot==='MKT'){ep=ob.bestBid;S.spread+=qty*(ob.bestAsk-ob.bestBid);}
+    else{if(!pr){simFB('error','❌ לחצו Bid.');return;}if(pr>ob.bestBid){simFB('error','⏳ $'+pr.toFixed(2)+' > Bid $'+ob.bestBid.toFixed(2)+'.');return;}ep=ob.bestBid;}
+    const rev=qty*ep;S.cash+=rev;
+    const buyAvg=S.pf[S.cur].avg;const pnl=(ep-buyAvg)*qty;
+    S.pf[S.cur].qty-=qty;if(S.pf[S.cur].qty<=0)delete S.pf[S.cur];
+    const pnlStr=pnl>=0?'+$'+pnl.toFixed(2):'-$'+Math.abs(pnl).toFixed(2);
+    simFB('success','✅ נמכרו '+qty+' '+S.cur+' ב-$'+ep.toFixed(2)+' ('+pnlStr+')');
+    S.mi++;simUI();if(S.mi<MISSIONS.length)setTimeout(simShowM,800);else setTimeout(simFinish,1000);
+  } else{simFB('error','❌ חפשו את המניה.');}
+}
+
+function simFB(t,msg){const el=document.getElementById('simFeedback');el.textContent=msg;el.className='sim-feedback show sim-feedback-'+t;setTimeout(()=>el.classList.remove('show'),4500);}
+
+function simFinish(){
+  clearInterval(S.ti);clearInterval(S.pi);S.on=false;
+  const e=Math.floor((Date.now()-S.t0)/1000);
+  document.getElementById('simResTime').textContent=Math.floor(e/60)+':'+String(e%60).padStart(2,'0');
+  document.getElementById('simResSpread').textContent='$'+Math.abs(S.spread).toFixed(2);
+  document.getElementById('simResCash').textContent='$'+S.cash.toFixed(2);
+  let msg=e<90?'⚡ מרשים!':e<180?'👍 קצב טוב!':'💪 סיימתם!';
+  msg+=S.spread<5?' עלות מרווחים מינימלית — LMT מעולה!':S.spread<20?' עלות סבירה.':' נסו יותר LMT.';
+  document.getElementById('simResMessage').textContent=msg;
+  document.getElementById('simResults').classList.add('show');
+}
+
+function simRestart(){
+  ['simSearchInput','simFormPrice','simFormQty','simFormAmount'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('simSearchResult').classList.remove('show');
+  document.getElementById('simOrderBook').style.display='none';
+  document.getElementById('simLivePrice').style.display='none';
+  document.getElementById('simFormSymbol').value='';
+  document.getElementById('simResults').classList.remove('show');
+  document.getElementById('simFeedback').classList.remove('show');
+  simSetDir('buy');simStart();
+}
+
+document.getElementById('simFormType').addEventListener('change',function(){document.getElementById('simPriceRow').style.display=this.value==='MKT'?'none':'flex';});
+simStart();
+</script>
+</body>
+</html>
