@@ -33,6 +33,12 @@
     .hp-nav-center{display:flex;align-items:center;gap:1.5rem;flex:1;justify-content:center;}
     .hp-nav-link{font-size:0.9rem;font-weight:500;color:rgba(240,248,250,0.75);transition:color 0.18s;}
     .hp-nav-link:hover{color:var(--text-white);}
+    .hp-nav-auth{display:flex;align-items:center;gap:0.75rem;}
+    .hp-nav-pill{display:inline-flex;align-items:center;justify-content:center;padding:0.42rem 1.1rem;border-radius:20px;font-size:0.875rem;font-weight:700;font-family:'Rubik',sans-serif;cursor:pointer;border:1.5px solid transparent;transition:transform 0.15s,background 0.15s;text-decoration:none;}
+    .hp-nav-pill-mint{background:#b3e0dc;color:#0c3d52;}
+    .hp-nav-pill-mint:hover{background:#8fc9c4;transform:translateY(-1px);}
+    .hp-nav-pill-outline{background:transparent;color:rgba(240,248,250,0.8);border-color:rgba(240,248,250,0.35);}
+    .hp-nav-pill-outline:hover{border-color:rgba(240,248,250,0.7);color:#f0f8fa;}
     .course-only-banner{background:linear-gradient(135deg,#1c6b61,#0c3d52);text-align:center;padding:0.6rem 1rem;font-size:0.85rem;font-weight:700;color:var(--accent-light);border-bottom:1px solid rgba(179,224,220,0.2);}
     .course-only-banner span{opacity:0.7;}
     #reading-progress{position:sticky;top:62px;z-index:99;height:4px;background:rgba(255,255,255,0.08);}
@@ -269,7 +275,7 @@
 </head>
 <body>
 
-<nav class="hp-nav"><a href="/" class="hp-nav-logo"><img src="/assets/images/logo.png" alt="NewGen Finance לוגו"><span>NewGen Finance</span></a><div class="hp-nav-center"><a href="/blog/" class="hp-nav-link">חזרה לבלוג</a><a href="/investor-academy/" class="hp-nav-link">חזרה לקורס</a></div></nav>
+<nav class="hp-nav"><a href="/" class="hp-nav-logo"><img src="/assets/images/logo.png" alt="NewGen Finance לוגו"><span>NewGen Finance</span></a><div class="hp-nav-center"><a href="/blog/" class="hp-nav-link">חזרה לבלוג</a><a href="/investor-academy/lessons/chapter-3.html" class="hp-nav-link">בחזרה לקורס</a></div><div class="hp-nav-auth" id="nav-auth"></div></nav>
 <div class="course-only-banner">🔒 תוכן בלעדי לתלמידי הקורס <span>| מופיע כחלק מפרק 3</span></div>
 <div id="reading-progress"><div id="reading-progress-bar"></div></div>
 
@@ -277,7 +283,7 @@
   <div class="article-meta-top"><span class="article-category">מדריך מעשי לתלמידים</span><span class="article-reading-time">⏱ כ-15 דקות + סימולטור</span></div>
   <h1>איך קונים (ומוכרים) מניה בפועל</h1>
   <p class="subtitle">המדריך שיכסה 90% ממה שתצטרכו 90% מהזמן. חיפוש מניה, ביקוש והיצע, פקודות, מימוש, עמלות, מיסוי ו-FIFO — עם סימולטור מסחר חי לתרגול.</p>
-  <a href="/investor-academy/episode4/" class="ep-link">← חזרה לפרק 4</a>
+  <a href="/investor-academy/lessons/chapter-3.html" class="ep-link">← חזרה לפרק 3</a>
 </div>
 
 <div class="article-layout">
@@ -829,6 +835,28 @@ simStart();
   // Show overlay
   const overlay = document.getElementById('paywall-overlay');
   if (overlay) overlay.style.display = 'flex';
+})();
+</script>
+<script>
+(async function() {
+  if (typeof window.supabase === 'undefined') return;
+  const _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const { data: { user } } = await _sb.auth.getUser();
+  const navAuth = document.getElementById('nav-auth');
+  if (!navAuth) return;
+  if (user) {
+    navAuth.innerHTML =
+      '<a href="/members/" class="hp-nav-pill hp-nav-pill-mint">אזור החברים</a>' +
+      '<button class="hp-nav-pill hp-nav-pill-outline" id="blog-signout-btn">התנתק</button>';
+    document.getElementById('blog-signout-btn').addEventListener('click', async function() {
+      await _sb.auth.signOut();
+      window.location.reload();
+    });
+  } else {
+    navAuth.innerHTML =
+      '<a href="/auth/login/" class="hp-nav-link">התחברות</a>' +
+      '<a href="/auth/register/" class="hp-nav-pill hp-nav-pill-mint">הרשמה</a>';
+  }
 })();
 </script>
 </body>
