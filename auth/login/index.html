@@ -335,7 +335,11 @@
         return;
       }
 
-      const redirect = sessionStorage.getItem('redirectAfterLogin');
+      // Prefer sessionStorage; fall back to the ?redirect= param still in the current URL
+      let redirect = sessionStorage.getItem('redirectAfterLogin');
+      if (!redirect || !redirect.startsWith('/')) {
+        redirect = new URLSearchParams(window.location.search).get('redirect');
+      }
       sessionStorage.removeItem('redirectAfterLogin');
       // Safety: only redirect to same-origin paths
       window.location.replace((redirect && redirect.startsWith('/')) ? redirect : '/members/');

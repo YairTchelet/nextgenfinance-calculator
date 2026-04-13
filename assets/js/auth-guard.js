@@ -9,7 +9,7 @@
   window.__supabase = _client; // Expose for calculator and other tools
   const { data: { session } } = await _client.auth.getSession();
   if (!session) {
-    sessionStorage.setItem('redirectAfterLogin', window.location.href);
+    sessionStorage.setItem('redirectAfterLogin', window.location.pathname + window.location.search);
     window.location.replace('/auth/login/');
   }
 })();
