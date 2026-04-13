@@ -288,6 +288,22 @@
 
     const _client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+    // FIX 2 — Session detection on page load.
+    // Handles the "returning from Google OAuth" case: Supabase redirects back to this
+    // page with an active session already established. Detect it and forward immediately.
+    (async () => {
+      const { data: { session } } = await _client.auth.getSession();
+      if (!session) return;
+      // Already logged in — grab redirect dest and go
+      const _ss  = sessionStorage.getItem('redirectAfterLogin');
+      const _par = new URLSearchParams(window.location.search).get('redirect');
+      const _dst = (_ss  && _ss.startsWith('/'))  ? _ss
+                 : (_par && _par.startsWith('/')) ? _par
+                 : '/members/';
+      sessionStorage.removeItem('redirectAfterLogin');
+      window.location.replace(_dst);
+    })();
+
     const form      = document.getElementById('login-form');
     const errorMsg  = document.getElementById('error-msg');
     const submitBtn = document.getElementById('submit-btn');
@@ -302,12 +318,23 @@
       errorMsg.classList.remove('visible');
     }
 
+    // FIX 1 — Google OAuth redirect.
+    // Encode the redirect destination into the redirectTo URL so it survives the
+    // OAuth round-trip (sessionStorage doesn't persist across the external redirect).
     document.getElementById('google-btn').addEventListener('click', async () => {
       const btn = document.getElementById('google-btn');
       btn.disabled = true;
+      const _ss  = sessionStorage.getItem('redirectAfterLogin');
+      const _par = new URLSearchParams(window.location.search).get('redirect');
+      const _dest = (_ss  && _ss.startsWith('/'))  ? _ss
+                  : (_par && _par.startsWith('/')) ? _par
+                  : null;
+      const _redirectTo = _dest
+        ? window.location.origin + '/auth/login/?redirect=' + encodeURIComponent(_dest)
+        : window.location.origin + '/members/';
       await _client.auth.signInWithOAuth({
         provider: 'google',
-        options: { redirectTo: window.location.origin + '/members/' }
+        options: { redirectTo: _redirectTo }
       });
     });
 
