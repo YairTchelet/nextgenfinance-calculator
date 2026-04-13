@@ -461,107 +461,144 @@
         </div><!-- /dyk-pair -->
     </div>
 
-    <!-- BLOG CTA: איך קונים ומוכרים מניה -->
+    <!-- PRACTICAL GUIDE WIDGET: איך קונים ומוכרים מניה -->
     <style>
-        .blog-cta-wrap {
-            max-width: 860px;
-            margin: 0 auto 2rem auto;
-            padding: 0 1rem;
+        .buy-guide-section {
+            margin: 0 0 2rem 0;
         }
-        .blog-cta-card {
+        .buy-guide-card {
             background: var(--card-light, #f7f9fa);
-            border-radius: 14px;
-            border-right: 4px solid var(--accent-mint, #2a9d8f);
-            border-left: 4px solid var(--accent-mint, #2a9d8f);
-            padding: 1.25rem 1.75rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1.5rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 6px 28px rgba(0,0,0,0.1);
         }
-        .blog-cta-body {
+        .buy-guide-accent-bar {
+            height: 6px;
+            background: linear-gradient(to left, #2a9d8f, #b3e0dc, #2a9d8f);
+        }
+        .buy-guide-body {
+            padding: 2rem 2.5rem 2rem;
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+        .buy-guide-content {
             flex: 1;
         }
-        .blog-cta-label {
+        .buy-guide-eyebrow {
             font-family: 'Rubik', 'Assistant', sans-serif;
             font-size: 0.72rem;
-            font-weight: 600;
-            color: var(--accent-mint, #2a9d8f);
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-            margin-bottom: 0.35rem;
-        }
-        .blog-cta-title {
-            font-family: 'Rubik', 'Assistant', sans-serif;
-            font-size: 1.1rem;
             font-weight: 700;
-            color: var(--card-dark, #0c3d52);
-            margin: 0 0 0.4rem 0;
-            line-height: 1.3;
+            color: #2a9d8f;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 0.5rem;
         }
-        .blog-cta-desc {
+        .buy-guide-title {
+            font-family: 'Rubik', 'Assistant', sans-serif;
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: var(--card-dark, #0c3d52);
+            line-height: 1.3;
+            margin: 0 0 0.9rem 0;
+        }
+        .buy-guide-desc {
+            font-family: 'Assistant', 'Rubik', sans-serif;
+            font-size: 1rem;
+            color: #4a6472;
+            line-height: 1.7;
+            margin: 0 0 1.25rem 0;
+        }
+        .buy-guide-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem 1rem;
+            margin-bottom: 0;
+        }
+        .buy-guide-feature {
             font-family: 'Assistant', 'Rubik', sans-serif;
             font-size: 0.85rem;
-            color: #555;
-            margin: 0;
-            line-height: 1.55;
+            font-weight: 600;
+            color: var(--card-dark, #0c3d52);
+            background: rgba(42,157,143,0.1);
+            border: 1px solid rgba(42,157,143,0.25);
+            border-radius: 20px;
+            padding: 0.3rem 0.85rem;
         }
-        .blog-cta-action {
+        .buy-guide-cta {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.65rem;
             flex-shrink: 0;
+            min-width: 160px;
         }
-        .blog-cta-btn {
+        .buy-guide-btn {
             font-family: 'Rubik', 'Assistant', sans-serif;
-            font-size: 0.9rem;
-            font-weight: 700;
+            font-size: 1.05rem;
+            font-weight: 800;
             color: #fff;
             background: var(--accent-mint, #2a9d8f);
             border: none;
-            border-radius: 8px;
-            padding: 0.6rem 1.3rem;
+            border-radius: 12px;
+            padding: 0.9rem 1.75rem;
             text-decoration: none;
             white-space: nowrap;
-            transition: background 0.2s;
-        }
-        .blog-cta-btn:hover {
-            background: #23887c;
-        }
-        .blog-cta-lock {
-            font-family: 'Assistant', 'Rubik', sans-serif;
-            font-size: 0.72rem;
-            color: #999;
+            transition: background 0.2s, transform 0.15s, box-shadow 0.15s;
+            display: block;
             text-align: center;
+            box-shadow: 0 4px 16px rgba(42,157,143,0.3);
         }
-        @media (max-width: 600px) {
-            .blog-cta-card {
+        .buy-guide-btn:hover {
+            background: #23887c;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 22px rgba(42,157,143,0.4);
+        }
+        .buy-guide-lock {
+            font-family: 'Assistant', 'Rubik', sans-serif;
+            font-size: 0.75rem;
+            color: #9aadba;
+            text-align: center;
+            line-height: 1.4;
+        }
+        @media (max-width: 700px) {
+            .buy-guide-body {
                 flex-direction: column;
-                align-items: flex-start;
-                padding: 1.1rem 1.2rem;
+                padding: 1.5rem 1.25rem 1.75rem;
+                gap: 1.5rem;
             }
-            .blog-cta-action {
+            .buy-guide-cta {
                 width: 100%;
-                align-items: flex-start;
+                align-items: stretch;
+                min-width: unset;
             }
-            .blog-cta-btn {
+            .buy-guide-btn {
                 width: 100%;
-                text-align: center;
+            }
+            .buy-guide-title {
+                font-size: 1.25rem;
             }
         }
     </style>
-    <div class="blog-cta-wrap">
-        <div class="blog-cta-card">
-            <div class="blog-cta-body">
-                <div class="blog-cta-label">📖 קריאה נלווית לשיעור</div>
-                <h3 class="blog-cta-title">איך קונים ומוכרים מניה בפועל?</h3>
-                <p class="blog-cta-desc">המדריך המעשי שלנו: חיפוש מניה במערכת Spark, הבנת ביקוש והיצע, פקודות LMT ו-MKT, בדיקת מימוש, עמלות, מיסוי ו-FIFO — עם סימולטור מסחר אינטראקטיבי לתרגול.</p>
-            </div>
-            <div class="blog-cta-action">
-                <a href="/blog/how-to-buy-stocks/" class="blog-cta-btn">למדריך המלא ←</a>
-                <span class="blog-cta-lock">🔒 תוכן בלעדי לתלמידי הקורס</span>
+    <div class="buy-guide-section">
+        <div class="buy-guide-card">
+            <div class="buy-guide-accent-bar"></div>
+            <div class="buy-guide-body">
+                <div class="buy-guide-content">
+                    <div class="buy-guide-eyebrow">📖 משאב נלווה לשיעור הבא</div>
+                    <h3 class="buy-guide-title">המדריך המעשי: איך קונים ומוכרים מניה</h3>
+                    <p class="buy-guide-desc">לפני שנעבור ליישום המלא בשיעור הבא — הכנו לכם מדריך מעשי מקיף עם צילומי מסך ממערכת Spark של מיטב. חיפוש מניה, הבנת ביקוש והיצע, פקודות LMT ו-MKT, בדיקת מימוש, עמלות, מיסוי ו-FIFO — וסימולטור מסחר אינטראקטיבי לתרגול.</p>
+                    <div class="buy-guide-features">
+                        <span class="buy-guide-feature">📸 צילומי מסך</span>
+                        <span class="buy-guide-feature">🎮 סימולטור מסחר</span>
+                        <span class="buy-guide-feature">💰 מדריך עמלות</span>
+                        <span class="buy-guide-feature">📊 מיסוי ו-FIFO</span>
+                    </div>
+                </div>
+                <div class="buy-guide-cta">
+                    <a href="/blog/how-to-buy-stocks/" class="buy-guide-btn">למדריך המלא ←</a>
+                    <span class="buy-guide-lock">🔒 תוכן בלעדי לתלמידים<br>נדרשת התחברות</span>
+                </div>
             </div>
         </div>
     </div>

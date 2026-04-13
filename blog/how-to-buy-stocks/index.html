@@ -270,7 +270,7 @@
 <body>
 
 <nav class="hp-nav"><a href="/" class="hp-nav-logo"><img src="/assets/images/logo.png" alt="NewGen Finance לוגו"><span>NewGen Finance</span></a><div class="hp-nav-center"><a href="/blog/" class="hp-nav-link">חזרה לבלוג</a><a href="/investor-academy/" class="hp-nav-link">חזרה לקורס</a></div></nav>
-<div class="course-only-banner">🔒 תוכן בלעדי לתלמידי הקורס <span>| מופיע כחלק מפרק 4</span></div>
+<div class="course-only-banner">🔒 תוכן בלעדי לתלמידי הקורס <span>| מופיע כחלק מפרק 3</span></div>
 <div id="reading-progress"><div id="reading-progress-bar"></div></div>
 
 <div class="article-header">
@@ -769,6 +769,67 @@ function simRestart(){
 
 document.getElementById('simFormType').addEventListener('change',function(){document.getElementById('simPriceRow').style.display=this.value==='MKT'?'none':'flex';});
 simStart();
+</script>
+
+<!-- PAYWALL OVERLAY -->
+<div id="paywall-overlay" style="display:none; position:fixed; inset:0; z-index:1000; background:rgba(11,74,100,0.85); backdrop-filter:blur(4px); align-items:center; justify-content:center; padding:2rem;">
+  <div style="background:#fff; border-radius:20px; padding:3rem 2.5rem; max-width:440px; width:100%; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,0.3); direction:rtl;">
+    <div style="font-size:3rem; margin-bottom:1rem;">🔒</div>
+    <h2 style="font-family:'Rubik',sans-serif; font-size:1.5rem; font-weight:800; color:#0c3d52; margin-bottom:0.8rem;">תוכן בלעדי לתלמידי הקורס</h2>
+    <p style="font-family:'Assistant',sans-serif; font-size:1.05rem; color:#4a6472; line-height:1.7; margin-bottom:2rem;">המדריך הזה כולל צילומי מסך, סימולטור מסחר אינטראקטיבי ותוכן מעשי שזמין רק למשתמשים רשומים עם גישה לקורס.</p>
+    <div id="paywall-buttons" style="display:flex; flex-direction:column; gap:0.8rem;"></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="/assets/js/supabase-config.js"></script>
+<script>
+(async function() {
+  if (typeof window.supabase === 'undefined') return;
+  const _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const { data: { user } } = await _sb.auth.getUser();
+
+  let hasAccess = false;
+  if (user) {
+    const { data: profile } = await _sb
+      .from('profiles')
+      .select('has_access')
+      .eq('id', user.id)
+      .single();
+    hasAccess = profile?.has_access === true;
+  }
+
+  if (hasAccess) {
+    const overlay = document.getElementById('paywall-overlay');
+    if (overlay) overlay.remove();
+    return;
+  }
+
+  // Blur content
+  const articleLayout = document.querySelector('.article-layout');
+  const articleHeader = document.querySelector('.article-header');
+  if (articleLayout) { articleLayout.style.filter = 'blur(6px)'; articleLayout.style.pointerEvents = 'none'; }
+  if (articleHeader) { articleHeader.style.filter = 'blur(3px)'; }
+
+  // Populate buttons based on auth state
+  const btnPrimary = 'font-family:Rubik,sans-serif; font-size:1rem; font-weight:800; padding:0.8rem 2rem; border-radius:10px; border:none; cursor:pointer; background:#2a9d8f; color:#fff; text-decoration:none; display:block; text-align:center;';
+  const btnSecondary = 'font-family:Rubik,sans-serif; font-size:1rem; font-weight:800; padding:0.8rem 2rem; border-radius:10px; border:2px solid #2a9d8f; cursor:pointer; background:transparent; color:#2a9d8f; text-decoration:none; display:block; text-align:center;';
+  const btns = document.getElementById('paywall-buttons');
+
+  if (!user) {
+    btns.innerHTML =
+      '<a href="/auth/login/" style="' + btnPrimary + '">התחבר לחשבון</a>' +
+      '<a href="/auth/register/" style="' + btnSecondary + '">הרשמה</a>';
+  } else {
+    btns.innerHTML =
+      '<a href="/profile/?access=denied" style="' + btnPrimary + '">בקש גישה לקורס</a>' +
+      '<a href="/blog/" style="' + btnSecondary + '">חזרה לבלוג</a>';
+  }
+
+  // Show overlay
+  const overlay = document.getElementById('paywall-overlay');
+  if (overlay) overlay.style.display = 'flex';
+})();
 </script>
 </body>
 </html>
