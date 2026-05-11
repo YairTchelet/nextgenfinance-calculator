@@ -181,6 +181,22 @@
       background: rgba(179, 224, 220, 0.12);
       border-right-color: #b3e0dc;
     }
+    /* Drawer scrim — closes drawer on outside tap */
+    .hp-drawer-scrim {
+      position: fixed;
+      inset: 0;
+      background: rgba(11, 61, 82, 0.4);
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+      z-index: 95;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .hp-drawer-scrim.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
     .hp-mobile-auth {
       padding: 0.75rem 1.5rem 0;
       display: flex;
@@ -829,6 +845,9 @@
   <div class="hp-mobile-auth" id="hp-mobile-auth"></div>
 </div>
 
+<!-- Mobile drawer scrim (closes drawer on outside tap) -->
+<div class="hp-drawer-scrim" id="hp-drawer-scrim" aria-hidden="true"></div>
+
 <!-- ── SECTION 1 — Hero ── -->
 <section id="hero">
 
@@ -1119,24 +1138,47 @@
   obs.observe(block);
 })();
 
-// Hamburger toggle
+// Hamburger toggle + drawer scroll-lock + scrim
 (function() {
   const btn = document.getElementById('hp-hamburger');
   const menu = document.getElementById('hp-mobile-menu');
+  const scrim = document.getElementById('hp-drawer-scrim');
+
+  function open() {
+    menu.classList.add('open');
+    btn.classList.add('open');
+    scrim.classList.add('open');
+    btn.setAttribute('aria-expanded', 'true');
+    menu.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  function close() {
+    menu.classList.remove('open');
+    btn.classList.remove('open');
+    scrim.classList.remove('open');
+    btn.setAttribute('aria-expanded', 'false');
+    menu.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
   btn.addEventListener('click', function() {
-    const isOpen = menu.classList.toggle('open');
-    btn.classList.toggle('open', isOpen);
-    btn.setAttribute('aria-expanded', isOpen);
-    menu.setAttribute('aria-hidden', !isOpen);
+    if (menu.classList.contains('open')) close();
+    else open();
   });
-  // Close on link click
+
+  scrim.addEventListener('click', close);
+
   menu.querySelectorAll('a').forEach(function(link) {
-    link.addEventListener('click', function() {
-      menu.classList.remove('open');
-      btn.classList.remove('open');
-      btn.setAttribute('aria-expanded', 'false');
-      menu.setAttribute('aria-hidden', 'true');
-    });
+    link.addEventListener('click', close);
+  });
+
+  // If viewport resizes above the mobile breakpoint while the drawer is open,
+  // CSS hides the drawer via display:none but the inline body overflow lock
+  // would remain. Force-close to clean up state.
+  window.addEventListener('resize', function() {
+    if (window.innerWidth > 768 && menu.classList.contains('open')) {
+      close();
+    }
   });
 })();
 </script>
