@@ -177,6 +177,10 @@
       background: rgba(179, 224, 220, 0.07);
       border-right-color: #7dd8d2;
     }
+    .hp-mobile-menu a:active {
+      background: rgba(179, 224, 220, 0.12);
+      border-right-color: #b3e0dc;
+    }
     .hp-mobile-auth {
       padding: 0.75rem 1.5rem 0;
       display: flex;
@@ -245,20 +249,12 @@
     .hero-dot:nth-child(4) { animation-delay: 1.4s; }
     .hero-dot:nth-child(5) { animation-delay: 1.6s; }
 
-    .hero-pulse-ring {
-      animation: pulse 2.5s ease-in-out 2s infinite;
-    }
     .hero-badge-svg {
       opacity: 0;
       animation: fadeSlideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
     .hero-float-1 { animation: fadeSlideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 1.5s forwards, float 6s ease-in-out 2.2s infinite; }
     .hero-float-2 { animation: fadeSlideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 1.8s forwards, float 7s ease-in-out 2.5s infinite reverse; }
-    .hero-particle {
-      animation: float 4s ease-in-out infinite;
-    }
-    .hero-particle:nth-child(odd) { animation-duration: 5s; animation-direction: reverse; }
-
     @keyframes drawLine {
       to { stroke-dashoffset: 0; }
     }
@@ -268,10 +264,6 @@
     @keyframes dotPop {
       0% { opacity: 0; transform: scale(0); }
       100% { opacity: 1; transform: scale(1); }
-    }
-    @keyframes pulse {
-      0%, 100% { r: 12; opacity: 0.5; }
-      50% { r: 18; opacity: 0; }
     }
     @keyframes fadeSlideUp {
       from { opacity: 0; transform: translateY(12px); }
@@ -283,8 +275,8 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .hero-line, .hero-area, .hero-dot, .hero-pulse-ring,
-      .hero-badge-svg, .hero-particle {
+      .hero-line, .hero-area, .hero-dot,
+      .hero-badge-svg {
         animation: none !important;
         opacity: 1 !important;
         stroke-dashoffset: 0 !important;
@@ -374,6 +366,7 @@
       transform: translateY(-2px);
       box-shadow: 0 8px 32px rgba(42, 157, 143, 0.5), inset 0 1px 0 rgba(255,255,255,0.15);
     }
+    .btn-hero-primary:active { transform: scale(0.98); }
 
     .btn-hero-outline {
       display: inline-flex;
@@ -390,33 +383,7 @@
       transition: border-color 0.18s, background 0.18s, transform 0.18s;
     }
     .btn-hero-outline:hover { border-color: rgba(240,248,250,0.78); background: rgba(255,255,255,0.06); transform: translateY(-2px); }
-
-    .scroll-arrow {
-      position: absolute;
-      bottom: 2rem;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 3px;
-      animation: bounce 2.2s ease-in-out infinite;
-      z-index: 2;
-    }
-    .scroll-arrow span {
-      display: block;
-      width: 10px;
-      height: 10px;
-      border-right: 2px solid rgba(179,224,220,0.5);
-      border-bottom: 2px solid rgba(179,224,220,0.5);
-      transform: rotate(45deg);
-      opacity: 0.6;
-    }
-    .scroll-arrow span:last-child { opacity: 0.3; margin-top: -6px; }
-    @keyframes bounce {
-      0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.5; }
-      50%       { transform: translateX(-50%) translateY(9px); opacity: 1; }
-    }
+    .btn-hero-outline:active { transform: scale(0.98); }
 
     /* ── Hero entrance animation ── */
     @keyframes heroFadeUp {
@@ -502,6 +469,7 @@
     .product-card:hover::before {
       opacity: 1;
     }
+    .product-card:active { transform: translateY(-2px); }
 
     .product-card-icon {
       width: 52px;
@@ -563,6 +531,7 @@
       margin-top: 0.25rem;
     }
     .product-card-btn:hover { background: #21867a; transform: translateY(-2px); box-shadow: 0 6px 18px rgba(42,157,143,0.35); }
+    .product-card-btn:active { transform: scale(0.98); }
 
     /* ── SECTION 3 — Why ── */
     #why { background: #0c3d52; }
@@ -653,9 +622,7 @@
       line-height: 1.55;
       color: #f0f8fa;
       letter-spacing: 0;
-      transition: letter-spacing 1.4s ease;
     }
-    .quote-block.visible .quote-text { letter-spacing: 0.012em; }
 
     .quote-author {
       margin-top: 1.25rem;
@@ -927,7 +894,6 @@
       <circle class="hero-dot" cx="700" cy="110" r="4" fill="#2a9d8f" opacity="0.7"/>
 
       <!-- Highlighted current point with pulse ring -->
-      <circle class="hero-pulse-ring" cx="760" cy="90" r="12" fill="none" stroke="#b3e0dc" stroke-width="1.5" opacity="0.5"/>
       <circle cx="760" cy="90" r="5" fill="#b3e0dc" filter="url(#orbGlow)"/>
 
       <!-- Floating candlesticks (abstract, left area) -->
@@ -943,11 +909,6 @@
         <line x1="124" y1="290" x2="124" y2="305" stroke="#2a9d8f" stroke-width="1.5"/>
       </g>
 
-      <!-- Small floating dots / particles -->
-      <circle class="hero-particle" cx="480" cy="60" r="3" fill="#b3e0dc" opacity="0.4"/>
-      <circle class="hero-particle" cx="620" cy="45" r="2" fill="#2a9d8f" opacity="0.5"/>
-      <circle class="hero-particle" cx="380" cy="410" r="2.5" fill="#b3e0dc" opacity="0.3"/>
-      <circle class="hero-particle" cx="800" cy="300" r="2" fill="#2a9d8f" opacity="0.4"/>
     </svg>
   </div>
 
@@ -957,10 +918,6 @@
   <div class="hero-ctas">
     <a href="/auth/register/" class="btn-hero-primary">התחל בחינם</a>
     <a href="/investor-academy/" class="btn-hero-outline">גלה את הקורס</a>
-  </div>
-  <div class="scroll-arrow" aria-hidden="true">
-    <span></span>
-    <span></span>
   </div>
 </section>
 
