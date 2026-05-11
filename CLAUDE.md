@@ -174,3 +174,15 @@ Env vars: `RESEND_API_KEY`, Supabase service role key.
 - Add error handling for scenarios that can't happen
 - Hardcode redirect URLs in auth handlers without checking sessionStorage/URL params first
 - `noindex` on public blog posts; `nofollow` is fine for external links only
+
+---
+
+## 10. AUDIT PROTOCOL
+
+When auditing any surface (homepage, blog post, course chapter, calculator, game, members area):
+- **Mobile (375px / 414px) is a first-class section**, not an appendix — Israeli retail investors are mobile-first
+- Flag Hebrew wrap quality, hit targets <44px, mobile-hostile motion (animating `r`, `width`, `letter-spacing`, `box-shadow`, large blurs)
+- Polish ceiling = `blog/warren-buffett/` and `blog/etf-guide/`
+- Output goes to `audits/[surface].md` — research artifact, no code edits unless asked
+
+→ Full mobile checklist, output template, brand framing: **`.claude/rules/audit-protocol.md`**
