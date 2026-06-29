@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>הבית הפיננסי · NewGen</title>
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&family=Assistant:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Auth: Supabase CDN → config → login guard (household allowlist enforced inline + by RLS) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="/assets/js/supabase-config.js"></script>
+<script src="/assets/js/auth-guard.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.1/echarts.min.js"></script>
+<style>
+  :root{
+    --bg:#0a3346;
+    --bg-2:#0c3d52;
+    --panel:#0e4458;
+    --panel-2:#10506a;
+    --line:rgba(255,255,255,.08);
+    --line-2:rgba(255,255,255,.14);
+    --teal:#14b8a6;
+    --teal-2:#38b2ac;
+    --ink:#eaf6f6;
+    --ink-dim:#9fc0c4;
+    --ink-faint:#6f9298;
+    --gold:#e0b34d;
+    --coral:#f0735a;
+    --elec:#f2a541;
+    --water:#5aa9e6;
+    --good:#34d6a8;
+    --shadow:0 14px 40px rgba(0,0,0,.35);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:radial-gradient(1200px 600px at 85% -10%, #11556e 0%, var(--bg-2) 42%, var(--bg) 100%) fixed;
+    color:var(--ink);
+    font-family:"Assistant","Segoe UI",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  .wrap{max-width:1240px;margin:0 auto;padding:22px 22px 64px}
+  h1,h2,h3,.num{font-family:"Rubik","Assistant",system-ui,sans-serif}
+
+  /* ---------- gate / loading ---------- */
+  #gate{position:fixed;inset:0;display:grid;place-items:center;background:var(--bg-2);z-index:50;color:var(--ink-dim);font-size:14px}
+  #gate .sp{width:30px;height:30px;border-radius:50%;border:3px solid var(--line-2);border-top-color:var(--teal);animation:spin .8s linear infinite;margin:0 auto 14px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* ---------- header ---------- */
+  header.top{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+  .brand{display:flex;align-items:center;gap:11px}
+  .logo{width:40px;height:40px;border-radius:11px;background:linear-gradient(135deg,var(--teal),#0c8f86);
+        display:grid;place-items:center;font-family:"Rubik";font-weight:800;color:#062b25;font-size:19px;box-shadow:0 6px 18px rgba(20,184,166,.35)}
+  .brand b{font-family:"Rubik";font-weight:700;font-size:18px;letter-spacing:-.2px;display:block;line-height:1.15}
+  .brand span{font-size:12.5px;color:var(--ink-faint)}
+  .spacer{flex:1}
+  .who{display:flex;align-items:center;gap:-8px}
+  .av{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-family:"Rubik";font-weight:700;font-size:13px;
+      border:2px solid var(--bg-2);color:#062b25}
+  .av.y{background:var(--teal-2)}
+  .av.b{background:var(--gold);margin-right:-10px}
+  .month{display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);
+         border-radius:11px;padding:8px 13px;font-family:"Rubik";font-weight:500;font-size:14px;cursor:pointer;color:var(--ink)}
+  .month select{background:transparent;border:0;color:var(--ink);font-family:"Rubik";font-weight:500;font-size:14px;cursor:pointer;outline:none}
+  .month select option{background:var(--panel-2);color:var(--ink)}
+  .back{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:8px 13px;font-family:"Rubik";font-weight:500;font-size:13.5px;color:var(--ink-dim);text-decoration:none}
+  .back:hover{border-color:var(--line-2);color:var(--ink)}
+
+  /* ---------- filter chips ---------- */
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+  .chip{background:var(--panel);border:1px solid var(--line);color:var(--ink-dim);
+        border-radius:999px;padding:7px 15px;font-size:13.5px;font-weight:600;cursor:pointer;transition:.16s;font-family:"Assistant"}
+  .chip:hover{border-color:var(--line-2);color:var(--ink)}
+  .chip.on{background:rgba(20,184,166,.16);border-color:var(--teal);color:#bdf3ec}
+  .chip .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-left:7px;vertical-align:1px}
+
+  /* ---------- KPI strip ---------- */
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+  .kpi{background:linear-gradient(180deg,var(--panel) 0%,rgba(14,68,88,.55) 100%);
+       border:1px solid var(--line);border-radius:16px;padding:16px 17px;position:relative;overflow:hidden}
+  .kpi .lbl{font-size:13px;color:var(--ink-dim);font-weight:600;margin-bottom:7px}
+  .kpi .val{font-family:"Rubik";font-weight:700;font-size:26px;letter-spacing:-.5px;line-height:1}
+  .kpi .sub{font-size:12.5px;margin-top:9px;font-weight:600;color:var(--ink-dim)}
+  .up{color:var(--good)} .down{color:var(--coral)}
+  .kpi.hero{background:linear-gradient(135deg,rgba(20,184,166,.22),rgba(14,68,88,.4));border-color:rgba(20,184,166,.4)}
+
+  /* ---------- grid + cards ---------- */
+  .grid{display:grid;gap:14px;margin-bottom:14px}
+  .g-2{grid-template-columns:1.15fr .85fr}
+  .g-12{grid-template-columns:1fr 1fr}
+  .card{background:linear-gradient(180deg,var(--panel) 0%,rgba(13,62,82,.6) 100%);
+        border:1px solid var(--line);border-radius:18px;padding:18px 18px 14px;box-shadow:var(--shadow)}
+  .card h3{margin:0;font-size:16px;font-weight:600;letter-spacing:-.2px}
+  .card .ch3-sub{font-size:12.5px;color:var(--ink-faint);margin-top:3px}
+  .card-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;gap:10px}
+  .tag{font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:999px;font-family:"Rubik";white-space:nowrap}
+  .tag.teal{background:rgba(20,184,166,.16);color:#7fe9da}
+  .tag.gold{background:rgba(224,179,77,.16);color:var(--gold)}
+  .chart{width:100%}
+  .empty{display:grid;place-items:center;color:var(--ink-faint);font-size:13px;text-align:center;padding:18px}
+
+  /* section label */
+  .sec{display:flex;align-items:center;gap:11px;margin:26px 2px 14px}
+  .sec h2{font-size:19px;font-weight:700;margin:0;letter-spacing:-.3px}
+  .sec .ln{flex:1;height:1px;background:var(--line)}
+  .sec .hint{font-size:12.5px;color:var(--ink-faint)}
+
+  /* ---------- goals ---------- */
+  .goals{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .goal{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px}
+  .goal .gt{display:flex;align-items:center;gap:9px;font-weight:700;font-family:"Rubik";font-size:15px}
+  .goal .gi{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font-size:15px}
+  .goal .amt{font-family:"Rubik";font-size:13px;color:var(--ink-dim);margin:12px 0 7px;display:flex;justify-content:space-between}
+  .goal .amt b{color:var(--ink);font-weight:700}
+  .bar{height:9px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden}
+  .bar > i{display:block;height:100%;border-radius:99px}
+  .goal .foot{font-size:12px;color:var(--ink-faint);margin-top:9px;display:flex;justify-content:space-between}
+  .goal .foot b{color:var(--teal-2)}
+
+  /* ---------- activity ---------- */
+  .feed{display:flex;flex-direction:column;gap:9px}
+  .row{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.025);border:1px solid var(--line);
+       border-radius:13px;padding:11px 13px}
+  .ic{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-size:16px;flex-shrink:0}
+  .row .mid{flex:1;min-width:0}
+  .row .ti{font-weight:600;font-size:14.5px;display:flex;align-items:center;gap:8px}
+  .row .me{font-size:12.5px;color:var(--ink-faint);margin-top:2px}
+  .row .amt2{font-family:"Rubik";font-weight:700;font-size:15px;white-space:nowrap}
+  .pill{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:999px;font-family:"Rubik"}
+  .pill.once{background:rgba(90,169,230,.16);color:#9fcdf2}
+  .pill.rec{background:rgba(224,179,77,.16);color:var(--gold)}
+  .pill.who{background:rgba(255,255,255,.07);color:var(--ink-dim)}
+
+  .note{font-size:12px;color:var(--ink-faint);text-align:center;margin-top:34px;line-height:1.7}
+  .note b{color:var(--ink-dim)}
+
+  :focus-visible{outline:2px solid var(--teal);outline-offset:2px;border-radius:6px}
+  @media (max-width:920px){
+    .kpis{grid-template-columns:1fr 1fr}
+    .g-2,.g-12{grid-template-columns:1fr}
+    .goals{grid-template-columns:1fr}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div id="gate"><div><div class="sp"></div>טוען נתונים…</div></div>
+
+<div class="wrap" style="visibility:hidden" id="app">
+
+  <header class="top">
+    <div class="brand">
+      <div class="logo">₪</div>
+      <div><b>הבית הפיננסי</b><span id="brand-sub">יאיר &amp; ביילה</span></div>
+    </div>
+    <div class="spacer"></div>
+    <div class="who" title="יאיר &amp; ביילה">
+      <div class="av b">ב</div><div class="av y" style="margin-right:-10px">י</div>
+    </div>
+    <label class="month">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      <select id="month-select" aria-label="בחירת חודש"></select>
+    </label>
+    <a class="back" href="/members/">אזור החברים</a>
+  </header>
+
+  <div class="chips" id="chips">
+    <button class="chip on" data-member="all">הכל</button>
+    <button class="chip" data-member="yair">יאיר <span class="dot" style="background:var(--teal-2)"></span></button>
+    <button class="chip" data-member="bayla">ביילה <span class="dot" style="background:var(--gold)"></span></button>
+    <button class="chip" data-member="joint">משותף</button>
+  </div>
+
+  <!-- KPIs -->
+  <div class="kpis">
+    <div class="kpi hero">
+      <div class="lbl">שווי נקי</div>
+      <div class="val" id="kpi-networth">—</div>
+      <div class="sub" id="kpi-networth-sub">—</div>
+    </div>
+    <div class="kpi">
+      <div class="lbl">נכנס החודש</div>
+      <div class="val" id="kpi-in">—</div>
+      <div class="sub" id="kpi-in-sub">—</div>
+    </div>
+    <div class="kpi">
+      <div class="lbl">יצא החודש</div>
+      <div class="val" id="kpi-out">—</div>
+      <div class="sub" id="kpi-out-sub">—</div>
+    </div>
+    <div class="kpi">
+      <div class="lbl">שיעור חיסכון</div>
+      <div class="val" id="kpi-rate">—</div>
+      <div class="sub" id="kpi-rate-sub">—</div>
+    </div>
+  </div>
+
+  <!-- net worth + flow -->
+  <div class="grid g-2">
+    <div class="card">
+      <div class="card-head">
+        <div><h3>שווי נקי לאורך זמן</h3><div class="ch3-sub">נכסים פחות התחייבויות · משוחזר מהתזרים</div></div>
+        <span class="tag teal" id="nw-tag"></span>
+      </div>
+      <div id="networth" class="chart" style="height:260px"></div>
+    </div>
+    <div class="card">
+      <div class="card-head">
+        <div><h3>לאן הולך הכסף</h3><div class="ch3-sub">תרשים זרימה · החודש הנבחר</div></div>
+        <span class="tag gold">אינטראקטיבי</span>
+      </div>
+      <div id="sankey" class="chart" style="height:260px"></div>
+    </div>
+  </div>
+
+  <!-- cashflow + categories -->
+  <div class="grid g-12">
+    <div class="card">
+      <div class="card-head">
+        <div><h3>נכנס מול יצא</h3><div class="ch3-sub">תזרים חודשי וקו הנטו</div></div>
+      </div>
+      <div id="cashflow" class="chart" style="height:240px"></div>
+    </div>
+    <div class="card">
+      <div class="card-head">
+        <div><h3>פילוח הוצאות</h3><div class="ch3-sub">החודש הנבחר · לפי קטגוריה</div></div>
+      </div>
+      <div id="cats" class="chart" style="height:240px"></div>
+    </div>
+  </div>
+
+  <!-- UTILITIES -->
+  <div class="sec"><h2>חשבונות שירות</h2><div class="ln"></div><span class="hint">עלות מול צריכה · לפי תקופת חיוב</span></div>
+  <div class="grid g-12">
+    <div class="card">
+      <div class="card-head">
+        <div><h3>חשמל ⚡</h3><div class="ch3-sub">₪ ביחס לצריכה (קוט״ש) · חשבון דו־חודשי</div></div>
+      </div>
+      <div id="elec" class="chart" style="height:230px"></div>
+    </div>
+    <div class="card">
+      <div class="card-head">
+        <div><h3>מים 💧</h3><div class="ch3-sub">₪ ביחס לצריכה (מ״ק)</div></div>
+      </div>
+      <div id="water" class="chart" style="height:230px"></div>
+    </div>
+  </div>
+
+  <!-- GOALS -->
+  <div class="sec"><h2>יעדים</h2><div class="ln"></div><span class="hint">הפקדה אוטומטית מהעו״ש</span></div>
+  <div class="goals" id="goals"></div>
+
+  <!-- ACTIVITY -->
+  <div class="sec"><h2>פעילות אחרונה</h2><div class="ln"></div><span class="hint">העברות אחרונות</span></div>
+  <div class="card">
+    <div class="feed" id="feed"></div>
+  </div>
+
+  <div class="note">
+    הבית הפיננסי · נתוני חיים מ-Supabase. <b>שלב 1</b> — דאשבורד לקריאה בלבד.<br>
+    הצעדים הבאים: webhook לטלגרם, פיצול קבלות, ושאילתות AI.
+  </div>
+
+</div>
+
+<script>
+(async function () {
+  // ── Household allowlist (mirrors the is_household_member() RLS function) ──
+  const HOUSEHOLD = [
+    '01b96d2c-fe06-4b7f-8bad-59a0dd8cacbe', // Yair
+    '00000000-0000-0000-0000-000000000000'  // Bayla — TODO replace once known
+  ];
+
+  if (typeof window.supabase === 'undefined') return;
+  const sb = window.__supabase || window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const { data: { user } } = await sb.auth.getUser();
+  if (!user) {
+    sessionStorage.setItem('redirectAfterLogin', '/finances/');
+    window.location.replace('/auth/login/?redirect=/finances/');
+    return;
+  }
+  if (!HOUSEHOLD.includes(user.id)) {
+    window.location.replace('/members/');
+    return;
+  }
+
+  // ── Palette / chart defaults (ported from prototype) ──
+  const C = { teal:'#14b8a6', teal2:'#38b2ac', gold:'#e0b34d', coral:'#f0735a',
+    elec:'#f2a541', water:'#5aa9e6', good:'#34d6a8', ink:'#9fc0c4',
+    grid:'rgba(255,255,255,.07)', purple:'#9b8cff' };
+  const FONT = 'Rubik, Assistant, sans-serif';
+  const axis = { axisLine:{lineStyle:{color:C.grid}}, axisLabel:{color:C.ink,fontFamily:FONT,fontSize:11}, splitLine:{lineStyle:{color:C.grid}} };
+  const TT = { backgroundColor:'#0a3346', borderColor:'rgba(255,255,255,.14)', textStyle:{color:'#eaf6f6',fontFamily:'Assistant'}, padding:[8,12] };
+  const HE_MONTHS = ['ינו','פבר','מרץ','אפר','מאי','יונ','יול','אוג','ספט','אוק','נוב','דצמ'];
+  const charts = [];
+  const fmt = v => '₪' + Math.round(v).toLocaleString('he-IL');
+  const monthKey = d => { const x = new Date(d); return x.getFullYear() + '-' + String(x.getMonth()+1).padStart(2,'0'); };
+  const monthLabel = k => { const [y,m] = k.split('-'); return HE_MONTHS[(+m)-1] + ' ' + y.slice(2); };
+  function mk(id, opt){ const el = document.getElementById(id); el.innerHTML=''; const c = echarts.init(el, null, {renderer:'canvas'}); c.setOption(opt); charts.push(c); return c; }
+  function emptyChart(id, msg){ document.getElementById(id).innerHTML = '<div class="empty">' + (msg||'אין נתונים להצגה') + '</div>'; }
+
+  // ── Load all data (RLS limits these reads to the household) ──
+  const [accRes, catRes, txRes, billRes, goalRes, setRes] = await Promise.all([
+    sb.from('accounts').select('*'),
+    sb.from('categories').select('*'),
+    sb.from('transactions').select('*').order('ts', { ascending: true }),
+    sb.from('bills').select('*').order('period_start', { ascending: true }),
+    sb.from('goals').select('*').order('created_at', { ascending: true }),
+    sb.from('settings').select('*')
+  ]);
+
+  const accounts = accRes.data || [];
+  const categories = catRes.data || [];
+  const txns = txRes.data || [];
+  const bills = billRes.data || [];
+  const goals = goalRes.data || [];
+  const settings = Object.fromEntries((setRes.data || []).map(s => [s.key, s.value]));
+  const rate = Number(settings.cad_to_ils) || 1;
+  const catById = Object.fromEntries(categories.map(c => [c.id, c]));
+
+  const ilsOf = t => Number(t.amount_ils != null ? t.amount_ils : t.amount * (t.currency === 'CAD' ? rate : 1));
+
+  // ── Live net worth (assets +, liabilities −, CAD at live rate) ──
+  const netWorth = accounts.reduce((s, a) => {
+    const sign = (a.type === 'credit' || a.type === 'loan') ? -1 : 1;
+    const conv = a.currency === 'CAD' ? rate : 1;
+    return s + sign * Number(a.balance) * conv;
+  }, 0);
+
+  // ── Available months (descending for the picker, ascending for series) ──
+  const monthsAsc = [...new Set(txns.map(t => monthKey(t.ts)))].sort();
+  const sel = document.getElementById('month-select');
+  if (monthsAsc.length) {
+    [...monthsAsc].reverse().forEach(k => { const o = document.createElement('option'); o.value = k; o.textContent = monthLabel(k); sel.appendChild(o); });
+  } else {
+    const o = document.createElement('option'); o.textContent = '—'; sel.appendChild(o);
+  }
+  let activeMonth = monthsAsc[monthsAsc.length - 1] || monthKey(new Date());
+  sel.value = activeMonth;
+  document.getElementById('brand-sub').textContent = 'יאיר & ביילה · ' + monthLabel(activeMonth);
+
+  // ── Per-month aggregates (for cashflow + net-worth reconstruction) ──
+  function monthAgg(k) {
+    let inc = 0, out = 0;
+    for (const t of txns) {
+      if (monthKey(t.ts) !== k) continue;
+      if (t.direction === 'in') inc += ilsOf(t); else out += ilsOf(t);
+    }
+    return { inc, out, net: inc - out };
+  }
+  const aggByMonth = Object.fromEntries(monthsAsc.map(k => [k, monthAgg(k)]));
+
+  function renderKPIs() {
+    const a = aggByMonth[activeMonth] || { inc:0, out:0, net:0 };
+    document.getElementById('kpi-networth').textContent = fmt(netWorth);
+    const nwSub = document.getElementById('kpi-networth-sub');
+    nwSub.textContent = (a.net >= 0 ? '▲ נטו ' : '▼ נטו ') + fmt(Math.abs(a.net)) + ' החודש';
+    nwSub.className = 'sub ' + (a.net >= 0 ? 'up' : 'down');
+    document.getElementById('kpi-in').textContent = fmt(a.inc);
+    document.getElementById('kpi-in-sub').textContent = 'הכנסות החודש';
+    document.getElementById('kpi-out').textContent = fmt(a.out);
+    document.getElementById('kpi-out-sub').textContent = 'הוצאות החודש';
+    const r = a.inc > 0 ? Math.round((a.net / a.inc) * 100) : 0;
+    document.getElementById('kpi-rate').textContent = r + '%';
+    const rs = document.getElementById('kpi-rate-sub');
+    rs.textContent = (a.net >= 0 ? '▲ נטו ' : '▼ נטו ') + fmt(Math.abs(a.net));
+    rs.className = 'sub ' + (a.net >= 0 ? 'up' : 'down');
+  }
+
+  // ── Net worth over time: anchor final point at live net worth, walk back by net flow ──
+  function renderNetWorth() {
+    if (!monthsAsc.length) { emptyChart('networth'); return; }
+    const series = []; let running = netWorth;
+    for (let i = monthsAsc.length - 1; i >= 0; i--) { series[i] = running; running -= aggByMonth[monthsAsc[i]].net; }
+    const first = series[0], last = series[series.length - 1];
+    const pct = first ? Math.round(((last - first) / first) * 100) : 0;
+    document.getElementById('nw-tag').textContent = (pct >= 0 ? '+' : '') + pct + '% בתקופה';
+    mk('networth', {
+      grid:{left:52,right:14,top:18,bottom:26}, tooltip:{trigger:'axis',...TT,valueFormatter:v=>fmt(v)},
+      xAxis:{type:'category',data:monthsAsc.map(monthLabel),boundaryGap:false,...axis},
+      yAxis:{type:'value',...axis,axisLabel:{...axis.axisLabel,formatter:v=>(v/1000).toFixed(0)+'k'}},
+      series:[{type:'line',smooth:true,symbol:'circle',symbolSize:6,data:series,
+        lineStyle:{width:3,color:C.teal},itemStyle:{color:C.teal},
+        areaStyle:{color:new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'rgba(20,184,166,.45)'},{offset:1,color:'rgba(20,184,166,.02)'}])}}]
+    });
+  }
+
+  function colorFor(cat, fallback){ return (cat && cat.color) || fallback; }
+
+  // ── Sankey: income categories → hub → expense categories + savings (selected month) ──
+  function renderSankey() {
+    const incByCat = {}, outByCat = {};
+    for (const t of txns) {
+      if (monthKey(t.ts) !== activeMonth) continue;
+      const c = catById[t.category_id];
+      const name = c ? c.name : 'ללא קטגוריה';
+      if (t.direction === 'in') incByCat[name] = (incByCat[name]||0) + ilsOf(t);
+      else outByCat[name] = (outByCat[name]||0) + ilsOf(t);
+    }
+    const incTotal = Object.values(incByCat).reduce((a,b)=>a+b,0);
+    const outTotal = Object.values(outByCat).reduce((a,b)=>a+b,0);
+    if (!incTotal && !outTotal) { emptyChart('sankey'); return; }
+    const HUB = 'תזרים';
+    const nodes = [{name:HUB,itemStyle:{color:C.teal}}];
+    const links = [];
+    Object.entries(incByCat).forEach(([n,v]) => { nodes.push({name:n,itemStyle:{color:C.good}}); links.push({source:n,target:HUB,value:Math.round(v)}); });
+    Object.entries(outByCat).forEach(([n,v]) => {
+      const c = categories.find(x=>x.name===n);
+      nodes.push({name:n,itemStyle:{color:colorFor(c,C.coral)}}); links.push({source:HUB,target:n,value:Math.round(v)});
+    });
+    const saved = incTotal - outTotal;
+    if (saved > 0) { nodes.push({name:'חיסכון',itemStyle:{color:C.good}}); links.push({source:HUB,target:'חיסכון',value:Math.round(saved)}); }
+    mk('sankey', {
+      tooltip:{...TT,valueFormatter:v=>fmt(v)},
+      series:[{type:'sankey',right:8,left:8,top:10,bottom:10,nodeWidth:13,nodeGap:9,
+        label:{color:'#eaf6f6',fontFamily:'Assistant',fontSize:11.5},
+        lineStyle:{color:'gradient',opacity:.42,curveness:.5},
+        data:nodes, links:links}]
+    });
+  }
+
+  // ── Cashflow: bars in/out + net line ──
+  function renderCashflow() {
+    if (!monthsAsc.length) { emptyChart('cashflow'); return; }
+    mk('cashflow', {
+      grid:{left:50,right:14,top:24,bottom:26},
+      tooltip:{trigger:'axis',...TT,valueFormatter:v=>fmt(v)},
+      legend:{data:['נכנס','יצא','נטו'],textStyle:{color:C.ink,fontFamily:'Assistant'},top:0,icon:'roundRect'},
+      xAxis:{type:'category',data:monthsAsc.map(monthLabel),...axis},
+      yAxis:{type:'value',...axis,axisLabel:{...axis.axisLabel,formatter:v=>(v/1000).toFixed(0)+'k'}},
+      series:[
+        {name:'נכנס',type:'bar',data:monthsAsc.map(k=>Math.round(aggByMonth[k].inc)),itemStyle:{color:C.teal,borderRadius:[4,4,0,0]},barMaxWidth:16},
+        {name:'יצא',type:'bar',data:monthsAsc.map(k=>Math.round(aggByMonth[k].out)),itemStyle:{color:C.coral,borderRadius:[4,4,0,0]},barMaxWidth:16},
+        {name:'נטו',type:'line',smooth:true,symbol:'circle',symbolSize:6,data:monthsAsc.map(k=>Math.round(aggByMonth[k].net)),lineStyle:{color:C.gold,width:2.5},itemStyle:{color:C.gold}}
+      ]
+    });
+  }
+
+  // ── Category donut (selected month expenses) ──
+  function renderCats() {
+    const byCat = {};
+    for (const t of txns) {
+      if (monthKey(t.ts) !== activeMonth || t.direction !== 'out') continue;
+      const c = catById[t.category_id]; const name = c ? c.name : 'ללא קטגוריה';
+      byCat[name] = (byCat[name]||0) + ilsOf(t);
+    }
+    const entries = Object.entries(byCat).sort((a,b)=>b[1]-a[1]);
+    if (!entries.length) { emptyChart('cats'); return; }
+    const total = entries.reduce((s,e)=>s+e[1],0);
+    const palette = [C.coral,C.teal,C.purple,C.elec,C.water,C.gold,'#6f9298'];
+    mk('cats', {
+      tooltip:{...TT,valueFormatter:v=>fmt(v)},
+      legend:{orient:'vertical',right:6,top:'center',textStyle:{color:C.ink,fontFamily:'Assistant',fontSize:12},itemGap:8},
+      series:[{type:'pie',radius:['52%','78%'],center:['33%','52%'],avoidLabelOverlap:true,
+        itemStyle:{borderColor:'#0e4458',borderWidth:2},
+        label:{show:true,position:'center',formatter:fmt(total)+'\nסה״כ',color:'#eaf6f6',fontFamily:FONT,fontSize:14,fontWeight:600,lineHeight:18},
+        emphasis:{label:{show:true,fontSize:15,formatter:p=>p.name+'\n'+fmt(p.value)}},
+        data:entries.map(([name,value],i)=>{ const c=categories.find(x=>x.name===name); return {name,value:Math.round(value),itemStyle:{color:colorFor(c,palette[i%palette.length])}}; })
+      }]
+    });
+  }
+
+  // ── Utility chart (electric / water) by billing period ──
+  function renderUtility(id, type, unit, costColor, lineColor) {
+    const rows = bills.filter(b => b.type === type);
+    if (!rows.length) { emptyChart(id, 'אין חשבונות ' + (type==='electric'?'חשמל':'מים')); return; }
+    const labels = rows.map(b => monthLabel(monthKey(b.period_start)));
+    mk(id, {
+      grid:{left:44,right:48,top:24,bottom:26},
+      tooltip:{trigger:'axis',...TT},
+      legend:{data:['עלות ₪', unit],textStyle:{color:C.ink,fontFamily:'Assistant',fontSize:11},top:0},
+      xAxis:{type:'category',data:labels,...axis},
+      yAxis:[
+        {type:'value',...axis,axisLabel:{...axis.axisLabel,formatter:'₪{value}'}},
+        {type:'value',...axis,splitLine:{show:false},axisLabel:{...axis.axisLabel}}
+      ],
+      series:[
+        {name:'עלות ₪',type:'bar',data:rows.map(b=>Math.round(Number(b.net_amount ?? b.amount))),itemStyle:{color:costColor,borderRadius:[3,3,0,0]},barMaxWidth:22},
+        {name:unit,type:'line',yAxisIndex:1,smooth:true,symbol:'circle',symbolSize:6,data:rows.map(b=>b.consumption!=null?Number(b.consumption):null),lineStyle:{color:lineColor,width:3},itemStyle:{color:lineColor}}
+      ]
+    });
+  }
+
+  // ── Goals ──
+  function renderGoals() {
+    const box = document.getElementById('goals');
+    if (!goals.length) { box.innerHTML = '<div class="empty">לא הוגדרו יעדים</div>'; return; }
+    box.innerHTML = goals.map(g => {
+      const pct = g.target ? Math.min(100, Math.round((Number(g.saved)/Number(g.target))*100)) : 0;
+      const col = g.color || C.teal;
+      let foot = pct + '%';
+      const mc = Number(g.monthly_contribution)||0;
+      let right = mc ? '<b>' + fmt(mc) + '</b>/חודש' : '';
+      if (mc && g.target) { const left = Math.max(0, Number(g.target)-Number(g.saved)); const months = Math.ceil(left/mc); if (months>0) right += ' · עוד ' + months + ' ח׳'; }
+      return '<div class="goal">'
+        + '<div class="gt"><span class="gi" style="background:rgba(20,184,166,.16)">' + (g.icon||'🎯') + '</span> ' + esc(g.name) + '</div>'
+        + '<div class="amt"><span>נצבר <b>' + fmt(g.saved) + '</b></span><span>יעד ' + fmt(g.target) + '</span></div>'
+        + '<div class="bar"><i style="width:' + pct + '%;background:linear-gradient(90deg,' + col + ',' + C.good + ')"></i></div>'
+        + '<div class="foot"><span>' + foot + '</span><span>' + right + '</span></div>'
+        + '</div>';
+    }).join('');
+  }
+
+  // ── Activity feed (respects member chip) ──
+  const ICON_BY_KIND = { 'דיור':'🏠','מזון':'🛒','חשבונות':'⚡','תחבורה':'🚗','פנאי':'🍽️','ביטוחים':'🛡️','שונות':'📦','משכורת':'💼','הטבות ותמיכה':'🎖️' };
+  let memberFilter = 'all';
+  function renderFeed() {
+    const box = document.getElementById('feed');
+    const rows = txns.filter(t => memberFilter === 'all' || t.member === memberFilter)
+                     .slice().sort((a,b)=>new Date(b.ts)-new Date(a.ts)).slice(0, 12);
+    if (!rows.length) { box.innerHTML = '<div class="empty">אין תנועות להצגה</div>'; return; }
+    box.innerHTML = rows.map(t => {
+      const c = catById[t.category_id]; const cname = c ? c.name : '';
+      const icon = (c && c.icon) || ICON_BY_KIND[cname] || '💸';
+      const sign = t.direction === 'in' ? '+' : '−';
+      const cls = t.direction === 'in' ? 'up' : 'down';
+      const recPill = t.recurrence === 'recurring' ? '<span class="pill rec">קבוע</span>' : '<span class="pill once">חד״פ</span>';
+      const whoPill = t.member ? '<span class="pill who">' + memberHe(t.member) + '</span>' : '';
+      const meBits = [];
+      if (cname) meBits.push(cname);
+      if (t.note) meBits.push(esc(t.note));
+      meBits.push(new Date(t.ts).toLocaleDateString('he-IL', {day:'numeric', month:'short'}));
+      const cur = t.currency === 'CAD' ? ('C$' + Number(t.amount).toLocaleString('he-IL') + ' · ' + fmt(ilsOf(t))) : fmt(ilsOf(t));
+      return '<div class="row">'
+        + '<div class="ic" style="background:rgba(20,184,166,.14)">' + icon + '</div>'
+        + '<div class="mid"><div class="ti">' + esc(t.merchant || cname || 'תנועה') + ' ' + recPill + ' ' + whoPill + '</div>'
+        + '<div class="me">' + meBits.join(' · ') + '</div></div>'
+        + '<div class="amt2 ' + cls + '">' + sign + cur + '</div>'
+        + '</div>';
+    }).join('');
+  }
+  function memberHe(m){ return m==='yair'?'יאיר':m==='bayla'?'ביילה':'משותף'; }
+  function esc(s){ return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+  function renderMonthScoped(){ renderKPIs(); renderSankey(); renderCats(); }
+  function renderAll(){
+    renderMonthScoped(); renderNetWorth(); renderCashflow();
+    renderUtility('elec','electric','קוט״ש','rgba(242,165,65,.55)',C.elec);
+    renderUtility('water','water','מ״ק','rgba(90,169,230,.5)',C.water);
+    renderGoals(); renderFeed();
+  }
+
+  // ── Reveal + wire interactions ──
+  document.getElementById('gate').style.display = 'none';
+  document.getElementById('app').style.visibility = 'visible';
+  renderAll();
+
+  sel.addEventListener('change', () => {
+    activeMonth = sel.value;
+    document.getElementById('brand-sub').textContent = 'יאיר & ביילה · ' + monthLabel(activeMonth);
+    renderMonthScoped();
+  });
+  document.querySelectorAll('#chips .chip').forEach(ch => ch.addEventListener('click', () => {
+    document.querySelectorAll('#chips .chip').forEach(x => x.classList.remove('on'));
+    ch.classList.add('on'); memberFilter = ch.dataset.member; renderFeed();
+  }));
+  window.addEventListener('resize', () => charts.forEach(c => c.resize()));
+})();
+</script>
+</body>
+</html>
