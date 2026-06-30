@@ -15,6 +15,8 @@
 
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 const PARSE_MODEL = 'claude-haiku-4-5-20251001';
+// lib path (not the index) avoids pdf-parse's debug block that reads a test file.
+const pdfParse = require('pdf-parse/lib/pdf-parse.js');
 
 // Allow voice transcription up to ~60s (Vercel Pro). Text is fast.
 module.exports.config = { maxDuration: 60 };
@@ -158,6 +160,100 @@ async function transcribeVoice(botToken, assemblyKey, fileId) {
   throw new Error('AssemblyAI timed out');
 }
 
+// ── Download a Telegram PDF and pull its text (digital PDFs only; no OCR) ──
+async function extractPdfText(botToken, fileId) {
+  const f = await tg(botToken, 'getFile', { file_id: fileId });
+  const filePath = f.result && f.result.file_path;
+  if (!filePath) throw new Error('Telegram getFile failed');
+  const file = await fetch('https://api.telegram.org/file/bot' + botToken + '/' + filePath);
+  const bytes = Buffer.from(await file.arrayBuffer());
+  const data = await pdfParse(bytes);
+  return (data.text || '').trim();
+}
+
+// ── Claude Haiku: classify a PDF (bill vs receipt) and extract it ──
+// Two tools + tool_choice:any → one call both decides the type and returns fields.
+async function parseDocument(apiKey, text, categories) {
+  const expenseNames = categories.filter(c => c.kind === 'expense').map(c => c.name);
+
+  const system =
+    'אתה מנוע חילוץ מסמכים פיננסיים. קיבלת טקסט שחולץ מ-PDF.\n' +
+    'אם זהו חשבון שירות (חשמל / מים / גז / ארנונה) — קרא ל-extract_bill.\n' +
+    'אם זו קבלה או חשבונית קנייה מחנות/בית עסק — קרא ל-extract_receipt ופצל לפריטים.\n' +
+    'בחר category לכל פריט אך ורק מתוך הרשימה: [' + expenseNames.join(', ') + ']. אם אין התאמה ברורה, השאר ריק.\n' +
+    'currency = ILS כברירת מחדל; CAD רק אם צוין דולר קנדי/קנדה/CAD.\n' +
+    'תאריכים בפורמט YYYY-MM-DD. סכומים חיוביים.';
+
+  const billTool = {
+    name: 'extract_bill',
+    description: 'חשבון שירות (חשמל/מים/גז/ארנונה) — סכום, תקופת חיוב, צריכה ומונה',
+    input_schema: {
+      type: 'object',
+      properties: {
+        type: { type: 'string', enum: ['electric', 'water', 'gas', 'arnona', 'other'] },
+        provider: { type: 'string', description: 'שם הספק, אם מצוין' },
+        period_start: { type: 'string', description: 'YYYY-MM-DD — תחילת תקופת החיוב' },
+        period_end: { type: 'string', description: 'YYYY-MM-DD — סוף תקופת החיוב' },
+        amount: { type: 'number', description: 'הסכום לתשלום' },
+        currency: { type: 'string', enum: ['ILS', 'CAD'] },
+        consumption: { type: 'number', description: 'צריכה (kWh / מ״ק), אם מצוין' },
+        unit: { type: 'string', enum: ['kWh', 'm3'] },
+        meter_reading: { type: 'number', description: 'קריאת מונה, אם מצוינת' },
+      },
+      required: ['type', 'amount', 'currency'],
+    },
+  };
+
+  const receiptTool = {
+    name: 'extract_receipt',
+    description: 'קבלה/חשבונית קנייה — פיצול לפריטים עם קטגוריה',
+    input_schema: {
+      type: 'object',
+      properties: {
+        merchant: { type: 'string', description: 'שם בית העסק' },
+        currency: { type: 'string', enum: ['ILS', 'CAD'] },
+        total: { type: 'number', description: 'סך הקבלה' },
+        items: {
+          type: 'array',
+          description: 'פריטי הקנייה',
+          items: {
+            type: 'object',
+            properties: {
+              description: { type: 'string' },
+              amount: { type: 'number' },
+              category: { type: 'string', description: 'שם קטגוריה מהרשימה, או ריק' },
+              recurrence: { type: 'string', enum: ['one_off', 'recurring'] },
+            },
+            required: ['description', 'amount'],
+          },
+        },
+      },
+      required: ['merchant', 'total', 'items'],
+    },
+  };
+
+  const r = await fetch(ANTHROPIC_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+    },
+    body: JSON.stringify({
+      model: PARSE_MODEL,
+      max_tokens: 2000,
+      system,
+      tools: [billTool, receiptTool],
+      tool_choice: { type: 'any' },
+      messages: [{ role: 'user', content: text.slice(0, 12000) }],
+    }),
+  });
+  if (!r.ok) throw new Error('Anthropic ' + r.status + ': ' + (await r.text()));
+  const data = await r.json();
+  const block = (data.content || []).find(b => b.type === 'tool_use');
+  return block ? { name: block.name, input: block.input } : null;
+}
+
 // ── Confirmation card + inline keyboard ──
 const DIR_EMOJI = { in: '🟢', out: '🔴' };
 function esc(s) {
@@ -191,6 +287,53 @@ function fixKeyboard(txId, categories, kindWanted) {
   for (let i = 0; i < buttons.length; i += 3) rows.push(buttons.slice(i, i + 3));
   rows.push([{ text: '🗑 מחק', callback_data: 'd|' + txId }]);
   return { inline_keyboard: rows };
+}
+
+// ── Bill (utility PDF) confirmation card + fix/delete keyboard ──
+const BILL_HE = { electric: 'חשמל', water: 'מים', gas: 'גז', arnona: 'ארנונה', other: 'אחר' };
+function billText(bill) {
+  const cur = bill.currency === 'CAD' ? 'C$' : '₪';
+  const lines = [
+    '<b>נשמר חשבון</b> 🧾',
+    'סוג: <b>' + esc(BILL_HE[bill.type] || bill.type) + '</b>',
+    'סכום: <b>' + cur + Number(bill.amount).toLocaleString('he-IL') + '</b>',
+  ];
+  if (bill.provider) lines.push('ספק: ' + esc(bill.provider));
+  if (bill.period_start || bill.period_end) lines.push('תקופה: ' + (bill.period_start || '?') + ' – ' + (bill.period_end || '?'));
+  if (bill.consumption != null) lines.push('צריכה: ' + Number(bill.consumption).toLocaleString('he-IL') + (bill.unit ? ' ' + bill.unit : ''));
+  if (bill.meter_reading != null) lines.push('מונה: ' + Number(bill.meter_reading).toLocaleString('he-IL'));
+  lines.push('\nלתיקון הסוג או מחיקה:');
+  return lines.join('\n');
+}
+function billKeyboard(billId) {
+  const row = [['electric', 'חשמל'], ['water', 'מים'], ['gas', 'גז'], ['arnona', 'ארנונה']]
+    .map(([t, he]) => ({ text: he, callback_data: 'bt|' + billId + '|' + t }));
+  return { inline_keyboard: [row, [{ text: '🗑 מחק', callback_data: 'bd|' + billId }]] };
+}
+
+// ── Receipt confirmation card + approve/discard keyboard ──
+function receiptText(merchant, total, currency, items) {
+  const cur = currency === 'CAD' ? 'C$' : '₪';
+  const lines = [
+    '<b>קבלה זוהתה</b> 🧾 — דרוש אישור',
+    'בית עסק: <b>' + esc(merchant || '?') + '</b>',
+    'סה״כ: <b>' + cur + Number(total || 0).toLocaleString('he-IL') + '</b>',
+    '',
+    '<b>פריטים (' + items.length + '):</b>',
+  ];
+  items.slice(0, 20).forEach(it => {
+    lines.push('• ' + esc(it.description) + ' — ' + cur + Number(it.amount).toLocaleString('he-IL') +
+      (it.category ? ' [' + esc(it.category) + ']' : ''));
+  });
+  if (items.length > 20) lines.push('… ועוד ' + (items.length - 20));
+  lines.push('\nלאישור הקישו ✅, או לביטול 🗑');
+  return lines.join('\n');
+}
+function receiptKeyboard(receiptId) {
+  return { inline_keyboard: [[
+    { text: '✅ אשר', callback_data: 'ra|' + receiptId },
+    { text: '🗑 בטל', callback_data: 'rx|' + receiptId },
+  ]] };
 }
 
 // ══════════════════════════════════════════════════════════════════
@@ -233,6 +376,76 @@ module.exports = async function handler(req, res) {
       const messageId = cq.message.message_id;
       const categories = await sbGet(SUPABASE_URL, SERVICE_KEY, 'categories?select=id,name,kind,icon&order=id');
 
+      // ── bill: delete ──
+      if (data.startsWith('bd|')) {
+        const billId = data.slice(3);
+        await sbDelete(SUPABASE_URL, SERVICE_KEY, 'bills?id=eq.' + billId);
+        await tg(BOT_TOKEN, 'answerCallbackQuery', { callback_query_id: cq.id, text: 'נמחק' });
+        await tg(BOT_TOKEN, 'editMessageText', { chat_id: chatId, message_id: messageId, text: '🗑 החשבון נמחק.' });
+        return res.status(200).json({ ok: true });
+      }
+
+      // ── bill: fix type ──
+      if (data.startsWith('bt|')) {
+        const parts = data.split('|');
+        const billId = parts[1];
+        const newType = parts[2];
+        await sbPatch(SUPABASE_URL, SERVICE_KEY, 'bills?id=eq.' + billId, { type: newType });
+        const rows = await sbGet(SUPABASE_URL, SERVICE_KEY,
+          'bills?id=eq.' + billId + '&select=type,provider,period_start,period_end,amount,currency,consumption,unit,meter_reading');
+        const bill = rows[0] || {};
+        await tg(BOT_TOKEN, 'answerCallbackQuery', { callback_query_id: cq.id, text: 'עודכן ל' + (BILL_HE[newType] || newType) });
+        await tg(BOT_TOKEN, 'editMessageText', {
+          chat_id: chatId, message_id: messageId, parse_mode: 'HTML',
+          text: billText(bill), reply_markup: billKeyboard(billId),
+        });
+        return res.status(200).json({ ok: true });
+      }
+
+      // ── receipt: discard ──
+      if (data.startsWith('rx|')) {
+        const receiptId = data.slice(3);
+        await sbDelete(SUPABASE_URL, SERVICE_KEY, 'receipts?id=eq.' + receiptId);
+        await tg(BOT_TOKEN, 'answerCallbackQuery', { callback_query_id: cq.id, text: 'בוטל' });
+        await tg(BOT_TOKEN, 'editMessageText', { chat_id: chatId, message_id: messageId, text: '🗑 הקבלה בוטלה.' });
+        return res.status(200).json({ ok: true });
+      }
+
+      // ── receipt: approve → write line items as transactions ──
+      if (data.startsWith('ra|')) {
+        const receiptId = data.slice(3);
+        const rows = await sbGet(SUPABASE_URL, SERVICE_KEY,
+          'receipts?id=eq.' + receiptId + '&select=id,merchant,currency,account_id,status,pending_items');
+        const receipt = rows[0];
+        if (!receipt || receipt.status === 'confirmed') {
+          await tg(BOT_TOKEN, 'answerCallbackQuery', { callback_query_id: cq.id, text: 'כבר אושר' });
+          return res.status(200).json({ ok: true });
+        }
+        const items = Array.isArray(receipt.pending_items) ? receipt.pending_items : [];
+        const txRows = items.map(it => {
+          const matched = categories.find(c => c.kind === 'expense' && c.name === (it.category || '').trim());
+          return {
+            account_id: receipt.account_id,
+            direction: 'out',
+            amount: Number(it.amount),
+            currency: receipt.currency || 'ILS',
+            category_id: matched ? matched.id : null,
+            member: member,
+            merchant: receipt.merchant || null,
+            note: it.description || null,
+            recurrence: it.recurrence === 'recurring' ? 'recurring' : 'one_off',
+            source: 'receipt_pdf',
+            receipt_id: receipt.id,
+            // fx_rate omitted → set_fx_rate() trigger fills it
+          };
+        });
+        if (txRows.length) await sbInsert(SUPABASE_URL, SERVICE_KEY, 'transactions', txRows);
+        await sbPatch(SUPABASE_URL, SERVICE_KEY, 'receipts?id=eq.' + receiptId, { status: 'confirmed', pending_items: null });
+        await tg(BOT_TOKEN, 'answerCallbackQuery', { callback_query_id: cq.id, text: 'נשמר' });
+        await tg(BOT_TOKEN, 'editMessageText', { chat_id: chatId, message_id: messageId, text: '✅ נשמרו ' + txRows.length + ' פריטים מהקבלה.' });
+        return res.status(200).json({ ok: true });
+      }
+
       if (data.startsWith('d|')) {
         const txId = data.slice(2);
         await sbDelete(SUPABASE_URL, SERVICE_KEY, 'transactions?id=eq.' + txId);
@@ -273,6 +486,104 @@ module.exports = async function handler(req, res) {
     const member = memberFor(msg.from && msg.from.id);
     if (!member) return res.status(200).json({ ok: true }); // unknown sender → silent ignore
     const chatId = msg.chat.id;
+
+    // ───────── document: PDF bill or receipt ─────────
+    if (msg.document) {
+      const doc = msg.document;
+      const isPdf = doc.mime_type === 'application/pdf' || /\.pdf$/i.test(doc.file_name || '');
+      if (!isPdf) {
+        await tg(BOT_TOKEN, 'sendMessage', { chat_id: chatId, text: 'אני תומך כרגע ב-PDF בלבד (קבלה או חשבון).' });
+        return res.status(200).json({ ok: true });
+      }
+
+      let pdfText;
+      try {
+        pdfText = await extractPdfText(BOT_TOKEN, doc.file_id);
+      } catch (e) {
+        console.error('pdf extract error:', e.message);
+        await tg(BOT_TOKEN, 'sendMessage', { chat_id: chatId, text: 'לא הצלחתי לקרוא את ה-PDF, נסו שוב.' });
+        return res.status(200).json({ ok: true });
+      }
+      if (!pdfText) {
+        await tg(BOT_TOKEN, 'sendMessage', { chat_id: chatId, text: 'ה-PDF נראה סרוק/תמונה ללא טקסט. שלחו PDF טקסטואלי או הזינו ידנית.' });
+        return res.status(200).json({ ok: true });
+      }
+
+      const [categories, accounts] = await Promise.all([
+        sbGet(SUPABASE_URL, SERVICE_KEY, 'categories?select=id,name,kind,icon&order=id'),
+        sbGet(SUPABASE_URL, SERVICE_KEY, 'accounts?select=id,holder,type&order=created_at'),
+      ]);
+      const defaultAccount = accounts.find(a => a.holder === 'joint' && a.type === 'checking') || accounts[0];
+
+      let parsedDoc;
+      try {
+        parsedDoc = await parseDocument(ANTHROPIC_API_KEY, pdfText, categories);
+      } catch (e) {
+        console.error('document parse error:', e.message);
+        await tg(BOT_TOKEN, 'sendMessage', { chat_id: chatId, text: 'לא הצלחתי לנתח את המסמך, נסו שוב.' });
+        return res.status(200).json({ ok: true });
+      }
+      if (!parsedDoc) {
+        await tg(BOT_TOKEN, 'sendMessage', { chat_id: chatId, text: 'לא זיהיתי קבלה או חשבון במסמך.' });
+        return res.status(200).json({ ok: true });
+      }
+
+      // ── bill → write directly to `bills` ──
+      if (parsedDoc.name === 'extract_bill') {
+        const b = parsedDoc.input || {};
+        if (!b.amount || Number(b.amount) <= 0) {
+          await tg(BOT_TOKEN, 'sendMessage', { chat_id: chatId, text: 'לא זיהיתי סכום בחשבון.' });
+          return res.status(200).json({ ok: true });
+        }
+        const bill = await sbInsert(SUPABASE_URL, SERVICE_KEY, 'bills', {
+          type: b.type || 'other',
+          provider: b.provider || null,
+          period_start: b.period_start || null,
+          period_end: b.period_end || null,
+          amount: Number(b.amount),
+          currency: b.currency || 'ILS',
+          consumption: b.consumption != null ? Number(b.consumption) : null,
+          unit: b.unit || null,
+          meter_reading: b.meter_reading != null ? Number(b.meter_reading) : null,
+        });
+        await tg(BOT_TOKEN, 'sendMessage', {
+          chat_id: chatId, parse_mode: 'HTML',
+          text: billText(bill), reply_markup: billKeyboard(bill.id),
+        });
+        return res.status(200).json({ ok: true });
+      }
+
+      // ── receipt → hold as pending, confirm in chat ──
+      const rc = parsedDoc.input || {};
+      const items = (Array.isArray(rc.items) ? rc.items : [])
+        .filter(it => it && Number(it.amount) > 0)
+        .map(it => ({
+          description: it.description || '',
+          amount: Number(it.amount),
+          category: (it.category || '').trim(),
+          recurrence: it.recurrence === 'recurring' ? 'recurring' : 'one_off',
+        }));
+      if (!items.length) {
+        await tg(BOT_TOKEN, 'sendMessage', { chat_id: chatId, text: 'לא זוהו פריטים בקבלה.' });
+        return res.status(200).json({ ok: true });
+      }
+      const currency = rc.currency || 'ILS';
+      const receipt = await sbInsert(SUPABASE_URL, SERVICE_KEY, 'receipts', {
+        account_id: defaultAccount ? defaultAccount.id : null,
+        merchant: rc.merchant || null,
+        total: rc.total != null ? Number(rc.total) : null,
+        currency: currency,
+        status: 'pending',
+        raw_text: pdfText.slice(0, 8000),
+        pending_items: items,
+      });
+      await tg(BOT_TOKEN, 'sendMessage', {
+        chat_id: chatId, parse_mode: 'HTML',
+        text: receiptText(rc.merchant, rc.total, currency, items),
+        reply_markup: receiptKeyboard(receipt.id),
+      });
+      return res.status(200).json({ ok: true });
+    }
 
     let text = '';
     let source = 'bot_text';
