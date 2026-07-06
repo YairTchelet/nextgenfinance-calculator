@@ -259,14 +259,24 @@
   <div class="goals" id="goals"></div>
 
   <!-- ACTIVITY -->
+  <div class="sec"><h2>תמיכה חיצונית</h2><div class="ln"></div><span class="hint">מזומן שהתקבל + פטורים · ללא ספירה כפולה</span></div>
+  <div class="kpi hero" style="margin-bottom:12px">
+    <div class="lbl">סה״כ תמיכה · <span id="support-month">—</span></div>
+    <div class="val" id="support-total">—</div>
+    <div class="sub" id="support-sub">—</div>
+  </div>
+  <div class="card">
+    <div class="feed" id="support-list"></div>
+  </div>
+
   <div class="sec"><h2>פעילות אחרונה</h2><div class="ln"></div><span class="hint">העברות אחרונות</span></div>
   <div class="card">
     <div class="feed" id="feed"></div>
   </div>
 
   <div class="note">
-    הבית הפיננסי · נתוני חיים מ-Supabase. <b>שלב 1</b> — דאשבורד לקריאה בלבד.<br>
-    הצעדים הבאים: webhook לטלגרם, פיצול קבלות, ושאילתות AI.
+    הבית הפיננסי · נתוני חיים מ-Supabase.<br>
+    קליטה דרך בוט הטלגרם: הוצאות בטקסט/קול, פיצול קבלות וחשבונות PDF, ושאלות חופשיות על הכספים.
   </div>
 
 </div>
@@ -309,13 +319,14 @@
   function emptyChart(id, msg){ document.getElementById(id).innerHTML = '<div class="empty">' + (msg||'אין נתונים להצגה') + '</div>'; }
 
   // ── Load all data (RLS limits these reads to the household) ──
-  const [accRes, catRes, txRes, billRes, goalRes, setRes] = await Promise.all([
+  const [accRes, catRes, txRes, billRes, goalRes, setRes, supRes] = await Promise.all([
     sb.from('accounts').select('*'),
     sb.from('categories').select('*'),
     sb.from('transactions').select('*').order('ts', { ascending: true }),
     sb.from('bills').select('*').order('period_start', { ascending: true }),
     sb.from('goals').select('*').order('created_at', { ascending: true }),
-    sb.from('settings').select('*')
+    sb.from('settings').select('*'),
+    sb.from('support').select('*')
   ]);
 
   const accounts = accRes.data || [];
@@ -323,6 +334,7 @@
   const txns = txRes.data || [];
   const bills = billRes.data || [];
   const goals = goalRes.data || [];
+  const support = supRes.data || [];
   const settings = Object.fromEntries((setRes.data || []).map(s => [s.key, s.value]));
   const rate = Number(settings.cad_to_ils) || 1;
   const catById = Object.fromEntries(categories.map(c => [c.id, c]));
@@ -541,7 +553,42 @@
   function memberHe(m){ return m==='yair'?'יאיר':m==='bayla'?'ביילה':'משותף'; }
   function esc(s){ return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 
-  function renderMonthScoped(){ renderKPIs(); renderSankey(); renderCats(); }
+  // ── External support: cash benefits (this month) + exemptions (recurring value) ──
+  const SUPPORT_HE = { army_family:'תשמ״ש (תשלומי משפחה)', army_rent:'השתתפות שכ״ד', army_voucher:'שוברים', parents:'תמיכת הורים' };
+  const SUPPORT_ICON = { army_family:'🎖️', army_rent:'🏠', army_voucher:'🎟️', parents:'👪' };
+  function supportRow(icon, title, meta, amt, extraPill){
+    return '<div class="row">'
+      + '<div class="ic" style="background:rgba(20,184,166,.14)">' + icon + '</div>'
+      + '<div class="mid"><div class="ti">' + title + (extraPill ? ' ' + extraPill : '') + '</div>'
+      + '<div class="me">' + meta + '</div></div>'
+      + '<div class="amt2 up">' + amt + '</div>'
+      + '</div>';
+  }
+  function renderSupport(){
+    const cashBySrc = {};
+    for (const t of txns) {
+      if (monthKey(t.ts) !== activeMonth || t.direction !== 'in' || !t.support_source) continue;
+      cashBySrc[t.support_source] = (cashBySrc[t.support_source]||0) + ilsOf(t);
+    }
+    const cashTotal = Object.values(cashBySrc).reduce((a,b)=>a+b,0);
+    const exemptTotal = support.reduce((s,r)=>s + (Number(r.amount)||0), 0);
+
+    document.getElementById('support-month').textContent = monthLabel(activeMonth);
+    document.getElementById('support-total').textContent = fmt(cashTotal + exemptTotal);
+    document.getElementById('support-sub').textContent = 'מזומן ' + fmt(cashTotal) + ' · פטורים ' + fmt(exemptTotal);
+
+    const rows = [];
+    Object.entries(cashBySrc).sort((a,b)=>b[1]-a[1]).forEach(([src,v]) => {
+      rows.push(supportRow(SUPPORT_ICON[src]||'🎖️', SUPPORT_HE[src]||esc(src), 'מזומן · החודש', '+' + fmt(v)));
+    });
+    support.forEach(r => {
+      const rec = r.recurrence === 'recurring' ? '<span class="pill rec">קבוע</span>' : '';
+      rows.push(supportRow('🧾', esc(r.label||'פטור'), 'פטור · ערך חודשי נחסך', fmt(Number(r.amount)||0), rec));
+    });
+    document.getElementById('support-list').innerHTML = rows.length ? rows.join('') : '<div class="empty">אין תמיכה חיצונית להצגה</div>';
+  }
+
+  function renderMonthScoped(){ renderKPIs(); renderSankey(); renderCats(); renderSupport(); }
   function renderAll(){
     renderMonthScoped(); renderNetWorth(); renderCashflow();
     renderUtility('elec','electric','קוט״ש','rgba(242,165,65,.55)',C.elec);

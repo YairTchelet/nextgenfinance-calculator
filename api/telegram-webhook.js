@@ -14,9 +14,23 @@
 // ══════════════════════════════════════════════════════════════════
 
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
-const PARSE_MODEL = 'claude-haiku-4-5-20251001';
+const PARSE_MODEL = 'claude-haiku-4-5-20251001'; // parsing/extraction — cheap + fast
+const QA_MODEL = 'claude-sonnet-4-6';            // conversational Q&A over the ledger
 // lib path (not the index) avoids pdf-parse's debug block that reads a test file.
 const pdfParse = require('pdf-parse/lib/pdf-parse.js');
+
+// ── Anthropic Messages API (raw fetch, no SDK) ──
+async function anthropic(apiKey, model, maxTokens, system, tools, messages) {
+  const body = { model, max_tokens: maxTokens, system, messages };
+  if (tools) { body.tools = tools; }
+  const r = await fetch(ANTHROPIC_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
+    body: JSON.stringify(body),
+  });
+  if (!r.ok) throw new Error('Anthropic ' + r.status + ': ' + (await r.text()));
+  return r.json();
+}
 
 // Allow voice transcription up to ~60s (Vercel Pro). Text is fast.
 module.exports.config = { maxDuration: 60 };
@@ -71,20 +85,23 @@ async function sbDelete(url, key, path) {
   if (!r.ok) throw new Error('Supabase DELETE ' + r.status + ': ' + (await r.text()));
 }
 
-// ── Claude Haiku: parse a Hebrew expense line into a structured transaction ──
+// ── Claude Haiku: route a Hebrew message → record an expense OR flag a question ──
+// Returns { name: 'record_expense'|'ask_question', input }.
 async function parseExpense(apiKey, text, categories) {
   const expenseNames = categories.filter(c => c.kind === 'expense').map(c => c.name);
   const incomeNames = categories.filter(c => c.kind === 'income').map(c => c.name);
 
   const system =
-    'אתה מנוע חילוץ נתונים פיננסיים. מהמשפט שמתקבל בעברית, חלץ עסקה כספית אחת.\n' +
-    'בחר category אך ורק מתוך הרשימות: הוצאות = [' + expenseNames.join(', ') + '] ; ' +
+    'אתה מנוע ניתוב פיננסי. סווג את ההודעה בעברית לאחת משתי פעולות.\n' +
+    'אם ההודעה מדווחת על הוצאה/הכנסה (סכום קיים) — קרא ל-record_expense.\n' +
+    'אם ההודעה היא שאלה על המצב הכספי (כמה הוצאנו, מה השווי, כמה נשאר) — קרא ל-ask_question.\n' +
+    'ל-record_expense: בחר category אך ורק מתוך הרשימות: הוצאות = [' + expenseNames.join(', ') + '] ; ' +
     'הכנסות = [' + incomeNames.join(', ') + ']. אם אין התאמה ברורה, השאר category ריק.\n' +
-    'direction = out כשמדובר בתשלום/קנייה/הוצאה, ו-in כשמדובר במשכורת/קבלת כסף/החזר.\n' +
+    'direction = out בתשלום/קנייה/הוצאה, ו-in במשכורת/קבלת כסף/החזר.\n' +
     'currency = ILS כברירת מחדל; CAD רק אם צוין דולר קנדי/קנדה/CAD.\n' +
-    'recurrence = recurring רק אם המשפט מציין שזה חוזר (מנוי, כל חודש), אחרת one_off.';
+    'recurrence = recurring רק אם צוין שזה חוזר (מנוי, כל חודש), אחרת one_off.';
 
-  const tool = {
+  const recordTool = {
     name: 'record_expense',
     description: 'רישום עסקה כספית אחת שחולצה מההודעה',
     input_schema: {
@@ -101,27 +118,114 @@ async function parseExpense(apiKey, text, categories) {
       required: ['direction', 'amount', 'currency', 'recurrence'],
     },
   };
-
-  const r = await fetch(ANTHROPIC_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01',
+  const askTool = {
+    name: 'ask_question',
+    description: 'המשתמש שואל שאלה על הכספים ולא מדווח על הוצאה',
+    input_schema: {
+      type: 'object',
+      properties: { question: { type: 'string', description: 'השאלה כפי שנשאלה' } },
+      required: ['question'],
     },
-    body: JSON.stringify({
-      model: PARSE_MODEL,
-      max_tokens: 400,
-      system,
-      tools: [tool],
-      tool_choice: { type: 'tool', name: 'record_expense' },
-      messages: [{ role: 'user', content: text }],
-    }),
-  });
-  if (!r.ok) throw new Error('Anthropic ' + r.status + ': ' + (await r.text()));
-  const data = await r.json();
+  };
+
+  const data = await anthropic(apiKey, PARSE_MODEL, 400, system, [recordTool, askTool], [{ role: 'user', content: text }]);
   const block = (data.content || []).find(b => b.type === 'tool_use');
-  return block ? block.input : null;
+  return block ? { name: block.name, input: block.input } : null;
+}
+
+// ── Claude Sonnet: answer a Hebrew question over the ledger (agentic read loop) ──
+function monthRange(month) {
+  const [y, m] = String(month).split('-').map(Number);
+  const p = n => String(n).padStart(2, '0');
+  const ny = m === 12 ? y + 1 : y, nm = m === 12 ? 1 : m + 1;
+  return { start: y + '-' + p(m) + '-01', end: ny + '-' + p(nm) + '-01' };
+}
+function normMonth(m) { return /^\d{4}-\d{2}$/.test(String(m || '')) ? m : new Date().toISOString().slice(0, 7); }
+
+async function qaMonthSummary(url, key, month, catMap) {
+  const { start, end } = monthRange(month);
+  const rows = await sbGet(url, key,
+    'transactions?ts=gte.' + start + '&ts=lt.' + end + '&select=direction,amount_ils,category_id,support_source');
+  let income = 0, expense = 0, support = 0; const byCat = {};
+  for (const r of rows) {
+    const v = Number(r.amount_ils) || 0;
+    if (r.direction === 'in') { income += v; if (r.support_source) support += v; }
+    else { expense += v; if (r.category_id) byCat[r.category_id] = (byCat[r.category_id] || 0) + v; }
+  }
+  const by_category = Object.entries(byCat)
+    .map(([cid, total]) => ({ category: catMap[cid] || 'ללא', total: Math.round(total) }))
+    .sort((a, b) => b.total - a.total);
+  return { month, income: Math.round(income), expense: Math.round(expense), net: Math.round(income - expense), support_received: Math.round(support), by_category };
+}
+
+async function qaNetWorth(url, key) {
+  const [accounts, settings] = await Promise.all([
+    sbGet(url, key, 'accounts?select=name,type,holder,currency,balance,is_active'),
+    sbGet(url, key, 'settings?key=eq.cad_to_ils&select=value'),
+  ]);
+  const cad = settings[0] != null ? Number(settings[0].value) : 1;
+  let net = 0; const list = [];
+  for (const a of accounts) {
+    if (a.is_active === false) continue;
+    const ils = Number(a.balance) * (a.currency === 'CAD' ? cad : 1);
+    net += (a.type === 'credit' || a.type === 'loan') ? -ils : ils;
+    list.push({ name: a.name, type: a.type, holder: a.holder, currency: a.currency, balance: Number(a.balance), balance_ils: Math.round(ils) });
+  }
+  return { net_worth_ils: Math.round(net), cad_to_ils: cad, accounts: list };
+}
+
+async function qaListTransactions(url, key, args, catMap, nameToId) {
+  let q = 'transactions?select=ts,direction,amount,currency,amount_ils,category_id,merchant,note&order=ts.desc&limit=' + Math.min(Number(args.limit) || 20, 50);
+  if (args.month) { const { start, end } = monthRange(normMonth(args.month)); q += '&ts=gte.' + start + '&ts=lt.' + end; }
+  if (args.direction === 'in' || args.direction === 'out') q += '&direction=eq.' + args.direction;
+  if (args.category && nameToId[args.category]) q += '&category_id=eq.' + nameToId[args.category];
+  const rows = await sbGet(url, key, q);
+  return rows.map(r => ({
+    date: (r.ts || '').slice(0, 10), direction: r.direction,
+    amount: Number(r.amount), currency: r.currency, amount_ils: Math.round(Number(r.amount_ils) || 0),
+    category: catMap[r.category_id] || 'ללא', merchant: r.merchant, note: r.note,
+  }));
+}
+
+async function answerQuestion(apiKey, url, key, question) {
+  const cats = await sbGet(url, key, 'categories?select=id,name,kind');
+  const catMap = {}, nameToId = {};
+  cats.forEach(c => { catMap[c.id] = c.name; nameToId[c.name] = c.id; });
+  const today = new Date().toISOString().slice(0, 10);
+
+  const tools = [
+    { name: 'get_month_summary', description: 'סיכום חודשי: הכנסות, הוצאות, נטו, תמיכה שהתקבלה, ופירוט לפי קטגוריה', input_schema: { type: 'object', properties: { month: { type: 'string', description: 'YYYY-MM' } }, required: ['month'] } },
+    { name: 'get_net_worth', description: 'שווי נטו נוכחי לפי יתרות החשבונות (₪, בשער נוכחי)', input_schema: { type: 'object', properties: {} } },
+    { name: 'list_transactions', description: 'רשימת תנועות מסוננת לפי חודש/קטגוריה/כיוון', input_schema: { type: 'object', properties: { month: { type: 'string' }, category: { type: 'string' }, direction: { type: 'string', enum: ['in', 'out'] }, limit: { type: 'number' } } } },
+  ];
+  const system =
+    'אתה עוזר פיננסי אישי למשק בית (יאיר וביילה), קופה משותפת. ענה בעברית, קצר וברור, בשקלים ₪.\n' +
+    'התאריך היום ' + today + '. אם חסר חודש בשאלה, הנח את החודש הנוכחי.\n' +
+    'השתמש בכלים כדי לקבל נתונים אמיתיים לפני שאתה עונה — אל תמציא מספרים.';
+
+  const messages = [{ role: 'user', content: question }];
+  for (let i = 0; i < 5; i++) {
+    const data = await anthropic(apiKey, QA_MODEL, 800, system, tools, messages);
+    messages.push({ role: 'assistant', content: data.content });
+    const toolUses = (data.content || []).filter(b => b.type === 'tool_use');
+    if (!toolUses.length) {
+      const t = (data.content || []).find(b => b.type === 'text');
+      return t ? t.text.trim() : 'לא הצלחתי לענות על השאלה.';
+    }
+    const results = [];
+    for (const tu of toolUses) {
+      let out;
+      try {
+        if (tu.name === 'get_month_summary') out = await qaMonthSummary(url, key, normMonth(tu.input.month), catMap);
+        else if (tu.name === 'get_net_worth') out = await qaNetWorth(url, key);
+        else if (tu.name === 'list_transactions') out = await qaListTransactions(url, key, tu.input || {}, catMap, nameToId);
+        else out = { error: 'unknown tool' };
+      } catch (e) { out = { error: e.message }; }
+      results.push({ type: 'tool_result', tool_use_id: tu.id, content: JSON.stringify(out) });
+    }
+    messages.push({ role: 'user', content: results });
+  }
+  return 'השאלה מורכבת מדי כרגע — נסו לנסח מחדש או לפצל לשתי שאלות.';
 }
 
 // ── AssemblyAI: transcribe a Telegram voice note (Hebrew) ──
@@ -627,26 +731,46 @@ module.exports = async function handler(req, res) {
       await tg(BOT_TOKEN, 'sendMessage', { chat_id: chatId, text: 'לא הצלחתי לנתח את ההודעה, נסו שוב.' });
       return res.status(200).json({ ok: true });
     }
+    if (!parsed) {
+      await tg(BOT_TOKEN, 'sendMessage', { chat_id: chatId, text: 'לא הבנתי — נסו לרשום הוצאה ("קפה 15") או לשאול שאלה ("כמה הוצאנו החודש?").' });
+      return res.status(200).json({ ok: true });
+    }
 
-    const amount = parsed && Number(parsed.amount);
-    if (!parsed || !amount || amount <= 0) {
+    // ── question → Sonnet Q&A over the ledger ──
+    if (parsed.name === 'ask_question') {
+      const question = (parsed.input && parsed.input.question) || text;
+      let answer;
+      try {
+        answer = await answerQuestion(ANTHROPIC_API_KEY, SUPABASE_URL, SERVICE_KEY, question);
+      } catch (e) {
+        console.error('qa error:', e.message);
+        answer = 'לא הצלחתי לענות על השאלה כרגע, נסו שוב.';
+      }
+      await tg(BOT_TOKEN, 'sendMessage', { chat_id: chatId, text: answer });
+      return res.status(200).json({ ok: true });
+    }
+
+    // ── expense → record a transaction ──
+    const ex = parsed.input || {};
+    const amount = Number(ex.amount);
+    if (!amount || amount <= 0) {
       await tg(BOT_TOKEN, 'sendMessage', { chat_id: chatId, text: 'לא זיהיתי סכום. נסו למשל: "קפה 15" או "משכורת 9800".' });
       return res.status(200).json({ ok: true });
     }
 
-    const wantedKind = parsed.direction === 'in' ? 'income' : 'expense';
-    const matched = categories.find(c => c.kind === wantedKind && c.name === (parsed.category || '').trim());
+    const wantedKind = ex.direction === 'in' ? 'income' : 'expense';
+    const matched = categories.find(c => c.kind === wantedKind && c.name === (ex.category || '').trim());
 
     const tx = await sbInsert(SUPABASE_URL, SERVICE_KEY, 'transactions', {
       account_id: defaultAccount ? defaultAccount.id : null,
-      direction: parsed.direction,
+      direction: ex.direction,
       amount: amount,
-      currency: parsed.currency || 'ILS',
+      currency: ex.currency || 'ILS',
       category_id: matched ? matched.id : null,
       member: member,
-      merchant: parsed.merchant || null,
-      note: parsed.note || null,
-      recurrence: parsed.recurrence || 'one_off',
+      merchant: ex.merchant || null,
+      note: ex.note || null,
+      recurrence: ex.recurrence || 'one_off',
       source: source,
       raw_text: text,
       // fx_rate intentionally omitted → set_fx_rate() trigger fills it
