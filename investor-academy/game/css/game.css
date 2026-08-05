@@ -47,11 +47,14 @@
             font-size: 2.5em; font-weight: 700; margin-bottom: 15px;
             background: var(--accent-gradient); -webkit-background-clip: text;
             -webkit-text-fill-color: transparent; background-clip: text;
+            text-align: center;
         }
+        .game-header { text-align: center; }
         .intro {
             background: linear-gradient(135deg, rgba(214, 245, 236, 0.7), rgba(198, 246, 213, 0.5));
             padding: 1.25rem; border-radius: var(--radius-sm); margin-bottom: 1.5rem;
             border-right: 4px solid var(--accent-start); font-size: 0.95em;
+            text-align: center;
         }
         .intro p { margin: 0.5rem 0; }
         .stock-ticker {
